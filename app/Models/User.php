@@ -94,6 +94,12 @@ class User extends Authenticatable
         return $this->hasMany(TemporaryUploadedImages::class);
     }
 
+    // student relations
+    public function courses(): HasMany
+    {
+        return $this->hasMany(CourseRegisteration::class, 'student_id', 'id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
