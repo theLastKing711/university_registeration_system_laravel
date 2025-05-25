@@ -15,10 +15,10 @@ return new class extends Migration
         Schema::create('course_registeration', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained();
-            $table->foreignId('student_id')->constrained();
+            $table->foreignId('student_id')->constrained('users', 'id');
             $table->foreignId('teacher_id')->constrained();
             $table->year('year');
-            $table->integer('semester')->unsigned();
+            $table->integer(column: 'semester')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

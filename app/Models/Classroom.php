@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Classroom extends Model
@@ -12,10 +13,18 @@ class Classroom extends Model
     use HasFactory;
 
     /**
-     * Get all of the courseRegisterationClassrooms for the classroom
+     * The courses that belong to the classroom
      */
-    public function courseRegisterationClassrooms(): HasMany
+    public function courses(): BelongsToMany
     {
-        return $this->hasMany(CourseRegiterationClassRoom::class, 'classroom_id', 'id');
+        return $this->belongsToMany(Course::class);
+    }
+
+    /**
+     * Get all of the classroomCourses for the classroom
+     */
+    public function classroomCourses(): HasMany
+    {
+        return $this->hasMany(ClassroomCourse::class);
     }
 }

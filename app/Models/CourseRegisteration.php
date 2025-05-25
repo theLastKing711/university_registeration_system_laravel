@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CourseRegisteration extends Pivot
@@ -39,13 +38,5 @@ class CourseRegisteration extends Pivot
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class, 'course_id', 'id');
-    }
-
-    /**
-     * Get all of the classes for the CourseRegisteration
-     */
-    public function courseRegisterationClassrooms(): HasMany
-    {
-        return $this->hasMany(CourseRegiterationClassRoom::class, 'course_registeration_id', localKey: 'id');
     }
 }
