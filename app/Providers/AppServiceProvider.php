@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->register(BuilderMacrosServiceProvider::class);
 
-        //for debug bar loggin
+        // for debug bar loggin
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Debugbar', \Barryvdh\Debugbar\Facades\Debugbar::class);
 

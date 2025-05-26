@@ -17,14 +17,26 @@ class Classroom extends Model
      */
     public function courses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(
+            OpenCourseRegisteration::class,
+            'classroom_course_teacher',
+            'course_id'
+        );
+    }
+
+    /**
+     * The courses that belong to the classroom
+     */
+    public function teachers(): BelongsToMany
+    {
+        return $this->belongsToMany(Course::class, 'classroom_course_teacher');
     }
 
     /**
      * Get all of the classroomCourses for the classroom
      */
-    public function classroomCourses(): HasMany
+    public function classroomCourseTeachers(): HasMany
     {
-        return $this->hasMany(ClassroomCourse::class);
+        return $this->hasMany(ClassroomCourseTeacher::class);
     }
 }

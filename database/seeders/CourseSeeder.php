@@ -11,16 +11,19 @@ class CourseSeeder extends Seeder
 
         // IT COURSES
         [
+            'id' => 1,
             'name' => 'Math1',
             'code' => 'M1',
             'credits' => 2,
         ],
         [
+            'id' => 2,
             'name' => 'Math2',
             'code' => 'M2',
             'credits' => 2,
         ],
         [
+            'id' => 3,
             'name' => 'Math3',
             'code' => 'M3',
             'credits' => 2,
@@ -28,16 +31,19 @@ class CourseSeeder extends Seeder
 
         // ENGLISH COURSES
         [
+            'id' => 4,
             'name' => 'English1',
             'code' => 'E1',
             'credits' => 2,
         ],
         [
+            'id' => 5,
             'name' => 'English2',
             'code' => 'E2',
             'credits' => 2,
         ],
         [
+            'id' => 6,
             'name' => 'English3',
             'code' => 'E3',
             'credits' => 2,
@@ -45,16 +51,19 @@ class CourseSeeder extends Seeder
 
         // BIO COURSES
         [
+            'id' => 7,
             'name' => 'Bio1',
             'code' => 'B1',
             'credits' => 2,
         ],
         [
+            'id' => 8,
             'name' => 'Bio2',
             'code' => 'B2',
             'credits' => 2,
         ],
         [
+            'id' => 9,
             'name' => 'Bio3',
             'code' => 'B3',
             'credits' => 2,

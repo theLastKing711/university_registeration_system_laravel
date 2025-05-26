@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -63,8 +64,9 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory,  Notifiable;
 
+    // HasRoles,
     /**
      * The attributes that are mass assignable.
      *
@@ -95,9 +97,42 @@ class User extends Authenticatable
     }
 
     // student relations
-    public function courses(): HasMany
+
+    /**
+     * The students that belong to the CourseTeacher
+     */
+    public function classes(): BelongsToMany
+    {
+        return $this->belongsToMany(CourseTeacher::class);
+    }
+
+    public function courseRegisterations(): HasMany
     {
         return $this->hasMany(CourseRegisteration::class, 'student_id', 'id');
+    }
+
+    /**
+     * The classrooms that belong to the User
+     */
+    public function classrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            ClassroomCourseTeacher::class,
+            'course_attendance',
+            'student_id',
+            'id'
+        );
+    }
+
+    /**
+     * Get all of the attendances for the User
+     */
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(
+            CourseAttendance::class,
+            'student_id',
+            'id');
     }
 
     /**

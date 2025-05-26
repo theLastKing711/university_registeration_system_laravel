@@ -7,15 +7,6 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CourseRegisteration extends Pivot
 {
-    protected $table = 'course_registeration';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = true;
-
     /**
      * Get the student that owns the CourseRegisteration
      */
@@ -25,18 +16,10 @@ class CourseRegisteration extends Pivot
     }
 
     /**
-     * Get the teacher that owns the CourseRegisteration
+     * Get the courseTeacher that owns the CourseRegisteration
      */
-    public function teacher(): BelongsTo
+    public function courseTeacher(): BelongsTo
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
-    }
-
-    /**
-     * Get the course that owns the CourseRegisteration
-     */
-    public function course(): BelongsTo
-    {
-        return $this->belongsTo(Course::class, 'course_id', 'id');
+        return $this->belongsTo(CourseTeacher::class);
     }
 }

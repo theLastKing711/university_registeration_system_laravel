@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Database\Factories\OpenCourseRegisterationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Teacher extends Model
@@ -12,10 +14,31 @@ class Teacher extends Model
     use HasFactory;
 
     /**
-     * Get all of the courseRegiteration for the Student
+     * The courses that belong to the Teacher
      */
-    public function courses(): HasMany
+    public function courses(): BelongsToMany
     {
-        return $this->hasMany(CourseRegisteration::class, 'teacher_id', 'id');
+        return $this->belongsToMany(
+            OpenCourseRegisterationFactory::class,
+            'classroom_course_teacher',
+            'course_id'
+
+        );
+    }
+
+    /**
+     * The classrooms that belong to the Teacher
+     */
+    public function classrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_course_teacher');
+    }
+
+    /**
+     * Get all of the classroomCourseTeachers for the Teacher
+     */
+    public function classroomCourseTeachers(): HasMany
+    {
+        return $this->hasMany(ClassroomCourseTeacher::class);
     }
 }
