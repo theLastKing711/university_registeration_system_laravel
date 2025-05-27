@@ -133,7 +133,12 @@ class User extends Authenticatable
      */
     public function ExamStudent(): BelongsToMany
     {
-        return $this->belongsToMany(Exam::class, 'exam_student', foreignPivotKey: 'student_id', 'exam_id');
+        return $this->belongsToMany(
+            Exam::class,
+            'exam_student',
+            foreignPivotKey: 'student_id',
+            relatedPivotKey: 'exam_id'
+        );
     }
 
     /**
@@ -141,7 +146,11 @@ class User extends Authenticatable
      */
     public function exams(): HasMany
     {
-        return $this->hasMany(ExamStudent::class, 'exam_student', 'id');
+        return $this->hasMany(
+            ExamStudent::class,
+            'exam_student',
+            'id'
+        );
     }
 
     /**
