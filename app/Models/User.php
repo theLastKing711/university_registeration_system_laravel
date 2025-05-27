@@ -98,14 +98,6 @@ class User extends Authenticatable
 
     // student relations
 
-    /**
-     * The students that belong to the CourseTeacher
-     */
-    public function classes(): BelongsToMany
-    {
-        return $this->belongsToMany(CourseTeacher::class);
-    }
-
     public function courseRegisterations(): HasMany
     {
         return $this->hasMany(CourseRegisteration::class, 'student_id', 'id');
@@ -132,15 +124,24 @@ class User extends Authenticatable
         return $this->hasMany(
             CourseAttendance::class,
             'student_id',
-            'id');
+            'id'
+        );
     }
 
     /**
-     * The exams that belong to the User
+     * The studentExams that belong to the User
      */
-    public function exams(): BelongsToMany
+    public function ExamStudent(): BelongsToMany
     {
-        return $this->belongsToMany(Exam::class, 'exam_student', 'student_id');
+        return $this->belongsToMany(Exam::class, 'exam_student', foreignPivotKey: 'student_id', 'exam_id');
+    }
+
+    /**
+     * Get all of the exams for the User
+     */
+    public function exams(): HasMany
+    {
+        return $this->hasMany(ExamStudent::class, 'exam_student', 'id');
     }
 
     /**
