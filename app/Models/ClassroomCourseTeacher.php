@@ -56,4 +56,12 @@ class ClassroomCourseTeacher extends Pivot
             'id'
         );
     }
+
+    /**
+     * Get all of the exams for the ClassroomCourseTeacher
+     */
+    public function exams(): HasMany
+    {
+        return $this->hasMany(Exam::class, 'classroom_course_teacher_id', 'id');
+    }
 }

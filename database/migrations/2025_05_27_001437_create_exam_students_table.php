@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('course_teacher', function (Blueprint $table) {
+        Schema::create('exam_students', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained();
-            $table->foreignId('teacher_id')->nullable()->constrained();
-            $table->year('year');
-            $table->integer(column: 'semester')->unsigned();
+            $table
+                ->foreignId('exam_id')
+                ->constrained();
+            $table
+                ->foreignId('student_id')
+                ->constrained('users', 'id');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('course_teacher');
+        Schema::dropIfExists('exam_students');
     }
 };

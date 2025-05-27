@@ -136,6 +136,14 @@ class User extends Authenticatable
     }
 
     /**
+     * The exams that belong to the User
+     */
+    public function exams(): BelongsToMany
+    {
+        return $this->belongsToMany(Exam::class, 'exam_student', 'student_id');
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

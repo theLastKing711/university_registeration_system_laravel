@@ -14,12 +14,4 @@ class CourseRegisteration extends Pivot
     {
         return $this->belongsTo(User::class, 'student_id', 'id');
     }
-
-    /**
-     * Get the courseTeacher that owns the CourseRegisteration
-     */
-    public function courseTeacher(): BelongsTo
-    {
-        return $this->belongsTo(CourseTeacher::class);
-    }
 }
