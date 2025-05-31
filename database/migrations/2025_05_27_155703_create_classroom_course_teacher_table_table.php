@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prerequisites', function (Blueprint $table) {
+        Schema::create('classroom_course_teacher', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained();
-            $table->foreignId('prerequisite_id')->constrained('courses', 'id');
+            $table->foreignId('classroom_id')->constrained();
+            $table->foreignId('course_teacher_id')->constrained('course_teacher');
+            $table->integer('day');
+            $table->time('from');
+            $table->time('to');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prerequisites');
+        Schema::dropIfExists('classroom_course_teacher');
     }
 };

@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table
-                ->foreignId('classroom_course_teacher_id')
-                ->constrained('classroom_course_teacher', 'id');
+                ->foreignId('course_teacher_id')
+                ->constrained('course_teacher');
+            $table
+                ->foreignId('classroom_id')
+                ->constrained('classrooms');
             $table->integer('max_mark');
             $table->date('date');
             $table->time('from');
-            $table->to('to');
+            $table->time('to');
             $table->timestamps();
         });
     }

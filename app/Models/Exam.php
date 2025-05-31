@@ -2,35 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Exam extends Model
+class Exam extends Pivot
 {
-    /** @use HasFactory<\Database\Factories\ExamFactory> */
-    use HasFactory;
-
-    /**
-     * Get the classroomCourseTeacher that owns the ClassroomCourseTeacher
-     */
-    public function classroomCourseTeacher(): BelongsTo
-    {
-        return $this->belongsTo(
-            ClassroomCourseTeacher::class,
-            'classroom_course_teacher_id',
-            'id'
-        );
-    }
-
     /**
      * The students that belong to the Exam
      */
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'exam_student', 'exam_id', 'student_id');
+        return $this->belongsToMany(
+            User::class,
+            'exam_student', 'exam_id',
+            'student_id'
+        );
     }
 
     /**
@@ -38,6 +25,10 @@ class Exam extends Model
      */
     public function examStudents(): HasMany
     {
-        return $this->hasMany(ExamStudent::class, 'exam_id', 'id');
+        return $this->hasMany(
+            ExamStudent::class,
+            'exam_id',
+            'id'
+        );
     }
 }

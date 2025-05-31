@@ -13,6 +13,14 @@ class Department extends Model
     use HasFactory;
 
     /**
+     * Get all of the students for the Department
+     */
+    public function students(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
+    /**
      * The courses that belong to the Department
      */
     public function courses(): BelongsToMany
@@ -26,5 +34,13 @@ class Department extends Model
     public function courseDepartments(): HasMany
     {
         return $this->hasMany(CourseDepartment::class);
+    }
+
+    /**
+     * The teachers that belong to the Department
+     */
+    public function teachers(): BelongsToMany
+    {
+        return $this->belongsToMany(Teacher::class);
     }
 }

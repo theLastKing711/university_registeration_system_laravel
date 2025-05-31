@@ -13,27 +13,31 @@ class TeacherSeeder extends Seeder
     public const TEACHERS = [
         [
             'id' => 1,
-            'name' => 'hassan bama',
+            'name' => 'aynman',
         ],
         [
             'id' => 2,
-            'name' => 'bassam kossa',
+            'name' => 'mousa',
         ],
         [
             'id' => 3,
-            'name' => 'tamer hosny',
+            'name' => 'shaar',
         ],
         [
             'id' => 4,
-            'name' => 'thaer basha',
+            'name' => 'basheer kharat',
         ],
         [
             'id' => 5,
-            'name' => 'hind azzrak',
+            'name' => 'sa3eed sa3dan',
         ],
         [
             'id' => 6,
-            'name' => 'kiba bara',
+            'name' => 'iman',
+        ],
+        [
+            'id' => 7,
+            'name' => 'black',
         ],
 
     ];

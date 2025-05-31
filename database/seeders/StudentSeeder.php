@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class StudentSeeder extends Seeder
@@ -12,6 +12,19 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        User::factory()
+            ->fromItDepartment()
+            ->enrolledInYear(2014)
+            ->unGraduated()
+            ->count(10)
+            ->create();
+
+        User::factory()
+            ->fromItDepartment()
+            ->enrolledInYear(2013)
+            ->graduatedInYear(2018)
+            ->count(10)
+            ->create();
+
     }
 }

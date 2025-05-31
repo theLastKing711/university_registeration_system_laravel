@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,5 +20,27 @@ class CourseFactory extends Factory
         return [
             //
         ];
+    }
+
+    public function belongsToItDepartment(): static
+    {
+        return $this->afterCreating(function (Course $course) {
+
+            $course
+                ->departments()
+                ->attach([1]);
+
+        });
+    }
+
+    public function belongsToEnglishDepartment(): static
+    {
+        return $this->afterCreating(function (Course $course) {
+
+            $course
+                ->departments()
+                ->attach([2]);
+
+        });
     }
 }

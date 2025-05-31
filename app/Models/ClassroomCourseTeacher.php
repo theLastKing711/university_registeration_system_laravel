@@ -18,19 +18,11 @@ class ClassroomCourseTeacher extends Pivot
     }
 
     /**
-     * Get the teacher that owns the ClassroomCourseTeacher
+     * Get the courseTeacher that owns the CourseTeacher
      */
-    public function teacher(): BelongsTo
+    public function courseTeacher(): BelongsTo
     {
-        return $this->belongsTo(Teacher::class);
-    }
-
-    /**
-     * Get the course that owns the ClassroomCourseTeacher
-     */
-    public function course(): BelongsTo
-    {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsTo(CourseTeacher::class);
     }
 
     /**
@@ -40,7 +32,8 @@ class ClassroomCourseTeacher extends Pivot
     {
         return $this->belongsToMany(
             User::class,
-            'users', 'student_id',
+            'users',
+            'student_id',
             'role_id'
         );
     }
@@ -55,13 +48,5 @@ class ClassroomCourseTeacher extends Pivot
             'classroom_course_teacher_id',
             'id'
         );
-    }
-
-    /**
-     * Get all of the exams for the ClassroomCourseTeacher
-     */
-    public function exams(): HasMany
-    {
-        return $this->hasMany(Exam::class, 'classroom_course_teacher_id', 'id');
     }
 }

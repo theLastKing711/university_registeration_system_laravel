@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 
             // student data
+            $table->foreignId('department_id')->nullable()->constrained();
             $table->string('national_id')->nullable();
             $table->date('birthdate')->nullable();
             $table->date('enrollment_date')->nullable();

@@ -3,70 +3,224 @@
 namespace Database\Seeders;
 
 use App\Models\Course;
+use App\Models\OpenCourseRegisteration;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CourseSeeder extends Seeder
 {
+    public const IT_COURSES = [
+        [
+            'data' => [
+                'id' => 1,
+                'name' => 'Math1',
+                'code' => 'M1',
+                'credits' => 2,
+            ],
+            'prerequisites' => [],
+        ],
+        [
+            'data' => [
+                'id' => 2,
+                'name' => 'Math2',
+                'code' => 'M2',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 2,
+                    'prerequisite_id' => 1,
+                ],
+            ],
+        ],
+        [
+            'data' => [
+                'id' => 3,
+                'name' => 'Math3',
+                'code' => 'M3',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 3,
+                    'prerequisite_id' => 2,
+                ],
+            ],
+        ],
+        [
+            'data' => [
+                'id' => 10,
+                'name' => 'Electronics1',
+                'code' => 'ELCTR1',
+                'credits' => 2,
+            ],
+            'prerequisites' => [],
+        ],
+        [
+            'data' => [
+                'id' => 11,
+                'name' => 'Electronics2',
+                'code' => 'ELCTR2',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 11,
+                    'prerequisite_id' => 3,
+                ],
+                [
+                    'course_id' => 11,
+                    'prerequisite_id' => 10,
+                ],
+            ],
+        ],
+    ];
+
     public const COURSES = [
 
         // IT COURSES
         [
-            'id' => 1,
-            'name' => 'Math1',
-            'code' => 'M1',
-            'credits' => 2,
+            'data' => [
+                'id' => 1,
+                'name' => 'Math1',
+                'code' => 'M1',
+                'credits' => 2,
+            ],
+            'prerequisites' => [],
         ],
         [
-            'id' => 2,
-            'name' => 'Math2',
-            'code' => 'M2',
-            'credits' => 2,
+            'data' => [
+                'id' => 2,
+                'name' => 'Math2',
+                'code' => 'M2',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 2,
+                    'prerequisite_id' => 1,
+                ],
+            ],
         ],
         [
-            'id' => 3,
-            'name' => 'Math3',
-            'code' => 'M3',
-            'credits' => 2,
+            'data' => [
+                'id' => 3,
+                'name' => 'Math3',
+                'code' => 'M3',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 3,
+                    'prerequisite_id' => 2,
+                ],
+            ],
+        ],
+        [
+            'data' => [
+                'id' => 10,
+                'name' => 'Electronics1',
+                'code' => 'ELCTR1',
+                'credits' => 2,
+            ],
+            'prerequisites' => [],
+        ],
+        [
+            'data' => [
+                'id' => 11,
+                'name' => 'Electronics2',
+                'code' => 'ELCTR2',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 11,
+                    'prerequisite_id' => 3,
+                ],
+                [
+                    'course_id' => 11,
+                    'prerequisite_id' => 10,
+                ],
+            ],
         ],
 
         // ENGLISH COURSES
         [
-            'id' => 4,
-            'name' => 'English1',
-            'code' => 'E1',
-            'credits' => 2,
+            'data' => [
+                'id' => 4,
+                'name' => 'English1',
+                'code' => 'E1',
+                'credits' => 2,
+            ],
+            'prerequisites' => [],
         ],
         [
-            'id' => 5,
-            'name' => 'English2',
-            'code' => 'E2',
-            'credits' => 2,
+            'data' => [
+                'id' => 5,
+                'name' => 'English2',
+                'code' => 'E2',
+                'credits' => 2,
+
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 5,
+                    'prerequisite_id' => 4,
+                ],
+            ],
         ],
         [
-            'id' => 6,
-            'name' => 'English3',
-            'code' => 'E3',
-            'credits' => 2,
+            'data' => [
+                'id' => 6,
+                'name' => 'English3',
+                'code' => 'E3',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 6,
+                    'prerequisite_id' => 5,
+                ],
+            ],
         ],
 
         // BIO COURSES
         [
-            'id' => 7,
-            'name' => 'Bio1',
-            'code' => 'B1',
-            'credits' => 2,
+            'data' => [
+                'id' => 7,
+                'name' => 'Bio1',
+                'code' => 'B1',
+                'credits' => 2,
+            ],
+            'prerequisites' => [],
         ],
         [
-            'id' => 8,
-            'name' => 'Bio2',
-            'code' => 'B2',
-            'credits' => 2,
+            'data' => [
+                'id' => 8,
+                'name' => 'Bio2',
+                'code' => 'B2',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 8,
+                    'prerequisite_id' => 7,
+                ],
+            ],
         ],
         [
-            'id' => 9,
-            'name' => 'Bio3',
-            'code' => 'B3',
-            'credits' => 2,
+            'data' => [
+                'id' => 9,
+                'name' => 'Bio3',
+                'code' => 'B3',
+                'credits' => 2,
+            ],
+            'prerequisites' => [
+                [
+                    'course_id' => 9,
+                    'prerequisite_id' => 8,
+                ],
+            ],
         ],
     ];
 
@@ -75,6 +229,40 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        Course::insert(self::COURSES);
+
+        $this->seedItCourses();
+
+        // $courses = collect(self::COURSES);
+
+        // Course::insert(
+        //     $courses
+        //         ->pluck('data')
+        //         ->toArray()
+        // );
+
+        // $prequesites =
+        //     $courses
+        //         ->pluck('prerequisites')
+        //         ->flatten(1);
+
+        // DB::table('prerequisites')
+        //     ->insert($prequesites->toArray());
+    }
+
+    public function seedItCourses(): void
+    {
+
+        $it_courses = collect(self::IT_COURSES);
+
+        Course::factory()
+            ->belongsToItDepartment()
+            ->has(
+                OpenCourseRegisteration::factory()
+                    ->openFrom2014To2019()
+                // ->withThreeSemesters()
+            )
+            ->createMany(
+                ...$it_courses->pluck('data')->toArray()
+            );
     }
 }

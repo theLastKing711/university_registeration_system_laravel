@@ -28,30 +28,18 @@ class OpenCourseRegisteration extends Model
     {
         return $this->belongsToMany(
             Teacher::class,
-            'classroom_course_teacher',
+            'course_teacher',
             'course_id'
         );
     }
 
     /**
-     * The classrooms that belong to the openCourseRegisteration
+     * Get all of the CourseTeachers for the openCourseRegisteration
      */
-    public function classrooms(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Classroom::class,
-            'classroom_course_teacher',
-            'course_id'
-        );
-    }
-
-    /**
-     * Get all of the classroomCourseTeachers for the openCourseRegisteration
-     */
-    public function classroomCourseTeachers(): HasMany
+    public function courseTeachers(): HasMany
     {
         return $this->hasMany(
-            ClassroomCourseTeacher::class,
+            CourseTeacher::class,
             'course_id',
             'id'
         );

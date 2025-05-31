@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -89,6 +90,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the department that owns the User
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    /**
      * Get all of the temporaryUploadedImages for the User
      */
     public function temporaryUploadedImages(): HasMany
@@ -97,11 +106,6 @@ class User extends Authenticatable
     }
 
     // student relations
-
-    public function courseRegisterations(): HasMany
-    {
-        return $this->hasMany(CourseRegisteration::class, 'student_id', 'id');
-    }
 
     /**
      * The classrooms that belong to the User
