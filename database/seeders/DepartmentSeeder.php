@@ -79,6 +79,41 @@ class DepartmentSeeder extends Seeder
                                             ],
                                         ],
                                     ],
+                                    'exams' => [
+                                        [
+                                            'id' => 1,
+                                            'data' => [
+                                                'course_teacher_id' => 1,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '01/01/2014',
+                                                'from' => '08:00:00',
+                                                'to' => '10:00:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 2,
+                                            'data' => [
+                                                'course_teacher_id' => 1,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '01/03/2014',
+                                                'from' => '10:00:00',
+                                                'to' => '12:00:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 3,
+                                            'data' => [
+                                                'course_teacher_id' => 1,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 60,
+                                                'date' => '01/04/2014',
+                                                'from' => '10:00:00',
+                                                'to' => '12:00:00',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'data' => [
@@ -106,6 +141,30 @@ class DepartmentSeeder extends Seeder
                                                 'day' => 3,
                                                 'from' => '10:00:00',
                                                 'to' => '11:00:00',
+                                            ],
+                                        ],
+                                    ],
+                                    'exams' => [
+                                        [
+                                            'id' => 4,
+                                            'data' => [
+                                                'course_teacher_id' => 2,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '02/01/2014',
+                                                'from' => '08:00:00',
+                                                'to' => '10:00:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 5,
+                                            'data' => [
+                                                'course_teacher_id' => 2,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '02/03/2014',
+                                                'from' => '10:00:00',
+                                                'to' => '12:00:00',
                                             ],
                                         ],
                                     ],
@@ -149,6 +208,41 @@ class DepartmentSeeder extends Seeder
                                             ],
                                         ],
                                     ],
+                                    'exams' => [
+                                        [
+                                            'id' => 6,
+                                            'data' => [
+                                                'course_teacher_id' => 2,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '02/01/2015',
+                                                'from' => '08:00:00',
+                                                'to' => '10:00:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 7,
+                                            'data' => [
+                                                'course_teacher_id' => 3,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '02/03/2015',
+                                                'from' => '10:00:00',
+                                                'to' => '12:00:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 8,
+                                            'data' => [
+                                                'course_teacher_id' => 3,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 60,
+                                                'date' => '02/03/2015',
+                                                'from' => '10:00:00',
+                                                'to' => '12:00:00',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'data' => [
@@ -176,6 +270,30 @@ class DepartmentSeeder extends Seeder
                                                 'day' => 5,
                                                 'from' => '10:00:00',
                                                 'to' => '11:00:00',
+                                            ],
+                                        ],
+                                    ],
+                                    'exams' => [
+                                        [
+                                            'id' => 9,
+                                            'data' => [
+                                                'course_teacher_id' => 4,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '03/01/2015',
+                                                'from' => '08:00:00',
+                                                'to' => '10:00:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 10,
+                                            'data' => [
+                                                'course_teacher_id' => 4,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '03/03/2015',
+                                                'from' => '10:00:00',
+                                                'to' => '12:00:00',
                                             ],
                                         ],
                                     ],
@@ -219,6 +337,41 @@ class DepartmentSeeder extends Seeder
                                             ],
                                         ],
                                     ],
+                                    'exams' => [
+                                        [
+                                            'id' => 11,
+                                            'data' => [
+                                                'course_teacher_id' => 5,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '03/01/2016',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 12,
+                                            'data' => [
+                                                'course_teacher_id' => 5,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 10,
+                                                'date' => '03/03/2016',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 13,
+                                            'data' => [
+                                                'course_teacher_id' => 4,
+                                                'classroom_id' => 1,
+                                                'max_mark' => 60,
+                                                'date' => '03/03/2016',
+                                                'from' => '08:00:00',
+                                                'to' => '10:00:00',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'data' => [
@@ -246,6 +399,30 @@ class DepartmentSeeder extends Seeder
                                                 'day' => 2,
                                                 'from' => '10:00:00',
                                                 'to' => '11:00:00',
+                                            ],
+                                        ],
+                                    ],
+                                    'exams' => [
+                                        [
+                                            'id' => 14,
+                                            'data' => [
+                                                'course_teacher_id' => 6,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '04/01/2016',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 15,
+                                            'data' => [
+                                                'course_teacher_id' => 6,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '04/03/2016',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
                                             ],
                                         ],
                                     ],
@@ -289,6 +466,41 @@ class DepartmentSeeder extends Seeder
                                             ],
                                         ],
                                     ],
+                                    'exams' => [
+                                        [
+                                            'id' => 16,
+                                            'data' => [
+                                                'course_teacher_id' => 7,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '04/01/2017',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 17,
+                                            'data' => [
+                                                'course_teacher_id' => 7,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '04/03/2017',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 18,
+                                            'data' => [
+                                                'course_teacher_id' => 7,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '04/04/2017',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'data' => [
@@ -316,6 +528,30 @@ class DepartmentSeeder extends Seeder
                                                 'day' => 4,
                                                 'from' => '10:00:00',
                                                 'to' => '11:00:00',
+                                            ],
+                                        ],
+                                    ],
+                                    'exams' => [
+                                        [
+                                            'id' => 19,
+                                            'data' => [
+                                                'course_teacher_id' => 8,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '05/01/2017',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 20,
+                                            'data' => [
+                                                'course_teacher_id' => 8,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '05/03/2017',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
                                             ],
                                         ],
                                     ],
@@ -359,6 +595,41 @@ class DepartmentSeeder extends Seeder
                                             ],
                                         ],
                                     ],
+                                    'exams' => [
+                                        [
+                                            'id' => 21,
+                                            'data' => [
+                                                'course_teacher_id' => 9,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '01/01/2018',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 22,
+                                            'data' => [
+                                                'course_teacher_id' => 9,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '01/03/2018',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 23,
+                                            'data' => [
+                                                'course_teacher_id' => 9,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '01/04/2018',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'data' => [
@@ -386,6 +657,30 @@ class DepartmentSeeder extends Seeder
                                                 'day' => 6,
                                                 'from' => '10:00:00',
                                                 'to' => '11:00:00',
+                                            ],
+                                        ],
+                                    ],
+                                    'exams' => [
+                                        [
+                                            'id' => 24,
+                                            'data' => [
+                                                'course_teacher_id' => 10,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '02/01/2018',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 25,
+                                            'data' => [
+                                                'course_teacher_id' => 10,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '02/03/2018',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
                                             ],
                                         ],
                                     ],
@@ -429,6 +724,41 @@ class DepartmentSeeder extends Seeder
                                             ],
                                         ],
                                     ],
+                                    'exams' => [
+                                        [
+                                            'id' => 26,
+                                            'data' => [
+                                                'course_teacher_id' => 11,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '02/01/2019',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 27,
+                                            'data' => [
+                                                'course_teacher_id' => 11,
+                                                'classroom_id' => 3,
+                                                'max_mark' => 10,
+                                                'date' => '02/03/2019',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 28,
+                                            'data' => [
+                                                'course_teacher_id' => 11,
+                                                'classroom_id' => 3,
+                                                'max_mark' => 10,
+                                                'date' => '02/03/2019',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'data' => [
@@ -456,6 +786,30 @@ class DepartmentSeeder extends Seeder
                                                 'day' => 3,
                                                 'from' => '10:00:00',
                                                 'to' => '11:00:00',
+                                            ],
+                                        ],
+                                    ],
+                                    'exams' => [
+                                        [
+                                            'id' => 29,
+                                            'data' => [
+                                                'course_teacher_id' => 12,
+                                                'classroom_id' => 2,
+                                                'max_mark' => 10,
+                                                'date' => '03/01/2019',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 30,
+                                            'data' => [
+                                                'course_teacher_id' => 12,
+                                                'classroom_id' => 3,
+                                                'max_mark' => 10,
+                                                'date' => '04/03/2019',
+                                                'from' => '08:00:00',
+                                                'to' => '09:30:00',
                                             ],
                                         ],
                                     ],
@@ -542,6 +896,19 @@ class DepartmentSeeder extends Seeder
                     ->pluck('data')
                     ->toArray()
             );
+
+        $exams =
+            $teachers
+                ->pluck('exams')
+                ->flatten(1);
+
+        DB::table('exams')
+            ->insert(
+                $exams
+                    ->pluck('data')
+                    ->toArray()
+            );
+
         // $x =
         // $departments
         //     ->pluck('courses')
