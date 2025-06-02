@@ -121,6 +121,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all of the attendances for the Student
+     */
+    public function studenAttendances(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            CourseTeacher::class,
+            'attendances',
+            'student_id',
+            'course_teacher_id'
+        );
+    }
+
+    /**
      * Get all of the attendances for the User
      */
     public function attendances(): HasMany
@@ -128,7 +141,6 @@ class User extends Authenticatable
         return $this->hasMany(
             CourseAttendance::class,
             'student_id',
-            'id'
         );
     }
 
@@ -155,6 +167,27 @@ class User extends Authenticatable
             'exam_student',
             'id'
         );
+    }
+
+    /**
+     * Get the students that owns the student
+     */
+    public function courses(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            OpenCourseRegisteration::class,
+            'student_course_registerations',
+            'student_id',
+            'course_id'
+        );
+    }
+
+    /**
+     * Get all of the studentCourseRegisterations for the student
+     */
+    public function studentCourseRegisterations(): HasMany
+    {
+        return $this->hasMany(StudentCourseRegisteration::class, 'student_id');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -11,6 +12,14 @@ class Course extends Model
 {
     /** @use HasFactory<\Database\Factories\CourseFactory> */
     use HasFactory;
+
+    /**
+     * Get the department that owns the Course
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
 
     /**
      * Get all of the prerequisites for the Course
@@ -66,10 +75,18 @@ class Course extends Model
     }
 
     /**
-     * Get all of the courseDepartments for the Course
+     * Get all of the firstCrossListedCourses for the Course
      */
-    public function courseDepartments(): HasMany
+    public function firstCrossListedCourses(): HasMany
     {
-        return $this->hasMany(CourseDepartment::class);
+        return $this->hasMany(CrossListedCourses::class, 'first_course_id');
+    }
+
+    /**
+     * Get all of the SecondCrossListedCourses for the Course
+     */
+    public function SecondCrossListedCourses(): HasMany
+    {
+        return $this->hasMany(CrossListedCourses::class, 'second_course_id');
     }
 }

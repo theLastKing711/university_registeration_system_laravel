@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ClassroomCourseTeacher extends Pivot
@@ -35,18 +34,6 @@ class ClassroomCourseTeacher extends Pivot
             'users',
             'student_id',
             'role_id'
-        );
-    }
-
-    /**
-     * Get all of the attendances for the ClassroomCourseTeacher
-     */
-    public function attendances(): HasMany
-    {
-        return $this->hasMany(
-            CourseAttendance::class,
-            'classroom_course_teacher_id',
-            'id'
         );
     }
 }

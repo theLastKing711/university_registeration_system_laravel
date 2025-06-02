@@ -21,19 +21,11 @@ class Department extends Model
     }
 
     /**
-     * The courses that belong to the Department
+     * Get all of the courses for the Department
      */
-    public function courses(): BelongsToMany
+    public function courses(): HasMany
     {
-        return $this->belongsToMany(Course::class);
-    }
-
-    /**
-     * Get all of the courseDepartments for the Course
-     */
-    public function courseDepartments(): HasMany
-    {
-        return $this->hasMany(CourseDepartment::class);
+        return $this->hasMany(Course::class);
     }
 
     /**

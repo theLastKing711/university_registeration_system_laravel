@@ -44,4 +44,20 @@ class OpenCourseRegisteration extends Model
             'id'
         );
     }
+
+    /**
+     * Get the students that owns the openCourseRegisteration
+     */
+    public function students(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'student_course_registerations', 'course_id', 'student_id');
+    }
+
+    /**
+     * Get all of the studentCourseRegisterations for the openCourseRegisteration
+     */
+    public function studentCourseRegisterations(): HasMany
+    {
+        return $this->hasMany(StudentCourseRegisteration::class, 'course_id');
+    }
 }

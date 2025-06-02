@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -40,5 +41,29 @@ class CourseTeacher extends Pivot
     public function exams(): HasMany
     {
         return $this->hasMany(Exam::class, 'course_teacher_id');
+    }
+
+    /**
+     * Get all of the attendances for the CourseTeacher
+     */
+    public function studenAttendances(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'attendances',
+            'course_teacher_id',
+            'student_id'
+        );
+    }
+
+    /**
+     * Get all of the attendances for the CourseTeacher
+     */
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(
+            CourseAttendance::class,
+            'course_teacher_id',
+        );
     }
 }

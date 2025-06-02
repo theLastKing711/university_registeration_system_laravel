@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
+            $table
+                ->foreignId('department_id')
+                ->constrained();
             $table->string('name');
             $table->string('code');
             $table->boolean('is_active')->default(true);
