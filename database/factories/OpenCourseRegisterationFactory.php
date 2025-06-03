@@ -22,6 +22,23 @@ class OpenCourseRegisterationFactory extends Factory
         ];
     }
 
+    public function openFrom2014To2015(): static
+    {
+
+        $random_semester = $this->faker->numberBetween(0, 2);
+
+        return
+            $this->forEachSequence(
+                [
+                    'year' => 2014,
+                ],
+                [
+                    'year' => 2015,
+                ],
+
+            );
+    }
+
     public function openFrom2014To2019(): static
     {
 
@@ -36,24 +53,23 @@ class OpenCourseRegisterationFactory extends Factory
                 [
                     'year' => 2015,
                     // 'semester' => $random_semester,
-
                 ],
-                [
-                    'year' => 2016,
-                    // 'semester' => $random_semester,
-                ],
-                [
-                    'year' => 2017,
-                    // 'semester' => $random_semester,
-                ],
-                [
-                    'year' => 2018,
-                    // 'semester' => $random_semester,
-                ],
-                [
-                    'year' => 2019,
-                    // 'semester' => $random_semester,
-                ],
+                // [
+                //     'year' => 2016,
+                //     // 'semester' => $random_semester,
+                // ],
+                // [
+                //     'year' => 2017,
+                //     // 'semester' => $random_semester,
+                // ],
+                // [
+                //     'year' => 2018,
+                //     // 'semester' => $random_semester,
+                // ],
+                // [
+                //     'year' => 2019,
+                //     // 'semester' => $random_semester,
+                // ],
             );
     }
 
