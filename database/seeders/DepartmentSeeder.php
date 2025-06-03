@@ -15,18 +15,24 @@ class DepartmentSeeder extends Seeder
         [
             'id' => 1,
             'name' => 'IT',
+            'is_course_registeration_open' => true,
         ],
         [
             'id' => 2,
             'name' => 'English',
+            'is_course_registeration_open' => true,
+
         ],
         [
             'id' => 3,
             'name' => 'Biology',
+            'is_course_registeration_open' => true,
+
         ],
         [
             'id' => 4,
             'name' => 'Shared', // houses shared courses like arabic or english across all departments.
+            'is_course_registeration_open' => true,
         ],
     ];
 
@@ -879,41 +885,41 @@ class DepartmentSeeder extends Seeder
                     ->toArray()
             );
 
-        $teachers =
-            $open_course_registerations
-                ->pluck('teachers')
-                ->flatten(1);
+        // $teachers =
+        //     $open_course_registerations
+        //         ->pluck('teachers')
+        //         ->flatten(1);
 
-        DB::table('course_teacher')
-            ->insert(
-                $teachers
-                    ->pluck('data')
-                    ->toArray()
-            );
+        // DB::table('course_teacher')
+        //     ->insert(
+        //         $teachers
+        //             ->pluck('data')
+        //             ->toArray()
+        //     );
 
-        $classrooms =
-            $teachers
-                ->pluck('classrooms')
-                ->flatten(1);
+        // $classrooms =
+        //     $teachers
+        //         ->pluck('classrooms')
+        //         ->flatten(1);
 
-        DB::table('classroom_course_teacher')
-            ->insert(
-                $classrooms
-                    ->pluck('data')
-                    ->toArray()
-            );
+        // DB::table('classroom_course_teacher')
+        //     ->insert(
+        //         $classrooms
+        //             ->pluck('data')
+        //             ->toArray()
+        //     );
 
-        $exams =
-            $teachers
-                ->pluck('exams')
-                ->flatten(1);
+        // $exams =
+        //     $teachers
+        //         ->pluck('exams')
+        //         ->flatten(1);
 
-        DB::table('exams')
-            ->insert(
-                $exams
-                    ->pluck('data')
-                    ->toArray()
-            );
+        // DB::table('exams')
+        //     ->insert(
+        //         $exams
+        //             ->pluck('data')
+        //             ->toArray()
+        //     );
 
         // $x =
         // $departments

@@ -14,30 +14,38 @@ class TeacherSeeder extends Seeder
         [
             'id' => 1,
             'name' => 'aynman',
+            'department_id' => 1,
+
         ],
         [
             'id' => 2,
             'name' => 'mousa',
+            'department_id' => 1,
         ],
         [
             'id' => 3,
             'name' => 'shaar',
+            'department_id' => 1,
         ],
         [
             'id' => 4,
             'name' => 'basheer kharat',
+            'department_id' => 1,
         ],
         [
             'id' => 5,
             'name' => 'sa3eed sa3dan',
+            'department_id' => 1,
         ],
         [
             'id' => 6,
             'name' => 'iman',
+            'department_id' => 1,
         ],
         [
             'id' => 7,
             'name' => 'black',
+            'department_id' => 1,
         ],
 
     ];

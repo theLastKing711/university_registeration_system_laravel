@@ -120,6 +120,176 @@
                 }
             }
         },
+        "/admins/courses": {
+            "post": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "a3763a3879fda6ba6dd4d7a1c56ba02d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCourseRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "dd364bf09bce2d6c9f8250b2d68f36a1",
+                "parameters": [
+                    {
+                        "name": "ids[]",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/departments/createdepartments": {
+            "post": {
+                "tags": [
+                    "adminsDepartments"
+                ],
+                "operationId": "a5ec546035cce5712229ec17948c03bc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateDepartmentRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/departments/deletedepartments": {
+            "delete": {
+                "tags": [
+                    "adminsDepartments"
+                ],
+                "operationId": "2a29ef87a8ac8ea4ca6523e8b6a4982d",
+                "parameters": [
+                    {
+                        "name": "ids[]",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/teachers": {
+            "post": {
+                "tags": [
+                    "adminsTeachers"
+                ],
+                "operationId": "655eb17f0b7ac0c15dba16216f856d47",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateTeacherRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "adminsTeachers"
+                ],
+                "operationId": "52bf2824f83fdc3ada6211ff0bebf7a4",
+                "parameters": [
+                    {
+                        "name": "ids[]",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admin/tests": {
             "get": {
                 "tags": [
@@ -510,6 +680,84 @@
                 },
                 "type": "object"
             },
+            "CreateCourseRequestData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "credits": {
+                        "type": "integer"
+                    },
+                    "department_id": {
+                        "type": "integer"
+                    },
+                    "prerequisites_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteCoursesRequestData": {
+                "properties": {
+                    "ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateDepartmentRequestData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteDepartmentRequestData": {
+                "properties": {
+                    "ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateTeacherRequestData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "department_id": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteTeachersRequestData": {
+                "properties": {
+                    "ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "ExampleCursorPaginationRequetData": {
                 "type": "object",
                 "allOf": [
@@ -779,6 +1027,18 @@
         {
             "name": "sanctum",
             "description": "sanctum"
+        },
+        {
+            "name": "adminsCourses",
+            "description": "adminsCourses"
+        },
+        {
+            "name": "adminsDepartments",
+            "description": "adminsDepartments"
+        },
+        {
+            "name": "adminsTeachers",
+            "description": "adminsTeachers"
         },
         {
             "name": "tests",

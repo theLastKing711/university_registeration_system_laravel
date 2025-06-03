@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Department extends Model
@@ -29,10 +28,10 @@ class Department extends Model
     }
 
     /**
-     * The teachers that belong to the Department
+     * Get all of the teachers for the Department
      */
-    public function teachers(): BelongsToMany
+    public function teachers(): HasMany
     {
-        return $this->belongsToMany(Teacher::class);
+        return $this->hasMany(Teacher::class);
     }
 }

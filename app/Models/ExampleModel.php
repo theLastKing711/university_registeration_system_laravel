@@ -16,12 +16,13 @@ use Spatie\Permission\Traits\HasRoles;
 class ExampleModel extends Eloquent implements Mediable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, MediaAlly;
+    use HasFactory, MediaAlly, Notifiable;
+    // /HasRoles
 
-    public function medially(): MorphMany
-    {
-        return $this->morphMany(Media::class, 'medially');
-    }
+    // public function medially(): MorphMany
+    // {
+    //     return $this->morphMany(Media::class, 'medially');
+    // }
 
     /**
      * The attributes that are mass assignable.

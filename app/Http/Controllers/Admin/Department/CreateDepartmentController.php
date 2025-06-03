@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Department;
 
-use App\Data\Admin\CreateDepartmentRequestData;
+use App\Data\Admin\Department\CreateDepartmentRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class CreateDepartmentController extends Controller
 {
-    #[OAT\Post(path: '/admins/createdepartments', tags: ['adminsCreateDepartments'])]
+    #[OAT\Post(path: '/admins/departments/createdepartments', tags: ['adminsDepartments'])]
     #[JsonRequestBody(CreateDepartmentRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(CreateDepartmentRequestData $request)
