@@ -19,16 +19,17 @@ class StudentSeeder extends Seeder
                 ->whereRelation('course.department', 'id', 1)
                 ->get();
 
-        // User::factory()
-        //     ->fromItDepartment()
-        //     ->enrolledInYear(2014)
-        //     ->unGraduated()
-        //     ->count(count: 3)
-        //     ->hasAttached(
-        //         $it_courses,
-        //         fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)]
-        //     )
-        //     ->create();
+        User::factory()
+            ->fromItDepartment()
+            ->enrolledInYear(2014)
+            ->unGraduated()
+            ->count(count: 3)
+            ->hasAttached(
+                $it_courses,
+                fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)], // runs once per it_course
+                'courses`' // the many to many relation for User Model we insert for $it_course
+            )
+            ->create();
 
         // User::factory()
         //     ->fromItDepartment()
