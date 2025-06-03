@@ -19,6 +19,7 @@ return new class extends Migration
             $table
                 ->foreignId('course_id')
                 ->constrained('open_course_registerations');
+            $table->integer('final_mark');
             $table->timestamps();
         });
     }

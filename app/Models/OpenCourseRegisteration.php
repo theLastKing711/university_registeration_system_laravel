@@ -50,7 +50,12 @@ class OpenCourseRegisteration extends Model
      */
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'student_course_registerations', 'course_id', 'student_id');
+        return $this->belongsToMany(
+            User::class,
+            'student_course_registerations',
+            'course_id',
+            'student_id'
+        );
     }
 
     /**
@@ -58,6 +63,9 @@ class OpenCourseRegisteration extends Model
      */
     public function studentCourseRegisterations(): HasMany
     {
-        return $this->hasMany(StudentCourseRegisteration::class, 'course_id');
+        return $this->hasMany(
+            StudentCourseRegisteration::class,
+            'course_id'
+        );
     }
 }

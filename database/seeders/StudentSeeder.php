@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -12,19 +13,29 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()
-            ->fromItDepartment()
-            ->enrolledInYear(2014)
-            ->unGraduated()
-            ->count(10)
-            ->create();
 
-        User::factory()
-            ->fromItDepartment()
-            ->enrolledInYear(2013)
-            ->graduatedInYear(2018)
-            ->count(10)
-            ->create();
+        $it_courses =
+            OpenCourseRegisteration::query()
+                ->whereRelation('course.department', 'id', 1)
+                ->get();
+
+        // User::factory()
+        //     ->fromItDepartment()
+        //     ->enrolledInYear(2014)
+        //     ->unGraduated()
+        //     ->count(count: 3)
+        //     ->hasAttached(
+        //         $it_courses,
+        //         fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)]
+        //     )
+        //     ->create();
+
+        // User::factory()
+        //     ->fromItDepartment()
+        //     ->enrolledInYear(2013)
+        //     ->graduatedInYear(2018)
+        //     ->count(10)
+        //     ->create();
 
     }
 }

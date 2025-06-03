@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             TeacherSeeder::class,
             // CourseSeeder::class,
-            // StudentSeeder::class,
+            StudentSeeder::class,
             // RolesAndPermissionsSeeder::class,
             // AdminSeeder::class,
         ]);

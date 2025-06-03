@@ -51,14 +51,6 @@ class Course extends Model
     }
 
     /**
-     * The departments that belong to the Course
-     */
-    public function departments(): BelongsToMany
-    {
-        return $this->belongsToMany(Department::class);
-    }
-
-    /**
      * The teachers that belong to the Course
      */
     public function teachers(): BelongsToMany
