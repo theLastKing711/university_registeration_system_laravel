@@ -137,11 +137,11 @@ class DepartmentSeeder extends Seeder
 
         $departments = collect(self::DEPARTMENTS);
 
-        Department::insert(
-            $departments
-                ->pluck('data')
-                ->toArray()
-        );
+        // Department::insert(
+        //     $departments
+        //         ->pluck('data')
+        //         ->toArray()
+        // );
 
         $courses =
             $departments
@@ -165,6 +165,7 @@ class DepartmentSeeder extends Seeder
                     ->toArray()
             );
 
+        // we didn't use afterMaking and batch insert because insert doesn't trigger after creating
         $open_course_premissions_to_insert =
             Course::all()
                 ->map(function (Course $course) {
@@ -172,17 +173,18 @@ class DepartmentSeeder extends Seeder
                     return
                         OpenCourseRegisteration::factory()
                             ->openFrom2014To2015()
-                            ->make([
+                            ->hasTwoTeachers()
+                            ->create([
                                 'course_id' => $course->id,
                                 'semester' => fake()->numberBetween(0, 2),
                             ]);
                 });
 
-        OpenCourseRegisteration::insert(
-            $open_course_premissions_to_insert
-                ->flatten(1)
-                ->toArray()
-        );
+        // OpenCourseRegisteration::insert(
+        //     $open_course_premissions_to_insert
+        //         ->flatten(1)
+        //         ->toArray()
+        // );
 
         // $open_course_registerations =
         //     $courses

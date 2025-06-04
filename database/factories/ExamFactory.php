@@ -20,4 +20,28 @@ class ExamFactory extends Factory
             //
         ];
     }
+
+    public function semesterExamsSequence(): static
+    {
+
+        return
+            $this->
+                sequence(
+                    [
+                        'max_mark' => 10,
+                    ],
+                    [
+                        'max_mark' => 10,
+                    ],
+                    [
+                        'max_mark' => 10,
+                    ],
+                    [
+                        'max_mark' => 10,
+                    ],
+                    [
+                        'max_mark' => 60,
+                    ]
+                );
+    }
 }

@@ -27,7 +27,7 @@ class StudentSeeder extends Seeder
             ->hasAttached(
                 $it_courses,
                 fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)], // runs once per it_course
-                'courses`' // the many to many relation for User Model we insert for $it_course
+                'courses' // the many to many relation for User Model we insert for $it_course
             )
             ->create();
 

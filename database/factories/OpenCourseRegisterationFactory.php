@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Exam;
+use App\Models\OpenCourseRegisteration;
+use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -38,6 +41,51 @@ class OpenCourseRegisterationFactory extends Factory
 
             );
     }
+
+    public function hasTwoTeachers(): static
+    {
+
+        return
+            $this->afterCreating(function (OpenCourseRegisteration $course) {
+
+                $teachers =
+                    Teacher::query()
+                        ->where(
+                            'department_id',
+                            1,
+                        )
+                        ->inRandomOrder()
+                        ->take(2)
+                        ->pluck('id');
+
+                $course->teachers()->attach($teachers);
+
+            });
+    }
+
+    // public function hasSixExams(): static
+    // {
+
+    //     return
+    //         $this->afterCreating(function (OpenCourseRegisteration $course) {
+
+    //             $semester_exams =
+    //                 Exam::query()
+    //                     ->factory()
+    //                     ->semesterExamsSequence()
+    //                     ->state([
+
+    //                     ])
+
+    //         });
+    //     // return
+    //     //     $this->
+    //     //         has(
+    //     //             Exam::factory()
+    //     //                 ->semesterExamsSequence()
+    //     //         );
+
+    // }
 
     public function openFrom2014To2019(): static
     {

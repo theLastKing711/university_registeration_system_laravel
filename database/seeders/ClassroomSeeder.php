@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Classroom;
+use App\Models\Department;
 use Illuminate\Database\Seeder;
 
 class ClassroomSeeder extends Seeder
@@ -67,5 +68,13 @@ class ClassroomSeeder extends Seeder
         $classrooms = array_map(fn ($class) => $class, self::CLASSROOMS);
 
         Classroom::insert(self::CLASSROOMS);
+
+        $departments = collect(DepartmentSeeder::DEPARTMENTS);
+
+        Department::insert(
+            $departments
+                ->pluck('data')
+                ->toArray()
+        );
     }
 }
