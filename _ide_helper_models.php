@@ -146,8 +146,6 @@ namespace App\Models{
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Course,\Illuminate\Database\Eloquent\Relations\Pivot> $coursesPrerequisites
  * @property-read int|null $courses_prerequisites_count
  * @property-read \App\Models\Department $department
- * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Department,\Illuminate\Database\Eloquent\Relations\Pivot> $departments
- * @property-read int|null $departments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CrossListedCourses> $firstCrossListedCourses
  * @property-read int|null $first_cross_listed_courses_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OpenCourseRegisteration> $openCourseRegisterations
@@ -236,7 +234,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
  * @property-read int|null $attendances_count
  * @property-read \App\Models\Classroom|null $classrooms
- * @property-read \App\Models\Course $course
+ * @property-read \App\Models\OpenCourseRegisteration $course
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Exam> $exams
  * @property-read int|null $exams_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $studenAttendances
@@ -302,6 +300,9 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
+ * @property int $is_course_registeration_open
+ * @property string $course_registeration_year
+ * @property int $course_registeration_semester
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Course> $courses
@@ -329,42 +330,15 @@ namespace App\Models{
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereCourseRegisterationSemester($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereCourseRegisterationYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereIsCourseRegisterationOpen($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereUpdatedAt($value)
  */
 	class Department extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * 
- *
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExamStudent> $examStudents
- * @property-read int|null $exam_students_count
- * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $students
- * @property-read int|null $students_count
- * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam newQuery()
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoinsCount(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsAvg(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsCount(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMax(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMin(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsSum(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsAvg(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMax(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMin(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsSum(string $column, string|null $order)
- * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
- * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam query()
- */
-	class Exam extends \Eloquent {}
 }
 
 namespace App\Models{

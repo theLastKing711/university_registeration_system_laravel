@@ -16,7 +16,7 @@ class CourseTeacher extends Pivot
      */
     public function course(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(OpenCourseRegisteration::class);
     }
 
     /**

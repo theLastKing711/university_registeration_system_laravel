@@ -12,6 +12,8 @@ class Exam extends Pivot
     /** @use HasFactory<\Database\Factories\ExamFactory> */
     use HasFactory;
 
+    protected $table = 'exams';
+
     /**
      * The students that belong to the Exam
      */

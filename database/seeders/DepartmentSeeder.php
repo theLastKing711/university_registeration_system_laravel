@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Classroom;
 use App\Models\Course;
+use App\Models\CourseTeacher;
 use App\Models\Department;
+use App\Models\Exam;
 use App\Models\OpenCourseRegisteration;
 use App\Models\Teacher;
 use Carbon\Carbon;
@@ -179,6 +181,41 @@ class DepartmentSeeder extends Seeder
                                 'semester' => fake()->numberBetween(0, 2),
                             ]);
                 });
+
+        CourseTeacher::with('course')
+            ->get()
+            ->each(function (CourseTeacher $course_teacher, $index) {
+
+                $course =
+                    $course_teacher
+                        ->course;
+
+                $course_year =
+                    $course
+                        ->year;
+
+                $course_semester =
+                    $course
+                        ->semester;
+
+                // if ($course_teacher->is_main_teacher) {
+
+                Exam::factory()
+                    ->semesterMainExamsMaxMarkSequence()
+
+                    ->withRandomFromTo()
+                    ->withRandomExamDate($course_year, $course_semester)
+                    ->withCourseTeacherId($course_teacher->id)
+                    ->create();
+
+                // }
+
+                // Exam
+                //     ::factory()
+                //     ->semesterMainExamsSequence()
+                //     ->stat
+
+            });
 
         // OpenCourseRegisteration::insert(
         //     $open_course_premissions_to_insert
