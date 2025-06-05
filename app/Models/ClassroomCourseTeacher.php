@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ClassroomCourseTeacher extends Pivot
 {
+    /** @use HasFactory<\Database\Factories\ClassroomCourseTeacherFactory> */
+    use HasFactory;
+
     /**
      * Get the teacher that owns the ClassroomCourseTeacher
      */

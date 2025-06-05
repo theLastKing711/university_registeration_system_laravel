@@ -23,6 +23,10 @@ class ClassroomFactory extends Factory
         'C-2',
         'C-3',
         'C-4',
+        'D-1',
+        'D-2',
+        'D-3',
+        'D-4',
     ];
 
     public const CLASS_HOURS = [

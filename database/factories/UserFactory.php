@@ -3,8 +3,10 @@
 namespace Database\Factories;
 
 use App\Enum\Auth\RolesEnum;
+use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -26,6 +28,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+
         return [
             'national_id' => $this->faker->randomNumber(6),
             'birthdate' => $this->faker->date(),
@@ -97,5 +100,75 @@ class UserFactory extends Factory
             'graduation_date' => null,
         ]
         );
+    }
+
+    public function withCourses(): static
+    {
+
+        return $this->afterCreating(function (User $student) {
+
+            $university_first_open_year =
+                2014;
+
+            $student_year =
+                Carbon::parse(
+                    $student
+                        ->enrollment_date
+                )
+                    ->year;
+
+            // $student_year =
+            //     $university_first_open_year
+            //     -
+            //     $student_year
+            //     +
+            //     1;
+
+            $registerable_courses_years =
+                collect(
+                    range(1, $student_year - $university_first_open_year + 1)
+                );
+
+            $registerable_courses_years
+                ->map(function (int $student_year) use ($student, $university_first_open_year) {
+
+                    $course_year =
+                        $university_first_open_year
+                        +
+                        $student_year
+                        -
+                        1;
+
+                    $courses_ids =
+                        OpenCourseRegisteration::query()
+                            ->where('year', $course_year)
+                            ->whereHas(
+                                'course',
+                                fn (Builder $query): Builder => $query
+                                    ->where('open_for_students_in_year', $student_year)
+                            )
+                            ->pluck('id');
+
+                    $student
+                        ->courses()
+                        ->attach($courses_ids, ['final_mark' => 30]);
+
+                });
+
+            // $courses_ids =
+            //     OpenCourseRegisteration::query()
+            //         ->whereYear(column: 'year', $year)
+            //         ->whereHas(
+            //             'course',
+            //             fn (Builder $query) => $query
+            //                 ->whereIn('year', $registerable_courses_years)
+            //         )
+            //         ->pluck('id');
+
+            // $student
+            //     ->courses()
+            //     ->attach($courses_ids);
+
+        });
     }
 }

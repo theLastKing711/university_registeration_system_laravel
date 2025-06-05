@@ -19,6 +19,8 @@ return new class extends Migration
             $table
                 ->foreignId('student_id')
                 ->constrained('users', 'id');
+            $table->date('date');
+            $table->boolean('is_student_present');
             $table->timestamps();
         });
     }

@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
             // OpenCourseRegisterationSeeder::class,
             TeacherSeeder::class,
             DepartmentSeeder::class,
-            // CourseSeeder::class,
             StudentSeeder::class,
+            // CourseSeeder::class,
             // RolesAndPermissionsSeeder::class,
             // AdminSeeder::class,
         ]);

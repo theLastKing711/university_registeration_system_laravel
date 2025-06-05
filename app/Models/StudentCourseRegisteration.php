@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class StudentCourseRegisteration extends Pivot
 {
+    protected $table = 'student_course_registerations';
+
     /**
      * Get the student that owns the StudentCourseRegisteration
      */

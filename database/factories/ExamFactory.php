@@ -128,7 +128,7 @@ class ExamFactory extends Factory
 
         $exam_day =
             strval(
-                fake()->numberBetween(1, 29)
+                fake()->numberBetween(1, int2: 28)
             );
 
         if (strlen($exam_day) === 1) {

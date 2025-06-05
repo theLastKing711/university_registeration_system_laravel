@@ -3,12 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\Classroom;
+use App\Models\ClassroomCourseTeacher;
 use App\Models\Course;
+use App\Models\CourseAttendance;
 use App\Models\CourseTeacher;
 use App\Models\Department;
 use App\Models\Exam;
 use App\Models\OpenCourseRegisteration;
 use App\Models\Teacher;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -59,7 +62,8 @@ class DepartmentSeeder extends Seeder
                         'department_id' => 1,
                         'name' => 'Math1',
                         'code' => 'M1',
-                        'credits' => 2,
+                        'credits' => 3,
+                        'open_for_students_in_year' => 1,
                     ],
                     'prerequisites' => [],
                     // 'opens' => [
@@ -74,7 +78,8 @@ class DepartmentSeeder extends Seeder
                         'department_id' => 1,
                         'name' => 'Math2',
                         'code' => 'M2',
-                        'credits' => 2,
+                        'credits' => 3,
+                        'open_for_students_in_year' => 1,
                     ],
                     'prerequisites' => [
                         [
@@ -89,7 +94,8 @@ class DepartmentSeeder extends Seeder
                         'department_id' => 1,
                         'name' => 'Math3',
                         'code' => 'M3',
-                        'credits' => 2,
+                        'credits' => 3,
+                        'open_for_students_in_year' => 2,
                     ],
                     'prerequisites' => [
                         [
@@ -104,7 +110,8 @@ class DepartmentSeeder extends Seeder
                         'department_id' => 1,
                         'name' => 'Electronics1',
                         'code' => 'ELCTR1',
-                        'credits' => 2,
+                        'credits' => 3,
+                        'open_for_students_in_year' => 2,
                     ],
                     'prerequisites' => [],
                 ],
@@ -114,7 +121,8 @@ class DepartmentSeeder extends Seeder
                         'department_id' => 1,
                         'name' => 'Electronics2',
                         'code' => 'ELCTR2',
-                        'credits' => 2,
+                        'credits' => 3,
+                        'open_for_students_in_year' => 3,
                     ],
                     'prerequisites' => [
                         [
@@ -183,6 +191,7 @@ class DepartmentSeeder extends Seeder
                 });
 
         CourseTeacher::with('course')
+            ->with('course.students')
             ->get()
             ->each(function (CourseTeacher $course_teacher, $index) {
 
@@ -202,11 +211,30 @@ class DepartmentSeeder extends Seeder
 
                 Exam::factory()
                     ->semesterMainExamsMaxMarkSequence()
-
                     ->withRandomFromTo()
                     ->withRandomExamDate($course_year, $course_semester)
                     ->withCourseTeacherId($course_teacher->id)
                     ->create();
+
+                ClassroomCourseTeacher::factory()
+                    ->withCourseTeacherId($course_teacher->id)
+                    ->withRandomFromTo()
+                    ->count(2)
+                    ->create();
+
+                $course_teacher_students =
+                    $course_teacher
+                        ->course
+                        ->students
+                        ->each(function (User $student) use ($course_teacher, $course_year, $course_semester) {
+
+                            CourseAttendance::factory()
+                                ->withCourseTeacherId($course_teacher->id)
+                                ->withStudentId($student->id)
+                                ->with15Days($course_year, $course_semester)
+                                ->create();
+
+                        });
 
                 // }
 

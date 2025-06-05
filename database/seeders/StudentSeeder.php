@@ -21,14 +21,23 @@ class StudentSeeder extends Seeder
 
         User::factory()
             ->fromItDepartment()
+            ->enrolledInYear(2015)
+            ->unGraduated()
+            ->withCourses()
+            ->count(count: 1)
+            ->create();
+
+        User::factory()
+            ->fromItDepartment()
             ->enrolledInYear(2014)
             ->unGraduated()
+            ->withCourses()
             ->count(count: 3)
-            ->hasAttached(
-                $it_courses,
-                fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)], // runs once per it_course
-                'courses' // the many to many relation for User Model we insert for $it_course
-            )
+            // ->hasAttached(
+            //     $it_courses,
+            //     fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)], // runs once per it_course
+            //     'courses' // the many to many relation for User Model we insert for $it_course
+            // )
             ->create();
 
         // User::factory()

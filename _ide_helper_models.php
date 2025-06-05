@@ -97,6 +97,7 @@ namespace App\Models{
  * @property-read \App\Models\CourseTeacher $courseTeacher
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $students
  * @property-read int|null $students_count
+ * @method static \Database\Factories\ClassroomCourseTeacherFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ClassroomCourseTeacher newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ClassroomCourseTeacher newQuery()
@@ -192,10 +193,13 @@ namespace App\Models{
  * @property int $id
  * @property int $course_teacher_id
  * @property int $student_id
+ * @property string $date
+ * @property int $is_student_present
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CourseTeacher $courseTeacher
  * @property-read \App\Models\User $student
+ * @method static \Database\Factories\CourseAttendanceFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance newQuery()
@@ -216,7 +220,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereCourseTeacherId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereIsStudentPresent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereStudentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereUpdatedAt($value)
  */
@@ -231,6 +237,7 @@ namespace App\Models{
  * @property int $course_id
  * @property int $teacher_id
  * @property int $is_main_teacher
+ * @property int $open_for_students_in_year
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
  * @property-read int|null $attendances_count
  * @property-read \App\Models\Classroom|null $classrooms
@@ -261,6 +268,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereCourseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereIsMainTeacher($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereOpenForStudentsInYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereTeacherId($value)
  */
 	class CourseTeacher extends \Eloquent {}
@@ -339,6 +347,55 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereUpdatedAt($value)
  */
 	class Department extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $course_teacher_id
+ * @property int $classroom_id
+ * @property int $max_mark
+ * @property string $date
+ * @property string $from
+ * @property string $to
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExamStudent> $examStudents
+ * @property-read int|null $exam_students_count
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $students
+ * @property-read int|null $students_count
+ * @method static \Database\Factories\ExamFactory factory($count = null, $state = [])
+ * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam newQuery()
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereClassroomId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereCourseTeacherId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereFrom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereMaxMark($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereTo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereUpdatedAt($value)
+ */
+	class Exam extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -435,8 +492,8 @@ namespace App\Models{
  * @property int $course_id
  * @property string $year
  * @property int $semester
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \App\Models\Course $course
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseTeacher> $courseTeachers
  * @property-read int|null $course_teachers_count
@@ -518,7 +575,13 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\OpenCourseRegisteration|null $course
+ * @property int $id
+ * @property int $student_id
+ * @property int $course_id
+ * @property int $final_mark
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\OpenCourseRegisteration $course
  * @property-read \App\Models\User|null $student
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration newModelQuery()
@@ -538,6 +601,12 @@ namespace App\Models{
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereCourseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereFinalMark($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereStudentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereUpdatedAt($value)
  */
 	class StudentCourseRegisteration extends \Eloquent {}
 }
@@ -685,7 +754,7 @@ namespace App\Models{
  * @property int|null $department_id
  * @property string|null $national_id
  * @property string|null $birthdate
- * @property string|null $enrollment_date
+ * @property \Illuminate\Support\Carbon|null $enrollment_date
  * @property string|null $graduation_date
  * @property string|null $phone_number
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Exam,\Illuminate\Database\Eloquent\Relations\Pivot> $ExamStudent

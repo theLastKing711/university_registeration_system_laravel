@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('code');
             $table->boolean('is_active')->default(true);
             $table->integer('credits'); // https://www.google.com/search?q=what+is+course+credits&sca_esv=7255129cf57cea14&rlz=1C1MMCH_enSY1151SY1151&sxsrf=AHTn8zq0Y-wFMYoVCKxsxAgQdweaUFBe7Q%3A1747955570994&ei=cq8vaMTBPKqGxc8P2bSK-A0&ved=0ahUKEwjEwpH3mbiNAxUqQ_EDHVmaAt8Q4dUDCBA&uact=5&oq=what+is+course+credits&gs_lp=Egxnd3Mtd2l6LXNlcnAiFndoYXQgaXMgY291cnNlIGNyZWRpdHMyCxAAGIAEGJECGIoFMgsQABiABBiRAhiKBTILEAAYgAQYkQIYigUyBRAAGIAEMgoQABiABBgUGIcCMgUQABiABDIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeSJ4YULUHWKoXcAN4AZABAJgB9AGgAfcKqgEDMi02uAEDyAEA-AEBmAIJoAKhC8ICChAAGLADGNYEGEfCAgcQABiABBgKmAMAiAYBkAYIkgcFMy4wLjagB6ImsgcDMi02uAeTCw&sclient=gws-wiz-serp
+            $table
+                ->integer('open_for_students_in_year')
+                ->default(0);
             $table->timestamps();
         });
     }
