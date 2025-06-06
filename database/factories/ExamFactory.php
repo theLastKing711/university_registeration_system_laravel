@@ -81,7 +81,7 @@ class ExamFactory extends Factory
 
         return
             $this->
-                sequence(
+                forEachSequence(
                     [
                         'max_mark' => 10,
                     ],

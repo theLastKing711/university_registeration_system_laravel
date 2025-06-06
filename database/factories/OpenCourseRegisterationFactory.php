@@ -48,7 +48,7 @@ class OpenCourseRegisterationFactory extends Factory
         return
             $this->afterCreating(function (OpenCourseRegisteration $course) {
 
-                $teachers =
+                $teachers_ids =
                     Teacher::query()
                         ->where(
                             'department_id',
@@ -58,7 +58,36 @@ class OpenCourseRegisterationFactory extends Factory
                         ->take(2)
                         ->pluck('id');
 
-                $course->teachers()->attach($teachers);
+                $z = [];
+
+                $teachers_attach_data =
+                    collect([$teachers_ids[0], $teachers_ids[1]])
+                        ->map(function ($teacher_id, $index) use (&$z) {
+
+                            if ($index % 2 === 0) {
+                                $z[$teacher_id] = [
+                                    'is_main_teacher' => true,
+                                ];
+
+                                return;
+                            }
+
+                            $z[$teacher_id] = [
+                                'is_main_teacher' => false,
+                            ];
+
+                            return [
+                                $teacher_id => [
+                                    ['is_main_teacher' => fake()->boolean(chanceOfGettingTrue: 60)],
+                                ],
+                            ];
+                        })
+                        ->collapseWithKeys()
+                        ->all();
+
+                $course
+                    ->teachers()
+                    ->attach($z);
 
             });
     }

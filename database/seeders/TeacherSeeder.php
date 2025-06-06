@@ -15,7 +15,6 @@ class TeacherSeeder extends Seeder
             'id' => 1,
             'name' => 'aynman',
             'department_id' => 1,
-
         ],
         [
             'id' => 2,

@@ -16,7 +16,7 @@ class CourseTeacherSeeder extends Seeder
      */
     public function run(): void
     {
-        CourseTeacher::with('course')
+        CourseTeacher::query()
             ->with('course.students')
             ->get()
             ->each(function (CourseTeacher $course_teacher, $index) {
@@ -33,15 +33,22 @@ class CourseTeacherSeeder extends Seeder
                     $course
                         ->semester;
 
-                // if ($course_teacher->is_main_teacher) {
+                if ($course_teacher->is_main_teacher) {
 
-                Exam::factory()
-                    ->semesterMainExamsMaxMarkSequence()
-                    ->withRandomFromTo()
-                    ->withRandomExamDate($course_year, $course_semester)
-                    ->withCourseTeacherId($course_teacher->id)
-                    ->create();
-
+                    Exam::factory()
+                        ->semesterMainExamsMaxMarkSequence()
+                        ->withRandomFromTo()
+                        ->withRandomExamDate($course_year, $course_semester)
+                        ->withCourseTeacherId($course_teacher->id)
+                        ->create();
+                } else {
+                    Exam::factory()
+                        ->semesterPracticalExamsSequence()
+                        ->withRandomFromTo()
+                        ->withRandomExamDate($course_year, $course_semester)
+                        ->withCourseTeacherId($course_teacher->id)
+                        ->create();
+                }
                 ClassroomCourseTeacher::factory()
                     ->withCourseTeacherId($course_teacher->id)
                     ->withRandomFromTo()
