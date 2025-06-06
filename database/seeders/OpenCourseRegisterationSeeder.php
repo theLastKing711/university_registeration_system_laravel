@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Course;
 use App\Models\OpenCourseRegisteration;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -245,6 +246,21 @@ class OpenCourseRegisterationSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $open_course_premissions_to_insert =
+           Course::all()
+               ->map(function (Course $course) {
+
+                   return
+                       OpenCourseRegisteration::factory()
+                           ->openFrom2014To2015()
+                           ->hasTwoTeachers()
+                           ->create([
+                               'course_id' => $course->id,
+                               'semester' => fake()->numberBetween(0, 2),
+                           ]);
+               });
+
         // $courses = collect(self::OPEN_COURSE_REGISTERATIONS);
 
         // OpenCourseRegisteration::insert(

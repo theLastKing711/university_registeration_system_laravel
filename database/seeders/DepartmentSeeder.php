@@ -2,16 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Classroom;
-use App\Models\ClassroomCourseTeacher;
 use App\Models\Course;
-use App\Models\CourseAttendance;
-use App\Models\CourseTeacher;
 use App\Models\Department;
-use App\Models\Exam;
 use App\Models\OpenCourseRegisteration;
-use App\Models\Teacher;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -145,277 +138,54 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
 
-        $departments = collect(self::DEPARTMENTS);
+        $departments = collect(
+            DepartmentSeeder::DEPARTMENTS
+        );
 
-        // Department::insert(
-        //     $departments
-        //         ->pluck('data')
-        //         ->toArray()
-        // );
-
-        $courses =
+        Department::insert(
             $departments
-                ->pluck('courses')
-                ->flatten(1);
-
-        Course::insert(
-            $courses
-                ->pluck(value: 'data')
+                ->pluck('data')
                 ->toArray()
         );
 
-        $course_prequisites =
-            $courses
-                ->pluck('prerequisites')
-                ->flatten(1);
+        // $departments = collect(self::DEPARTMENTS);
 
-        DB::table('prerequisites')
-            ->insert(
-                $course_prequisites
-                    ->toArray()
-            );
+        // $courses =
+        //     $departments
+        //         ->pluck('courses')
+        //         ->flatten(1);
 
-        // we didn't use afterMaking and batch insert because insert doesn't trigger after creating
-        $open_course_premissions_to_insert =
-            Course::all()
-                ->map(function (Course $course) {
-
-                    return
-                        OpenCourseRegisteration::factory()
-                            ->openFrom2014To2015()
-                            ->hasTwoTeachers()
-                            ->create([
-                                'course_id' => $course->id,
-                                'semester' => fake()->numberBetween(0, 2),
-                            ]);
-                });
-
-        CourseTeacher::with('course')
-            ->with('course.students')
-            ->get()
-            ->each(function (CourseTeacher $course_teacher, $index) {
-
-                $course =
-                    $course_teacher
-                        ->course;
-
-                $course_year =
-                    $course
-                        ->year;
-
-                $course_semester =
-                    $course
-                        ->semester;
-
-                // if ($course_teacher->is_main_teacher) {
-
-                Exam::factory()
-                    ->semesterMainExamsMaxMarkSequence()
-                    ->withRandomFromTo()
-                    ->withRandomExamDate($course_year, $course_semester)
-                    ->withCourseTeacherId($course_teacher->id)
-                    ->create();
-
-                ClassroomCourseTeacher::factory()
-                    ->withCourseTeacherId($course_teacher->id)
-                    ->withRandomFromTo()
-                    ->count(2)
-                    ->create();
-
-                $course_teacher_students =
-                    $course_teacher
-                        ->course
-                        ->students
-                        ->each(function (User $student) use ($course_teacher, $course_year, $course_semester) {
-
-                            CourseAttendance::factory()
-                                ->withCourseTeacherId($course_teacher->id)
-                                ->withStudentId($student->id)
-                                ->with15Days($course_year, $course_semester)
-                                ->create();
-
-                        });
-
-                // }
-
-                // Exam
-                //     ::factory()
-                //     ->semesterMainExamsSequence()
-                //     ->stat
-
-            });
-
-        // OpenCourseRegisteration::insert(
-        //     $open_course_premissions_to_insert
-        //         ->flatten(1)
+        // Course::insert(
+        //     $courses
+        //         ->pluck(value: 'data')
         //         ->toArray()
         // );
 
-        // $open_course_registerations =
+        // $course_prequisites =
         //     $courses
-        //         ->pluck('open_registerations')
-        //         ->flatten(1);`
-
-        // DB::table('open_course_registerations')
-        //     ->insert(
-        //         $open_course_registerations
-        //             ->pluck('data')
-        //             ->toArray()
-        //     );
-
-        // $teachers =
-        //     $open_course_registerations
-        //         ->pluck('teachers')
+        //         ->pluck('prerequisites')
         //         ->flatten(1);
 
-        // DB::table('course_teacher')
+        // DB::table('prerequisites')
         //     ->insert(
-        //         $teachers
-        //             ->pluck('data')
+        //         $course_prequisites
         //             ->toArray()
         //     );
 
-        // $classrooms =
-        //     $teachers
-        //         ->pluck('classrooms')
-        //         ->flatten(1);
+        // we didn't use afterMaking and batch insert because insert doesn't trigger after creating
+        // $open_course_premissions_to_insert =
+        //     Course::all()
+        //         ->map(function (Course $course) {
 
-        // DB::table('classroom_course_teacher')
-        //     ->insert(
-        //         $classrooms
-        //             ->pluck('data')
-        //             ->toArray()
-        //     );
+        //             return
+        //                 OpenCourseRegisteration::factory()
+        //                     ->openFrom2014To2015()
+        //                     ->hasTwoTeachers()
+        //                     ->create([
+        //                         'course_id' => $course->id,
+        //                         'semester' => fake()->numberBetween(0, 2),
+        //                     ]);
+        //         });
 
-        // $exams =
-        //     $teachers
-        //         ->pluck('exams')
-        //         ->flatten(1);
-
-        // DB::table('exams')
-        //     ->insert(
-        //         $exams
-        //             ->pluck('data')
-        //             ->toArray()
-        //     );
-
-        // $x =
-        // $departments
-        //     ->pluck('courses')
-        //     ->flatten(1);
-
-        // Department::factory()
-        //     ->has(`
-        //         Teacher::factory()
-        //             ->seedFromItDepartment()
-        //             ->hasAttached(
-
-        //             )
-        //     )
-        //     ->has(
-        //         //     Course::factory(
-        //         //         $departments
-        //         //             ->pluck('courses')
-        //         //             ->flatten(1)
-        //         //             ->toArray()
-        //         //     )
-        //         Course::factory()
-        //             ->forEachSequence(
-        //                 ...$x
-        //             )
-
-        //     )
-        //     ->createMany(
-        //         $departments->select('id', 'name')
-        // );
-
-        // $departments->each(function ( $department) use ($departments) {
-        //     $x = Department
-        //             ::factory()
-        //             ->has(
-        //                 Course::factory()
-        //             )
-        //         ->create($department)
-        //             };
-
-        // $departments_models =
-        //    Department::query()
-        //        ->whereIn(
-        //            'id',
-        //            $departments->pluck('id')
-        //        )
-        //        ->get();
-
-        // foreach (self::DEPARTMENTS as $department => $department_values) {
-        //     $department_model =
-        //      $departments_models
-        //          ->firstWhere(
-        //              'id',
-        //              $department_values['id']
-        //          );
-
-        //     $courses = collect(
-        //         $department_values['courses']
-        //     );
-
-        //     $courses_models =
-        //         Course::query()
-        //             ->whereIn(
-        //                 'id',
-        //                 $courses->pluck('id')
-        //             )
-        //             ->get();
-
-        //     $department_model
-        //         ->courses()
-        //         ->attach($courses_models->pluck('id'));
-
-        // this insert them all in one go
-        // DB::table('classroom_course')
-        //     ->insert(
-        //         $courses->pluck('classroom_course')->flatten(depth: 1)
-        //             ->toArray()
-        //     );
-        // or
-        // $courses->each(function ($course) {
-
-        //     DB::table('classroom_course')
-        //         ->insert($course['classroom_course']);
-        // });
-
-        // $courses->each(function ($course) {
-        //     $classrooms =
-        //         collect($course['classrooms']);
-
-        //     $classrooms_models =
-        //         Classroom::query()
-        //             ->whereIn(
-        //                 'name',
-        //                 values: $classrooms->pluck('name')
-        //             )
-        //             ->get();
-
-        //     $course_model =
-        //             $courses_models
-        //                 ->firstWhere(
-        //                     'name',
-        //                     $course['name']
-        //                 );
-
-        //     $course_classrooms_to_attach = [];
-
-        //     $course_model
-        //         ->classrooms()
-        //         ->attach(
-        //             $classrooms_models
-        //                     ->pluck('id'),
-        //             $classrooms
-        //                             ->pluck('pivot')
-        //                             ->toArray()
-        //         );
-
-        // });
-
-        // }
     }
 }

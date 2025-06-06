@@ -230,7 +230,31 @@ class CourseSeeder extends Seeder
     public function run(): void
     {
 
-        $this->seedItCourses();
+        $departments = collect(DepartmentSeeder::DEPARTMENTS);
+
+        $courses =
+            $departments
+                ->pluck('courses')
+                ->flatten(1);
+
+        Course::insert(
+            $courses
+                ->pluck(value: 'data')
+                ->toArray()
+        );
+
+        $course_prequisites =
+            $courses
+                ->pluck('prerequisites')
+                ->flatten(1);
+
+        DB::table('prerequisites')
+            ->insert(
+                $course_prequisites
+                    ->toArray()
+            );
+
+        // $this->seedItCourses();
 
         // $courses = collect(self::COURSES);
 

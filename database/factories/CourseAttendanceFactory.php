@@ -44,7 +44,7 @@ class CourseAttendanceFactory extends Factory
                 );
     }
 
-    public function with15Days(string $year, int $semester): static
+    public function with15DaysForEachSequence(string $year, int $semester): static
     {
 
         $semesters = [
@@ -68,12 +68,12 @@ class CourseAttendanceFactory extends Factory
 
                     if ($index % 2 === 0) {
                         return [
-                            'date' => $first_day_date->addDays($index * 7),
+                            'date' => $first_day_date->toImmutable()->addDays(floor($index / 2) * 7)->toDateString(),
                         ];
                     }
 
                     return [
-                        'date' => $first_day_date->addDays(($index * 7) + 1),
+                        'date' => $first_day_date->toImmutable()->addDays(floor($index / 2) * 7 + 1)->toDateString(),
                     ];
 
                 });
