@@ -72,5 +72,6 @@ class CourseTeacherSeeder extends Seeder
                 // }
 
             });
+
     }
 }

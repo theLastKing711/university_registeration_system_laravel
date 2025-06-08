@@ -151,7 +151,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             Exam::class,
-            'exam_student',
+            'exam_students',
             foreignPivotKey: 'student_id',
             relatedPivotKey: 'exam_id'
         );
@@ -164,7 +164,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(
             ExamStudent::class,
-            'exam_student',
+            'student_id',
             'id'
         );
     }

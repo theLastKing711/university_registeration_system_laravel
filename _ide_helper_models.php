@@ -138,6 +138,7 @@ namespace App\Models{
  * @property string $code
  * @property int $is_active
  * @property int $credits
+ * @property int $open_for_students_in_year
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CrossListedCourses> $SecondCrossListedCourses
@@ -181,6 +182,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereOpenForStudentsInYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereUpdatedAt($value)
  */
 	class Course extends \Eloquent {}
@@ -237,7 +239,6 @@ namespace App\Models{
  * @property int $course_id
  * @property int $teacher_id
  * @property int $is_main_teacher
- * @property int $open_for_students_in_year
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
  * @property-read int|null $attendances_count
  * @property-read \App\Models\Classroom|null $classrooms
@@ -268,7 +269,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereCourseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereIsMainTeacher($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereOpenForStudentsInYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereTeacherId($value)
  */
 	class CourseTeacher extends \Eloquent {}
@@ -360,8 +360,10 @@ namespace App\Models{
  * @property string $date
  * @property string $from
  * @property string $to
+ * @property int $is_main_exam
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CourseTeacher $courseTeacher
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExamStudent> $examStudents
  * @property-read int|null $exam_students_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $students
@@ -391,6 +393,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereFrom($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereIsMainExam($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereMaxMark($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereUpdatedAt($value)
@@ -754,7 +757,7 @@ namespace App\Models{
  * @property int|null $department_id
  * @property string|null $national_id
  * @property string|null $birthdate
- * @property \Illuminate\Support\Carbon|null $enrollment_date
+ * @property string|null $enrollment_date
  * @property string|null $graduation_date
  * @property string|null $phone_number
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Exam,\Illuminate\Database\Eloquent\Relations\Pivot> $ExamStudent

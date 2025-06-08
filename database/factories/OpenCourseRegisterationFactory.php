@@ -61,7 +61,7 @@ class OpenCourseRegisterationFactory extends Factory
                 $z = [];
 
                 $teachers_attach_data =
-                    collect([$teachers_ids[0], $teachers_ids[1]])
+                    collect(value: [$teachers_ids[0], $teachers_ids[1]])
                         ->map(function ($teacher_id, $index) use (&$z) {
 
                             if ($index % 2 === 0) {
@@ -78,7 +78,7 @@ class OpenCourseRegisterationFactory extends Factory
 
                             return [
                                 $teacher_id => [
-                                    ['is_main_teacher' => fake()->boolean(chanceOfGettingTrue: 60)],
+                                    'is_main_teacher' => false,
                                 ],
                             ];
                         })

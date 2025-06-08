@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             OpenCourseRegisterationSeeder::class,
             StudentSeeder::class,
             CourseTeacherSeeder::class,
+            ExamStudentSeeder::class,
             // RolesAndPermissionsSeeder::class,
             // AdminSeeder::class,
         ]);

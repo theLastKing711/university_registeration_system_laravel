@@ -102,6 +102,7 @@ class ExamFactory extends Factory
                     'max_mark' => 10,
                 ],
                 [
+                    'is_main_exam' => true,
                     'max_mark' => 60,
                 ],
             );

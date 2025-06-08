@@ -23,6 +23,9 @@ return new class extends Migration
             $table->date('date');
             $table->time('from');
             $table->time('to');
+            $table
+                ->boolean('is_main_exam')
+                ->default(false);
             $table->timestamps();
         });
     }
