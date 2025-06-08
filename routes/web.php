@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
 use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
+use App\Http\Controllers\Admin\Student\GraduateStudentController;
+use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
 use App\Http\Controllers\ExampleController;
@@ -23,6 +25,14 @@ Route::prefix('admins')
     ->middleware(['api'])
     ->group(function () {
         $adminRole = RolesEnum::ADMIN->value;
+
+        Route::prefix('students')->group(function () {
+
+            Route::post('', RegisterStudentController::class);
+
+            Route::patch('{id}', GraduateStudentController::class);
+
+        });
 
         Route::prefix('teachers')->group(function () {
 

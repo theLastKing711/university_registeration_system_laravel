@@ -5,6 +5,39 @@
         "version": "1"
     },
     "paths": {
+        "/admins/students/{id}": {
+            "patch": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "615a6b422f362f21900f14eb6308d068",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GraduateStudentRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsStudentIdPathParameterData"
+                }
+            ]
+        },
         "/admin/admin/{id}": {
             "parameters": [
                 {
@@ -222,6 +255,34 @@
                         }
                     }
                 ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/students": {
+            "post": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "34f3b35b8d3346312cd49329dc7d7a05",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterStudentRequestData"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "204": {
                         "description": "",
@@ -736,6 +797,57 @@
                 },
                 "type": "object"
             },
+            "GraduateStudentData": {},
+            "GraduateStudentRequestData": {
+                "properties": {
+                    "graduation_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterStudentRequestData": {
+                "properties": {
+                    "department_id": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "national_id": {
+                        "type": "string"
+                    },
+                    "birthdate": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "enrollment_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "CreateTeacherRequestData": {
                 "properties": {
                     "name": {
@@ -978,6 +1090,14 @@
             }
         },
         "parameters": {
+            "adminsStudentIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "ExampleIdPathParameter": {
                 "name": "id",
                 "in": "path",
@@ -1035,6 +1155,10 @@
         {
             "name": "adminsDepartments",
             "description": "adminsDepartments"
+        },
+        {
+            "name": "adminsStudents",
+            "description": "adminsStudents"
         },
         {
             "name": "adminsTeachers",
