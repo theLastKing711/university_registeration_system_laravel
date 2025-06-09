@@ -3,6 +3,7 @@
 use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
+use App\Http\Controllers\Admin\Course\OpenForRegisterationController;
 use App\Http\Controllers\Admin\Department\CloseDepartmentForRegisterationController;
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
 use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
@@ -70,7 +71,8 @@ Route::prefix('admins')
         Route::prefix('courses')->group(function () {
 
             Route::post('', CreateCourseController::class);
-            Route::delete('', DeleteCoursesController::class);
+            Route::delete('', action: DeleteCoursesController::class);
+            Route::post('openForRegisteration', OpenForRegisterationController::class);
 
         });
 

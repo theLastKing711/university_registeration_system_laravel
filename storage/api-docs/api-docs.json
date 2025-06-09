@@ -275,6 +275,34 @@
                 }
             }
         },
+        "/admins/courses/openForRegisteration": {
+            "post": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "a333a12f1ab116c2d5835bfa7427ca84",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OpenForRegisterationRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admins/departments/createdepartments": {
             "post": {
                 "tags": [
@@ -864,6 +892,20 @@
             "DeleteCoursesRequestData": {
                 "properties": {
                     "ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "OpenForRegisterationRequestData": {
+                "properties": {
+                    "department_id": {
+                        "type": "integer"
+                    },
+                    "courses_ids": {
                         "type": "array",
                         "items": {
                             "type": "integer"
