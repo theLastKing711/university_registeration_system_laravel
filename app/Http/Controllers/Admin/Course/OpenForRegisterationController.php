@@ -26,17 +26,26 @@ class OpenForRegisterationController extends Controller
             );
 
         Course::query()
-            ->whereIn('id', $request->courses_ids)
+            ->whereIn(
+                'id',
+                $request->courses_ids
+            )
             ->get()
-            ->each(function (Course $course) use ($courses_department) {
+            ->each(function (Course $course) use ($request) {
 
                 $open_course_registeration = new OpenCourseRegisteration;
 
                 $open_course_registeration->year =
-                    $courses_department->course_registeration_year;
+                    $request->year;
 
                 $open_course_registeration->semester =
-                    $courses_department->course_registeration_semester;
+                     $request->semester;
+
+                // $open_course_registeration->year =
+                //     $courses_department->course_registeration_year;
+
+                // $open_course_registeration->semester =
+                //     $courses_department->course_registeration_semester;
 
                 $course
                     ->openCourseRegisterations()

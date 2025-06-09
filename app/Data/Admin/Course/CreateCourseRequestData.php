@@ -22,7 +22,7 @@ class CreateCourseRequestData extends Data
         #[OAT\Property]
         public int $credits,
         #[OAT\Property]
-        public int $department_id,
+        public ?int $department_id,
         #[ArrayProperty(), Present]
         public array $prerequisites_ids,
     ) {}

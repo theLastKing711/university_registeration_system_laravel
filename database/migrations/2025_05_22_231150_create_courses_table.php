@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('department_id')
+                ->nullable()
                 ->constrained();
             $table->string('name');
             $table->string('code');

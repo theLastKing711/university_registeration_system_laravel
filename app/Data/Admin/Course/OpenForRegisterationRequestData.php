@@ -14,12 +14,15 @@ class OpenForRegisterationRequestData extends Data
 {
     public function __construct(
         #[OAT\Property]
-        public int $department_id,
+        public int $semester,
+        #[OAT\Property]
+        public int $year,
+        #[OAT\Property]
+        public ?int $department_id,
         #[
             ArrayProperty(),
             Exists('courses', 'id')
         ]
-
         public array $courses_ids,
     ) {}
 }

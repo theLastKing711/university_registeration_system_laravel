@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Prerequisite extends Model
+class Prerequisite extends Pivot
 {
     /** @use HasFactory<\Database\Factories\PrerequisiteFactory> */
     use HasFactory;
+
+    protected $table = 'prerequisites';
 
     /**
      * Get the course that owns the Prerequisite

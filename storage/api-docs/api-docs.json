@@ -773,6 +773,43 @@
             }
         },
         "/students/courses": {
+            "get": {
+                "tags": [
+                    "studentsCourses"
+                ],
+                "operationId": "57e924d82d7113d4c86d2e82f58bf7f1",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetOpenCoursesThisSemesterData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "studentsCourses"
@@ -878,7 +915,8 @@
                         "type": "integer"
                     },
                     "department_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "prerequisites_ids": {
                         "type": "array",
@@ -902,8 +940,15 @@
             },
             "OpenForRegisterationRequestData": {
                 "properties": {
-                    "department_id": {
+                    "semester": {
                         "type": "integer"
+                    },
+                    "year": {
+                        "type": "integer"
+                    },
+                    "department_id": {
+                        "type": "integer",
+                        "nullable": true
                     },
                     "courses_ids": {
                         "type": "array",
@@ -1206,6 +1251,28 @@
                         "type": "integer"
                     },
                     "total": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "GetOpenCoursesThisSemesterData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "GetOpenCoursesThisSemesterQueryParameterData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
                         "type": "integer"
                     }
                 },

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\Student\Course\GetOpenCoursesThisSemesterController;
 use App\Http\Controllers\Student\Course\RegisterCoursesController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,17 +24,19 @@ use Illuminate\Support\Facades\Route;
 //         Route::post('', [FileController::class, 'store']);
 //     });
 
-// Route::prefix('students')
-//     ->middleware(['api'])
-//     ->group(function () {
+Route::prefix('students')
+    ->middleware(['api'])
+    ->group(function () {
 
-//         Route::prefix('courses')->group(function () {
+        Route::prefix('courses')->group(function () {
 
-//             Route::post('', RegisterCoursesController::class);
+            Route::get('', GetOpenCoursesThisSemesterController::class);
 
-//         });
+            Route::post('', RegisterCoursesController::class);
 
-//     });
+        });
+
+    });
 
 Route::prefix('admins')
     ->middleware(['api'])
