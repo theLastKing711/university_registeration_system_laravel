@@ -1,25 +1,38 @@
 <?php
 
 use App\Enum\Auth\RolesEnum;
-use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
+use App\Http\Controllers\Admin\Department\CloseDepartmentForRegisterationController;
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
 use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
+use App\Http\Controllers\Admin\Department\OpenDepartmentForRegisterationController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
-use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\Student\Course\RegisterCoursesController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('files')
-    ->middleware(['api'])
-    ->group(function () {
-        Route::get('', [FileController::class, 'index']);
-        Route::post('', [FileController::class, 'store']);
-    });
+// Route::prefix('files')
+//     ->middleware(['api'])
+//     ->group(function () {
+//         Route::get('', [FileController::class, 'index']);
+//         Route::post('', [FileController::class, 'store']);
+//     });
+
+// Route::prefix('students')
+//     ->middleware(['api'])
+//     ->group(function () {
+
+//         Route::prefix('courses')->group(function () {
+
+//             Route::post('', RegisterCoursesController::class);
+
+//         });
+
+//     });
 
 Route::prefix('admins')
     ->middleware(['api'])
@@ -43,6 +56,10 @@ Route::prefix('admins')
         });
 
         Route::prefix('departments')->group(function () {
+
+            Route::patch('{id}/openForRegisteration', OpenDepartmentForRegisterationController::class);
+
+            Route::patch('{id}/closeForRegisteration', CloseDepartmentForRegisterationController::class);
 
             Route::post('createdepartments', CreateDepartmentController::class);
 

@@ -46,7 +46,7 @@ class DepartmentSeeder extends Seeder
                 'name' => 'IT',
                 'is_course_registeration_open' => true,
                 'course_registeration_year' => 2014,
-                'course_registeration_semester' => 2014,
+                'course_registeration_semester' => 0,
             ],
             'courses' => [
                 [

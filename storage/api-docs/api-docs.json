@@ -5,6 +5,72 @@
         "version": "1"
     },
     "paths": {
+        "/admins/departments/{id}/closeForRegisteration": {
+            "patch": {
+                "tags": [
+                    "adminsDepartments"
+                ],
+                "operationId": "cf852729ab9a4043e6342781e11476b1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CloseDepartmentForRegisterationData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsDepartmentIdPathParameterData"
+                }
+            ]
+        },
+        "/admins/departments/{id}/openForRegisteration": {
+            "patch": {
+                "tags": [
+                    "adminsDepartments"
+                ],
+                "operationId": "672501cd0fc6e16fecca79d05a384be7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OpenDepartmentForRegisterationData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsDepartmentIdPathParameterData"
+                }
+            ]
+        },
         "/admins/students/{id}": {
             "patch": {
                 "tags": [
@@ -678,6 +744,34 @@
                 }
             }
         },
+        "/students/courses": {
+            "post": {
+                "tags": [
+                    "studentsCourses"
+                ],
+                "operationId": "0256cf254858d5e8f3aa7c54cc527923",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterCoursesRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/auth/register": {
             "post": {
                 "tags": [
@@ -778,6 +872,7 @@
                 },
                 "type": "object"
             },
+            "CloseDepartmentForRegisterationData": {},
             "CreateDepartmentRequestData": {
                 "properties": {
                     "name": {
@@ -793,6 +888,17 @@
                         "items": {
                             "type": "integer"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "OpenDepartmentForRegisterationData": {
+                "properties": {
+                    "course_registeration_year": {
+                        "type": "integer"
+                    },
+                    "course_registeration_semester": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"
@@ -1063,6 +1169,17 @@
                 },
                 "type": "object"
             },
+            "RegisterCoursesRequestData": {
+                "properties": {
+                    "course_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "LoginRequestData": {},
             "RegisterRequestData": {
                 "properties": {
@@ -1090,6 +1207,14 @@
             }
         },
         "parameters": {
+            "adminsDepartmentIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsStudentIdPathParameterData": {
                 "name": "id",
                 "in": "path",
@@ -1171,6 +1296,10 @@
         {
             "name": "files",
             "description": "files"
+        },
+        {
+            "name": "studentsCourses",
+            "description": "studentsCourses"
         },
         {
             "name": "usersAuth",
