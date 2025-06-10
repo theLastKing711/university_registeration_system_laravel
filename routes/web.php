@@ -1,6 +1,7 @@
 <?php
 
 use App\Enum\Auth\RolesEnum;
+use App\Http\Controllers\Admin\Course\AssignTeacherToCourseController;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
 use App\Http\Controllers\Admin\Course\OpenForRegisterationController;
@@ -74,6 +75,8 @@ Route::prefix('admins')
         Route::prefix('courses')->group(function () {
 
             Route::post('', CreateCourseController::class);
+            Route::post('assignCourseToTeacher', AssignTeacherToCourseController::class);
+
             Route::delete('', action: DeleteCoursesController::class);
             Route::post('openForRegisteration', OpenForRegisterationController::class);
 

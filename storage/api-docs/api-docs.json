@@ -219,6 +219,34 @@
                 }
             }
         },
+        "/admins/courses/assignCourseToTeacher": {
+            "post": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "f5648b75b74d4b01212f1c6d537a2fa7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AssignTeacherToCourseRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admins/courses": {
             "post": {
                 "tags": [
@@ -896,6 +924,20 @@
                     },
                     "created_at": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AssignTeacherToCourseRequestData": {
+                "properties": {
+                    "course_id": {
+                        "type": "integer"
+                    },
+                    "teacher_id": {
+                        "type": "integer"
+                    },
+                    "is_main_teacher": {
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
