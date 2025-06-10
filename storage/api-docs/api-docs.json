@@ -5,6 +5,34 @@
         "version": "1"
     },
     "paths": {
+        "/admins/courses/getCourseStudents/{id}": {
+            "get": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "8e0a74c778f0e2dc5ef88be9bd6e10b0",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetCourseStudentsRespnseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsCourseTeacherPathParameterData"
+                }
+            ]
+        },
         "/admins/departments/{id}/closeForRegisteration": {
             "patch": {
                 "tags": [
@@ -213,6 +241,34 @@
                                 "schema": {
                                     "type": "boolean"
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/courses/assignClassroomToCourse": {
+            "post": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "31b571441b78fb5b856ad5f76db7dede",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AssignClassroomToCourseRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
                             }
                         }
                     }
@@ -928,6 +984,26 @@
                 },
                 "type": "object"
             },
+            "AssignClassroomToCourseRequestData": {
+                "properties": {
+                    "course_teacher_id": {
+                        "type": "integer"
+                    },
+                    "classroom_id": {
+                        "type": "integer"
+                    },
+                    "day": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "string"
+                    },
+                    "to": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "AssignTeacherToCourseRequestData": {
                 "properties": {
                     "course_id": {
@@ -980,6 +1056,7 @@
                 },
                 "type": "object"
             },
+            "GetCourseStudentsRespnseData": {},
             "OpenForRegisterationRequestData": {
                 "properties": {
                     "semester": {
@@ -1357,7 +1434,30 @@
                 ]
             }
         },
+        "responses": {
+            "200": {
+                "description": "Items fetched successfully",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/GetCourseStudentsRespnseData"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "parameters": {
+            "adminsCourseTeacherPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsDepartmentIdPathParameterData": {
                 "name": "id",
                 "in": "path",

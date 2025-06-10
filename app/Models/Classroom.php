@@ -25,7 +25,12 @@ class Classroom extends Model
      */
     public function courseTeachers(): BelongsToMany
     {
-        return $this->belongsToMany(CourseTeacher::class, 'exams');
+        return
+            $this
+                ->belongsToMany(
+                    CourseTeacher::class,
+                    'exams'
+                );
     }
 
     /**

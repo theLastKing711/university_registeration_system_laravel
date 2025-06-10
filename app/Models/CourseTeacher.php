@@ -27,12 +27,16 @@ class CourseTeacher extends Pivot
         return $this->belongsTo(Teacher::class);
     }
 
-    /**
-     * Get the classrooms that owns the CourseTeacher
-     */
-    public function classrooms(): BelongsTo
+    public function classrooms(): BelongsToMany
     {
-        return $this->belongsTo(Classroom::class, 'course_teacher_id');
+        return
+            $this
+                ->belongsToMany(
+                    Classroom::class,
+                    'classroom_course_teacher',
+                    'course_teacher_id'
+                )
+                ->withTimestamps();
     }
 
     /**
