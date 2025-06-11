@@ -5,12 +5,12 @@
         "version": "1"
     },
     "paths": {
-        "/admins/courses/getCourseStudents/{id}": {
+        "/admins/courses/getCourseStudents/{course_teacher_id}": {
             "get": {
                 "tags": [
                     "adminsCourses"
                 ],
-                "operationId": "8e0a74c778f0e2dc5ef88be9bd6e10b0",
+                "operationId": "a70a1e664363889c29798d4de8ff52a4",
                 "responses": {
                     "200": {
                         "description": "Items fetched successfully",
@@ -30,6 +30,50 @@
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsCourseTeacherPathParameterData"
+                }
+            ]
+        },
+        "/admins/courses/getSemesterCourses/{id}": {
+            "get": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "8b9b6e76f4aaeb15ecb5d38c2b30ac73",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetSemesterCoursesResponseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsDepartmentIdPathParameterData"
                 }
             ]
         },
@@ -287,6 +331,34 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/AssignTeacherToCourseRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/courses/createCourseAttendance": {
+            "post": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "41559b31bbb38a72b9b283536b69d953",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCourseAttendanceRequestData"
                             }
                         }
                     }
@@ -1018,6 +1090,28 @@
                 },
                 "type": "object"
             },
+            "CreateCourseAttendanceRequestData": {
+                "properties": {
+                    "course_teacher_id": {
+                        "type": "integer"
+                    },
+                    "date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "students_attendance": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StudentAttendanceData"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "CreateCourseRequestData": {
                 "properties": {
                     "name": {
@@ -1056,7 +1150,22 @@
                 },
                 "type": "object"
             },
-            "GetCourseStudentsRespnseData": {},
+            "GetCourseStudentsRespnseData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSemesterCoursesResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "OpenForRegisterationRequestData": {
                 "properties": {
                     "semester": {
@@ -1074,6 +1183,17 @@
                         "items": {
                             "type": "integer"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "StudentAttendanceData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "is_present": {
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
@@ -1104,6 +1224,17 @@
                         "type": "integer"
                     },
                     "course_registeration_semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "YearSemesterQueryParameterData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
                         "type": "integer"
                     }
                 },
@@ -1434,24 +1565,9 @@
                 ]
             }
         },
-        "responses": {
-            "200": {
-                "description": "Items fetched successfully",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/GetCourseStudentsRespnseData"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "parameters": {
             "adminsCourseTeacherPathParameterData": {
-                "name": "id",
+                "name": "course_teacher_id",
                 "in": "path",
                 "required": true,
                 "schema": {

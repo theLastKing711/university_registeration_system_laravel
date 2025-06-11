@@ -3,9 +3,11 @@
 use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Admin\Course\AssignClassroomToCourseController;
 use App\Http\Controllers\Admin\Course\AssignTeacherToCourseController;
+use App\Http\Controllers\Admin\Course\CreateCourseAttendanceController;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
 use App\Http\Controllers\Admin\Course\GetCourseStudentsController;
+use App\Http\Controllers\Admin\Course\GetSemesterCoursesController;
 use App\Http\Controllers\Admin\Course\OpenForRegisterationController;
 use App\Http\Controllers\Admin\Department\CloseDepartmentForRegisterationController;
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
@@ -76,12 +78,14 @@ Route::prefix('admins')
 
         Route::prefix('courses')->group(function () {
 
-            Route::get('getCourseStudents/{id}', GetCourseStudentsController::class);
+            Route::get('getCourseStudents/{course_teacher_id}', GetCourseStudentsController::class);
+            Route::get('getSemesterCourses/{id}', GetSemesterCoursesController::class);
 
             Route::post('', CreateCourseController::class);
             Route::post('assignCourseToTeacher', AssignTeacherToCourseController::class);
             Route::post('assignClassroomToCourse', AssignClassroomToCourseController::class);
             Route::post('openForRegisteration', OpenForRegisterationController::class);
+            Route::post('createCourseAttendance', CreateCourseAttendanceController::class);
 
             Route::delete('', action: DeleteCoursesController::class);
 

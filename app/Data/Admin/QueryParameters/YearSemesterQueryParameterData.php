@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\Course;
+namespace App\Data\Admin\QueryParameters;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
@@ -8,10 +8,12 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema()]
-class GetCourseStudentsRespnseData extends Data
+class YearSemesterQueryParameterData extends Data
 {
     public function __construct(
         #[OAT\Property]
-        public string $name,
+        public int $year,
+        #[OAT\Property]
+        public int $semester,
     ) {}
 }

@@ -54,7 +54,7 @@ class CourseTeacher extends Pivot
     {
         return $this->belongsToMany(
             User::class,
-            'attendances',
+            'course_attendance',
             'course_teacher_id',
             'student_id'
         );

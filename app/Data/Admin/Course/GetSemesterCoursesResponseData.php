@@ -8,10 +8,10 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema()]
-class GetCourseStudentsRespnseData extends Data
+class GetSemesterCoursesResponseData extends Data
 {
     public function __construct(
         #[OAT\Property]
-        public string $name,
+        public int $id,
     ) {}
 }

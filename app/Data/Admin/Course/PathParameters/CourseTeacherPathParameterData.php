@@ -13,14 +13,14 @@ class CourseTeacherPathParameterData extends Data
         #[
             OAT\PathParameter(
                 parameter: 'adminsCourseTeacherPathParameterData', // the name used in ref
-                name: 'id',
+                name: 'course_teacher_id',
                 schema: new OAT\Schema(
                     type: 'integer',
                 ),
             ),
-            FromRouteParameter('id'),
+            FromRouteParameter('course_teacher_id'),
             Exists('course_teacher', 'id')
         ]
-        public int $id,
+        public int $course_teacher_id,
     ) {}
 }

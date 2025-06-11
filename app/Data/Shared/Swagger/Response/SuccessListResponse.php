@@ -17,7 +17,8 @@ class SuccessListResponse extends OAT\Response
             content: new OAT\JsonContent(
                 type: 'array',
                 items: new OAT\Items(
-                    type: $type
+                    type: $type,
+                    oneOf: [new Oat\Schema(type: $type)]
                 )
             )
         );

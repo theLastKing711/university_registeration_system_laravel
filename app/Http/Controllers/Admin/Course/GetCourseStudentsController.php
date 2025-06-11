@@ -9,19 +9,19 @@ use App\Http\Controllers\Controller;
 use App\Models\CourseTeacher;
 use OpenApi\Attributes as OAT;
 
+#[
+    OAT\PathItem(
+        path: '/admins/courses/getCourseStudents/{course_teacher_id}',
+        parameters: [
+            new OAT\PathParameter(
+                ref: '#/components/parameters/adminsCourseTeacherPathParameterData',
+            ),
+        ],
+    ),
+]
 class GetCourseStudentsController extends Controller
 {
-    #[
-        OAT\PathItem(
-            path: '/admins/courses/getCourseStudents/{id}',
-            parameters: [
-                new OAT\PathParameter(
-                    ref: '#/components/parameters/adminsCourseTeacherPathParameterData',
-                ),
-            ],
-        ),
-    ]
-    #[OAT\Get(path: '/admins/courses/getCourseStudents', tags: ['adminsCourses'])]
+    #[OAT\Get(path: '/admins/courses/getCourseStudents/{course_teacher_id}', tags: ['adminsCourses'])]
     #[SuccessListResponse(GetCourseStudentsRespnseData::class)]
     public function __invoke(CourseTeacherPathParameterData $courseTeacherPathData)
     {
@@ -31,7 +31,7 @@ class GetCourseStudentsController extends Controller
                 ->with('course.students:id,name')
                 ->firstWhere(
                     'id',
-                    $courseTeacherPathData->id,
+                    $courseTeacherPathData->course_teacher_id,
                 )
                 ->course
                 ->students;
