@@ -34,4 +34,12 @@ class Department extends Model
     {
         return $this->hasMany(Teacher::class);
     }
+
+    /**
+     * Get all of the openRegisterations for the Department
+     */
+    public function openRegisterations(): HasMany
+    {
+        return $this->hasMany(DepartmentRegisterationPeriod::class);
+    }
 }

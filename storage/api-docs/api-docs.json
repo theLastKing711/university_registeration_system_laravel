@@ -190,26 +190,6 @@
                 }
             ]
         },
-        "/admin/users": {
-            "get": {
-                "tags": [
-                    "admins"
-                ],
-                "operationId": "60abfa1474bf57a132f8180ff927722f",
-                "responses": {
-                    "200": {
-                        "description": "Item fetched successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "1"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/admins/admins": {
             "post": {
                 "tags": [
@@ -1076,36 +1056,6 @@
                     }
                 }
             }
-        },
-        "/users/auth/register": {
-            "post": {
-                "tags": [
-                    "usersAuth"
-                ],
-                "operationId": "aa7e2d048b2a67158ee3c7251acbff2e",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RegisterRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Item fetched successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RegisterResponseData"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "components": {
@@ -1775,10 +1725,6 @@
             "name": "auth"
         },
         {
-            "name": "admins",
-            "description": "admins"
-        },
-        {
             "name": "adminsAdmins",
             "description": "adminsAdmins"
         },
@@ -1813,10 +1759,6 @@
         {
             "name": "studentsCourses",
             "description": "studentsCourses"
-        },
-        {
-            "name": "usersAuth",
-            "description": "usersAuth"
         }
     ]
 }

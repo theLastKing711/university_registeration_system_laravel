@@ -37,13 +37,17 @@ Route::prefix('students')
     ->middleware(['api'])
     ->group(function () {
 
-        Route::prefix('courses')->group(function () {
+        $studentRole = RolesEnum::STUDENT->value;
 
-            Route::get('', GetOpenCoursesThisSemesterController::class);
+        Route::prefix('courses')
+            ->middleware(['auth:sanctum', "role:{$studentRole}"])
+            ->group(function () {
 
-            Route::post('', RegisterCoursesController::class);
+                Route::get('', GetOpenCoursesThisSemesterController::class);
 
-        });
+                Route::post('', RegisterCoursesController::class);
+
+            });
 
     });
 
