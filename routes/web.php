@@ -1,10 +1,14 @@
 <?php
 
 use App\Enum\Auth\RolesEnum;
+use App\Http\Controllers\Admin\Admin\CreateAdminController;
+use App\Http\Controllers\Admin\Admin\DeleteAdminController;
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\Course\AssignClassroomToCourseController;
 use App\Http\Controllers\Admin\Course\AssignTeacherToCourseController;
 use App\Http\Controllers\Admin\Course\CreateCourseAttendanceController;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
+use App\Http\Controllers\Admin\Course\CreateExamController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
 use App\Http\Controllers\Admin\Course\GetCourseStudentsController;
 use App\Http\Controllers\Admin\Course\GetSemesterCoursesController;
@@ -48,72 +52,68 @@ Route::prefix('admins')
     ->group(function () {
         $adminRole = RolesEnum::ADMIN->value;
 
-        Route::prefix('students')->group(function () {
+        // must be logged in after making request to /sanctum and obtaining token to send here
+        Route::middleware(['auth:sanctum'])->group(function () use ($adminRole) {
 
-            Route::post('', RegisterStudentController::class);
+            Route::prefix('admins')
+                ->middleware(["role:{$adminRole}"])
+                ->group(function () {
 
-            Route::patch('{id}', GraduateStudentController::class);
+                    Route::post('', CreateAdminController::class);
+
+                    Route::delete('', DeleteAdminController::class);
+
+                });
+
+            Route::prefix('students')->group(function () {
+
+                Route::post('', RegisterStudentController::class);
+
+                Route::patch('{id}', GraduateStudentController::class);
+
+            });
+
+            Route::prefix('teachers')->group(function () {
+
+                Route::post('', CreateTeacherController::class);
+
+                Route::delete('', DeleteTeachersController::class);
+
+            });
+
+            Route::prefix('departments')->group(function () {
+
+                Route::patch('{id}/openForRegisteration', OpenDepartmentForRegisterationController::class);
+
+                Route::patch('{id}/closeForRegisteration', CloseDepartmentForRegisterationController::class);
+
+                Route::post('createdepartments', CreateDepartmentController::class);
+
+                Route::delete('deletedepartments', DeleteDepartmentController::class);
+
+            });
+
+            Route::prefix('courses')->group(function () {
+
+                Route::get('getCourseStudents/{course_teacher_id}', GetCourseStudentsController::class);
+                Route::get('getSemesterCourses/{id}', GetSemesterCoursesController::class);
+
+                Route::post('', CreateCourseController::class);
+                Route::post('assignCourseToTeacher', AssignTeacherToCourseController::class);
+                Route::post('assignClassroomToCourse', AssignClassroomToCourseController::class);
+                Route::post('openForRegisteration', OpenForRegisterationController::class);
+                Route::post('createCourseAttendance', CreateCourseAttendanceController::class);
+                Route::post('createExam', CreateExamController::class);
+
+                Route::delete('', action: DeleteCoursesController::class);
+
+            });
 
         });
 
-        Route::prefix('teachers')->group(function () {
-
-            Route::post('', CreateTeacherController::class);
-
-            Route::delete('', DeleteTeachersController::class);
-
+        Route::prefix('auth')->group(function () {
+            Route::post('login', [AuthController::class, 'login']);
+            Route::post('logout', [AuthController::class, 'logout']);
         });
-
-        Route::prefix('departments')->group(function () {
-
-            Route::patch('{id}/openForRegisteration', OpenDepartmentForRegisterationController::class);
-
-            Route::patch('{id}/closeForRegisteration', CloseDepartmentForRegisterationController::class);
-
-            Route::post('createdepartments', CreateDepartmentController::class);
-
-            Route::delete('deletedepartments', DeleteDepartmentController::class);
-
-        });
-
-        Route::prefix('courses')->group(function () {
-
-            Route::get('getCourseStudents/{course_teacher_id}', GetCourseStudentsController::class);
-            Route::get('getSemesterCourses/{id}', GetSemesterCoursesController::class);
-
-            Route::post('', CreateCourseController::class);
-            Route::post('assignCourseToTeacher', AssignTeacherToCourseController::class);
-            Route::post('assignClassroomToCourse', AssignClassroomToCourseController::class);
-            Route::post('openForRegisteration', OpenForRegisterationController::class);
-            Route::post('createCourseAttendance', CreateCourseAttendanceController::class);
-
-            Route::delete('', action: DeleteCoursesController::class);
-
-        });
-
-        // Route::middleware(['auth:sanctum', "role:{$adminRole}"])
-        //     //auth:sanctum check if user is logged in (middleware('auth')),
-        //     ->group(function () {
-
-        //         Route::prefix('tests')
-        //             ->group(function () {
-        //                 Route::get('', [ExampleController::class, 'index']);
-        //                 Route::get('{id}', [ExampleController::class, 'show_item']);
-
-        //                 Route::get('queryParameters', [ExampleController::class, 'get_query_parameters']);
-
-        //                 Route::post('post_json', [ExampleController::class, 'post_json']);
-
-        //                 Route::patch('{id}', [ExampleController::class, 'patch_json']);
-        //                 Route::delete('{id}', [ExampleController::class, 'delete_json']);
-
-        //             });
-
-        //     });
-
-        // Route::prefix('auth')->group(function () {
-        //     Route::post('login', [AuthController::class, 'login']);
-        //     Route::post('logout', [AuthController::class, 'logout']);
-        // });
 
     });

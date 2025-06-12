@@ -210,6 +210,62 @@
                 }
             }
         },
+        "/admins/admins": {
+            "post": {
+                "tags": [
+                    "adminsAdmins"
+                ],
+                "operationId": "032a8032037c7a75bf91c104d916a04c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateAdminRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "adminsAdmins"
+                ],
+                "operationId": "a97667191247dbaae980571e29c71f2d",
+                "parameters": [
+                    {
+                        "name": "ids[]",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/sanctum/csrf-cookie": {
             "get": {
                 "tags": [
@@ -231,12 +287,12 @@
                 }
             }
         },
-        "/admin/auth/login": {
+        "/admins/auth/login": {
             "post": {
                 "tags": [
                     "auth"
                 ],
-                "operationId": "6a79aabfd077d1c18f803074e3c11afb",
+                "operationId": "f3d30614a98200caa463cb61bd615d27",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -271,12 +327,12 @@
                 }
             }
         },
-        "/admin/auth/logout": {
+        "/admins/auth/logout": {
             "post": {
                 "tags": [
                     "auth"
                 ],
-                "operationId": "6121f7e28a200ed5d837b4e609524ba2",
+                "operationId": "9dd3b099da7d36014f777f653b6affcb",
                 "responses": {
                     "200": {
                         "description": "The User was successfully logged out",
@@ -419,6 +475,34 @@
                         }
                     }
                 ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/courses/createExam": {
+            "post": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "488fc8166b69b138dfc951e87ec16199",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateExamData"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "204": {
                         "description": "",
@@ -1026,6 +1110,28 @@
     },
     "components": {
         "schemas": {
+            "AdminIdsData": {
+                "properties": {
+                    "ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateAdminRequestData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "adminLogin": {
                 "properties": {
                     "name": {
@@ -1045,9 +1151,6 @@
                         "type": "integer"
                     },
                     "name": {
-                        "type": "string"
-                    },
-                    "email": {
                         "type": "string"
                     },
                     "created_at": {
@@ -1135,6 +1238,37 @@
                         "items": {
                             "type": "integer"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateExamData": {
+                "properties": {
+                    "course_teacher_id": {
+                        "type": "integer"
+                    },
+                    "classroom_id": {
+                        "type": "integer"
+                    },
+                    "date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "from": {
+                        "type": "string"
+                    },
+                    "to": {
+                        "type": "string"
+                    },
+                    "max_mark": {
+                        "type": "integer"
+                    },
+                    "is_main_exam": {
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
@@ -1566,6 +1700,14 @@
             }
         },
         "parameters": {
+            "adminsAdminIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsCourseTeacherPathParameterData": {
                 "name": "course_teacher_id",
                 "in": "path",
@@ -1635,6 +1777,10 @@
         {
             "name": "admins",
             "description": "admins"
+        },
+        {
+            "name": "adminsAdmins",
+            "description": "adminsAdmins"
         },
         {
             "name": "sanctum",

@@ -17,13 +17,14 @@ class AdminSeeder extends Seeder
 
     public function seedAdmins(): void
     {
-        User::factory()
-            ->staticAdmin()
-            ->create();
 
         User::factory()
-            ->count(9)
             ->admin()
             ->create();
+
+        // User::factory()
+        //     ->count(9)
+        //     ->admin()
+        //     ->create();
     }
 }

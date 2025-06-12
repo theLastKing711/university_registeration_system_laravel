@@ -47,6 +47,15 @@ class CourseTeacher extends Pivot
         return $this->hasMany(Exam::class, 'course_teacher_id');
     }
 
+    public function examClassrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Classroom::class,
+            'exams',
+            'course_teacher_id'
+        );
+    }
+
     /**
      * Get all of the attendances for the CourseTeacher
      */

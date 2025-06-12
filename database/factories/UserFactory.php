@@ -52,7 +52,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'name' => 'admin',
-            'email' => 'admin@admin.com',
+            // 'email' => 'admin@admin.com',
             'password' => Hash::make('admin'),
         ])->afterCreating(function (User $user) {
             $user->assignRole(RolesEnum::ADMIN);

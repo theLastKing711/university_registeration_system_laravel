@@ -14,21 +14,20 @@ class LoginDataResponse extends Data
         public int $id,
         #[OAT\Property(type: 'string')]
         public string $name,
-        #[OAT\Property(type: 'string')]
-        public string $email,
+        // #[OAT\Property(type: 'string')]
+        // public string $email,
         #[OAT\Property(type: 'string')]
         public string $created_at,
-    ) {
-    }
+    ) {}
 
-    public static function fromModel(User $user): self
-    {
-        return new self(
-            id: $user->id,
-            name: $user->name,
-            email: $user->email,
-            created_at: $user->created_at
-        );
-    }
+    // public static function fromModel(User $user): self
+    // {
+    //     return new self(
+    //         id: $user->id,
+    //         name: $user->name,
+    //         email: $user->email,
+    //         created_at: $user->created_at
+    //     );
+    // }
 
 }

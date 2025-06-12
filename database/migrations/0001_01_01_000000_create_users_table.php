@@ -26,6 +26,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('password');
 
+            // admin only data
+            $table
+                ->foreignId('manages_department_with_id')
+                ->nullable()
+                ->constrained('departments');
+
             $table->rememberToken();
             $table->timestamps();
         });

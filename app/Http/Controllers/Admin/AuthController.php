@@ -9,6 +9,7 @@ use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Log;
 use OpenApi\Attributes as OAT;
 
 class AuthController extends Controller
@@ -21,9 +22,9 @@ class AuthController extends Controller
             path: '/sanctum/csrf-cookie',
             tags: ['sanctum'],
             //        parameters: [
-            ////            new OAT\HeaderParameter(
-            ////                name: 'X-CSRF-TOKEN',
-            ////            ),
+            // //            new OAT\HeaderParameter(
+            // //                name: 'X-CSRF-TOKEN',
+            // //            ),
             //            new OAT\HeaderParameter(
             //                name: 'Origin',
             //                schema: new OAT\Schema(
@@ -66,7 +67,7 @@ class AuthController extends Controller
 
     #[OAT\Tag('auth')]
     #[OAT\Post(
-        path: '/admin/auth/login',
+        path: '/admins/auth/login',
         tags: ['auth'],
         responses: [
             new OAT\Response(
@@ -85,6 +86,8 @@ class AuthController extends Controller
     #[JsonRequestBody(LoginData::class)]
     public function login(Request $request, LoginData $data): mixed
     {
+        Log::info('hello world');
+
         if (Auth::attempt(['name' => $data->name, 'password' => $data->password])) {
 
             return LoginDataResponse::from(Auth::user());
@@ -99,7 +102,7 @@ class AuthController extends Controller
     }
 
     #[OAT\Post(
-        path: '/admin/auth/logout',
+        path: '/admins/auth/logout',
         tags: ['auth'],
         responses: [
             new OAT\Response(
