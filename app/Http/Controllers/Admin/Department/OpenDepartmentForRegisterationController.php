@@ -31,6 +31,34 @@ class OpenDepartmentForRegisterationController extends Controller
         OpenDepartmentForRegisterationData $request
     ) {
 
+
+        $deprtment_registeration_period_opened_previously = 
+            DepartmentRegisterationPeriod
+                ::query()
+                ->where(
+                    'department_id',
+                    $patheParameterData->id
+                )
+                ->where(
+                    'year',
+                    $request->course_registeration_year
+                )
+                ->where(
+                    'semester',
+                    $request->course_registeration_semester
+                )
+                ->first();
+
+        if($deprtment_registeration_period_opened_previously)
+        {
+            $deprtment_registeration_period_opened_previously
+                ->update([
+                    'is_open_for_students' => true;
+                ]);
+
+            return;
+        }
+
         $deprtment_registeration_period =
             new DepartmentRegisterationPeriod;
 
