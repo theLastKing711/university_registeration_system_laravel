@@ -358,7 +358,14 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\Department|null $department
+ * @property int $id
+ * @property int $department_id
+ * @property string $year
+ * @property int $semester
+ * @property int $is_open_for_students
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \App\Models\Department $department
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod latestOpenTimeForStudents(int $department_id)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod newModelQuery()
@@ -378,6 +385,13 @@ namespace App\Models{
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod whereDepartmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod whereIsOpenForStudents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod whereSemester($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DepartmentRegisterationPeriod whereYear($value)
  */
 	class DepartmentRegisterationPeriod extends \Eloquent {}
 }

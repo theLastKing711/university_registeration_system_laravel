@@ -8,6 +8,7 @@ use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\DepartmentRegisterationPeriod;
 use OpenApi\Attributes as OAT;
 
 #[
@@ -26,16 +27,35 @@ class CloseDepartmentForRegisterationController extends Controller
     #[JsonRequestBody(CloseDepartmentForRegisterationData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(
-        DepartmentIdPathParameterData $patheParameterData,
-        // CloseDepartmentForRegisterationData $request
+        DepartmentIdPathParameterData $pathParameterData,
+        CloseDepartmentForRegisterationData $request
     ) {
-        Department::query()
+
+        DepartmentRegisterationPeriod::query()
             ->where(
-                'id',
-                $patheParameterData->id
+                'department_id',
+                $pathParameterData->id
+            )
+            ->where(
+                'year',
+                $request->year
+            )
+            ->where(
+                'semester',
+                $request->semester
             )
             ->update([
-                'is_course_registeration_open' => false,
+                'is_open_for_students',
+                false,
             ]);
+
+        // Department::query()
+        //     ->where(
+        //         'id',
+        //         $patheParameterData->id
+        //     )
+        //     ->update([
+        //         'is_course_registeration_open' => false,
+        //     ]);
     }
 }

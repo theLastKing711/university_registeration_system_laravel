@@ -8,6 +8,7 @@ use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\DepartmentRegisterationPeriod;
 use OpenApi\Attributes as OAT;
 
 #[
@@ -29,16 +30,34 @@ class OpenDepartmentForRegisterationController extends Controller
         DepartmentIdPathParameterData $patheParameterData,
         OpenDepartmentForRegisterationData $request
     ) {
-        $department =
-            Department::query()
-                ->firstWhere(
-                    'id',
-                    $patheParameterData->id
-                )
-                ->update([
-                    'is_course_registeration_open' => true,
-                    'course_registeration_semester' => $request->course_registeration_semester,
-                    'course_registeration_year' => $request->course_registeration_year,
-                ]);
+
+        $deprtment_registeration_period =
+            new DepartmentRegisterationPeriod;
+
+        $deprtment_registeration_period->year =
+             $request->course_registeration_year;
+
+        $deprtment_registeration_period->semester =
+            $request->course_registeration_semester;
+
+        $deprtment_registeration_period->department_id =
+             $patheParameterData->id;
+
+        $deprtment_registeration_period->is_open_for_students =
+            true;
+
+        $deprtment_registeration_period->save();
+
+        // $department =
+        //     Department::query()
+        //         ->firstWhere(
+        //             'id',
+        //             $patheParameterData->id
+        //         )
+        //         ->update([
+        //             'is_course_registeration_open' => true,
+        //             'course_registeration_semester' => $request->course_registeration_semester,
+        //             'course_registeration_year' => $request->course_registeration_year,
+        //         ]);
     }
 }

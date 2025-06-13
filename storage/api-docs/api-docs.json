@@ -1282,7 +1282,17 @@
                 },
                 "type": "object"
             },
-            "CloseDepartmentForRegisterationData": {},
+            "CloseDepartmentForRegisterationData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "CreateDepartmentRequestData": {
                 "properties": {
                     "name": {

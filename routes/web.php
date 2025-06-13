@@ -114,22 +114,46 @@ Route::prefix('admins')
                 });
 
             Route::prefix('courses')
-                ->middleware([
-                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                ])
+
                 ->group(function () {
 
-                    Route::get('getCourseStudents/{course_teacher_id}', GetCourseStudentsController::class);
-                    Route::get('getSemesterCourses/{id}', GetSemesterCoursesController::class);
+                    Route::get('getCourseStudents/{course_teacher_id}', GetCourseStudentsController::class)
+                        ->middleware([
+                            RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                        ]);
 
-                    Route::post('', CreateCourseController::class);
-                    Route::post('assignCourseToTeacher', AssignTeacherToCourseController::class);
-                    Route::post('assignClassroomToCourse', AssignClassroomToCourseController::class);
-                    Route::post('openForRegisteration', OpenForRegisterationController::class);
-                    Route::post('createCourseAttendance', CreateCourseAttendanceController::class);
-                    Route::post('createExam', CreateExamController::class);
+                    Route::get('getSemesterCourses/{id}', GetSemesterCoursesController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
 
-                    Route::delete('', action: DeleteCoursesController::class);
+                    Route::post('', CreateCourseController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::post('assignCourseToTeacher', AssignTeacherToCourseController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::post('assignClassroomToCourse', AssignClassroomToCourseController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::post('createCourseAttendance', CreateCourseAttendanceController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::post('createExam', CreateExamController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::post('openForRegisteration', OpenForRegisterationController::class)
+                        ->middleware(
+                            RolesEnum::oneOfRolesMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER)
+                        );
+
+                    Route::delete('', action: DeleteCoursesController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
 
                 });
 
