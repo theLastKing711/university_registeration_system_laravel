@@ -4,9 +4,11 @@ namespace App\Data\Admin\Department\PathParameters;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
+use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Attributes\Validation\Exists;
 use Spatie\LaravelData\Data;
 
+#[MergeValidationRules]
 class DepartmentIdPathParameterData extends Data
 {
     public function __construct(

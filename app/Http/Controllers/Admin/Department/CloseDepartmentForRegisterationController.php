@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Department;
 
 use App\Data\Admin\Department\CloseDepartmentForRegisterationData;
-use App\Data\Admin\Department\PathParameters\DepartmentIdPathParameterData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
@@ -27,14 +26,13 @@ class CloseDepartmentForRegisterationController extends Controller
     #[JsonRequestBody(CloseDepartmentForRegisterationData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(
-        DepartmentIdPathParameterData $pathParameterData,
         CloseDepartmentForRegisterationData $request
     ) {
 
         DepartmentRegisterationPeriod::query()
             ->where(
                 'department_id',
-                $pathParameterData->id
+                $request->id
             )
             ->where(
                 'year',
@@ -44,9 +42,9 @@ class CloseDepartmentForRegisterationController extends Controller
                 'semester',
                 $request->semester
             )
+            ->first()
             ->update([
-                'is_open_for_students',
-                false,
+                'is_open_for_students' => false,
             ]);
 
         // Department::query()

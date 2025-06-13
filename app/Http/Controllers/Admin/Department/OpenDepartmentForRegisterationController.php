@@ -7,7 +7,6 @@ use App\Data\Admin\Department\PathParameters\DepartmentIdPathParameterData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
 use OpenApi\Attributes as OAT;
 
@@ -31,10 +30,8 @@ class OpenDepartmentForRegisterationController extends Controller
         OpenDepartmentForRegisterationData $request
     ) {
 
-
-        $deprtment_registeration_period_opened_previously = 
-            DepartmentRegisterationPeriod
-                ::query()
+        $deprtment_registeration_period_opened_previously =
+            DepartmentRegisterationPeriod::query()
                 ->where(
                     'department_id',
                     $patheParameterData->id
@@ -49,11 +46,10 @@ class OpenDepartmentForRegisterationController extends Controller
                 )
                 ->first();
 
-        if($deprtment_registeration_period_opened_previously)
-        {
+        if ($deprtment_registeration_period_opened_previously) {
             $deprtment_registeration_period_opened_previously
                 ->update([
-                    'is_open_for_students' => true;
+                    'is_open_for_students' => true,
                 ]);
 
             return;
@@ -74,18 +70,8 @@ class OpenDepartmentForRegisterationController extends Controller
         $deprtment_registeration_period->is_open_for_students =
             true;
 
-        $deprtment_registeration_period->save();
+        $deprtment_registeration_period
+            ->save();
 
-        // $department =
-        //     Department::query()
-        //         ->firstWhere(
-        //             'id',
-        //             $patheParameterData->id
-        //         )
-        //         ->update([
-        //             'is_course_registeration_open' => true,
-        //             'course_registeration_semester' => $request->course_registeration_semester,
-        //             'course_registeration_year' => $request->course_registeration_year,
-        //         ]);
     }
 }
