@@ -40,7 +40,12 @@ Route::prefix('students')
         $studentRole = RolesEnum::STUDENT->value;
 
         Route::prefix('courses')
-            ->middleware(['auth:sanctum', "role:{$studentRole}"])
+            ->middleware(
+                [
+                    'auth:sanctum',
+                    RolesEnum::oneOfMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER),
+                ]
+            )
             ->group(function () {
 
                 Route::get('', GetOpenCoursesThisSemesterController::class);
@@ -55,12 +60,19 @@ Route::prefix('admins')
     ->middleware(['api'])
     ->group(function () {
         $adminRole = RolesEnum::ADMIN->value;
+        $courseRegistererRole = RolesEnum::COURSES_REGISTERER->value;
 
         // must be logged in after making request to /sanctum and obtaining token to send here
-        Route::middleware(['auth:sanctum'])->group(function () use ($adminRole) {
+        Route::middleware(['auth:sanctum'])->group(function () {
+            // ->middleware(["role:{$adminRole}|{$courseRegistererRole}"])
 
             Route::prefix('admins')
-                ->middleware(["role:{$adminRole}"])
+                ->middleware(
+                    [
+                        'auth:sanctum',
+                        RolesEnum::oneOfMiddleware(RolesEnum::ADMIN),
+                    ]
+                )
                 ->group(function () {
 
                     Route::post('', CreateAdminController::class);

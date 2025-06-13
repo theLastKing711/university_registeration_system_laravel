@@ -13,44 +13,44 @@ class DepartmentRegisterationPeriodSeeder extends Seeder
     public function run(): void
     {
         DB::table(
-            'departemnt_registeration_periods'
+            'department_registeration_periods'
         )
             ->insert([
                 [
                     'department_id' => 1,
                     'year' => 2014,
                     'semester' => 0,
-                    'is_open_for_students' => true,
+                    'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
                     'year' => 2014,
                     'semester' => 1,
-                    'is_open_for_students' => true,
+                    'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
                     'year' => 2014,
                     'semester' => 2,
-                    'is_open_for_students' => true,
+                    'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
                     'year' => 2015,
                     'semester' => 0,
-                    'is_open_for_students' => true,
+                    'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
                     'year' => 2015,
                     'semester' => 1,
-                    'is_open_for_students' => true,
+                    'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
                     'year' => 2015,
                     'semester' => 2,
-                    'is_open_for_students' => true,
+                    'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,

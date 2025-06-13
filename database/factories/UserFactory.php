@@ -41,14 +41,14 @@ class UserFactory extends Factory
         ];
     }
 
-    public function staticAdmin(): static
+    public function admin(): static
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(RolesEnum::ADMIN);
         });
     }
 
-    public function admin(): static
+    public function staticAdmin(): static
     {
         return $this->state(fn (array $attributes) => [
             'name' => 'admin',
@@ -56,6 +56,16 @@ class UserFactory extends Factory
             'password' => Hash::make('admin'),
         ])->afterCreating(function (User $user) {
             $user->assignRole(RolesEnum::ADMIN);
+        });
+    }
+
+    public function staticCourseRegisterer(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'cr',
+            'password' => Hash::make('cr'),
+        ])->afterCreating(function (User $user) {
+            $user->assignRole(RolesEnum::COURSES_REGISTERER);
         });
     }
 

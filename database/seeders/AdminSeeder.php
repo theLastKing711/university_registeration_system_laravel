@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
     {
 
         User::factory()
-            ->admin()
+            ->staticAdmin()
             ->create();
 
         // User::factory()

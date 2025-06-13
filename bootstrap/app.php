@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         // allows you to access routes without hitting /sanctum and sending request without csrf token
-        // $middleware->validateCs`rfTokens(except: ['*']);
+        // $middleware->validateCsrfTokens(except: ['*']);
         $middleware->statefulApi();
         $middleware->append(Locale::class);
         // 'true' or 'false' to true or false in query params for laravel-data and l5-swagger integration

@@ -8,7 +8,9 @@ use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Department;
+use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
+use Illuminate\Support\Facades\Auth;
 use OpenApi\Attributes as OAT;
 
 class OpenForRegisterationController extends Controller
@@ -19,11 +21,23 @@ class OpenForRegisterationController extends Controller
     public function __invoke(OpenForRegisterationRequestData $request)
     {
 
-        $courses_department = Department::query()
-            ->firstWhere(
-                'id',
-                $request->department_id,
-            );
+        // $logged_user =
+        //     Auth::User();
+
+        $courses_department =
+            Department::query()
+                ->firstWhere(
+                    'id',
+                    $request->department_id
+                );
+
+        /** @var DepartmentRegisterationPeriod $latestTimeDepartentOpenRegisteration */
+        $latestTimeDepartentOpenRegisteration =
+            DepartmentRegisterationPeriod::query()
+                ->where('department_id', $courses_department->id)
+                ->orderBy('year', 'desc')
+                ->orderBy('semester', 'desc')
+                ->first();
 
         Course::query()
             ->whereIn(
@@ -31,15 +45,15 @@ class OpenForRegisterationController extends Controller
                 $request->courses_ids
             )
             ->get()
-            ->each(function (Course $course) use ($request) {
+            ->each(function (Course $course) use ($latestTimeDepartentOpenRegisteration) {
 
                 $open_course_registeration = new OpenCourseRegisteration;
 
                 $open_course_registeration->year =
-                    $request->year;
+                    $latestTimeDepartentOpenRegisteration->year;
 
                 $open_course_registeration->semester =
-                     $request->semester;
+                     $latestTimeDepartentOpenRegisteration->semester;
 
                 // $open_course_registeration->year =
                 //     $courses_department->course_registeration_year;
@@ -49,7 +63,7 @@ class OpenForRegisterationController extends Controller
 
                 $course
                     ->openCourseRegisterations()
-                    ->save($open_course_registeration);
+                    ->save(model: $open_course_registeration);
 
             });
 

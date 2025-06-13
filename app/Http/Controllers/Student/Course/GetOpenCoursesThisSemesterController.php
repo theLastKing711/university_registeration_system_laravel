@@ -8,6 +8,7 @@ use App\Data\Student\Course\GetOpenCoursesThisSemesterData;
 use App\Data\Student\Course\QueryParameters\GetOpenCoursesThisSemesterQueryParameterData;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use DB;
@@ -46,11 +47,25 @@ class GetOpenCoursesThisSemesterController extends Controller
                 $logged_user
                     ->department;
 
+        /** @var DepartmentRegisterationPeriod $department_latest_open_registeration */
+        $department_latest_open_registeration = DepartmentRegisterationPeriod::query()
+            ->where(
+                'is_open_for_students',
+                true,
+            )
+            ->where(
+                'department_id',
+                $logged_user->department_id
+            )
+            ->orderBy('year', 'desc')
+            ->orderBy('semester', 'desc')
+            ->first();
+
         return DB::table('courses')
-            ->leftJoin('departments', 'courses.department_id', '=', 'departments.id')
+            ->leftJoin('departments', 'courses.department_id', 'departments.id')
             ->join('open_course_registerations', 'open_course_registerations.course_id', 'courses.id')
-            ->where('open_course_registerations.year', $logged_user_department->course_registeration_year)
-            ->where('open_course_registerations.semester', $logged_user_department->course_registeration_semester)
+            ->where('open_course_registerations.year', $department_latest_open_registeration->year)
+            ->where('open_course_registerations.semester', $department_latest_open_registeration->semester)
             ->whereNested(function ($query) use ($logged_user_department) {
                 $query
                     ->where('departments.id', $logged_user_department->id)
