@@ -69,6 +69,16 @@ class UserFactory extends Factory
         });
     }
 
+    public function staticMarkAssigner(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'ma',
+            'password' => Hash::make('ma'),
+        ])->afterCreating(function (User $user) {
+            $user->assignRole(RolesEnum::MARKS_ASSIGNER);
+        });
+    }
+
     public function fromItDepartment(): static
     {
 

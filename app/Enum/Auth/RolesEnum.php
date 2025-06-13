@@ -40,7 +40,7 @@ enum RolesEnum: string
      *
      * @param  RolesEnum[]  $roles
      */
-    public static function oneOfMiddleware(...$roles): string
+    public static function oneOfRolesMiddleware(...$roles): string
     {
         $roles_count = count($roles);
 
@@ -55,6 +55,12 @@ enum RolesEnum: string
             return $prev.'|'.$current->value;
 
         }, 'role:');
+
+    }
+
+    public static function oneRoleOnlyMiddleware(RolesEnum $role): string
+    {
+        return 'role: '.$role->value;
 
     }
 }

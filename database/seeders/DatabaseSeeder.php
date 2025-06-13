@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
             // RolesAndPermissionsSeeder::class,
             // AdminSeeder::class,
             // DepartmentRegisterationPeriodSeeder::class,
-            CourseRegistererSeeder::class,
+            // CourseRegistererSeeder::class,
+            MarkAssignerSeeder::class,
         ]);
     }
 }
