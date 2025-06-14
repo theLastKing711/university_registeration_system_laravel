@@ -15,7 +15,7 @@ use OpenApi\Attributes as OAT;
         path: '/admins/departments/{id}/closeForRegisteration',
         parameters: [
             new OAT\PathParameter(
-                ref: '#/components/parameters/adminsDepartmentIdPathParameterData',
+                ref: '#/components/parameters/CloseDepartmentForRegisterationPathParameterData',
             ),
         ],
     ),

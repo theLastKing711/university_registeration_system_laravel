@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Department\CloseDepartmentForRegisterationControl
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
 use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
 use App\Http\Controllers\Admin\Department\OpenDepartmentForRegisterationController;
+use App\Http\Controllers\Admin\Student\AssignMarkToStudentController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
@@ -80,6 +81,7 @@ Route::prefix('admins')
                 ->group(function () {
 
                     Route::post('', RegisterStudentController::class);
+                    Route::post('assignMarkToStudent', AssignMarkToStudentController::class);
 
                     Route::patch('{id}', GraduateStudentController::class);
 

@@ -106,7 +106,7 @@
             },
             "parameters": [
                 {
-                    "$ref": "#/components/parameters/adminsDepartmentIdPathParameterData"
+                    "$ref": "#/components/parameters/CloseDepartmentForRegisterationPathParameterData"
                 }
             ]
         },
@@ -569,6 +569,34 @@
                         }
                     }
                 ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/students/assignMarkToStudent": {
+            "post": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "6c0ad79d926c48226010d17981d45399",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AssignMarkToStudentRequestData"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "204": {
                         "description": "",
@@ -1334,6 +1362,42 @@
                 },
                 "type": "object"
             },
+            "AssignMarkToStudentRequestData": {
+                "properties": {
+                    "exam_id": {
+                        "description": "Summary of __construct",
+                        "type": "integer"
+                    },
+                    "exam_students": {
+                        "description": "Summary of __construct",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ExamStudentItemData"
+                        }
+                    },
+                    "exam_data": {
+                        "schema": "string",
+                        "description": "Summary of __construct",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    }
+                },
+                "type": "object"
+            },
+            "ExamStudentItemData": {
+                "properties": {
+                    "student_id": {
+                        "type": "integer"
+                    },
+                    "mark": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "GraduateStudentData": {},
             "GraduateStudentRequestData": {
                 "properties": {
@@ -1670,6 +1734,14 @@
             },
             "adminsCourseTeacherPathParameterData": {
                 "name": "course_teacher_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "CloseDepartmentForRegisterationPathParameterData": {
+                "name": "id",
                 "in": "path",
                 "required": true,
                 "schema": {

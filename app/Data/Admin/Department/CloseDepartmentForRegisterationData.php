@@ -19,9 +19,14 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class CloseDepartmentForRegisterationData extends Data
 {
     public function __construct(
+        #[OAT\Property]
+        public int $year,
+        #[OAT\Property]
+        public int $semester,
+
         #[
             OAT\PathParameter(
-                parameter: 'adminsDepartmentIdPathParameterData', // the name used in ref
+                parameter: 'CloseDepartmentForRegisterationPathParameterData', // the name used in ref
                 name: 'id',
                 schema: new OAT\Schema(
                     type: 'integer',
@@ -31,10 +36,7 @@ class CloseDepartmentForRegisterationData extends Data
             Exists('departments', 'id')
         ]
         public int $id,
-        #[OAT\Property]
-        public int $year,
-        #[OAT\Property]
-        public int $semester,
+
     ) {}
 
     public static function rules(ValidationContext $context): array
