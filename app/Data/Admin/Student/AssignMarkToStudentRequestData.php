@@ -57,8 +57,9 @@ class AssignMarkToStudentRequestData extends Data
 
     }
 
-    public static function messages(): array
+    public static function messages(...$args): array
     {
+
         return [
             'exam_students.*.student_id' => 'الطالب غير مسجل بالمادة, لايمكن تسجيل له علامة فحص.',
         ];

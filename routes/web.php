@@ -166,6 +166,7 @@ Route::prefix('admins')
 
         });
 
+        // NEEDS CSRF TOKEN, EVEN THOUGH IT'S OUTSIDE auth:sanctum middleware
         Route::prefix('auth')->group(function () {
             Route::post('login', [AuthController::class, 'login']);
             Route::post('logout', [AuthController::class, 'logout']);
