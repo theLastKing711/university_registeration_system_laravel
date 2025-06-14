@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Course\CreateCourseAttendanceController;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\CreateExamController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
+use App\Http\Controllers\Admin\Course\GetCourseExamsController;
 use App\Http\Controllers\Admin\Course\GetCourseStudentsController;
 use App\Http\Controllers\Admin\Course\GetSemesterCoursesController;
 use App\Http\Controllers\Admin\Course\OpenForRegisterationController;
@@ -125,6 +126,10 @@ Route::prefix('admins')
                         ]);
 
                     Route::get('getSemesterCourses/{id}', GetSemesterCoursesController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::get('{id}/getCourseExams', GetCourseExamsController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]);
 

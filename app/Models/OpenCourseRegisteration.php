@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -67,5 +69,17 @@ class OpenCourseRegisteration extends Model
             StudentCourseRegisteration::class,
             'course_id'
         );
+    }
+
+    #[Scope]
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     **/
+    protected function getStudents(Builder $query, int $id): void
+    {
+        $query->where('votes', '>', 100);
     }
 }

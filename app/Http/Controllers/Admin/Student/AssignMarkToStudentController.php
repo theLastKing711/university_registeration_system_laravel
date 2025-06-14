@@ -26,7 +26,7 @@ class AssignMarkToStudentController extends Controller
                 );
 
         $exam_attach_data =
-            $request->exam_students->mapWithKeys(function (ExamStudentItemData $student, &$exam_attach_data) {
+            $request->exam_students->mapWithKeys(function (ExamStudentItemData $student) {
 
                 return [$student->student_id => ['mark' => $student->mark]];
 

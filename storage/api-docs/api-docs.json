@@ -5,6 +5,34 @@
         "version": "1"
     },
     "paths": {
+        "/admins/courses/{id}/getCourseExams": {
+            "get": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "782fa32e98aaf81b93d23a0dd41fd559",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetCourseExamsData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/getCourseExamsDataPathParameter"
+                }
+            ]
+        },
         "/admins/courses/getCourseStudents/{course_teacher_id}": {
             "get": {
                 "tags": [
@@ -1262,6 +1290,8 @@
                 },
                 "type": "object"
             },
+            "GetCourseExamsData": {},
+            "GetCourseExamsRequestData": {},
             "GetCourseStudentsRespnseData": {
                 "properties": {
                     "name": {
@@ -1374,15 +1404,6 @@
                         "items": {
                             "$ref": "#/components/schemas/ExamStudentItemData"
                         }
-                    },
-                    "exam_data": {
-                        "schema": "string",
-                        "description": "Summary of __construct",
-                        "type": "string",
-                        "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
-                        "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
                     }
                 },
                 "type": "object"
@@ -1725,6 +1746,14 @@
         },
         "parameters": {
             "adminsAdminIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "getCourseExamsDataPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,
