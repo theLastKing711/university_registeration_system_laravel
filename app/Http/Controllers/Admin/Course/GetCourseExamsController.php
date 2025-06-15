@@ -14,9 +14,9 @@ use OpenApi\Attributes as OAT;
         path: '/admins/courses/{id}/getCourseExams',
         parameters: [
             new OAT\PathParameter(
-                ref: '#/components/parameters/getCourseExamsDataPathParameter',
+                ref: '#/components/parameters/getCourseExamsDataPathParameter'
             ),
-        ],
+        ]
     )
 ]
 class GetCourseExamsController extends Controller

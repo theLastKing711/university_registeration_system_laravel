@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained();
             $table->year('year');
             $table->integer(column: 'semester')->unsigned();
+            $table->unique(['course_id', 'year', 'semester']);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

@@ -34,6 +34,12 @@ class DepartmentSeeder extends Seeder
             'name' => 'Shared', // houses shared courses like arabic or english across all departments.
             'is_course_registeration_open' => true,
         ],
+        [
+            'id' => 5,
+            'name' => 'Architecture',
+            'is_course_registeration_open' => true,
+
+        ],
     ];
 
     // seed others first tommowrw example: courses = ['math1', 'math2', 'math3',] seed it then classrooms = ['a-1', 'a-2', 'a-3'] run seeder then
@@ -59,6 +65,7 @@ class DepartmentSeeder extends Seeder
                         'open_for_students_in_year' => 1,
                     ],
                     'prerequisites' => [],
+                    'cross_listed_courses' => [],
                     // 'opens' => [
                     //     'course_id' => 1,
                     //     'year' => Carbon::createFromFormat('Y', 2014)->toDateTimeString(),
@@ -80,6 +87,7 @@ class DepartmentSeeder extends Seeder
                             'prerequisite_id' => 1,
                         ],
                     ],
+                    'cross_listed_courses' => [],
                 ],
                 [
                     'data' => [
@@ -96,6 +104,7 @@ class DepartmentSeeder extends Seeder
                             'prerequisite_id' => 2,
                         ],
                     ],
+                    'cross_listed_courses' => [],
                 ],
                 [
                     'data' => [
@@ -107,6 +116,7 @@ class DepartmentSeeder extends Seeder
                         'open_for_students_in_year' => 2,
                     ],
                     'prerequisites' => [],
+                    'cross_listed_courses' => [],
                 ],
                 [
                     'data' => [
@@ -127,8 +137,60 @@ class DepartmentSeeder extends Seeder
                             'prerequisite_id' => 10,
                         ],
                     ],
+                    'cross_listed_courses' => [],
+                ],
+                [
+                    'data' => [
+                        'id' => 12,
+                        'department_id' => 1,
+                        'name' => 'ITEng100',
+                        'code' => 'ITEng100',
+                        'credits' => 3,
+                        'open_for_students_in_year' => 3,
+                    ],
+                    'prerequisites' => [
+                        [
+                            'course_id' => 11,
+                            'prerequisite_id' => 3,
+                        ],
+                        [
+                            'course_id' => 11,
+                            'prerequisite_id' => 10,
+                        ],
+                    ],
+                    'cross_listed_courses' => [
+                        [
+                            'first_course_id' => 12,
+                            'second_course_id' => 100,
+                        ],
+                    ],
                 ],
             ],
+
+        ],
+        [
+            'data' => [
+                'id' => 2,
+                'name' => 'Architecture',
+                'is_course_registeration_open' => true,
+                'course_registeration_year' => 2014,
+                'course_registeration_semester' => 0,
+            ],
+            'courses' => [
+                [
+                    'data' => [
+                        'id' => 100,
+                        'department_id' => 2,
+                        'name' => 'ArchEngTheo100',
+                        'code' => 'ArchEngTheo100',
+                        'credits' => 3,
+                        'open_for_students_in_year' => 1,
+                    ],
+                    'prerequisites' => [],
+                    'cross_listed_courses' => [],
+                ],
+            ],
+
         ],
     ];
 

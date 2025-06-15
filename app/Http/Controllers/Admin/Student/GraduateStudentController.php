@@ -20,6 +20,7 @@ use OpenApi\Attributes as OAT;
         ],
     ),
 ]
+
 class GraduateStudentController extends Controller
 {
     #[OAT\Patch(path: '/admins/students/{id}', tags: ['adminsStudents'])]

@@ -254,6 +254,17 @@ class CourseSeeder extends Seeder
                     ->toArray()
             );
 
+        $cross_listed_courses =
+            $courses
+                ->pluck('cross_listed_courses')
+                ->flatten(1);
+
+        DB::table('cross_listed_courses')
+            ->insert(
+                $cross_listed_courses
+                    ->toArray()
+            );
+
         // $this->seedItCourses();
 
         // $courses = collect(self::COURSES);

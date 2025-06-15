@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CrossListedCourses extends Pivot
 {
+    protected $table = 'cross_listed_courses';
+
     /**
      * Get the firstCourse that owns the CrossListedCourses
      */
