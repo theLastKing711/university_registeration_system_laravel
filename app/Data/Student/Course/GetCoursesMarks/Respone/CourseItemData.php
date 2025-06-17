@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Student\Course;
+namespace App\Data\Student\Course\GetCoursesMarks\Respone;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
@@ -15,5 +15,9 @@ class CourseItemData extends Data
         public int $id,
         #[OAT\Property]
         public string $name,
+        #[OAT\Property]
+        public string $code,
+        #[OAT\Property]
+        public int $credits
     ) {}
 }

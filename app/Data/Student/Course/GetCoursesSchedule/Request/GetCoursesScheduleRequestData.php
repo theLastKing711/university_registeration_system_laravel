@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Student\Course;
+namespace App\Data\Student\Course\GetCoursesSchedule\Request;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;

@@ -1048,6 +1048,45 @@
                 }
             }
         },
+        "/students/courses/marks": {
+            "get": {
+                "tags": [
+                    "studentsCourses"
+                ],
+                "operationId": "26e46e59cb305aa678b442cdb3e05c0f",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetCoursesMarksResponseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/students/courses/schedule": {
             "get": {
                 "tags": [
@@ -1078,7 +1117,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/GetCoursesScheduleData"
+                                        "$ref": "#/components/schemas/GetCoursesScheduleResponseData"
                                     }
                                 }
                             }
@@ -1724,7 +1763,26 @@
                 },
                 "type": "object"
             },
-            "GetCoursesScheduleData": {},
+            "CourseClassroomScheduleItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCoursesMarksRequestQueryParameterData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCoursesMarksResponseData": {},
             "GetCoursesScheduleRequestData": {
                 "properties": {
                     "year": {
@@ -1732,6 +1790,65 @@
                     },
                     "semester": {
                         "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "ClassroomItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CourseItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCoursesScheduleResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "day": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "string"
+                    },
+                    "to": {
+                        "type": "string"
+                    },
+                    "course": {
+                        "$ref": "#/components/schemas/CourseItemData"
+                    },
+                    "teacher": {
+                        "$ref": "#/components/schemas/TeacherItemData"
+                    },
+                    "classroom": {
+                        "$ref": "#/components/schemas/ClassroomItemData"
+                    }
+                },
+                "type": "object"
+            },
+            "TeacherItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
                     }
                 },
                 "type": "object"

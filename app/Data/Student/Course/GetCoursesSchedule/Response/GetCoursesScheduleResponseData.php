@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Student\Course;
+namespace App\Data\Student\Course\GetCoursesSchedule\Response;
 
 use App\Models\ClassroomCourseTeacher;
 use OpenApi\Attributes as OAT;

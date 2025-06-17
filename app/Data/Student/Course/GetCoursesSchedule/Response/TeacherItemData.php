@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Student\Course;
+namespace App\Data\Student\Course\GetCoursesSchedule\Response;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
@@ -8,7 +8,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema()]
-class ClassroomItemData extends Data
+class TeacherItemData extends Data
 {
     public function __construct(
         #[OAT\Property]

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Student\Course;
 
 use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
-use App\Data\Student\Course\GetCoursesScheduleRequestData;
-use App\Data\Student\Course\GetCoursesScheduleResponseData;
+use App\Data\Student\Course\GetCoursesSchedule\Request\GetCoursesScheduleRequestData;
+use App\Data\Student\Course\GetCoursesSchedule\Response\GetCoursesScheduleResponseData;
 use App\Http\Controllers\Controller;
 use App\Models\ClassroomCourseTeacher;
 use App\Models\User;
@@ -86,8 +86,6 @@ class GetCoursesScheduleController extends Controller
                         )
                 )
                 ->get();
-
-        // return $student_course_schedule;
 
         return GetCoursesScheduleResponseData::collect($student_course_schedule);
 
