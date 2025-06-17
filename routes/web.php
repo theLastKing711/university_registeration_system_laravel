@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\Student\Course\GetCoursesScheduleController;
 use App\Http\Controllers\Student\Course\GetOpenCoursesThisSemesterController;
 use App\Http\Controllers\Student\Course\RegisterCoursesController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,7 @@ Route::prefix('students')
             ->group(function () {
 
                 Route::get('', GetOpenCoursesThisSemesterController::class);
+                Route::get('schedule', GetCoursesScheduleController::class);
 
                 Route::post('', RegisterCoursesController::class);
 

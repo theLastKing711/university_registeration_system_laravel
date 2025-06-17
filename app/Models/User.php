@@ -146,7 +146,7 @@ class User extends Authenticatable
     /**
      * The studentExams that belong to the User
      */
-    public function ExamStudent(): BelongsToMany
+    public function examStudent(): BelongsToMany
     {
         return $this->belongsToMany(
             Exam::class,

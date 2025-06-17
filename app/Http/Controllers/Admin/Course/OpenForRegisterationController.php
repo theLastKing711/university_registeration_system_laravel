@@ -62,13 +62,6 @@ class OpenForRegisterationController extends Controller
 
                     $open_course_registeration->semester =
                             $latestTimeDepartentOpenRegisteration->semester;
-
-                    // $open_course_registeration->year =
-                    //     $courses_department->course_registeration_year;
-
-                    // $open_course_registeration->semester =
-                    //     $courses_department->course_registeration_semester;
-
                     $course
                         ->openCourseRegisterations()
                         ->save(model: $open_course_registeration);

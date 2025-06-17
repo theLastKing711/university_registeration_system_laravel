@@ -79,6 +79,13 @@ class UserFactory extends Factory
         });
     }
 
+    public function withStudentRole(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole(RolesEnum::STUDENT);
+        });
+    }
+
     public function fromItDepartment(): static
     {
 

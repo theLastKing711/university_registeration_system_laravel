@@ -27,6 +27,19 @@ class CourseTeacher extends Pivot
         return $this->belongsTo(Teacher::class);
     }
 
+    /**
+     * Get all of the classroomCourseTeachers for the CourseTeacher
+     */
+    public function classroomCourseTeachers(): HasMany
+    {
+        return
+            $this
+                ->hasMany(
+                    ClassroomCourseTeacher::class,
+                    'course_teacher_id'
+                );
+    }
+
     public function classrooms(): BelongsToMany
     {
         return

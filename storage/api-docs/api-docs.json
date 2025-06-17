@@ -1048,6 +1048,45 @@
                 }
             }
         },
+        "/students/courses/schedule": {
+            "get": {
+                "tags": [
+                    "studentsCourses"
+                ],
+                "operationId": "e8ab1be388596ab7d1b925bda78c2029",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetCoursesScheduleData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/students/courses": {
             "get": {
                 "tags": [
@@ -1680,6 +1719,18 @@
                         "type": "integer"
                     },
                     "total": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCoursesScheduleData": {},
+            "GetCoursesScheduleRequestData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
                         "type": "integer"
                     }
                 },

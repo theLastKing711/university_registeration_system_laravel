@@ -25,7 +25,7 @@ class ClassroomCourseTeacher extends Pivot
      */
     public function courseTeacher(): BelongsTo
     {
-        return $this->belongsTo(CourseTeacher::class);
+        return $this->belongsTo(CourseTeacher::class, 'course_teacher_id');
     }
 
     /**

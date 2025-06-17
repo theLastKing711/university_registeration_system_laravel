@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\OpenCourseRegisteration;
 use App\Models\User;
+use Hash;
 use Illuminate\Database\Seeder;
 
 class StudentSeeder extends Seeder
@@ -20,6 +21,7 @@ class StudentSeeder extends Seeder
                 ->get();
 
         User::factory()
+            ->withStudentRole()
             ->fromItDepartment()
             ->enrolledInYear(2014)
             ->unGraduated()
@@ -33,6 +35,11 @@ class StudentSeeder extends Seeder
             ->create();
 
         User::factory()
+            ->state([
+                'name' => 'it_student',
+                'password' => Hash::make('it_student'),
+            ])
+            ->withStudentRole()
             ->fromItDepartment()
             ->enrolledInYear(2015)
             ->unGraduated()
