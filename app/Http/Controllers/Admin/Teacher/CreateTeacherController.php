@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Teacher;
 
-use App\Data\Admin\Teacher\CreateTeacherRequestData;
+use App\Data\Admin\Teacher\CreateTeacher\Request\CreateTeacherRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Course;
 
-use App\Data\Admin\Course\CreateCourseRequestData;
+use App\Data\Admin\Course\CreateCourse\Request\CreateCourseRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;

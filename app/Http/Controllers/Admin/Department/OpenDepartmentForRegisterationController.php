@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Department;
 
-use App\Data\Admin\Department\OpenDepartmentForRegisterationData;
+use App\Data\Admin\Department\OpenDepartmentForRegisteration\Request\OpenDepartmentForRegisterationData;
 use App\Data\Admin\Department\PathParameters\DepartmentIdPathParameterData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
@@ -12,7 +12,7 @@ use OpenApi\Attributes as OAT;
 
 #[
     OAT\PathItem(
-        path: '/admins/departments/{id}/openForRegisteration',
+        path: '/admins/departments/{id}/open-for-registerations',
         parameters: [
             new OAT\PathParameter(
                 ref: '#/components/parameters/adminsDepartmentIdPathParameterData',
@@ -22,7 +22,7 @@ use OpenApi\Attributes as OAT;
 ]
 class OpenDepartmentForRegisterationController extends Controller
 {
-    #[OAT\Patch(path: '/admins/departments/{id}/openForRegisteration', tags: ['adminsDepartments'])]
+    #[OAT\Patch(path: '/admins/departments/{id}/open-for-registerations', tags: ['adminsDepartments'])]
     #[JsonRequestBody(OpenDepartmentForRegisterationData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(

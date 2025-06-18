@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Student;
 
-use App\Data\Admin\Student\RegisterStudentRequestData;
+use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;

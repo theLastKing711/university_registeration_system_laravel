@@ -9,6 +9,7 @@ use App\Data\Student\Course\GetCoursesMarks\Respone\GetCoursesMarksResponseData;
 use App\Http\Controllers\Controller;
 use App\Models\StudentCourseRegisteration;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class GetCoursesMarksController extends Controller
@@ -16,9 +17,13 @@ class GetCoursesMarksController extends Controller
     #[OAT\Get(path: '/students/courses/marks', tags: ['studentsCourses'])]
     #[QueryParameter('year')]
     #[QueryParameter('semester')]
+    #[QueryParameter('page')]
+    #[QueryParameter('perPage')]
     #[SuccessListResponse(GetCoursesMarksResponseData::class)]
     public function __invoke(GetCoursesMarksRequestQueryParameterData $request)
     {
+
+        Log::info($request->all());
 
         $logged_user_id = Auth::User()->id;
 

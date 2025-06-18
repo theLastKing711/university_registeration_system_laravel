@@ -7,7 +7,7 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[Oat\Schema()]
+#[Oat\Schema(schema: 'GetCoursesScheduleCourseItemData')]
 class CourseItemData extends Data
 {
     public function __construct(

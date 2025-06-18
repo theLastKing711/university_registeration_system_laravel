@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Student;
 
-use App\Data\Admin\Student\GraduateStudentRequestData;
+use App\Data\Admin\Student\GraduateStudent\Request\GraduateStudentRequestData;
 use App\Data\Admin\Student\PathParameters\StudentIdPathParameterData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
@@ -23,7 +23,7 @@ use OpenApi\Attributes as OAT;
 
 class GraduateStudentController extends Controller
 {
-    #[OAT\Patch(path: '/admins/students/{id}', tags: ['adminsStudents'])]
+    #[OAT\Patch(path: '/admins/students/{id}/graduation', tags: ['adminsStudents'])]
     #[JsonRequestBody(GraduateStudentRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(StudentIdPathParameterData $studentIdPathParameterData, GraduateStudentRequestData $request)

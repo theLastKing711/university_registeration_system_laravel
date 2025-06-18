@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Student\Course;
 
 use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
-use App\Data\Student\Course\GetOpenCoursesThisSemesterData;
+use App\Data\Student\Course\GetOpenCoursesThisSemester\Response\GetOpenCoursesThisSemesterResponseData;
 use App\Data\Student\Course\QueryParameters\GetOpenCoursesThisSemesterQueryParameterData;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
@@ -12,6 +12,7 @@ use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use OpenApi\Attributes as OAT;
 
 class GetOpenCoursesThisSemesterController extends Controller
@@ -19,7 +20,7 @@ class GetOpenCoursesThisSemesterController extends Controller
     #[OAT\Get(path: '/students/courses', tags: ['studentsCourses'])]
     #[QueryParameter('year', 'integer')]
     #[QueryParameter('semester', 'integer')]
-    #[SuccessListResponse(GetOpenCoursesThisSemesterData::class)]
+    #[SuccessListResponse(GetOpenCoursesThisSemesterResponseData::class)]
     public function __invoke(GetOpenCoursesThisSemesterQueryParameterData $queryParameterData)
     {
 
@@ -29,7 +30,8 @@ class GetOpenCoursesThisSemesterController extends Controller
                 ->with('department')
                 ->firstWhere(
                     'id',
-                    operator: 1
+                    1
+                    // operator: Auth::User()->id
                 );
 
         $departments =

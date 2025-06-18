@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Course;
 
-use App\Data\Admin\Course\DeleteCoursesRequestData;
+use App\Data\Admin\Course\DeleteCourses\Request\DeleteCoursesRequestData;
 use App\Data\Shared\Swagger\Parameter\QueryParameter\ListQueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;

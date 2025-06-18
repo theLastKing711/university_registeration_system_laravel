@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Teacher;
 
-use App\Data\Admin\Teacher\DeleteTeachersRequestData;
+use App\Data\Admin\Teacher\DeleteTeacher\Request\DeleteTeachersRequestData;
 use App\Data\Shared\Swagger\Parameter\QueryParameter\ListQueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;

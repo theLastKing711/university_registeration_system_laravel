@@ -4,26 +4,24 @@ use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Admin\Admin\CreateAdminController;
 use App\Http\Controllers\Admin\Admin\DeleteAdminController;
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\Course\AssignClassroomToCourseController;
-use App\Http\Controllers\Admin\Course\AssignTeacherToCourseController;
-use App\Http\Controllers\Admin\Course\CreateCourseAttendanceController;
-use App\Http\Controllers\Admin\Course\CreateCourseController;
-use App\Http\Controllers\Admin\Course\CreateExamController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
-use App\Http\Controllers\Admin\Course\GetCourseExamsController;
-use App\Http\Controllers\Admin\Course\GetCourseStudentsController;
-use App\Http\Controllers\Admin\Course\GetSemesterCoursesController;
-use App\Http\Controllers\Admin\Course\OpenForRegisterationController;
+use App\Http\Controllers\Admin\CourseTeacher\AssignClassroomToCourseTeacherController;
+use App\Http\Controllers\Admin\CourseTeacher\CreateCourseTeacherAttendanceController;
+use App\Http\Controllers\Admin\CourseTeacher\CreateCourseTeacherExamController;
+use App\Http\Controllers\Admin\CourseTeacher\GetCourseTeacherExamsController;
+use App\Http\Controllers\Admin\CourseTeacher\GetCourseTeacherStudentsController;
 use App\Http\Controllers\Admin\Department\CloseDepartmentForRegisterationController;
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
 use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
+use App\Http\Controllers\Admin\Department\GetSemesterCoursesController;
 use App\Http\Controllers\Admin\Department\OpenDepartmentForRegisterationController;
-use App\Http\Controllers\Admin\Student\AssignMarkToStudentController;
+use App\Http\Controllers\Admin\Exam\AssignMarkToStudentController;
+use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
+use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\Student\Course\GetCoursesMarksController;
 use App\Http\Controllers\Student\Course\GetCoursesScheduleController;
 use App\Http\Controllers\Student\Course\GetOpenCoursesThisSemesterController;
@@ -49,7 +47,7 @@ Route::prefix('students')
             )
             ->group(function () {
 
-                Route::get('', GetOpenCoursesThisSemesterController::class);
+                Route::get('', action: GetOpenCoursesThisSemesterController::class);
                 Route::get('schedule', GetCoursesScheduleController::class);
                 Route::get('marks', GetCoursesMarksController::class);
 
@@ -85,11 +83,19 @@ Route::prefix('admins')
                 ])
                 ->group(function () {
 
-                    Route::post('', RegisterStudentController::class);
-                    Route::post('assignMarkToStudent', AssignMarkToStudentController::class);
+                    Route::post('', action: RegisterStudentController::class);
 
-                    Route::patch('{id}', GraduateStudentController::class);
+                    Route::patch('{id}/graduation', GraduateStudentController::class);
 
+                });
+
+            Route::prefix('exams')
+                ->middleware([
+                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                ])
+                ->group(function () {
+
+                    Route::post('{id}/students', AssignMarkToStudentController::class);
                 });
 
             Route::prefix('teachers')
@@ -110,13 +116,42 @@ Route::prefix('admins')
                 ])
                 ->group(function () {
 
-                    Route::patch('{id}/openForRegisteration', OpenDepartmentForRegisterationController::class);
+                    Route::get('{id}/open-course-registerations', GetSemesterCoursesController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
 
-                    Route::patch('{id}/closeForRegisteration', CloseDepartmentForRegisterationController::class);
+                    Route::post('', CreateDepartmentController::class);
 
-                    Route::post('createdepartments', CreateDepartmentController::class);
+                    Route::patch('{id}/open-for-registerations', OpenDepartmentForRegisterationController::class);
+                    Route::patch('{id}//close-for-registerations', CloseDepartmentForRegisterationController::class);
 
-                    Route::delete('deletedepartments', DeleteDepartmentController::class);
+                    Route::delete('', DeleteDepartmentController::class);
+
+                });
+
+            Route::prefix('course-teachers')
+
+                ->group(function () {
+                    Route::get('{id}/exams', GetCourseTeacherExamsController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::get('{id}/students', GetCourseTeacherStudentsController::class)
+                        ->middleware([
+                            RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                        ]);
+
+                    Route::post('classrooms', AssignClassroomToCourseTeacherController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::post('exams', CreateCourseTeacherExamController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
+                    Route::post('course-attendances', CreateCourseTeacherAttendanceController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
 
                 });
 
@@ -124,45 +159,21 @@ Route::prefix('admins')
 
                 ->group(function () {
 
-                    Route::get('getCourseStudents/{course_teacher_id}', GetCourseStudentsController::class)
-                        ->middleware([
-                            RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                        ]);
-
-                    Route::get('getSemesterCourses/{id}', GetSemesterCoursesController::class)->middleware([
+                    Route::delete('', action: DeleteCoursesController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]);
 
-                    Route::get('{id}/getCourseExams', GetCourseExamsController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
+                });
 
-                    Route::post('', CreateCourseController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
+            Route::prefix('open-course-registerations')
+                ->group(function () {
 
-                    Route::post('assignCourseToTeacher', AssignTeacherToCourseController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
-
-                    Route::post('assignClassroomToCourse', AssignClassroomToCourseController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
-
-                    Route::post('createCourseAttendance', CreateCourseAttendanceController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
-
-                    Route::post('createExam', CreateExamController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
-
-                    Route::post('openForRegisteration', OpenForRegisterationController::class)
+                    Route::post('', OpenCourseForRegisterationController::class)
                         ->middleware(
                             RolesEnum::oneOfRolesMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER)
                         );
 
-                    Route::delete('', action: DeleteCoursesController::class)->middleware([
+                    Route::post('teachers', AssignTeacherToOpenCourseController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]);
 
@@ -170,10 +181,10 @@ Route::prefix('admins')
 
         });
 
-        // NEEDS CSRF TOKEN, EVEN THOUGH IT'S OUTSIDE auth:sanctum middleware
-        Route::prefix('auth')->group(function () {
-            Route::post('login', [AuthController::class, 'login']);
-            Route::post('logout', [AuthController::class, 'logout']);
-        });
-
     });
+
+// NEEDS CSRF TOKEN, EVEN THOUGH IT'S OUTSIDE auth:sanctum middleware
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+});

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Department;
 
-use App\Data\Admin\Department\CloseDepartmentForRegisterationData;
+use App\Data\Admin\Department\CloseDepartmentForRegisteration\Request\CloseDepartmentForRegisterationRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
@@ -12,7 +12,7 @@ use OpenApi\Attributes as OAT;
 
 #[
     OAT\PathItem(
-        path: '/admins/departments/{id}/closeForRegisteration',
+        path: '/admins/departments/{id}/close-for-registerations',
         parameters: [
             new OAT\PathParameter(
                 ref: '#/components/parameters/CloseDepartmentForRegisterationPathParameterData',
@@ -22,11 +22,11 @@ use OpenApi\Attributes as OAT;
 ]
 class CloseDepartmentForRegisterationController extends Controller
 {
-    #[OAT\Patch(path: '/admins/departments/{id}/closeForRegisteration', tags: ['adminsDepartments'])]
-    #[JsonRequestBody(CloseDepartmentForRegisterationData::class)]
+    #[OAT\Patch(path: '/admins/departments/{id}/close-for-registerations', tags: ['adminsDepartments'])]
+    #[JsonRequestBody(CloseDepartmentForRegisterationRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(
-        CloseDepartmentForRegisterationData $request
+        CloseDepartmentForRegisterationRequestData $request
     ) {
 
         DepartmentRegisterationPeriod::query()
