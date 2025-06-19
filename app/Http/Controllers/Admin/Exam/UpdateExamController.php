@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\Exam;
 use App\Data\Admin\Exam\UpdateExam\Request\UpdateExamRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
+use App\Http\Controllers\Admin\Exam\Abstract\ExamController;
 use App\Models\Exam;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class UpdateExamController extends ExamController
@@ -16,16 +16,21 @@ class UpdateExamController extends ExamController
     #[SuccessNoContentResponse]
     public function __invoke(UpdateExamRequestData $request)
     {
-
-        Log::info($request->all());
-
         Exam::query()
             ->firstWhere(
                 'id',
                 $request->id
             )
             ->update(
-                $request->all()
+                [
+                    'classroom_id' => $request->classroom_id,
+                    'course_teacher_id' => $request->course_teacher_id,
+                    'date' => $request->date,
+                    'from' => $request->from,
+                    'to' => $request->to,
+                    'is_main_exam' => $request->is_main_exam,
+                    'max_mark' => $request->max_mark,
+                ]
             );
     }
 }

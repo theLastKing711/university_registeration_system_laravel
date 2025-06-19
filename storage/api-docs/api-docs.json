@@ -222,9 +222,101 @@
             ]
         },
         "/admins/students/{id}": {
+            "patch": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "28556a1a3d408c293a74c5566402da42",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateStudentRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsUpdateStudentPathParameter"
+                }
+            ]
+        },
+        "/admins/students/{id}/graduation": {
+            "patch": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "c55220d8751e090fd9beae857c700aa4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GraduateStudentRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsStudentIdPathParameterData"
+                }
+            ]
+        },
+        "/admins/teachers/{id}": {
+            "patch": {
+                "tags": [
+                    "adminsTeachers"
+                ],
+                "operationId": "9e2f532074740ad3b5e7742d42fa4176",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTeacherRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsUpdateTeacherPathParameter"
                 }
             ]
         },
@@ -703,34 +795,6 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/OpenCourseForRegisterationRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/admins/students/{id}/graduation": {
-            "patch": {
-                "tags": [
-                    "adminsStudents"
-                ],
-                "operationId": "c55220d8751e090fd9beae857c700aa4",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/GraduateStudentRequestData"
                             }
                         }
                     }
@@ -1529,6 +1593,53 @@
                 },
                 "type": "object"
             },
+            "UpdateStudentRequestData": {
+                "properties": {
+                    "department_id": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "national_id": {
+                        "type": "string"
+                    },
+                    "birthdate": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "enrollment_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45",
+                        "nullable": true
+                    },
+                    "graduation_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45",
+                        "nullable": true
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "CreateTeacherRequestData": {
                 "properties": {
                     "name": {
@@ -1547,6 +1658,17 @@
                         "items": {
                             "type": "integer"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTeacherRequestData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "department_id": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"
@@ -1980,10 +2102,31 @@
                     "type": "integer"
                 }
             },
-            "id": {
-                "$ref": "#/components/parameters/adminsDeleteExamPathParameter"
+            "adminsUpdateExamPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
             },
             "adminsStudentIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsUpdateStudentPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsUpdateTeacherPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

@@ -25,8 +25,10 @@ use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourse
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
+use App\Http\Controllers\Admin\Student\UpdateStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
+use App\Http\Controllers\Admin\Teacher\UpdateTeacherController;
 use App\Http\Controllers\Student\Course\GetCoursesMarksController;
 use App\Http\Controllers\Student\Course\GetCoursesScheduleController;
 use App\Http\Controllers\Student\Course\GetOpenCoursesThisSemesterController;
@@ -90,6 +92,8 @@ Route::prefix('admins')
 
                     Route::post('', action: RegisterStudentController::class);
 
+                    Route::patch('{id}', UpdateStudentController::class);
+
                     Route::patch('{id}/graduation', GraduateStudentController::class);
 
                 });
@@ -118,6 +122,8 @@ Route::prefix('admins')
 
                     Route::post('', CreateTeacherController::class);
 
+                    Route::patch('{id}', UpdateTeacherController::class);
+
                     Route::delete('', DeleteTeachersController::class);
 
                 });
@@ -142,7 +148,6 @@ Route::prefix('admins')
                 });
 
             Route::prefix('course-teachers')
-
                 ->group(function () {
 
                     Route::get('{id}/exams', GetCourseTeacherExamsController::class)->middleware([
@@ -169,7 +174,6 @@ Route::prefix('admins')
                 });
 
             Route::prefix('courses')
-
                 ->group(function () {
 
                     Route::post('', CreateCourseController::class);
@@ -177,7 +181,7 @@ Route::prefix('admins')
                     Route::patch('{id}', UpdateCourseController::class);
 
                     Route::delete('', action: DeleteCoursesController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                        RolesEnum::oneRoleOnlyMiddleware(role: RolesEnum::ADMIN),
                     ]);
 
                 });

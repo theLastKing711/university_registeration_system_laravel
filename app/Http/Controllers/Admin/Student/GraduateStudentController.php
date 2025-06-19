@@ -12,7 +12,7 @@ use OpenApi\Attributes as OAT;
 
 #[
     OAT\PathItem(
-        path: '/admins/students/{id}',
+        path: '/admins/students/{id}/graduation',
         parameters: [
             new OAT\PathParameter(
                 ref: '#/components/parameters/adminsStudentIdPathParameterData',

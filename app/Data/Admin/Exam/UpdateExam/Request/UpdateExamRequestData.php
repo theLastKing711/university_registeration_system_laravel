@@ -44,7 +44,11 @@ class UpdateExamRequestData extends Data
 
         #[
             OAT\PathParameter(
-                ref: '#/components/parameters/adminsDeleteExamPathParameter',
+                parameter: 'adminsUpdateExamPathParameter',
+                name: 'id',
+                schema: new OAT\Schema(
+                    type: 'integer',
+                ),
             ),
             FromRouteParameter('id'),
             Exists('exams', 'id')

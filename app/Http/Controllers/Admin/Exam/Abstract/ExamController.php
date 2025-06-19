@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Exam;
+namespace App\Http\Controllers\Admin\Exam\Abstract;
 
 use App\Http\Controllers\Controller;
 use OpenApi\Attributes as OAT;
@@ -15,4 +15,4 @@ use OpenApi\Attributes as OAT;
         ],
     ),
 ]
-class ExamController extends Controller {}
+abstract class ExamController extends Controller {}
