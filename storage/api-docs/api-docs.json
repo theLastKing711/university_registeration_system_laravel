@@ -189,6 +189,32 @@
                     }
                 }
             },
+            "patch": {
+                "tags": [
+                    "adminsExams"
+                ],
+                "operationId": "d384b3ab5d9f71e2c3fe3d34ea97efb6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateExamRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsDeleteExamPathParameter"
@@ -1374,6 +1400,39 @@
                 "type": "object"
             },
             "DeleteExamRequestData": {},
+            "UpdateExamRequestData": {
+                "properties": {
+                    "course_teacher_id": {
+                        "type": "integer"
+                    },
+                    "classroom_id": {
+                        "type": "integer"
+                    },
+                    "max_mark": {
+                        "type": "integer"
+                    },
+                    "date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "from": {
+                        "type": "string",
+                        "default": "08:00:00"
+                    },
+                    "to": {
+                        "type": "string",
+                        "default": "10:00:00"
+                    },
+                    "is_main_exam": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
             "AssignTeacherToCourseRequestData": {
                 "properties": {
                     "course_id": {
@@ -1920,6 +1979,9 @@
                 "schema": {
                     "type": "integer"
                 }
+            },
+            "id": {
+                "$ref": "#/components/parameters/adminsDeleteExamPathParameter"
             },
             "adminsStudentIdPathParameterData": {
                 "name": "id",

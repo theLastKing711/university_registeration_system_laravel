@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\Department\OpenDepartmentForRegisterationControll
 use App\Http\Controllers\Admin\Exam\AssignMarkToStudentController;
 use App\Http\Controllers\Admin\Exam\CreateExamController;
 use App\Http\Controllers\Admin\Exam\DeleteExamController;
+use App\Http\Controllers\Admin\Exam\UpdateExamController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
@@ -102,6 +103,8 @@ Route::prefix('admins')
                     Route::post('', CreateExamController::class);
 
                     Route::post('{id}/students', AssignMarkToStudentController::class);
+
+                    Route::patch('{id}', UpdateExamController::class);
 
                     Route::delete('{id}', DeleteExamController::class);
 
