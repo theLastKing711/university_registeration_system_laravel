@@ -4,7 +4,9 @@ use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Admin\Admin\CreateAdminController;
 use App\Http\Controllers\Admin\Admin\DeleteAdminController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
+use App\Http\Controllers\Admin\Course\UpdateCourseController;
 use App\Http\Controllers\Admin\CourseTeacher\AssignClassroomToCourseTeacherController;
 use App\Http\Controllers\Admin\CourseTeacher\CreateCourseTeacherAttendanceController;
 use App\Http\Controllers\Admin\CourseTeacher\CreateCourseTeacherExamController;
@@ -16,6 +18,8 @@ use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
 use App\Http\Controllers\Admin\Department\GetSemesterCoursesController;
 use App\Http\Controllers\Admin\Department\OpenDepartmentForRegisterationController;
 use App\Http\Controllers\Admin\Exam\AssignMarkToStudentController;
+use App\Http\Controllers\Admin\Exam\CreateExamController;
+use App\Http\Controllers\Admin\Exam\DeleteExamController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
@@ -95,7 +99,12 @@ Route::prefix('admins')
                 ])
                 ->group(function () {
 
+                    Route::post('', CreateExamController::class);
+
                     Route::post('{id}/students', AssignMarkToStudentController::class);
+
+                    Route::delete('{id}', DeleteExamController::class);
+
                 });
 
             Route::prefix('teachers')
@@ -123,7 +132,7 @@ Route::prefix('admins')
                     Route::post('', CreateDepartmentController::class);
 
                     Route::patch('{id}/open-for-registerations', OpenDepartmentForRegisterationController::class);
-                    Route::patch('{id}//close-for-registerations', CloseDepartmentForRegisterationController::class);
+                    Route::patch('{id}/close-for-registerations', CloseDepartmentForRegisterationController::class);
 
                     Route::delete('', DeleteDepartmentController::class);
 
@@ -132,6 +141,7 @@ Route::prefix('admins')
             Route::prefix('course-teachers')
 
                 ->group(function () {
+
                     Route::get('{id}/exams', GetCourseTeacherExamsController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]);
@@ -159,6 +169,10 @@ Route::prefix('admins')
 
                 ->group(function () {
 
+                    Route::post('', CreateCourseController::class);
+
+                    Route::patch('{id}', UpdateCourseController::class);
+
                     Route::delete('', action: DeleteCoursesController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]);
@@ -181,10 +195,10 @@ Route::prefix('admins')
 
         });
 
-    });
+        // NEEDS CSRF TOKEN, EVEN THOUGH IT'S OUTSIDE auth:sanctum middleware
+        Route::prefix('auth')->group(function () {
+            Route::post('login', [AuthController::class, 'login']);
+            Route::post('logout', [AuthController::class, 'logout']);
+        });
 
-// NEEDS CSRF TOKEN, EVEN THOUGH IT'S OUTSIDE auth:sanctum middleware
-Route::prefix('auth')->group(function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout']);
-});
+    });

@@ -66,6 +66,39 @@
                 }
             ]
         },
+        "/admins/courses/{id}": {
+            "patch": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "f96ca094648542a3ef2452143b6114fc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCourseRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsUpdateCoursePathParameterData"
+                }
+            ]
+        },
         "/admins/departments/{id}/close-for-registerations": {
             "patch": {
                 "tags": [
@@ -136,6 +169,29 @@
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsDepartmentIdPathParameterData"
+                }
+            ]
+        },
+        "/admins/exams/{id}": {
+            "delete": {
+                "tags": [
+                    "adminsExams"
+                ],
+                "operationId": "aab8c2c0aa77a19353d96ee6ea4c3ef9",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsDeleteExamPathParameter"
                 }
             ]
         },
@@ -537,6 +593,34 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/AssignMarkToStudentRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/exams": {
+            "post": {
+                "tags": [
+                    "adminsExams"
+                ],
+                "operationId": "67d9f5efa14472f8cb3e63c499f994c8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateExamRequestData"
                             }
                         }
                     }
@@ -1125,6 +1209,9 @@
             },
             "CreateCourseRequestData": {
                 "properties": {
+                    "department_id": {
+                        "type": "integer"
+                    },
                     "name": {
                         "type": "string"
                     },
@@ -1137,15 +1224,8 @@
                     "credits": {
                         "type": "integer"
                     },
-                    "department_id": {
-                        "type": "integer",
-                        "nullable": true
-                    },
-                    "prerequisites_ids": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                    "open_for_students_in_year": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"
@@ -1157,6 +1237,29 @@
                         "items": {
                             "type": "integer"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCourseRequestData": {
+                "properties": {
+                    "department_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "credits": {
+                        "type": "integer"
+                    },
+                    "open_for_students_in_year": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"
@@ -1237,6 +1340,40 @@
                 },
                 "type": "object"
             },
+            "CreateExamRequestData": {
+                "properties": {
+                    "course_teacher_id": {
+                        "type": "integer"
+                    },
+                    "classroom_id": {
+                        "type": "integer"
+                    },
+                    "max_mark": {
+                        "type": "integer"
+                    },
+                    "date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "from": {
+                        "type": "string",
+                        "default": "08:00:00"
+                    },
+                    "to": {
+                        "type": "string",
+                        "default": "10:00:00"
+                    },
+                    "is_main_exam": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteExamRequestData": {},
             "AssignTeacherToCourseRequestData": {
                 "properties": {
                     "course_id": {
@@ -1752,6 +1889,14 @@
                     "type": "integer"
                 }
             },
+            "adminsUpdateCoursePathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "CloseDepartmentForRegisterationPathParameterData": {
                 "name": "id",
                 "in": "path",
@@ -1761,6 +1906,14 @@
                 }
             },
             "adminsDepartmentIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsDeleteExamPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,
@@ -1841,6 +1994,10 @@
         {
             "name": "adminsStudents",
             "description": "adminsStudents"
+        },
+        {
+            "name": "adminsExams",
+            "description": "adminsExams"
         },
         {
             "name": "adminsOpenCourseRegisterations",

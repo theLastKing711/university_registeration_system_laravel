@@ -7,8 +7,6 @@ use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class CreateCourseController extends Controller
@@ -18,29 +16,15 @@ class CreateCourseController extends Controller
     #[SuccessNoContentResponse]
     public function __invoke(CreateCourseRequestData $request)
     {
-
-        Log::info(json_encode($request->prerequisites_ids));
-
         $course = new Course;
 
+        $course->department_id = $request->department_id;
         $course->name = $request->name;
         $course->code = $request->code;
         $course->is_active = $request->is_active;
         $course->credits = $request->credits;
-        $course->department_id = $request->department_id;
+        $course->open_for_students_in_year = $request->open_for_students_in_year;
 
-        DB::transaction(function () use ($course, $request) {
-
-            /** @var Course $created_course */
-            $created_course = Course::create(attributes: $course->toArray());
-
-            $created_course
-                ->coursesPrerequisites()
-                ->attach(
-                    $request->prerequisites_ids
-                );
-
-        });
-
+        $course->save();
     }
 }
