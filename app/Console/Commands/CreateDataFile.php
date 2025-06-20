@@ -167,6 +167,8 @@ class CreateDataFile extends Command
             use App\Data\Shared\Swagger\Property\ArrayProperty;
             use Illuminate\Support\Collection;
             use OpenApi\Attributes as OAT;
+            use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+
 
             #[TypeScript]
             #[Oat\Schema()]
@@ -190,10 +192,33 @@ class CreateDataFile extends Command
             $written = Storage::disk('app')
                 ->put('Data'.'\\'.$this->argument('name').'PaginationResultData.php', $fileContents);
 
-            $file_class_name =
-                $file_class_name_without_data.'QueryParameterData';
+            // $file_class_name =
+            //     $file_class_name_without_data.'QueryParameterData';
 
-            $real_path = $real_path.'\\'.'QueryParameters';
+            // $real_path = $real_path.'\\'.'QueryParameters';
+
+            $path =
+            str_replace(
+                '/',
+                '\\',
+                $this->argument('pagination')
+            );
+
+            $class_name =
+                explode(
+                    '\\',
+                    $path
+                );
+
+            $augmented_path =
+                explode(
+                    '\\',
+                    $path
+                );
+
+            array_splice($augmented_path, -1, 1);
+
+            $real_path = implode('\\', $augmented_path);
 
             $fileContents = <<<EOT
             <?php
@@ -215,7 +240,7 @@ class CreateDataFile extends Command
             EOT;
 
             $written = Storage::disk('app')
-                ->put('Data'.'\\'.$real_path.'\\'.$file_class_name.'Data.php', $fileContents);
+                ->put('Data'.'\\'.$real_path.'\\'.$file_class_name.'.php', $fileContents);
 
             if ($written) {
                 $this->info('Created new Repo '.$this->argument('name').'Repository.php in App\Repositories.');

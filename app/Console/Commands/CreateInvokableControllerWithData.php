@@ -467,9 +467,8 @@ class CreateInvokableControllerWithData extends Command
 
             if ($pagination_option) {
 
-                $get_many_data_name = $get_many_data_class.
+                // $get_many_data_name = $get_many_data_class.
 
-                $this->info('hello worlds');
                 $query_option = $this->argument('name');
 
                 $query_parameter_file_name = $input_file_name.'QueryParameterData';
@@ -490,7 +489,6 @@ class CreateInvokableControllerWithData extends Command
                 use App\Data\\$pagination_path;
                 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
                 use OpenApi\Attributes as OAT;
-                $pagination_data_imports
 
                 class $file_class_name extends Controller
                 {
@@ -512,7 +510,8 @@ class CreateInvokableControllerWithData extends Command
 
                 Artisan::call('make:data', [
                     'name' => $get_many_option,
-                    '--pagination' => 'default',
+                    '--pagination' => $this->option('pagination'),
+                    // '--pagination' => 'default',
                 ]);
 
                 Artisan::call('make:data', [
