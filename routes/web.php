@@ -23,16 +23,18 @@ use App\Http\Controllers\Admin\Exam\DeleteExamController;
 use App\Http\Controllers\Admin\Exam\UpdateExamController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
+use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseController;
+use App\Http\Controllers\Admin\Student\DeleteStudentController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Student\UpdateStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
 use App\Http\Controllers\Admin\Teacher\UpdateTeacherController;
-use App\Http\Controllers\Student\Course\GetCoursesMarksController;
-use App\Http\Controllers\Student\Course\GetCoursesScheduleController;
-use App\Http\Controllers\Student\Course\GetOpenCoursesThisSemesterController;
-use App\Http\Controllers\Student\Course\RegisterCoursesController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesMarksController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesScheduleController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesThisSemesterController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterOpenCoursesController;
 use Illuminate\Support\Facades\Route;
 
 // Route::prefix('files')
@@ -46,7 +48,7 @@ Route::prefix('students')
     ->middleware(['api', 'auth:sanctum'])
     ->group(function () {
 
-        Route::prefix('courses')
+        Route::prefix('course-offerings')
             ->middleware(
                 [
                     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::STUDENT),
@@ -55,10 +57,22 @@ Route::prefix('students')
             ->group(function () {
 
                 Route::get('', action: GetOpenCoursesThisSemesterController::class);
-                Route::get('schedule', GetCoursesScheduleController::class);
-                Route::get('marks', GetCoursesMarksController::class);
+                Route::get('schedule', GetOpenCoursesScheduleController::class);
+                Route::get('marks', GetOpenCoursesMarksController::class);
 
-                Route::post('', RegisterCoursesController::class);
+            });
+
+        Route::prefix('course-registerations')
+            ->middleware(
+                [
+                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::STUDENT),
+                ]
+            )
+            ->group(function () {
+
+                Route::post('', RegisterOpenCoursesController::class);
+
+                Route::delete('{id}', UnRegisterOpenCourseController::class);
 
             });
 
@@ -95,6 +109,8 @@ Route::prefix('admins')
                     Route::patch('{id}', UpdateStudentController::class);
 
                     Route::patch('{id}/graduation', GraduateStudentController::class);
+
+                    Route::delete('{id}', DeleteStudentController::class);
 
                 });
 

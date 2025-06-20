@@ -221,7 +221,46 @@
                 }
             ]
         },
+        "/admins/open-course-registerations/{id}": {
+            "delete": {
+                "tags": [
+                    "adminsOpenCourseRegisterations"
+                ],
+                "operationId": "d15161c7fc055d6df7e225e71c39a86d",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminOpenCourseRegisterationPathParameter"
+                }
+            ]
+        },
         "/admins/students/{id}": {
+            "delete": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "f5f125eda80f2d623417966c1309d708",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "patch": {
                 "tags": [
                     "adminsStudents"
@@ -994,12 +1033,12 @@
                 }
             }
         },
-        "/students/courses/marks": {
+        "/students/open-course-registerations/marks": {
             "get": {
                 "tags": [
                     "studentsCourses"
                 ],
-                "operationId": "26e46e59cb305aa678b442cdb3e05c0f",
+                "operationId": "059d3665d5bbe5dd3f624d39f67cf9af",
                 "parameters": [
                     {
                         "name": "year",
@@ -1010,20 +1049,6 @@
                     },
                     {
                         "name": "semester",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "perPage",
                         "in": "query",
                         "schema": {
                             "type": "string"
@@ -1047,12 +1072,12 @@
                 }
             }
         },
-        "/students/courses/schedule": {
+        "/students/open-course-registerations/schedule": {
             "get": {
                 "tags": [
                     "studentsCourses"
                 ],
-                "operationId": "e8ab1be388596ab7d1b925bda78c2029",
+                "operationId": "cc3b034d88646171f0fef504055dbf1d",
                 "parameters": [
                     {
                         "name": "year",
@@ -1086,12 +1111,12 @@
                 }
             }
         },
-        "/students/courses": {
+        "/students/open-course-registerations": {
             "get": {
                 "tags": [
                     "studentsCourses"
                 ],
-                "operationId": "57e924d82d7113d4c86d2e82f58bf7f1",
+                "operationId": "fb86732421d7e3c676b1696dbc421f96",
                 "parameters": [
                     {
                         "name": "year",
@@ -1128,13 +1153,13 @@
                 "tags": [
                     "studentsCourses"
                 ],
-                "operationId": "0256cf254858d5e8f3aa7c54cc527923",
+                "operationId": "d08044587a1da97313a66c913fda5c89",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/RegisterCoursesRequestData"
+                                "$ref": "#/components/schemas/RegisterOpenCoursesRequestData"
                             }
                         }
                     }
@@ -1511,6 +1536,7 @@
                 },
                 "type": "object"
             },
+            "DeleteOpenCourseRequestData": {},
             "OpenCourseForRegisterationRequestData": {
                 "properties": {
                     "semester": {
@@ -1543,6 +1569,7 @@
                 },
                 "type": "object"
             },
+            "DeleteStudentRequestData": {},
             "GraduateStudentRequestData": {
                 "properties": {
                     "graduation_date": {
@@ -2008,7 +2035,7 @@
                 },
                 "type": "object"
             },
-            "RegisterCoursesRequestData": {
+            "RegisterOpenCoursesRequestData": {
                 "properties": {
                     "course_ids": {
                         "type": "array",
@@ -2103,6 +2130,22 @@
                 }
             },
             "adminsUpdateExamPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminOpenCourseRegisterationPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsDeleteStudentPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

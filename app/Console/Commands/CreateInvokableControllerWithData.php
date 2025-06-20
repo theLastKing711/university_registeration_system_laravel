@@ -421,6 +421,24 @@ class CreateInvokableControllerWithData extends Command
 
         if ($get_many_option) {
 
+            $this->info($this->option('pagination'));
+
+            $pagination_option = $this->hasOption('pagination');
+
+            $pagination_data = '';
+            $pagination_data_imports = '';
+            $pagination_data_swagger = '';
+
+            if ($pagination_option) {
+                $pagination_data_imports =
+                    "use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;\n";
+
+                $pagination_data_swagger =
+                    "#[QueryParams('page')]\n"
+                    .
+                    "#[QueryParams('perPage')\n";
+            }
+
             $get_many_path =
             str_replace(
                 '/',
@@ -447,7 +465,7 @@ class CreateInvokableControllerWithData extends Command
 
             $this->info($this->option('pagination'));
 
-            if ($this->option('pagination')) {
+            if ($pagination_option) {
 
                 $get_many_data_name = $get_many_data_class.
 
@@ -472,6 +490,7 @@ class CreateInvokableControllerWithData extends Command
                 use App\Data\\$pagination_path;
                 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
                 use OpenApi\Attributes as OAT;
+                $pagination_data_imports
 
                 class $file_class_name extends Controller
                 {
