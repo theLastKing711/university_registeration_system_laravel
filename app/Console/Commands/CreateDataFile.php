@@ -27,8 +27,6 @@ class CreateDataFile extends Command
     public function handle()
     {
 
-        $this->info('hello world');
-
         /** @var string $path */
         $path =
             str_replace(
@@ -120,37 +118,7 @@ class CreateDataFile extends Command
 
         $pagination_option = $this->option('pagination');
 
-        $this->info('hello world');
-
         if ($pagination_option) {
-
-            // /** @var string $path */
-            // $pagination_path =
-            // str_replace(
-            //     '/',
-            //     '\\',
-            //     $this->argument('pagination')
-            // );
-
-            // $pagination_class_name =
-            //     explode(
-            //         '\\',
-            //         $pagination_path
-            //     );
-
-            // $pagination_augmented_path =
-            //     explode(
-            //         '\\',
-            //         $pagination_path
-            //     ).'Data';
-
-            // $pagination_file_class_name =
-            //     $pagination_class_name[count($class_name) - 1].'Data';
-
-            // $file_class_name =
-            //     $file_class_name_without_data.'PaginationResultData';
-
-            // $pagination_data_class = $pagination_option
 
             $file_class_name =
                 $file_class_name_without_data.'PaginationResultData';
@@ -197,30 +165,35 @@ class CreateDataFile extends Command
 
             // $real_path = $real_path.'\\'.'QueryParameters';
 
-            $path =
-            str_replace(
-                '/',
-                '\\',
-                $this->argument('pagination')
-            );
+            // /** @var string $path */
+            // $pagination_path =
+            // str_replace(
+            //     '/',
+            //     '\\',
+            //     $this->argument('name')
+            // );
 
-            $class_name =
-                explode(
-                    '\\',
-                    $path
-                );
+            // $pagination_class_name =
+            //     explode(
+            //         '\\',
+            //         $pagination_path
+            //     );
 
-            $augmented_path =
-                explode(
-                    '\\',
-                    $path
-                );
+            // $pagination_augmented_path =
+            //     explode(
+            //         '\\',
+            //         $pagination_path
+            //     ).'Data';
 
-            array_splice($augmented_path, -1, 1);
+            // $pagination_file_class_name =
+            //     $pagination_class_name[count($class_name) - 1].'Data';
 
-            $real_path = implode('\\', $augmented_path);
+            // $file_class_name =
+            //     $file_class_name_without_data.'PaginationResultData';
 
-            $fileContents = <<<EOT
+            // $pagination_data_class = $pagination_option;
+
+            $fileContents_2 = <<<EOT
             <?php
 
             namespace App\Data\\$real_path;
@@ -240,7 +213,7 @@ class CreateDataFile extends Command
             EOT;
 
             $written = Storage::disk('app')
-                ->put('Data'.'\\'.$real_path.'\\'.$file_class_name.'.php', $fileContents);
+                ->put('Data'.'\\'.$real_path.'\\'.$file_class_name.'.php', $fileContents_2);
 
             if ($written) {
                 $this->info('Created new Repo '.$this->argument('name').'Repository.php in App\Repositories.');

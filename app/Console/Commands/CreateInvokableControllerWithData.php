@@ -425,20 +425,6 @@ class CreateInvokableControllerWithData extends Command
 
             $pagination_option = $this->hasOption('pagination');
 
-            $pagination_data = '';
-            $pagination_data_imports = '';
-            $pagination_data_swagger = '';
-
-            if ($pagination_option) {
-                $pagination_data_imports =
-                    "use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;\n";
-
-                $pagination_data_swagger =
-                    "#[QueryParams('page')]\n"
-                    .
-                    "#[QueryParams('perPage')\n";
-            }
-
             $get_many_path =
             str_replace(
                 '/',
@@ -471,7 +457,7 @@ class CreateInvokableControllerWithData extends Command
 
                 $query_option = $this->argument('name');
 
-                $query_parameter_file_name = $input_file_name.'QueryParameterData';
+                $query_parameter_file_name = $input_file_name.'Data';
 
                 $pagination_class =
                     $get_many_data_class_without_data.'PaginationResultData';
@@ -508,14 +494,15 @@ class CreateInvokableControllerWithData extends Command
                 $written = Storage::disk('app')
                     ->put('Http\Controllers'.'\\'.$this->argument('name').'Controller.php', $fileContents);
 
-                Artisan::call('make:data', [
-                    'name' => $get_many_option,
-                    '--pagination' => $this->option('pagination'),
-                    // '--pagination' => 'default',
-                ]);
+                $this->info($this->option('pagination'));
 
                 Artisan::call('make:data', [
                     'name' => $get_many_option,
+                ]);
+
+                Artisan::call('make:data', [
+                    'name' => $this->option('pagination'),
+                    '--pagination' => 'default',
                 ]);
 
                 return;
