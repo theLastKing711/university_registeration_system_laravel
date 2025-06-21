@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCourses\Request;
+namespace App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCourses\Response;
+use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+use OpenApi\Attributes as OAT;
 
-use App\Data\Shared\Pagination\QueryParameters\PaginationQueryParameterData;
-
-class GetStudentRegisteredOpenCoursesResponseData extends PaginationQueryParameterData
+#[TypeScript]
+#[Oat\Schema()]
+class GetStudentRegisteredOpenCoursesResponseData extends Data
 {
     public function __construct(
-        ?int $page,
-        ?int $perPage,
+
     ) {
-        parent::__construct($page, $perPage);
     }
 }

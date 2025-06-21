@@ -2,7 +2,7 @@
 
 namespace App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCourses\Response;
 
-use App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCourses\Request\GetStudentRegisteredOpenCoursesResponseData;
+use App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCourses\Request\GetStudentRegisteredOpenCoursesRequestData;
 use App\Data\Shared\Pagination\PaginationResultData;
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use Illuminate\Support\Collection;

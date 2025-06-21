@@ -120,6 +120,53 @@ class CreateDataFile extends Command
 
         if ($pagination_option) {
 
+            // /** @var string $path */
+            // $response_path =
+            //     str_replace(
+            //         '/',
+            //         '\\',
+            //         $this->option('pagination')
+            //     );
+
+            // $response_class_name =
+            //     explode(
+            //         '\\',
+            //         $response_path
+            //     );
+
+            // $response_augmented_path =
+            //     explode(
+            //         '\\',
+            //         $response_path
+            //     );
+
+            // array_splice($response_augmented_path, -1, 1);
+
+            // $response_path = implode('\\', $response_augmented_path);
+
+            // $response_file_class_name =
+            //     $file_class_name_without_data.'Data';
+
+            // $fileContents_3 = <<<EOT
+            // <?php
+
+            // namespace App\Data\\$response_path;
+            // use Spatie\LaravelData\Data;
+            // use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+            // use OpenApi\Attributes as OAT;
+
+            // #[TypeScript]
+            // #[Oat\Schema()]
+            // class $response_file_class_name extends Data
+            // {
+            //     public function __construct(
+
+            //     ) {
+            //     }
+            // }
+
+            // EOT;
+
             /** @var string $path */
             $pagination_path =
                 str_replace(
@@ -144,8 +191,11 @@ class CreateDataFile extends Command
 
             $pagination_path = implode('\\', $pagination_augmented_path);
 
+            $pagination_path_file_name_without_data =
+                $pagination_class_name[count($pagination_class_name) - 1];
+
             $pagination_file_class_name =
-                $file_class_name_without_data.'Data';
+                $pagination_path_file_name_without_data.'Data';
 
             $fileContents_2 = <<<EOT
             <?php
@@ -167,7 +217,67 @@ class CreateDataFile extends Command
             EOT;
 
             $written = Storage::disk('app')
-                ->put('Data'.'\\'.$pagination_path.'\\'.$file_class_name.'.php', $fileContents_2);
+                ->put('Data'.'\\'.$pagination_path.'\\'.$pagination_file_class_name.'.php', $fileContents_2);
+
+            if ($written) {
+                $this->info('Created new Repo '.$this->argument('name').'Repository.php in App\Repositories.');
+            } else {
+                $this->info('Something went wrong');
+            }
+
+            // /** @var string $path */
+            // $response_path =
+            //     str_replace(
+            //         '/',
+            //         '\\',
+            //         $this->option('pagination')
+            //     );
+
+            // $response_class_name =
+            //     explode(
+            //         '\\',
+            //         $response_path
+            //     );
+
+            // $response_augmented_path =
+            //     explode(
+            //         '\\',
+            //         $response_path
+            //     );
+
+            // array_splice($response_augmented_path, -1, 1);
+
+            // $response_path = implode('\\', $response_augmented_path);
+
+            // $response_file_class_name =
+            //     $file_class_name_without_data.'Data';
+
+            $response_item_file_class_name =
+               $file_class_name_without_data.'Data';
+
+            $fileContents_3 = <<<EOT
+            <?php
+
+            namespace App\Data\\$real_path;
+
+            use Spatie\LaravelData\Data;
+            use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+            use OpenApi\Attributes as OAT;
+
+            #[TypeScript]
+            #[Oat\Schema()]
+            class $response_item_file_class_name extends Data
+            {
+                public function __construct(
+
+                ) {
+                }
+            }
+
+            EOT;
+
+            $written = Storage::disk('app')
+                ->put('Data'.'\\'.$pagination_path.'\\'.$response_item_file_class_name.'.php', $fileContents_3);
 
             if ($written) {
                 $this->info('Created new Repo '.$this->argument('name').'Repository.php in App\Repositories.');
@@ -238,6 +348,7 @@ class CreateDataFile extends Command
             <?php
 
             namespace App\Data\\$real_path;
+            
             $array_property_import;
             $collection_import;
             use Spatie\LaravelData\Data;
