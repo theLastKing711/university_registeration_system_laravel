@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\Teacher\UpdateTeacherController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesMarksController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesScheduleController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesThisSemesterController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterOpenCoursesController;
 use Illuminate\Support\Facades\Route;
 
@@ -69,6 +70,8 @@ Route::prefix('students')
                 ]
             )
             ->group(function () {
+
+                Route::get('', GetStudentRegisteredOpenCoursesController::class);
 
                 Route::post('', RegisterOpenCoursesController::class);
 

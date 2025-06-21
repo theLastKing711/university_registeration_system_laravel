@@ -241,6 +241,8 @@ namespace App\Models{
  * @property int $is_main_teacher
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
  * @property-read int|null $attendances_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClassroomCourseTeacher> $classroomCourseTeachers
+ * @property-read int|null $classroom_course_teachers_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Classroom,\Illuminate\Database\Eloquent\Relations\Pivot> $classrooms
  * @property-read int|null $classrooms_count
  * @property-read \App\Models\OpenCourseRegisteration $course
@@ -818,8 +820,6 @@ namespace App\Models{
  * @property string|null $graduation_date
  * @property string|null $phone_number
  * @property int|null $manages_department_with_id
- * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Exam,\Illuminate\Database\Eloquent\Relations\Pivot> $ExamStudent
- * @property-read int|null $exam_student_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
  * @property-read int|null $attendances_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\ClassroomCourseTeacher,\Illuminate\Database\Eloquent\Relations\Pivot> $classrooms
@@ -827,6 +827,8 @@ namespace App\Models{
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\OpenCourseRegisteration,\Illuminate\Database\Eloquent\Relations\Pivot> $courses
  * @property-read int|null $courses_count
  * @property-read \App\Models\Department|null $department
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Exam,\Illuminate\Database\Eloquent\Relations\Pivot> $examStudent
+ * @property-read int|null $exam_student_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExamStudent> $exams
  * @property-read int|null $exams_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\CourseTeacher,\Illuminate\Database\Eloquent\Relations\Pivot> $studenAttendances

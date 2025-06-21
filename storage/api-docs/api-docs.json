@@ -221,12 +221,12 @@
                 }
             ]
         },
-        "/admins/open-course-registerations/{id}": {
+        "/admins/course-registerations/{id}": {
             "delete": {
                 "tags": [
                     "adminsOpenCourseRegisterations"
                 ],
-                "operationId": "d15161c7fc055d6df7e225e71c39a86d",
+                "operationId": "ee64308eefd99a3fec5ad4f912e0a211",
                 "responses": {
                     "204": {
                         "description": "",
@@ -1111,12 +1111,12 @@
                 }
             }
         },
-        "/students/open-course-registerations": {
+        "/students/course-offerings": {
             "get": {
                 "tags": [
                     "studentsCourses"
                 ],
-                "operationId": "fb86732421d7e3c676b1696dbc421f96",
+                "operationId": "ddd138f4fbc41fde16fd18a525e86635",
                 "parameters": [
                     {
                         "name": "year",
@@ -1148,12 +1148,48 @@
                         }
                     }
                 }
+            }
+        },
+        "/students/course-registerations": {
+            "get": {
+                "tags": [
+                    "studentsOpenCourseRegisterations"
+                ],
+                "operationId": "aa4fde182c0ea619410cfedc8bb7f551",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetStudentRegisteredOpenCoursesResponsePaginationResultData"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "post": {
                 "tags": [
                     "studentsCourses"
                 ],
-                "operationId": "d08044587a1da97313a66c913fda5c89",
+                "operationId": "b0fa583223e4da7d76e35d415951ba33",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1536,7 +1572,7 @@
                 },
                 "type": "object"
             },
-            "DeleteOpenCourseRequestData": {},
+            "UnRegisterOpenCourseRequestData": {},
             "OpenCourseForRegisterationRequestData": {
                 "properties": {
                     "semester": {
@@ -1917,8 +1953,22 @@
                 },
                 "type": "object"
             },
-            "CourseItemData": {
-                "$ref": "GetCoursesMarksCourseItemData"
+            "GetCoursesMarksCourseItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "credits": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
             },
             "GetCoursesMarksResponseData": {
                 "properties": {
@@ -1926,7 +1976,7 @@
                         "type": "integer"
                     },
                     "course": {
-                        "$ref": "#/components/schemas/CourseItemData"
+                        "$ref": "#/components/schemas/GetCoursesMarksCourseItemData"
                     },
                     "year": {
                         "type": "integer"
@@ -2023,6 +2073,64 @@
                     }
                 },
                 "type": "object"
+            },
+            "GetStudentRegisteredOpenCoursesCourseItemData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "credits": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "GetStudentRegisteredOpenCoursesResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02 18:31:45",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02 18:31:45"
+                    },
+                    "course": {
+                        "$ref": "#/components/schemas/GetStudentRegisteredOpenCoursesCourseItemData"
+                    }
+                },
+                "type": "object"
+            },
+            "GetStudentRegisteredOpenCoursesResponsePaginationResultData": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/adminPaginatedAbstract"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/GetStudentRegisteredOpenCoursesResponseData"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
             },
             "GetOpenCoursesThisSemesterQueryParameterData": {
                 "properties": {
@@ -2262,6 +2370,10 @@
         {
             "name": "studentsCourses",
             "description": "studentsCourses"
+        },
+        {
+            "name": "studentsOpenCourseRegisterations",
+            "description": "studentsOpenCourseRegisterations"
         }
     ]
 }

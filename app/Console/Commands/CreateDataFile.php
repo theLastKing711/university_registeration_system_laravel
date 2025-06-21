@@ -277,7 +277,8 @@ class CreateDataFile extends Command
             EOT;
 
             $written = Storage::disk('app')
-                ->put('Data'.'\\'.$pagination_path.'\\'.$response_item_file_class_name.'.php', $fileContents_3);
+                // ->put('Data'.'\\'.$pagination_path.'\\'.$response_item_file_class_name.'.php', $fileContents_3);
+                ->put('Data'.'\\'.$this->argument('name').'Data.php', $fileContents_3);
 
             if ($written) {
                 $this->info('Created new Repo '.$this->argument('name').'Repository.php in App\Repositories.');
@@ -295,7 +296,6 @@ class CreateDataFile extends Command
 
             namespace App\Data\\$real_path;
 
-            use App\Data\\$pagination_path\\$pagination_file_class_name;
             use App\Data\Shared\Pagination\PaginationResultData;
             use App\Data\Shared\Swagger\Property\ArrayProperty;
             use Illuminate\Support\Collection;
@@ -313,7 +313,7 @@ class CreateDataFile extends Command
                     int \$per_page,
                     #[ArrayProperty($child_class_name::class)]
                     public Collection \$data,
-                    int \$total
+                    int \$total,
                 ) {
                     parent::__construct(\$current_page, \$per_page, \$total);
                 }
@@ -348,7 +348,7 @@ class CreateDataFile extends Command
             <?php
 
             namespace App\Data\\$real_path;
-            
+
             $array_property_import;
             $collection_import;
             use Spatie\LaravelData\Data;

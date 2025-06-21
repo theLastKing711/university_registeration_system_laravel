@@ -24609,6 +24609,21 @@ namespace Illuminate\Support {
             return \Illuminate\Support\Collection::selectMany($relation);
         }
 
+        /**
+         * 
+         *
+         * @see \App\Providers\BuilderMacrosServiceProvider::boot()
+         * @param int $perPage
+         * @param mixed $total
+         * @param mixed $page
+         * @param mixed $pageName
+         * @static 
+         */
+        public static function paginate($perPage, $total = null, $page = null, $pageName = 'page')
+        {
+            return \Illuminate\Support\Collection::paginate($perPage, $total, $page, $pageName);
+        }
+
             }
     }
 
