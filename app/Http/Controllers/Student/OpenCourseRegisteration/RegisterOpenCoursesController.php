@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class RegisterOpenCoursesController extends Controller
 {
-    #[OAT\Post(path: '/students/course-registerations', tags: ['studentsCourses'])]
+    #[OAT\Post(path: '/students/course-registerations', tags: ['studentsOpenCourseRegisterations'])]
     #[JsonRequestBody(RegisterOpenCoursesRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(RegisterOpenCoursesRequestData $request)

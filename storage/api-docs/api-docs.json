@@ -224,7 +224,7 @@
         "/admins/course-registerations/{id}": {
             "delete": {
                 "tags": [
-                    "adminsOpenCourseRegisterations"
+                    "studentsOpenCourseRegisterations"
                 ],
                 "operationId": "ee64308eefd99a3fec5ad4f912e0a211",
                 "responses": {
@@ -1187,7 +1187,7 @@
             },
             "post": {
                 "tags": [
-                    "studentsCourses"
+                    "studentsOpenCourseRegisterations"
                 ],
                 "operationId": "b0fa583223e4da7d76e35d415951ba33",
                 "requestBody": {
@@ -2360,6 +2360,10 @@
             "description": "adminsOpenCourseRegisterations"
         },
         {
+            "name": "studentsOpenCourseRegisterations",
+            "description": "studentsOpenCourseRegisterations"
+        },
+        {
             "name": "adminsTeachers",
             "description": "adminsTeachers"
         },
@@ -2370,10 +2374,6 @@
         {
             "name": "studentsCourses",
             "description": "studentsCourses"
-        },
-        {
-            "name": "studentsOpenCourseRegisterations",
-            "description": "studentsOpenCourseRegisterations"
         }
     ]
 }
