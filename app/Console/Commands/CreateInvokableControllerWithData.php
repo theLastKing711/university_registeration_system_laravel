@@ -496,13 +496,14 @@ class CreateInvokableControllerWithData extends Command
 
                 $this->info($this->option('pagination'));
 
-                Artisan::call('make:data', [
-                    'name' => $get_many_option,
-                ]);
+                // Artisan::call('make:data', [
+                //     'name' => $get_many_option,
+                // ]);
 
                 Artisan::call('make:data', [
-                    'name' => $this->option('pagination'),
-                    '--pagination' => 'default',
+                    // 'name' => $this->option('pagination'),
+                    'name' => $get_many_option,
+                    '--pagination' => $this->option('pagination'),
                 ]);
 
                 return;

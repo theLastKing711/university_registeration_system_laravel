@@ -12,7 +12,7 @@ class CreateDataFile extends Command
      *
      * @var string
      */
-    protected $signature = 'make:data {name} {--path} {--delete-many} {--pagination}';
+    protected $signature = 'make:data {name} {--path} {--delete-many} {--pagination==}';
 
     /**
      * The console command description.
@@ -120,6 +120,61 @@ class CreateDataFile extends Command
 
         if ($pagination_option) {
 
+            /** @var string $path */
+            $pagination_path =
+                str_replace(
+                    '/',
+                    '\\',
+                    $this->option('pagination')
+                );
+
+            $pagination_class_name =
+                explode(
+                    '\\',
+                    $pagination_path
+                );
+
+            $pagination_augmented_path =
+                explode(
+                    '\\',
+                    $pagination_path
+                );
+
+            array_splice($pagination_augmented_path, -1, 1);
+
+            $pagination_path = implode('\\', $pagination_augmented_path);
+
+            $pagination_file_class_name =
+                $file_class_name_without_data.'Data';
+
+            $fileContents_2 = <<<EOT
+            <?php
+
+            namespace App\Data\\$pagination_path;
+
+            use App\Data\Shared\Pagination\QueryParameters\PaginationQueryParameterData;
+
+            class $pagination_file_class_name extends PaginationQueryParameterData
+            {
+                public function __construct(
+                    ?int \$page,
+                    ?int \$perPage,
+                ) {
+                    parent::__construct(\$page, \$perPage);
+                }
+            }
+
+            EOT;
+
+            $written = Storage::disk('app')
+                ->put('Data'.'\\'.$pagination_path.'\\'.$file_class_name.'.php', $fileContents_2);
+
+            if ($written) {
+                $this->info('Created new Repo '.$this->argument('name').'Repository.php in App\Repositories.');
+            } else {
+                $this->info('Something went wrong');
+            }
+
             $file_class_name =
                 $file_class_name_without_data.'PaginationResultData';
 
@@ -130,7 +185,7 @@ class CreateDataFile extends Command
 
             namespace App\Data\\$real_path;
 
-            use App\Data\\$real_path\\$child_class_name;
+            use App\Data\\$pagination_path\\$pagination_file_class_name;
             use App\Data\Shared\Pagination\PaginationResultData;
             use App\Data\Shared\Swagger\Property\ArrayProperty;
             use Illuminate\Support\Collection;
@@ -164,62 +219,6 @@ class CreateDataFile extends Command
             //     $file_class_name_without_data.'QueryParameterData';
 
             // $real_path = $real_path.'\\'.'QueryParameters';
-
-            // /** @var string $path */
-            // $pagination_path =
-            // str_replace(
-            //     '/',
-            //     '\\',
-            //     $this->argument('name')
-            // );
-
-            // $pagination_class_name =
-            //     explode(
-            //         '\\',
-            //         $pagination_path
-            //     );
-
-            // $pagination_augmented_path =
-            //     explode(
-            //         '\\',
-            //         $pagination_path
-            //     ).'Data';
-
-            // $pagination_file_class_name =
-            //     $pagination_class_name[count($class_name) - 1].'Data';
-
-            // $file_class_name =
-            //     $file_class_name_without_data.'PaginationResultData';
-
-            // $pagination_data_class = $pagination_option;
-
-            $fileContents_2 = <<<EOT
-            <?php
-
-            namespace App\Data\\$real_path;
-
-            use App\Data\Shared\Pagination\QueryParameters\PaginationQueryParameterData;
-
-            class $file_class_name extends PaginationQueryParameterData
-            {
-                public function __construct(
-                    ?int \$page,
-                    ?int \$perPage,
-                ) {
-                    parent::__construct(\$page, \$perPage);
-                }
-            }
-
-            EOT;
-
-            $written = Storage::disk('app')
-                ->put('Data'.'\\'.$real_path.'\\'.$file_class_name.'.php', $fileContents_2);
-
-            if ($written) {
-                $this->info('Created new Repo '.$this->argument('name').'Repository.php in App\Repositories.');
-            } else {
-                $this->info('Something went wrong');
-            }
 
             return;
         }
