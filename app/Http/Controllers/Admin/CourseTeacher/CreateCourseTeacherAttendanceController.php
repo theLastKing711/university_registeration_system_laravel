@@ -12,7 +12,7 @@ use OpenApi\Attributes as OAT;
 
 class CreateCourseTeacherAttendanceController extends Controller
 {
-    #[OAT\Post(path: '/admins/courses/course-attendances', tags: ['adminsCourseTeachers'])]
+    #[OAT\Post(path: '/admins/course-teachers/course-attendances', tags: ['adminsCourseTeachers'])]
     #[JsonRequestBody(CreateCourseTeacherAttendanceRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(CreateCourseTeacherAttendanceRequestData $request)

@@ -12,6 +12,8 @@ class GetCourseTeacherStudentsRespnseData extends Data
 {
     public function __construct(
         #[OAT\Property]
+        public int $id,
+        #[OAT\Property]
         public string $name,
     ) {}
 }

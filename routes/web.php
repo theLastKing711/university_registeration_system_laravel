@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Course\DeleteCoursesController;
 use App\Http\Controllers\Admin\Course\UpdateCourseController;
 use App\Http\Controllers\Admin\CourseTeacher\CreateCourseTeacherAttendanceController;
 use App\Http\Controllers\Admin\CourseTeacher\GetCourseTeacherStudentsController;
+use App\Http\Controllers\Admin\CourseTeacher\UpdateCourseTeacherAttendaceController;
 use App\Http\Controllers\Admin\Department\CloseDepartmentForRegisterationController;
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
 use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
@@ -199,6 +200,11 @@ Route::prefix('admins')
                 ->group(function () {
 
                     Route::get('{id}/students', GetCourseTeacherStudentsController::class)
+                        ->middleware([
+                            RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                        ]);
+
+                    Route::patch('{id}/students', UpdateCourseTeacherAttendaceController::class)
                         ->middleware([
                             RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                         ]);

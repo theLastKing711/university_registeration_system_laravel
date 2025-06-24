@@ -5,36 +5,31 @@ namespace App\Http\Controllers\Admin\CourseTeacher;
 use App\Data\Admin\CourseTeacher\GetCourseTeacherStudents\Response\GetCourseTeacherStudentsRespnseData;
 use App\Data\Admin\CourseTeacher\PathParameters\CourseTeacherPathParameterData;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherController;
 use App\Models\CourseTeacher;
 use OpenApi\Attributes as OAT;
 
-#[
-    OAT\PathItem(
-        path: '/admins/courses/{id}/students',
-        parameters: [
-            new OAT\PathParameter(
-                ref: '#/components/parameters/adminsCourseTeacherPathParameterData',
-            ),
-        ],
-    ),
-]
-class GetCourseTeacherStudentsController extends Controller
+class GetCourseTeacherStudentsController extends CourseTeacherController
 {
-    #[OAT\Get(path: '/admins/courses/{id}/students', tags: ['adminsCourseTeachers'])]
+    #[OAT\Get(path: '/admins/course-teachers/{id}/students', tags: ['adminsCourseTeachers'])]
     #[SuccessListResponse(GetCourseTeacherStudentsRespnseData::class)]
-    public function __invoke(CourseTeacherPathParameterData $courseTeacherPathData)
+    public function __invoke(CourseTeacherPathParameterData $request)
     {
 
-        return
+        $course_teacher_students =
             CourseTeacher::query()
                 ->with('course.students:id,name')
                 ->firstWhere(
                     'id',
-                    $courseTeacherPathData->id,
+                    $request->id,
                 )
                 ->course
                 ->students;
+
+        return
+            GetCourseTeacherStudentsRespnseData::collect(
+                $course_teacher_students
+            );
 
     }
 }

@@ -54,12 +54,12 @@
                 }
             ]
         },
-        "/admins/courses/{id}/students": {
+        "/admins/course-teachers/{id}/students": {
             "get": {
                 "tags": [
                     "adminsCourseTeachers"
                 ],
-                "operationId": "390a54794e9b485650b5cd4fc100397b",
+                "operationId": "06ccdd33b7ec5c8b3918c546f72637da",
                 "responses": {
                     "200": {
                         "description": "Items fetched successfully",
@@ -76,9 +76,35 @@
                     }
                 }
             },
+            "patch": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "3857aae318c5a98d802ced3644cb8512",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "parameters": [
                 {
-                    "$ref": "#/components/parameters/adminsCourseTeacherPathParameterData"
+                    "$ref": "#/components/parameters/adminsUpdateCourseTeacherRequestIdPathParameter"
                 }
             ]
         },
@@ -592,12 +618,12 @@
                 }
             }
         },
-        "/admins/courses/course-attendances": {
+        "/admins/course-teachers/course-attendances": {
             "post": {
                 "tags": [
                     "adminsCourseTeachers"
                 ],
-                "operationId": "ce08c65a58612dbca2f17ddc65fabf34",
+                "operationId": "3937c7acf82d774b10f1a3956ef30060",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1461,8 +1487,33 @@
             },
             "GetCourseTeacherStudentsRespnseData": {
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "name": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminCourseTeacherUpdateCourseTeacherAttendaceRequestStudentAttendanceItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "is_student_present": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherRequestData": {
+                "properties": {
+                    "students_attendandces": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AdminCourseTeacherUpdateCourseTeacherAttendaceRequestStudentAttendanceItemData"
+                        }
                     }
                 },
                 "type": "object"
@@ -2469,6 +2520,14 @@
                 }
             },
             "adminsCourseTeacherPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsUpdateCourseTeacherRequestIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,
