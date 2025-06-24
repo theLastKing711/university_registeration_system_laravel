@@ -12,7 +12,7 @@ use OpenApi\Attributes as OAT;
 
 class AssignMarkToStudentController extends Controller
 {
-    #[OAT\Post(path: '/admins/students/exam-marks', tags: ['adminsStudents'])]
+    #[OAT\Post(path: '/admins/{id}/students', tags: ['adminsStudents'])]
     #[JsonRequestBody(AssignMarkToStudentRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(AssignMarkToStudentRequestData $request)
@@ -26,11 +26,13 @@ class AssignMarkToStudentController extends Controller
                 );
 
         $exam_attach_data =
-            $request->exam_students->mapWithKeys(function (ExamStudentItemData $student) {
+            $request
+                ->exam_students
+                ->mapWithKeys(function (ExamStudentItemData $student) {
 
-                return [$student->student_id => ['mark' => $student->mark]];
+                    return [$student->student_id => ['mark' => $student->mark]];
 
-            })
+                })
                 ->all();
 
         $exam

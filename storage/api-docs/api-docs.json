@@ -237,16 +237,6 @@
                     "adminsExams"
                 ],
                 "operationId": "14bb91ae7eff1741f538a5f51c75eb8e",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/GetExamRequestData"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Item fetched successfully",
@@ -781,12 +771,12 @@
                 }
             }
         },
-        "/admins/students/exam-marks": {
+        "/admins/{id}/students": {
             "post": {
                 "tags": [
                     "adminsStudents"
                 ],
-                "operationId": "12a03eaa700253f5ed685dfcb0a2f847",
+                "operationId": "6a36b9632ca821242695bbfbb23c6c28",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1445,9 +1435,9 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "students_attendance": {
                         "type": "array",
@@ -1637,9 +1627,9 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "from": {
                         "type": "string",
@@ -1657,7 +1647,39 @@
             },
             "DeleteExamRequestData": {},
             "GetExamRequestData": {},
-            "GetExamResponseData": {},
+            "GetExamResponseData": {
+                "properties": {
+                    "course_teacher_id": {
+                        "type": "integer"
+                    },
+                    "classroom_id": {
+                        "type": "integer"
+                    },
+                    "max_mark": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    },
+                    "from": {
+                        "type": "string",
+                        "default": "08:00:00"
+                    },
+                    "to": {
+                        "type": "string",
+                        "default": "08:00:00"
+                    },
+                    "is_main_exam": {
+                        "type": "boolean"
+                    },
+                    "classroom": {
+                        "$ref": "#/components/schemas/GetExamsClassroomItemData"
+                    }
+                },
+                "type": "object"
+            },
             "GetExamsRequestData": {
                 "properties": {
                     "course_teacher_id": {
@@ -1689,9 +1711,9 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "from": {
                         "type": "string",
@@ -1725,9 +1747,9 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "from": {
                         "type": "string",
@@ -1797,9 +1819,9 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     }
                 },
                 "type": "object"
@@ -1817,17 +1839,17 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "enrollment_date": {
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "phone_number": {
                         "type": "string"
@@ -1854,26 +1876,26 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "enrollment_date": {
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45",
+                        "example": "2024-09-02",
                         "nullable": true
                     },
                     "graduation_date": {
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45",
+                        "example": "2024-09-02",
                         "nullable": true
                     },
                     "phone_number": {
@@ -2344,9 +2366,9 @@
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
-                        "default": "2024-09-02 18:31:45",
+                        "default": "2024-09-02",
                         "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02 18:31:45"
+                        "example": "2024-09-02"
                     },
                     "course": {
                         "$ref": "#/components/schemas/GetStudentRegisteredOpenCoursesCourseItemData"
