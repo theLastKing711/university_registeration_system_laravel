@@ -76,6 +76,31 @@
                     }
                 }
             },
+            "delete": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "471e8589aabff2f656f0ccb0d523027c",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "patch": {
                 "tags": [
                     "adminsCourseTeachers"
@@ -86,7 +111,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherRequestData"
+                                "$ref": "#/components/schemas/AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherAttendanceRequestData"
                             }
                         }
                     }
@@ -102,6 +127,13 @@
                     }
                 }
             },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsUpdateCourseTeacherRequestIdPathParameter"
+                }
+            ]
+        },
+        "/admins/course-teachers/{id}": {
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsUpdateCourseTeacherRequestIdPathParameter"
@@ -1485,6 +1517,19 @@
                 },
                 "type": "object"
             },
+            "AdminCourseTeacherDeleteCourseTeacherAttendaceRequestDeleteCourseTeacherAttendanceRequestData": {
+                "properties": {
+                    "date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    }
+                },
+                "type": "object"
+            },
             "GetCourseTeacherStudentsRespnseData": {
                 "properties": {
                     "id": {
@@ -1507,7 +1552,7 @@
                 },
                 "type": "object"
             },
-            "AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherRequestData": {
+            "AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherAttendanceRequestData": {
                 "properties": {
                     "date": {
                         "schema": "string",
@@ -2520,6 +2565,14 @@
                 }
             },
             "adminsUpdateCourseTeacherClassroomPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsDeleteCourseTeacherAttendanceIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

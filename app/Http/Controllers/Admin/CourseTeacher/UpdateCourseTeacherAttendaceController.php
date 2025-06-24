@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Admin\CourseTeacher;
 
 use App\Data\Admin\CourseTeacher\UpdateCourseTeacherAttendace\Request\StudentAttendanceItemData;
-use App\Data\Admin\CourseTeacher\UpdateCourseTeacherAttendace\Request\UpdateCourseTeacherRequestData;
+use App\Data\Admin\CourseTeacher\UpdateCourseTeacherAttendace\Request\UpdateCourseTeacherAttandenceRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
-use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherController;
+use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherAttendanceController;
 use App\Models\CourseTeacher;
 use OpenApi\Attributes as OAT;
 
-class UpdateCourseTeacherAttendaceController extends CourseTeacherController
+class UpdateCourseTeacherAttendaceController extends CourseTeacherAttendanceController
 {
     #[OAT\Patch(path: '/admins/course-teachers/{id}/students', tags: ['adminsCourseTeachers'])]
-    #[JsonRequestBody(UpdateCourseTeacherRequestData::class)]
+    #[JsonRequestBody(UpdateCourseTeacherAttandenceRequestData::class)]
     #[SuccessNoContentResponse]
-    public function __invoke(UpdateCourseTeacherRequestData $request)
+    public function __invoke(UpdateCourseTeacherAttandenceRequestData $request)
     {
 
         $student_attendace_attach_data =
