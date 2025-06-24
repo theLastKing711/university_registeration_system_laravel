@@ -79,7 +79,7 @@ class CourseTeacher extends Pivot
             'course_attendance',
             'course_teacher_id',
             'student_id'
-        );
+        )->withPivot('updated_at');
     }
 
     /**

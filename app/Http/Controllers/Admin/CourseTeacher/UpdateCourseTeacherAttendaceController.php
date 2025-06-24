@@ -21,12 +21,13 @@ class UpdateCourseTeacherAttendaceController extends CourseTeacherController
         $student_attendace_attach_data =
             $request
                 ->students_attendandces
-                ->mapWithKeys(function (StudentAttendanceItemData $student) {
+                ->mapWithKeys(function (StudentAttendanceItemData $student) use ($request) {
 
                     return
                         [
                             $student->id => [
                                 'is_student_present' => $student->is_student_present,
+                                'date' => $request->date,
                             ],
                         ];
 

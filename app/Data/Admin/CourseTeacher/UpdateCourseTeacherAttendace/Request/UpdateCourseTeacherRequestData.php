@@ -3,6 +3,7 @@
 namespace App\Data\Admin\CourseTeacher\UpdateCourseTeacherAttendace\Request;
 
 use App\Data\Shared\Swagger\Property\ArrayProperty;
+use App\Data\Shared\Swagger\Property\DateProperty;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -14,14 +15,15 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[Oat\Schema(schema: 'AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherRequestData')]
 class UpdateCourseTeacherRequestData extends Data
 {
-    /**
-     * @param  \Illuminate\Support\Collection<StudentAttendanceItemData>  $items
-     */
     public function __construct(
 
+        #[DateProperty]
+        public string $date,
+
         #[ArrayProperty(StudentAttendanceItemData::class)]
-        /** @var StudentAttendanceItemData[] */
+        /** @var Collection<StudentAttendanceItemData> */
         public Collection $students_attendandces,
+
         #[
             OAT\PathParameter(
                 parameter: 'adminsUpdateCourseTeacherRequestIdPathParameter',

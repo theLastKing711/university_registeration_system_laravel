@@ -1509,6 +1509,14 @@
             },
             "AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherRequestData": {
                 "properties": {
+                    "date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    },
                     "students_attendandces": {
                         "type": "array",
                         "items": {
