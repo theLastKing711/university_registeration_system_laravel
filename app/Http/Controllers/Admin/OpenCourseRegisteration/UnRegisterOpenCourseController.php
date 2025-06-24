@@ -10,7 +10,7 @@ use OpenApi\Attributes as OAT;
 
 class UnRegisterOpenCourseController extends OpenCourseRegisterationController
 {
-    #[OAT\Delete(path: '/admins/course-registerations/{id}', tags: ['studentsOpenCourseRegisterations'])]
+    #[OAT\Delete(path: '/admins/course-registerations/registered-courses/this-semester/{id}', tags: ['studentsOpenCourseRegisterations'])]
     #[SuccessNoContentResponse]
     public function __invoke(UnRegisterOpenCourseRequestData $request)
     {

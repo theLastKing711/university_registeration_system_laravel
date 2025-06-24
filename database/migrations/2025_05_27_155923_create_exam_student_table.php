@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('exam_id')
-                ->constrained();
+                ->constrained()
+                ->cascadeOnDelete();
+
             $table
                 ->foreignId('student_id')
-                ->constrained('users', 'id');
+                ->constrained('users', 'id')
+                ->cascadeOnDelete();
             $table->integer('mark');
             $table->timestamps();
         });

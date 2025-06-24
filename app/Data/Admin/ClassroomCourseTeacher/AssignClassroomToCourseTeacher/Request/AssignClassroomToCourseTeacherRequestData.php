@@ -1,50 +1,57 @@
 <?php
 
-namespace App\Data\Admin\Exam\CreateExam\Request;
+namespace App\Data\Admin\ClassroomCourseTeacher\AssignClassroomToCourseTeacher\Request;
 
-use App\Data\Shared\Swagger\Property\DateProperty;
+use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseTeacher;
-use App\Models\Exam;
 use Closure;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelData\Attributes\Validation\Bail;
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
 use Spatie\LaravelData\Attributes\Validation\Exists;
+use Spatie\LaravelData\Attributes\Validation\In;
+use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema()]
-class CreateExamRequestData extends Data
+class AssignClassroomToCourseTeacherRequestData extends Data
 {
     public function __construct(
-        #[
-            OAT\Property,
-            Exists('course_teacher', 'id')
-        ]
-        public int $course_teacher_id,
+
         #[
             OAT\Property,
             Exists('classrooms', 'id')
         ]
         public int $classroom_id,
-        #[OAT\Property]
-        public int $max_mark,
-        #[DateProperty]
-        public string $date,
+
+        #[
+            OAT\Property,
+            Exists('course_teacher', 'id')
+        ]
+        public int $course_teacher_id,
+
+        #[OAT\Property, In([0, 1, 2, 3, 4, 5, 6, 7])]
+        public int $day,
+
+        #[WithCast(DateTimeInterfaceCast::class)]
         #[
             OAT\Property(default: '08:00:00'),
-            DateFormat('H:i:s')
+            Bail,
+            DateFormat('H:i:s'),
         ]
         public string $from,
+
+        #[WithCast(DateTimeInterfaceCast::class)]
         #[
-            OAT\Property(default: '10:00:00'),
+            OAT\Property(default: '08:00:00'),
+            Bail,
             DateFormat('H:i:s')
         ]
         public string $to,
-        #[OAT\Property]
-        public bool $is_main_exam,
-
     ) {}
 
     public static function rules(ValidationContext $context): array
@@ -58,15 +65,11 @@ class CreateExamRequestData extends Data
 
                     $request_course_teacher_id = $context->payload['course_teacher_id'];
 
-                    $request_date = $context->payload['date'];
+                    $request_day = $context->payload['day'];
 
                     $request_from = $context->payload['from'];
 
                     $request_to = $context->payload['to'];
-
-                    // $request_from = Carbon::parse($context->payload['from']);
-
-                    // $request_to = Carbon::parse($context->payload['to']);
 
                     $course_teacher =
                         CourseTeacher::query()
@@ -80,11 +83,11 @@ class CreateExamRequestData extends Data
 
                     $course_semester = $course_teacher->course->semester;
 
-                    $exams_with_overlapped_timing = Exam::query()
-                        ->where('classroom_id', $request_classroom_id)
-                        ->where('date', $request_date)
+                    $overlapped_time_classrooms = ClassroomCourseTeacher::query()
                         ->whereRelation('courseTeacher.course', 'year', $course_year)
                         ->whereRelation('courseTeacher.course', 'semester', $course_semester)
+                        ->where('classroom_id', $request_classroom_id)
+                        ->where('day', $request_day)
                         ->whereNested(function ($query) use ($request_from, $request_to) {
                             $query
                                 ->whereNested(function ($query) use ($request_from, $request_to) {
@@ -96,12 +99,13 @@ class CreateExamRequestData extends Data
                                     $query
                                         ->whereTime('to', '>=', $request_from)
                                         ->whereTime('to', '<=', $request_to);
+
                                 });
                         })
                         ->get();
 
-                    if ($exams_with_overlapped_timing->count() != 0) {
-                        $fail('يوحد تضارب في يوم وتوقيت الفحص, يرجى اختيار وقت ويوم آخر.');
+                    if ($overlapped_time_classrooms->isNotEmpty()) {
+                        $fail('يوحد تضارب في يوم وتوقيت الحصة, يرجى اختيار وقت ويوم آخر.');
                     }
                 },
             ],

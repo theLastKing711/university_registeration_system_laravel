@@ -17,7 +17,7 @@ use OpenApi\Attributes as OAT;
 
 class GetOpenCoursesThisSemesterController extends Controller
 {
-    #[OAT\Get(path: '/students/course-offerings', tags: ['studentsCourses'])]
+    #[OAT\Get(path: '/students/course-offerings/offered-courses/this-semester', tags: ['studentsCourses'])]
     #[QueryParameter('year', 'integer')]
     #[QueryParameter('semester', 'integer')]
     #[SuccessListResponse(GetOpenCoursesThisSemesterResponseData::class)]

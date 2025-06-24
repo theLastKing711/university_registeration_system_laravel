@@ -422,6 +422,7 @@ namespace App\Models{
  * @property int $is_main_exam
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Classroom $classroom
  * @property-read \App\Models\CourseTeacher $courseTeacher
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExamStudent> $examStudents
  * @property-read int|null $exam_students_count

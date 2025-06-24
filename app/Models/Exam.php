@@ -16,6 +16,14 @@ class Exam extends Pivot
     protected $table = 'exams';
 
     /**
+     * Get the classroom that owns the Exam
+     */
+    public function classroom(): BelongsTo
+    {
+        return $this->belongsTo(Classroom::class);
+    }
+
+    /**
      * Get the courseTeacher that owns the Exam
      */
     public function courseTeacher(): BelongsTo

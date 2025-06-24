@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Student\OpenCourseRegisteration;
 
 use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
-use App\Data\Student\OpenCourseRegisteration\GetCoursesSchedule\Request\GetCoursesScheduleRequestData;
-use App\Data\Student\OpenCourseRegisteration\GetCoursesSchedule\Response\GetCoursesScheduleResponseData;
+use App\Data\Student\OpenCourseRegisteration\GetCoursesScheduleThisSemester\Request\GetCoursesScheduleThisSemesterRequestData;
+use App\Data\Student\OpenCourseRegisteration\GetCoursesScheduleThisSemester\Response\GetCoursesScheduleThisSemesterResponseData;
 use App\Http\Controllers\Controller;
 use App\Models\ClassroomCourseTeacher;
 use App\Models\User;
@@ -14,11 +14,11 @@ use OpenApi\Attributes as OAT;
 
 class GetOpenCoursesScheduleController extends Controller
 {
-    #[OAT\Get(path: '/students/open-course-registerations/schedule', tags: ['studentsCourses'])]
+    #[OAT\Get(path: '/students/course-registerations/offered-courses/schedule', tags: ['studentsCourses'])]
     #[QueryParameter('year')]
     #[QueryParameter('semester')]
-    #[SuccessListResponse(GetCoursesScheduleResponseData::class)]
-    public function __invoke(GetCoursesScheduleRequestData $request)
+    #[SuccessListResponse(GetCoursesScheduleThisSemesterResponseData::class)]
+    public function __invoke(GetCoursesScheduleThisSemesterRequestData $request)
     {
 
         // return $logged_user =
@@ -87,7 +87,7 @@ class GetOpenCoursesScheduleController extends Controller
                 )
                 ->get();
 
-        return GetCoursesScheduleResponseData::collect($student_course_schedule);
+        return GetCoursesScheduleThisSemesterResponseData::collect($student_course_schedule);
 
     }
 }
