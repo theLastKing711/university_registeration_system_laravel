@@ -1547,7 +1547,8 @@
                         "type": "integer"
                     },
                     "is_student_present": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     }
                 },
                 "type": "object"

@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
         $middleware->append(Locale::class);
         // 'true' or 'false' to true or false in query params for laravel-data and l5-swagger integration
-        $middleware->append(ParseStringToBoolInQueryParameter::class);
+        // $middleware->append(ParseStringToBoolInQueryParameter::class);
 
         $middleware->alias([
             'optional_auth' => OptionalAuthSanctum::class,

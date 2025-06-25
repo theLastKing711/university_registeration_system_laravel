@@ -4,13 +4,14 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 // convert route?is_condition=true&is_other_=false
 // which get translated to string 'true' or 'false
 // to true or false
 // so laravel validation don't throw error
-//when there is none
+// when there is none
 class ParseStringToBoolInQueryParameter
 {
     /**
@@ -21,6 +22,8 @@ class ParseStringToBoolInQueryParameter
     public function handle(Request $request, Closure $next): Response
     {
         foreach ($request->query() as $key => $value) {
+            Log::info('hell wrold');
+
             if ($value === 'true') {
                 $request[$key] = true;
             }
