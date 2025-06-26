@@ -7,7 +7,6 @@ use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherAttendanceController;
 use App\Models\CourseAttendance;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class DeleteCourseTeacherAttendaceController extends CourseTeacherAttendanceController
@@ -28,20 +27,6 @@ class DeleteCourseTeacherAttendaceController extends CourseTeacherAttendanceCont
                 $request->date
             )
             ->delete();
-
-        Log::info(
-            CourseAttendance::query()
-                ->where(
-                    'course_teacher_id',
-                    $request->id
-                )
-                ->where(
-                    'date',
-                    $request->date
-                )
-                ->get()
-                ->count()
-        );
 
     }
 }

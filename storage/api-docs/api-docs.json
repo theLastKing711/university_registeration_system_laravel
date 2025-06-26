@@ -1486,9 +1486,6 @@
             },
             "CreateCourseTeacherAttendanceRequestData": {
                 "properties": {
-                    "course_teacher_id": {
-                        "type": "integer"
-                    },
                     "date": {
                         "schema": "string",
                         "type": "string",
@@ -1497,10 +1494,10 @@
                         "pattern": "YYYY-MM-DD",
                         "example": "2024-09-02"
                     },
-                    "students_attendance": {
+                    "items": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/StudentAttendanceData"
+                            "type": "integer"
                         }
                     }
                 },

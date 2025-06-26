@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Admin\CourseTeacher;
 
 use App\Data\Admin\CourseTeacher\CreateCourseTeacherAttendance\Request\CreateCourseTeacherAttendanceRequestData;
 use App\Data\Admin\CourseTeacher\CreateCourseTeacherAttendance\Request\StudentAttendanceData as RequestStudentAttendanceData;
+use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherAttendanceController;
 use App\Models\CourseTeacher;
 use OpenApi\Attributes as OAT;
 
-class CreateCourseTeacherAttendanceController extends Controller
+class CreateCourseTeacherAttendanceController extends CourseTeacherAttendanceController
 {
     #[OAT\Post(path: '/admins/course-teachers/course-attendances', tags: ['adminsCourseTeachers'])]
+    #[QueryParameter('date')]
     #[JsonRequestBody(CreateCourseTeacherAttendanceRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(CreateCourseTeacherAttendanceRequestData $request)
@@ -33,7 +35,7 @@ class CreateCourseTeacherAttendanceController extends Controller
         CourseTeacher::query()
             ->firstWhere(
                 'id',
-                $request->course_teacher_id
+                $request->id
             )
             ->studenAttendances()
             ->attach($attendace_attach_data);

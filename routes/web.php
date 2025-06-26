@@ -205,6 +205,10 @@ Route::prefix('admins')
                             RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                         ]);
 
+                    Route::post('{id}/students', CreateCourseTeacherAttendanceController::class)->middleware([
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]);
+
                     Route::patch('{id}/students', UpdateCourseTeacherAttendaceController::class)
                         ->middleware([
                             RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
@@ -214,10 +218,6 @@ Route::prefix('admins')
                         ->middleware([
                             RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                         ]);
-
-                    Route::post('course-attendances', CreateCourseTeacherAttendanceController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
 
                 });
 

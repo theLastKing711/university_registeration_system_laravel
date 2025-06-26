@@ -19,7 +19,7 @@ class CreateCourseTeacherAttendanceRequestData extends Data
      */
     public function __construct(
         #[OAT\Property, Exists('course_teacher', 'id')]
-        public int $course_teacher_id,
+        public int $id,
 
         #[DateProperty]
         public string $date,
