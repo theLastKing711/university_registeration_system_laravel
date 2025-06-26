@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\OpenCourseRegisteration;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -66,11 +65,6 @@ class DepartmentSeeder extends Seeder
                     ],
                     'prerequisites' => [],
                     'cross_listed_courses' => [],
-                    // 'opens' => [
-                    //     'course_id' => 1,
-                    //     'year' => Carbon::createFromFormat('Y', 2014)->toDateTimeString(),
-                    //     'semester' => 0
-                    // ]
                 ],
                 [
                     'data' => [

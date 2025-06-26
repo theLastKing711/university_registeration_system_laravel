@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('course_attendance', function (Blueprint $table) {
             $table->id();
             $table
-                ->foreignId('course_teacher_id')
-                ->constrained('course_teacher', 'id');
+                ->foreignId('lecture_id')
+                ->constrained();
             $table
                 ->foreignId('student_id')
                 ->constrained('users', 'id');
-            $table->date('date');
             $table->boolean('is_student_present');
             $table->timestamps();
         });

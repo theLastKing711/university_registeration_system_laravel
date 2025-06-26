@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ClassroomCourseTeacher extends Pivot
@@ -26,18 +25,5 @@ class ClassroomCourseTeacher extends Pivot
     public function courseTeacher(): BelongsTo
     {
         return $this->belongsTo(CourseTeacher::class, 'course_teacher_id');
-    }
-
-    /**
-     * The students that belong to the ClassroomCourseTeacher
-     */
-    public function students(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            User::class,
-            'users',
-            'student_id',
-            'role_id'
-        );
     }
 }

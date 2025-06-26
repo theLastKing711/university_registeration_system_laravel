@@ -28,6 +28,14 @@ class CourseTeacher extends Pivot
     }
 
     /**
+     * Get all of the lectures for the CourseTeacher
+     */
+    public function lectures(): HasMany
+    {
+        return $this->hasMany(Lecture::class);
+    }
+
+    /**
      * Get all of the classroomCourseTeachers for the CourseTeacher
      */
     public function classroomCourseTeachers(): HasMany

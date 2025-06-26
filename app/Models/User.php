@@ -107,28 +107,15 @@ class User extends Authenticatable
     // student relations
 
     /**
-     * The classrooms that belong to the User
-     */
-    public function classrooms(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            ClassroomCourseTeacher::class,
-            'course_attendance',
-            'student_id',
-            'id'
-        );
-    }
-
-    /**
      * Get all of the attendances for the Student
      */
-    public function studenAttendances(): BelongsToMany
+    public function lectures(): BelongsToMany
     {
         return $this->belongsToMany(
             CourseTeacher::class,
-            'attendances',
+            'course_attendance',
             'student_id',
-            'course_teacher_id'
+            'lecture_id'
         );
     }
 

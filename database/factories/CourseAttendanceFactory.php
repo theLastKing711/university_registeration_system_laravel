@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Lecture;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,16 +24,16 @@ class CourseAttendanceFactory extends Factory
         ];
     }
 
-    public function withCourseTeacherId(int $course_teacher_id): static
-    {
-        return
-            $this->
-                state(
-                    [
-                        'course_teacher_id' => $course_teacher_id,
-                    ]
-                );
-    }
+    // public function withCourseTeacherId(int $course_teacher_id): static
+    // {
+    //     return
+    //         $this->
+    //             state(
+    //                 [
+    //                     'course_teacher_id' => $course_teacher_id,
+    //                 ]
+    //             );
+    // }
 
     public function withStudentId(int $student_id): static
     {
@@ -44,38 +46,57 @@ class CourseAttendanceFactory extends Factory
                 );
     }
 
-    public function with15DaysForEachSequence(string $year, int $semester): static
+    // public function with15DaysForEachSequence(string $year, int $semester): static
+    // {
+
+    //     $semesters = [
+    //         0 => 1,
+    //         1 => 3,
+    //         2 => 4,
+    //     ];
+
+    //     $first_day_date =
+    //         Carbon::createFromDate(
+    //             (int) $year,
+    //             $semesters[$semester],
+    //             1
+    //         );
+
+    //     $date_sequence =
+    //         collect(
+    //             range(1, 15)
+    //         )
+    //             ->map(function ($day, $index) use ($first_day_date) {
+
+    //                 if ($index % 2 === 0) {
+    //                     return [
+    //                         'date' => $first_day_date->toImmutable()->addDays(floor($index / 2) * 7)->toDateString(),
+    //                     ];
+    //                 }
+
+    //                 return [
+    //                     'date' => $first_day_date->toImmutable()->addDays(floor($index / 2) * 7 + 1)->toDateString(),
+    //                 ];
+
+    //             });
+
+    //     return
+    //         $this->
+    //             forEachSequence(
+    //                 ...$date_sequence
+    //             );
+    // }
+
+    /**
+     * @param  Collection<Lecture>  $lectures
+     */
+    public function withLectureIdsForEachSequence($lectures): static
     {
 
-        $semesters = [
-            0 => 1,
-            1 => 3,
-            2 => 4,
-        ];
-
-        $first_day_date =
-            Carbon::createFromDate(
-                (int) $year,
-                $semesters[$semester],
-                1
-            );
-
         $date_sequence =
-            collect(
-                range(1, 15)
-            )
-                ->map(function ($day, $index) use ($first_day_date) {
-
-                    if ($index % 2 === 0) {
-                        return [
-                            'date' => $first_day_date->toImmutable()->addDays(floor($index / 2) * 7)->toDateString(),
-                        ];
-                    }
-
-                    return [
-                        'date' => $first_day_date->toImmutable()->addDays(floor($index / 2) * 7 + 1)->toDateString(),
-                    ];
-
+            $lectures
+                ->map(function (Lecture $lecture, $index) {
+                    return ['lecture_id' => $lecture->id];
                 });
 
         return

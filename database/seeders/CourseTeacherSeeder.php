@@ -6,6 +6,7 @@ use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseAttendance;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
+use App\Models\Lecture;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -49,25 +50,35 @@ class CourseTeacherSeeder extends Seeder
                         ->withCourseTeacherId($course_teacher->id)
                         ->create();
                 }
+
                 ClassroomCourseTeacher::factory()
                     ->withCourseTeacherId($course_teacher->id)
                     ->withRandomFromTo()
                     ->count(2)
                     ->create();
 
-                $course_teacher_students =
-                    $course_teacher
-                        ->course
-                        ->students
-                        ->each(callback: function (User $student) use ($course_teacher, $course_year, $course_semester) {
+                $lectures = Lecture::factory()
+                    ->withCourseTeacherId($course_teacher->id)
+                    ->with15LecturesForEachSequence($course_year, $course_semester)
+                    ->create();
 
-                            CourseAttendance::factory()
-                                ->withCourseTeacherId($course_teacher->id)
-                                ->withStudentId($student->id)
-                                ->with15DaysForEachSequence($course_year, $course_semester)
-                                ->create();
+                // ->hasAttached(
+                //     $it_courses,
+                //     fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)], // runs once per it_course
+                //     'courses' // the many to many relation for User Model we insert for $it_course
+                // )
 
-                        });
+                $course_teacher
+                    ->course
+                    ->students
+                    ->each(callback: function (User $student) use ($lectures) {
+
+                        CourseAttendance::factory()
+                            ->withStudentId($student->id)
+                            ->withLectureIdsForEachSequence($lectures)
+                            ->create();
+
+                    });
 
                 // }
 

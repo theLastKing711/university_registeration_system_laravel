@@ -25,11 +25,10 @@ class CourseAttendance extends Pivot
     /**
      * Get the courseTeacher that owns the CourseAttendance
      */
-    public function courseTeacher(): BelongsTo
+    public function lecture(): BelongsTo
     {
         return $this->belongsTo(
-            CourseTeacher::class,
-            'course_teacher_id',
+            Lecture::class,
         );
     }
 }
