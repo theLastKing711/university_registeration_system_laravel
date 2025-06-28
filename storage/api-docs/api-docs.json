@@ -54,6 +54,39 @@
                 }
             ]
         },
+        "/admins/academic-year-semesters/{id}/departments": {
+            "post": {
+                "tags": [
+                    "adminsAcademicYearSemesters"
+                ],
+                "operationId": "f1bc8a461962f1253f4999e040908282",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminAcademicYearSemesterOpenDepartmentsForRegisterationRequestOpenDepartmentsForRegisterationRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsAcademicYearSemesterOpenDepartmentsForRegisterationIdPathParameter"
+                }
+            ]
+        },
         "/admins/classroom-course-teachers/{id}": {
             "delete": {
                 "tags": [
@@ -1608,6 +1641,17 @@
                     }
                 ]
             },
+            "AdminAcademicYearSemesterOpenDepartmentsForRegisterationRequestOpenDepartmentsForRegisterationRequestData": {
+                "properties": {
+                    "departments_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "AdminAcademicYearSemesterUpdateAcademicYearSemesterRequestUpdateAcademicYearSemesterRequestData": {
                 "properties": {
                     "year": {
@@ -2779,6 +2823,14 @@
         },
         "parameters": {
             "adminsDeleteAcademicYearSemesterIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsAcademicYearSemesterOpenDepartmentsForRegisterationIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

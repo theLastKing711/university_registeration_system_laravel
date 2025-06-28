@@ -4,6 +4,7 @@ use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Admin\AcademicYearSemester\CreateAcademicYearSemesterController;
 use App\Http\Controllers\Admin\AcademicYearSemester\DeleteAcademicYearSemesterController;
 use App\Http\Controllers\Admin\AcademicYearSemester\GetAcademicYearsSemestersController;
+use App\Http\Controllers\Admin\AcademicYearSemester\OpenDepartmentsForRegisterationController;
 use App\Http\Controllers\Admin\AcademicYearSemester\UpdateAcademicYearSemesterController;
 use App\Http\Controllers\Admin\Admin\CreateAdminController;
 use App\Http\Controllers\Admin\Admin\DeleteAdminController;
@@ -125,6 +126,8 @@ Route::prefix('admins')
                     Route::get('', GetAcademicYearsSemestersController::class);
 
                     Route::post('', CreateAcademicYearSemesterController::class);
+
+                    Route::post('{id}/departments', OpenDepartmentsForRegisterationController::class);
 
                     Route::patch('{id}', UpdateAcademicYearSemesterController::class);
 
