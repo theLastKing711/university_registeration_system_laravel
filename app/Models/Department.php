@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Department extends Model
@@ -41,5 +42,13 @@ class Department extends Model
     public function openRegisterations(): HasMany
     {
         return $this->hasMany(DepartmentRegisterationPeriod::class);
+    }
+
+    /**
+     * The openedAcademicyears that belong to the Department
+     */
+    public function openedAcademicyears(): BelongsToMany
+    {
+        return $this->belongsToMany(AcademicYearSemester::class, 'department_registeration_periods');
     }
 }

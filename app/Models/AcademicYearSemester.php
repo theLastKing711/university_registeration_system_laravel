@@ -13,6 +13,22 @@ class AcademicYearSemester extends Model
     use HasFactory;
 
     /**
+     * Get all of the departmentRegisterationPeriod for the AcademicYearSemester
+     */
+    public function departmentRegisterationPeriod(): HasMany
+    {
+        return $this->hasMany(DepartmentRegisterationPeriod::class);
+    }
+
+    /**
+     * The departments that belong to the AcademicYearSemester
+     */
+    public function departments(): BelongsToMany
+    {
+        return $this->belongsToMany(Department::class, 'department_registeration_periods');
+    }
+
+    /**
      * Get all of the comments for the AcademiceYearSemester
      */
     public function openCourseRegisterations(): HasMany

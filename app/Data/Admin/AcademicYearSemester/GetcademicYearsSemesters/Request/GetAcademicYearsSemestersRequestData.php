@@ -15,6 +15,8 @@ class GetAcademicYearsSemestersRequestData extends PaginationQueryParameterData
         public ?int $year,
         #[OAT\Property]
         public ?int $semester,
+        #[OAT\Property]
+        public ?int $department_id,
 
     ) {
         parent::__construct($page, $perPage);

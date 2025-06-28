@@ -18,44 +18,37 @@ class DepartmentRegisterationPeriodSeeder extends Seeder
             ->insert([
                 [
                     'department_id' => 1,
-                    'year' => 2014,
-                    'semester' => 0,
+                    'academic_year_semester_id' => 1,
                     'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
-                    'year' => 2014,
-                    'semester' => 1,
+                    'academic_year_semester_id' => 2,
                     'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
-                    'year' => 2014,
-                    'semester' => 2,
+                    'academic_year_semester_id' => 3,
                     'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
-                    'year' => 2015,
-                    'semester' => 0,
+                    'academic_year_semester_id' => 4,
                     'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
-                    'year' => 2015,
-                    'semester' => 1,
+                    'academic_year_semester_id' => 5,
                     'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
-                    'year' => 2015,
-                    'semester' => 2,
+                    'academic_year_semester_id' => 6,
                     'is_open_for_students' => false,
                 ],
                 [
                     'department_id' => 1,
-                    'year' => 2016,
-                    'semester' => 1,
+                    'academic_year_semester_id' => 7,
                     'is_open_for_students' => true,
                 ],
             ]);

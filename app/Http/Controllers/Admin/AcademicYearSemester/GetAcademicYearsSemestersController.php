@@ -18,6 +18,7 @@ class GetAcademicYearsSemestersController extends Controller
     #[QueryParameter('page', 'integer')]
     #[QueryParameter('perPage', 'integer')]
     #[QueryParameter('semester', 'integer')]
+    #[QueryParameter('department_id', 'integer')]
     #[QueryParameter('year', 'integer')]
     #[SuccessItemResponse(GetAcademicYearsSemestersResponsePaginationResultData::class)]
     public function __invoke(GetAcademicYearsSemestersRequestData $request)
@@ -25,6 +26,15 @@ class GetAcademicYearsSemestersController extends Controller
 
         $academic_years_semesters =
             AcademicYearSemester::query()
+                ->when(
+                    $request->department_id,
+                    fn (Builder $query) => $query
+                        ->whereRelation(
+                            'departmentRegisterationPeriod',
+                            'department_id',
+                            $request->department_id
+                        )
+                )
                 ->when(
                     $request->year,
                     fn (Builder $query) => $query

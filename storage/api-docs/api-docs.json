@@ -563,6 +563,13 @@
                         }
                     },
                     {
+                        "name": "department_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "year",
                         "in": "query",
                         "schema": {
@@ -1559,6 +1566,10 @@
                                 "nullable": true
                             },
                             "semester": {
+                                "type": "integer",
+                                "nullable": true
+                            },
+                            "department_id": {
                                 "type": "integer",
                                 "nullable": true
                             }

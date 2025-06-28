@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('department_registeration_periods', function (Blueprint $table) {
             $table->id();
             $table->foreignId('department_id')->constrained();
-            $table->year('year');
-            $table->integer('semester');
+
+            $table->unsignedBigInteger('academic_year_semester_id');
+            $table->foreign('academic_year_semester_id', 'department_registeration_periods_semester_id_foreign')->references('id')->on('academic_year_semesters');
+
             $table->boolean('is_open_for_students');
-            $table->unique(['department_id', 'year', 'semester'], 'department_registeration_periods_main_unique');
+            // $table->unique(['department_id', 'year', 'semester'], 'department_registeration_periods_main_unique');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
