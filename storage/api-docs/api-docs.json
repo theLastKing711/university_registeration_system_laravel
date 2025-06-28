@@ -535,6 +535,54 @@
             ]
         },
         "/admins/academic-year-semesters": {
+            "get": {
+                "tags": [
+                    "adminsAcademicYearSemesters"
+                ],
+                "operationId": "06f62a3fdc898b6b7680f46c48d72d29",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminAcademicYearSemesterGetcademicYearsSemestersResponseGetAcademicYearsSemestersResponsePaginationResultData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "adminsAcademicYearSemesters"
@@ -1497,6 +1545,57 @@
                     }
                 },
                 "type": "object"
+            },
+            "GetAcademicYearsSemestersRequestData": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginationQueryParameterData"
+                    },
+                    {
+                        "properties": {
+                            "year": {
+                                "type": "integer",
+                                "nullable": true
+                            },
+                            "semester": {
+                                "type": "integer",
+                                "nullable": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "AdminAcademicYearSemesterGetcademicYearsSemestersResponseGetAcademicYearsSemestersResponseData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminAcademicYearSemesterGetcademicYearsSemestersResponseGetAcademicYearsSemestersResponsePaginationResultData": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/adminPaginatedAbstract"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AdminAcademicYearSemesterGetcademicYearsSemestersResponseGetAcademicYearsSemestersResponseData"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
             },
             "AdminAcademicYearSemesterUpdateAcademicYearSemesterRequestUpdateAcademicYearSemesterRequestData": {
                 "properties": {
