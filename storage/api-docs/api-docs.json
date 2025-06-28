@@ -5,6 +5,55 @@
         "version": "1"
     },
     "paths": {
+        "/admins/academic-year-semesters/{id}": {
+            "delete": {
+                "tags": [
+                    "adminsAcademicYearSemesters"
+                ],
+                "operationId": "2bf7c6339554628dcbac0beee1ad1b99",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "adminsAcademicYearSemesters"
+                ],
+                "operationId": "dfc4c2091bbb49f4ff59e0d8e444cb94",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminAcademicYearSemesterUpdateAcademicYearSemesterRequestUpdateAcademicYearSemesterRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsUpdateCourseTeacherRequestIdPathParameter"
+                }
+            ]
+        },
         "/admins/classroom-course-teachers/{id}": {
             "delete": {
                 "tags": [
@@ -485,6 +534,34 @@
                 }
             ]
         },
+        "/admins/academic-year-semesters": {
+            "post": {
+                "tags": [
+                    "adminsAcademicYearSemesters"
+                ],
+                "operationId": "62a309d9de6bf5751f3f0cbafb28bc77",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminAcademicYearSemesterCreateAcademicYearSemesterRequestCreateAcademicYearSemesterRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admins/admins": {
             "post": {
                 "tags": [
@@ -656,6 +733,15 @@
                     "adminsCourseTeachers"
                 ],
                 "operationId": "3937c7acf82d774b10f1a3956ef30060",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1390,6 +1476,39 @@
     },
     "components": {
         "schemas": {
+            "AdminAcademicYearSemesterCreateAcademicYearSemesterRequestCreateAcademicYearSemesterRequestData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminAcademicYearSemesterDeleteAcademicYearSemesterRequestDeleteAcademicYearSemesterRequestData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminAcademicYearSemesterUpdateAcademicYearSemesterRequestUpdateAcademicYearSemesterRequestData": {
+                "properties": {
+                    "year": {
+                        "type": "integer"
+                    },
+                    "semester": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "CreateAdminRequestData": {
                 "properties": {
                     "name": {
@@ -1486,6 +1605,9 @@
             },
             "CreateCourseTeacherAttendanceRequestData": {
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "date": {
                         "schema": "string",
                         "type": "string",
@@ -1494,10 +1616,10 @@
                         "pattern": "YYYY-MM-DD",
                         "example": "2024-09-02"
                     },
-                    "items": {
+                    "students_attendance": {
                         "type": "array",
                         "items": {
-                            "type": "integer"
+                            "$ref": "#/components/schemas/StudentAttendanceData"
                         }
                     }
                 },
@@ -2546,6 +2668,22 @@
             }
         },
         "parameters": {
+            "adminsDeleteAcademicYearSemesterIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsUpdateAcademicYearSemesterIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsAdminIdPathParameterData": {
                 "name": "id",
                 "in": "path",
@@ -2731,6 +2869,10 @@
     "tags": [
         {
             "name": "auth"
+        },
+        {
+            "name": "adminsAcademicYearSemesters",
+            "description": "adminsAcademicYearSemesters"
         },
         {
             "name": "adminsAdmins",

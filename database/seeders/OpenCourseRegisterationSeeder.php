@@ -257,7 +257,7 @@ class OpenCourseRegisterationSeeder extends Seeder
                            ->hasTwoTeachers()
                            ->create([
                                'course_id' => $course->id,
-                               'semester' => fake()->numberBetween(0, 2),
+                               //    'semester' => fake()->numberBetween(0, 2),
                            ]);
                });
 

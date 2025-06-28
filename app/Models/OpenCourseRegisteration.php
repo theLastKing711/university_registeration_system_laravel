@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class OpenCourseRegisteration extends Model
+class OpenCourseRegisteration extends Pivot
 {
     /** @use HasFactory<\Database\Factories\OpenCourseRegisterationFactory> */
     use HasFactory;
+
+    public $incrementing = true;
+
+    protected $table = 'open_course_registerations';
 
     /**
      * Get the course that owns the openCourseRegisteration
@@ -21,6 +25,14 @@ class OpenCourseRegisteration extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    /**
+     * Get the academicYearSemester that owns the OpenCourseRegisteration
+     */
+    public function academicYearSemester(): BelongsTo
+    {
+        return $this->belongsTo(AcademicYearSemester::class);
     }
 
     /**

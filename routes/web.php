@@ -1,6 +1,9 @@
 <?php
 
 use App\Enum\Auth\RolesEnum;
+use App\Http\Controllers\Admin\AcademicYearSemester\CreateAcademicYearSemesterController;
+use App\Http\Controllers\Admin\AcademicYearSemester\DeleteAcademicYearSemesterController;
+use App\Http\Controllers\Admin\AcademicYearSemester\UpdateAcademicYearSemesterController;
 use App\Http\Controllers\Admin\Admin\CreateAdminController;
 use App\Http\Controllers\Admin\Admin\DeleteAdminController;
 use App\Http\Controllers\Admin\AuthController;
@@ -109,6 +112,23 @@ Route::prefix('admins')
 
         // must be logged in after making request to /sanctum and obtaining token to send here
         Route::middleware(['auth:sanctum'])->group(function () {
+
+            Route::prefix('academic-year-semesters')
+                ->middleware(
+                    [
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]
+                )
+                ->group(function () {
+
+                    Route::post('', CreateAcademicYearSemesterController::class);
+
+                    Route::patch('{id}', UpdateAcademicYearSemesterController::class);
+
+                    Route::delete('{id}', DeleteAcademicYearSemesterController::class);
+
+                });
+
             Route::prefix('admins')
                 ->middleware(
                     [

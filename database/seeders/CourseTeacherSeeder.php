@@ -18,7 +18,14 @@ class CourseTeacherSeeder extends Seeder
     public function run(): void
     {
         CourseTeacher::query()
-            ->with('course.students')
+            ->with(
+                [
+                    'course' => [
+                        'students',
+                        'academicYearSemester',
+                    ],
+                ]
+            )
             ->get()
             ->each(function (CourseTeacher $course_teacher, $index) {
 
@@ -28,10 +35,12 @@ class CourseTeacherSeeder extends Seeder
 
                 $course_year =
                     $course
+                        ->academicYearSemester
                         ->year;
 
                 $course_semester =
                     $course
+                        ->academicYearSemester
                         ->semester;
 
                 if ($course_teacher->is_main_teacher) {

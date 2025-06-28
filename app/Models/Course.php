@@ -43,6 +43,14 @@ class Course extends Model
     }
 
     /**
+     * The academicYearOpenedInt that belong to the Course
+     */
+    public function openedYearsSemesters(): BelongsToMany
+    {
+        return $this->belongsToMany(AcademicYearSemester::class, 'open_course_registerations');
+    }
+
+    /**
      * Get all of the openCourseRegisterations for the Course
      */
     public function openCourseRegisterations(): HasMany

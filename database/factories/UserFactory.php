@@ -168,7 +168,11 @@ class UserFactory extends Factory
 
                     $courses_ids =
                         OpenCourseRegisteration::query()
-                            ->where('year', $course_year)
+                            ->whereRelation(
+                                'academicYearSemester',
+                                'year',
+                                $course_year
+                            )
                             ->whereHas(
                                 'course',
                                 fn (Builder $query): Builder => $query

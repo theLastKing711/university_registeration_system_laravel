@@ -21,22 +21,20 @@ class OpenCourseRegisterationFactory extends Factory
     {
         return [
             //
-            'semester' => $this->faker->numberBetween(0, 2),
+            // 'semester' => $this->faker->numberBetween(0, 2),
         ];
     }
 
     public function openFrom2014To2015(): static
     {
 
-        $random_semester = $this->faker->numberBetween(0, 2);
-
         return
             $this->forEachSequence(
                 [
-                    'year' => 2014,
+                    'academic_year_semester_id' => $this->faker->numberBetween(int1: 1, int2: 3),
                 ],
                 [
-                    'year' => 2015,
+                    'academic_year_semester_id' => $this->faker->numberBetween(4, 6),
                 ],
 
             );
