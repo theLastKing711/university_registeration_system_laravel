@@ -22,30 +22,30 @@ class CreateAcademicYearSemesterRequestData extends Data
         public int $semester,
     ) {}
 
-    public static function rules(ValidationContext $context): array
-    {
-        return [
-            'year' => [
-                function (string $attribute, mixed $value, Closure $fail) use ($context) {
+    // public static function rules(ValidationContext $context): array
+    // {
+    //     return [
+    //         'year' => [
+    //             function (string $attribute, mixed $value, Closure $fail) use ($context) {
 
-                    $academic_year_semester =
-                        AcademicYearSemester::query()
-                            ->where(
-                                'year',
-                                $value
-                            )
-                            ->where(
-                                'semester',
-                                $context->payload['semester']
-                            )
-                            ->first();
+    //                 $academic_year_semester =
+    //                     AcademicYearSemester::query()
+    //                         ->where(
+    //                             'year',
+    //                             $value
+    //                         )
+    //                         ->where(
+    //                             'semester',
+    //                             $context->payload['semester']
+    //                         )
+    //                         ->first();
 
-                    if ($academic_year_semester) {
-                        $fail('السنة والفصل المضافيين موجودين مسبقا.');
-                    }
+    //                 if ($academic_year_semester) {
+    //                     $fail('السنة والفصل المضافيين موجودين مسبقا.');
+    //                 }
 
-                },
-            ],
-        ];
-    }
+    //             },
+    //         ],
+    //     ];
+    // }
 }

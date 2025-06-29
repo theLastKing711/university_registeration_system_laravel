@@ -438,7 +438,23 @@
                 }
             ]
         },
-        "/admins/course-registerations/registerd-courses/this-semester/{id}": {
+        "/admins/open-course-registerations/{id}": {
+            "delete": {
+                "tags": [
+                    "adminsOpenCourseRegisterations"
+                ],
+                "operationId": "09a25abc99b477a39ac9a4e54811b03a",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminOpenCourseRegisterationPathParameter"
@@ -1133,24 +1149,6 @@
                         }
                     }
                 },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/admins/course-registerations/registered-courses/this-semester/{id}": {
-            "delete": {
-                "tags": [
-                    "studentsOpenCourseRegisterations"
-                ],
-                "operationId": "29996f5311f74f19b93cfc60c370608d",
                 "responses": {
                     "204": {
                         "description": "",
@@ -2157,13 +2155,9 @@
                 },
                 "type": "object"
             },
-            "UnRegisterOpenCourseRequestData": {},
             "OpenCourseForRegisterationRequestData": {
                 "properties": {
-                    "semester": {
-                        "type": "integer"
-                    },
-                    "year": {
+                    "academic_year_semester_id": {
                         "type": "integer"
                     },
                     "department_id": {
@@ -2179,6 +2173,7 @@
                 },
                 "type": "object"
             },
+            "UnRegisterOpenCourseRequestData": {},
             "YearSemesterQueryParameterData": {
                 "properties": {
                     "year": {
@@ -3073,10 +3068,6 @@
             "description": "adminsOpenCourseRegisterations"
         },
         {
-            "name": "studentsOpenCourseRegisterations",
-            "description": "studentsOpenCourseRegisterations"
-        },
-        {
             "name": "adminsTeachers",
             "description": "adminsTeachers"
         },
@@ -3091,6 +3082,10 @@
         {
             "name": "studentsCourses",
             "description": "studentsCourses"
+        },
+        {
+            "name": "studentsOpenCourseRegisterations",
+            "description": "studentsOpenCourseRegisterations"
         }
     ]
 }

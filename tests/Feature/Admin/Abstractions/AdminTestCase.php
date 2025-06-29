@@ -15,11 +15,11 @@ class AdminTestCase extends TestCase
 
     public User $admin;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-//        parent::withHeader('Accept', 'application/json');
+        //        parent::withHeader('Accept', 'application/json');
 
         $this->seed(RolesAndPermissionsSeeder::class);
 

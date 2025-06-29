@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('course_id')
-                ->constrained('open_course_registerations');
+                ->constrained('open_course_registerations')
+                ->cascadeOnDelete();
 
             $table
                 ->foreignId('teacher_id')
-                ->constrained();
+                ->constrained()
+                ->cascadeOnDelete();
             $table
                 ->boolean('is_main_teacher')
                 ->default(true);

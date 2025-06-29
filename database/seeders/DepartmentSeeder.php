@@ -183,6 +183,18 @@ class DepartmentSeeder extends Seeder
                     'prerequisites' => [],
                     'cross_listed_courses' => [],
                 ],
+                [
+                    'data' => [
+                        'id' => 101,
+                        'department_id' => 2,
+                        'name' => 'ArchEngTheo101',
+                        'code' => 'ArchEngTheo101',
+                        'credits' => 3,
+                        'open_for_students_in_year' => 1,
+                    ],
+                    'prerequisites' => [],
+                    'cross_listed_courses' => [],
+                ],
             ],
 
         ],

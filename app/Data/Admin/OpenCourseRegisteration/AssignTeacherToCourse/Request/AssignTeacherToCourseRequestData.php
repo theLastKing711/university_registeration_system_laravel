@@ -65,7 +65,7 @@ class AssignTeacherToCourseRequestData extends Data
                         $open_course
                             ->teachers()
                             ->wherePivot('is_main_teacher', true)
-                            ->get();
+                            ->first();
 
                     $course_has_main_teacher =
                         $course_main_teacher != null;

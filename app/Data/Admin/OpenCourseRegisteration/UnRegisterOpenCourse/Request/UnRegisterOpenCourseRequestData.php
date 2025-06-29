@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\OpenCourseRegisteration\DeleteOpenCourse\Request;
+namespace App\Data\Admin\OpenCourseRegisteration\UnRegisterOpenCourse\Request;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -22,7 +22,7 @@ class UnRegisterOpenCourseRequestData extends Data
                 ),
             ),
             FromRouteParameter('id'),
-            Exists('student_course_registerations', 'id')
+            Exists('open_course_registerations', 'id')
         ]
         public int $id,
     ) {}

@@ -84,7 +84,7 @@ Route::prefix('students')
 
                                 Route::get('', GetStudentRegisteredOpenCoursesThisSemesterController::class);
                                 Route::post('', RegisterOpenCoursesController::class);
-                                Route::delete('{id}', UnRegisterOpenCourseController::class);
+                                // Route::delete('{id}', UnRegisterOpenCourseController::class);
 
                             });
 
@@ -290,6 +290,8 @@ Route::prefix('admins')
                     Route::post('teachers', AssignTeacherToOpenCourseController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]);
+
+                    Route::delete('{id}', UnRegisterOpenCourseController::class);
 
                 });
 

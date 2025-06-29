@@ -11,8 +11,10 @@ use App\Models\CrossListedCourses;
 use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
-use DB;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class OpenCourseForRegisterationController extends Controller
@@ -22,6 +24,10 @@ class OpenCourseForRegisterationController extends Controller
     #[SuccessNoContentResponse]
     public function __invoke(OpenCourseForRegisterationRequestData $request)
     {
+
+        Log::info('testing from controller');
+
+        Debugbar::log('hello world from controller');
 
         // $logged_user =
         //     Auth::User();
@@ -36,10 +42,15 @@ class OpenCourseForRegisterationController extends Controller
         /** @var DepartmentRegisterationPeriod $latestTimeDepartentOpenRegisteration */
         $latestTimeDepartentOpenRegisteration =
             DepartmentRegisterationPeriod::query()
+                ->with('academicSemesterYear')
                 ->where('department_id', $courses_department->id)
-                ->orderBy('year', 'desc')
-                ->orderBy('semester', 'desc')
+                ->where(
+                    'academic_year_semester_id',
+                    $request->academic_year_semester_id
+                )
                 ->first();
+
+        $latestTimeDepartentOpenRegisteration->academic_year_semester_id;
 
         DB::transaction(function () use ($latestTimeDepartentOpenRegisteration, $request) {
 
@@ -57,11 +68,9 @@ class OpenCourseForRegisterationController extends Controller
 
                     $open_course_registeration = new OpenCourseRegisteration;
 
-                    $open_course_registeration->year =
-                        $latestTimeDepartentOpenRegisteration->year;
+                    $open_course_registeration->academic_year_semester_id =
+                        $latestTimeDepartentOpenRegisteration->academic_year_semester_id;
 
-                    $open_course_registeration->semester =
-                            $latestTimeDepartentOpenRegisteration->semester;
                     $course
                         ->openCourseRegisterations()
                         ->save(model: $open_course_registeration);
@@ -93,11 +102,8 @@ class OpenCourseForRegisterationController extends Controller
 
                             $open_course_registeration = new OpenCourseRegisteration;
 
-                            $open_course_registeration->year =
-                                $latestTimeDepartentOpenRegisteration->year;
-
-                            $open_course_registeration->semester =
-                                    $latestTimeDepartentOpenRegisteration->semester;
+                            $open_course_registeration->academic_year_semester_id =
+                                $latestTimeDepartentOpenRegisteration->academic_year_semester_id;
 
                             $cross_lised_course
                                 ->openCourseRegisterations()

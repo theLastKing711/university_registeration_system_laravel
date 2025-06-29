@@ -13,6 +13,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
+ * 
+ *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -27,7 +29,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $permissions_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\Spatie\Permission\Models\Role,\Illuminate\Database\Eloquent\Relations\Pivot> $roles
  * @property-read int|null $roles_count
- *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
@@ -59,7 +60,37 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
- *
+ * @property int|null $department_id
+ * @property string|null $national_id
+ * @property string|null $birthdate
+ * @property string|null $enrollment_date
+ * @property string|null $graduation_date
+ * @property string|null $phone_number
+ * @property int|null $manages_department_with_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
+ * @property-read int|null $attendances_count
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\OpenCourseRegisteration,\Illuminate\Database\Eloquent\Relations\Pivot> $courses
+ * @property-read int|null $courses_count
+ * @property-read \App\Models\Department|null $department
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Exam,\Illuminate\Database\Eloquent\Relations\Pivot> $examStudent
+ * @property-read int|null $exam_student_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExamStudent> $exams
+ * @property-read int|null $exams_count
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\CourseTeacher,\Illuminate\Database\Eloquent\Relations\Pivot> $lectures
+ * @property-read int|null $lectures_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\StudentCourseRegisteration> $studentCourseRegisterations
+ * @property-read int|null $student_course_registerations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TemporaryUploadedImages> $temporaryUploadedImages
+ * @property-read int|null $temporary_uploaded_images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBirthdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereDepartmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEnrollmentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereGraduationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereManagesDepartmentWithId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNationalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoneNumber($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable

@@ -13,10 +13,11 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class OpenCourseForRegisterationRequestData extends Data
 {
     public function __construct(
-        #[OAT\Property]
-        public int $semester,
-        #[OAT\Property]
-        public int $year,
+        #[
+            OAT\Property,
+            Exists('academic_year_semesters', 'id')
+        ]
+        public int $academic_year_semester_id,
         #[OAT\Property]
         public ?int $department_id,
         #[

@@ -7,7 +7,7 @@ use OpenApi\Attributes as OAT;
 
 #[
     OAT\PathItem(
-        path: '/admins/course-registerations/registerd-courses/this-semester/{id}',
+        path: '/admins/open-course-registerations/{id}',
         parameters: [
             new OAT\PathParameter(
                 ref: '#/components/parameters/adminOpenCourseRegisterationPathParameter',

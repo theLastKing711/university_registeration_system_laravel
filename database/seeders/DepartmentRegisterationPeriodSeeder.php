@@ -51,6 +51,16 @@ class DepartmentRegisterationPeriodSeeder extends Seeder
                     'academic_year_semester_id' => 7,
                     'is_open_for_students' => true,
                 ],
+                [
+                    'department_id' => 2,
+                    'academic_year_semester_id' => 1,
+                    'is_open_for_students' => false,
+                ],
+                [
+                    'department_id' => 2,
+                    'academic_year_semester_id' => 2,
+                    'is_open_for_students' => true,
+                ],
             ]);
     }
 }

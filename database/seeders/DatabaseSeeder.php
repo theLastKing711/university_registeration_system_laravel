@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             DepartmentSeeder::class,
             ClassroomSeeder::class,
-            OpenCourseRegisterationSeeder::class,
             TeacherSeeder::class,
             CourseSeeder::class,
             OpenCourseRegisterationSeeder::class,

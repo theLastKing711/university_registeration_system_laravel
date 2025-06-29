@@ -13,11 +13,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class DeleteAcademicYearSemesterRequestData extends Data
 {
     public function __construct(
-        #[OAT\Property]
-        public int $year,
-        #[OAT\Property]
-        public int $semester,
-
         #[
             OAT\PathParameter(
                 parameter: 'adminsDeleteAcademicYearSemesterIdPathParameter',
