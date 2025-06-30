@@ -46,7 +46,7 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response =
             $this
-                ->get(
+                ->getJson(
                     $get_academic_years_semesters_route,
                 );
 
@@ -82,7 +82,7 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response =
             $this
-                ->post(
+                ->postJson(
                     $this->main_route,
                     $create_academic_year_semester_request
                         ->toArray()
@@ -124,7 +124,7 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response =
             $this
-                ->delete(
+                ->deleteJson(
                     $show_route
 
                 );
@@ -178,7 +178,7 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response =
             $this
-                ->patch(
+                ->patchJson(
                     $show_route,
                     $update_academic_year_semester_request
                         ->toArray()
@@ -231,7 +231,7 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response =
             $this
-                ->post(
+                ->postJson(
                     $open_department_for_registeration_route,
                     $open_department_for_registeration_request
                         ->toArray()

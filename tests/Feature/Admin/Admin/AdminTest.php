@@ -39,7 +39,7 @@ class AdminTest extends AdminTestCase
 
         $response =
             $this
-                ->post(
+                ->postJson(
                     $assign_a_teacher_to_an_open_course_route,
                     $create_admin_request
                         ->toArray()
@@ -77,20 +77,13 @@ class AdminTest extends AdminTestCase
     public function delete_admin_with_200_response(): void
     {
 
-        $admins =
-            User::query()
-                ->where(
-                    'id',
-                    1
-                )
-                ->get();
-
         $first_admin =
-            $admins->first();
+            User::query()
+                ->first();
 
         $show_route = $this->main_route.'/?ids[]='.$first_admin->id;
 
-        $response = $this->delete($show_route);
+        $response = $this->deleteJson($show_route);
 
         $response->assertStatus(200);
 
@@ -99,7 +92,7 @@ class AdminTest extends AdminTestCase
             ->first();
 
         $admin_has_been_deleted =
-         $deleted_admin === null;
+         $deleted_admin == null;
 
         $this->assertTrue($admin_has_been_deleted);
 

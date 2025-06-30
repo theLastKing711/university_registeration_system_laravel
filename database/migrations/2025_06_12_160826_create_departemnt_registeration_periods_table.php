@@ -13,10 +13,18 @@ return new class extends Migration
     {
         Schema::create('department_registeration_periods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('department_id')->constrained();
+            $table
+                ->foreignId('department_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-            $table->unsignedBigInteger('academic_year_semester_id');
-            $table->foreign('academic_year_semester_id', 'department_registeration_periods_semester_id_foreign')->references('id')->on('academic_year_semesters');
+            $table
+                ->unsignedBigInteger('academic_year_semester_id');
+            $table
+                ->foreign('academic_year_semester_id', 'department_registeration_periods_semester_id_foreign')
+                ->references('id')
+                ->on('academic_year_semesters')
+                ->cascadeOnDelete();
 
             $table->boolean('is_open_for_students');
             // $table->unique(['department_id', 'year', 'semester'], 'department_registeration_periods_main_unique');

@@ -59,7 +59,7 @@ class OpenCourseForRegisterationTest extends AdminTestCase
 
         $response =
             $this
-                ->post(
+                ->postJson(
                     $assign_a_teacher_to_an_open_course_route,
                     $assign_a_teacher_to_an_open_course
                         ->toArray()
@@ -100,7 +100,7 @@ class OpenCourseForRegisterationTest extends AdminTestCase
 
         $response =
             $this
-                ->post(
+                ->postJson(
                     $this->main_route,
                     $open_course_registeration_request_data
                         ->toArray()
@@ -134,7 +134,7 @@ class OpenCourseForRegisterationTest extends AdminTestCase
 
         $show_route = $this->main_route.'/'.$open_course_registeration->id;
 
-        $response = $this->delete($show_route);
+        $response = $this->deleteJson($show_route);
 
         $response->assertStatus(200);
 
