@@ -79,13 +79,15 @@ class AssignClassroomToCourseTeacherRequestData extends Data
                                 $request_course_teacher_id
                             );
 
-                    $course_year = $course_teacher->course->year;
+                    $course_year =
+                        $course_teacher->course->academicYearSemester->year;
 
-                    $course_semester = $course_teacher->course->semester;
+                    $course_semester =
+                        $course_teacher->course->academicYearSemester->semester;
 
                     $overlapped_time_classrooms = ClassroomCourseTeacher::query()
-                        ->whereRelation('courseTeacher.course', 'year', $course_year)
-                        ->whereRelation('courseTeacher.course', 'semester', $course_semester)
+                        ->whereRelation('courseTeacher.course.academicYearSemester', 'year', $course_year)
+                        ->whereRelation('courseTeacher.course.academicYearSemester', 'semester', $course_semester)
                         ->where('classroom_id', $request_classroom_id)
                         ->where('day', $request_day)
                         ->whereNested(function ($query) use ($request_from, $request_to) {

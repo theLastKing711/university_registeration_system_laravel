@@ -1573,17 +1573,7 @@
                 },
                 "type": "object"
             },
-            "AdminAcademicYearSemesterDeleteAcademicYearSemesterRequestDeleteAcademicYearSemesterRequestData": {
-                "properties": {
-                    "year": {
-                        "type": "integer"
-                    },
-                    "semester": {
-                        "type": "integer"
-                    }
-                },
-                "type": "object"
-            },
+            "AdminAcademicYearSemesterDeleteAcademicYearSemesterRequestDeleteAcademicYearSemesterRequestData": {},
             "GetAcademicYearsSemestersRequestData": {
                 "type": "object",
                 "allOf": [
@@ -1675,6 +1665,7 @@
             "DeleteAdminRequestData": {
                 "properties": {
                     "ids": {
+                        "description": "int>",
                         "type": "array",
                         "items": {
                             "type": "integer"

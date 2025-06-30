@@ -16,6 +16,7 @@ class DeleteAdminController extends Controller
     #[SuccessNoContentResponse]
     public function __invoke(DeleteAdminRequestData $request)
     {
+
         User::query()
             ->whereIn(
                 'id',

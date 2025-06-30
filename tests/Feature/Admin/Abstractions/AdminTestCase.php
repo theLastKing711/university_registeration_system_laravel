@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin\Abstractions;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class AdminTestCase extends TestCase
@@ -35,4 +36,12 @@ class AdminTestCase extends TestCase
                 ->staticAdmin()
                 ->create();
     }
+
+    // public function post($uri, $data = [], $headers = []): TestResponse
+    // {
+    //     return
+    //         parent::withHeaders(['Accept' => 'application/json'])
+    //             ->post($uri, $data, $headers);
+
+    // }
 }
