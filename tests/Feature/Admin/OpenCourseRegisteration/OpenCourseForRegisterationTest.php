@@ -4,9 +4,12 @@ namespace Tests\Feature\Admin\OpenCourseRegisteration;
 
 use App\Data\Admin\OpenCourseRegisteration\AssignTeacherToCourse\Request\AssignTeacherToCourseRequestData;
 use App\Data\Admin\OpenCourseRegisteration\OpenCourseForRegisteration\Request\OpenCourseForRegisterationRequestData;
+use App\Models\AcademicYearSemester;
+use App\Models\Course;
 use App\Models\CourseTeacher;
+use App\Models\Department;
 use App\Models\OpenCourseRegisteration;
-use Barryvdh\Debugbar\Facades\Debugbar;
+use App\Models\Teacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
@@ -14,7 +17,6 @@ use Database\Seeders\DepartmentRegisterationPeriodSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\TeacherSeeder;
-use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 use Tests\Feature\Admin\Traits\MediaMockTrait;
@@ -50,8 +52,8 @@ class OpenCourseForRegisterationTest extends AdminTestCase
 
         $assign_a_teacher_to_an_open_course =
             new AssignTeacherToCourseRequestData(
-                1,
-                1,
+                OpenCourseRegisteration::first()->id,
+                Teacher::first()->id,
                 1
             );
 
@@ -87,15 +89,29 @@ class OpenCourseForRegisterationTest extends AdminTestCase
     public function open_course_for_registeration_and_open_related_cross_listed_courses_with_201_response(): void
     {
 
-        Log::info('testing from tests');
+        $it_deparmtent_id =
+            Department::firstWhere('name', 'IT')->id;
 
-        Debugbar::log('hello world from test');
+        $twenty_sixteent_year_semester_zero_id =
+            AcademicYearSemester::where('year', '2016')
+                ->where('semester', 0)
+                ->first()
+                ->id;
+
+        $course_that_has_cross_one_listed_course_id =
+            Course::query()
+                ->has('firstCrossListedCourses', 1)
+                ->orHas('SecondCrossListedCourses', 1)
+                ->first()
+                ->id;
+
+        $before_course_open_count = OpenCourseRegisteration::count();
 
         $open_course_registeration_request_data =
             OpenCourseForRegisterationRequestData::from([
-                'academic_year_semester_id' => 7,
-                'department_id' => 1,
-                'courses_ids' => [1, 2],
+                'academic_year_semester_id' => $twenty_sixteent_year_semester_zero_id,
+                'department_id' => $it_deparmtent_id,
+                'courses_ids' => [$course_that_has_cross_one_listed_course_id],
             ]);
 
         $response =
@@ -122,12 +138,23 @@ class OpenCourseForRegisterationTest extends AdminTestCase
                 )
                 ->get();
 
-        $this->assertCount(2, $created_open_courses);
+        $after_course_open_count = OpenCourseRegisteration::count();
+
+        $number_of_added_courses = 2;
+
+        $two_courses_has_been_registered =
+                    $before_course_open_count + $number_of_added_courses
+                    ==
+                    $after_course_open_count;
+        $this
+            ->assertTrue(
+                $two_courses_has_been_registered
+            );
 
     }
 
     #[Test]
-    public function destroy_delete_an_existing_open_course_with_200_response(): void
+    public function delete_an_existing_open_course_with_200_response(): void
     {
 
         $open_course_registeration = OpenCourseRegisteration::first();

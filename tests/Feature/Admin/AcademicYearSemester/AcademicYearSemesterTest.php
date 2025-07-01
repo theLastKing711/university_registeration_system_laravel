@@ -7,6 +7,7 @@ use App\Data\Admin\AcademicYearSemester\GetcademicYearsSemesters\Response\GetAca
 use App\Data\Admin\AcademicYearSemester\OpenDepartmentsForRegisteration\Request\OpenDepartmentsForRegisterationRequestData;
 use App\Data\Admin\AcademicYearSemester\UpdateAcademicYearSemester\Request\UpdateAcademicYearSemesterRequestData;
 use App\Models\AcademicYearSemester;
+use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\DepartmentRegisterationPeriodSeeder;
@@ -34,11 +35,16 @@ class AcademicYearSemesterTest extends AdminTestCase
     public function get_academic_years_semesters_with_201_response(): void
     {
 
+        $first_department =
+            Department::first();
+
         $get_academic_years_semesters_route =
             $this
                 ->main_route
                 .
-                '?department_id=1'
+                '?department_id='
+                .
+                $first_department->id
                 .
                 '&year=2014'
                 .
@@ -158,7 +164,7 @@ class AcademicYearSemesterTest extends AdminTestCase
             new UpdateAcademicYearSemesterRequestData(
                 2018,
                 0,
-                1
+                AcademicYearSemester::first()->id
             );
 
         $first_academic_year_semester =
@@ -220,9 +226,12 @@ class AcademicYearSemesterTest extends AdminTestCase
                 )
                 ->first();
 
+        $first_two_departments_ids =
+            Department::all()->pluck('id')->take(2)->toArray();
+
         $open_department_for_registeration_request =
             new OpenDepartmentsForRegisterationRequestData(
-                [1, 2],
+                $first_two_departments_ids,
                 $academic_year_semester->id
             );
 

@@ -107,7 +107,8 @@ class AssignClassroomToCourseTeacherRequestData extends Data
                         ->get();
 
                     if ($overlapped_time_classrooms->isNotEmpty()) {
-                        $fail('يوحد تضارب في يوم وتوقيت الحصة, يرجى اختيار وقت ويوم آخر.');
+
+                        $fail(__('messages.classroom_course_teacher.overlap'));
                     }
                 },
             ],

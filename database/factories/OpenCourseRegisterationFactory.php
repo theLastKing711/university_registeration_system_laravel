@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\AcademicYearSemester;
 use App\Models\Exam;
 use App\Models\OpenCourseRegisteration;
 use App\Models\Teacher;
@@ -28,15 +29,25 @@ class OpenCourseRegisterationFactory extends Factory
     public function openFrom2014To2015(): static
     {
 
+        $academic_semesters_years =
+            AcademicYearSemester::all();
+
+        $two_thouthand_fourthen_semester_ids =
+            $academic_semesters_years
+                ->where('year', 2014);
+
+        $two_thouthand_fifteen_semester_ids =
+            $academic_semesters_years
+                ->where('year', 2015);
+
         return
             $this->forEachSequence(
                 [
-                    'academic_year_semester_id' => $this->faker->numberBetween(int1: 1, int2: 3),
+                    'academic_year_semester_id' => $this->faker->randomElement($two_thouthand_fourthen_semester_ids),
                 ],
                 [
-                    'academic_year_semester_id' => $this->faker->numberBetween(4, 6),
+                    'academic_year_semester_id' => $this->faker->randomElement($two_thouthand_fourthen_semester_ids),
                 ],
-
             );
     }
 

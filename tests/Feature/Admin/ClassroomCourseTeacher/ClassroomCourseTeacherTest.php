@@ -3,7 +3,10 @@
 namespace Tests\Feature\Admin\Admin;
 
 use App\Data\Admin\ClassroomCourseTeacher\AssignClassroomToCourseTeacher\Request\AssignClassroomToCourseTeacherRequestData;
+use App\Data\Admin\ClassroomCourseTeacher\UpdateCourseTeacherClassroom\Request\UpdateCourseTeacherClassroomRequestData;
+use App\Models\Classroom;
 use App\Models\ClassroomCourseTeacher;
+use App\Models\CourseTeacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
@@ -51,8 +54,8 @@ class ClassroomCourseTeacherTest extends AdminTestCase
 
         $assign_classroom_to_course_request =
             new AssignClassroomToCourseTeacherRequestData(
-                4,
-                1,
+                Classroom::first()->id,
+                CourseTeacher::first()->id,
                 5,
                 '12:00:00',
                 '14:00:00'
@@ -68,14 +71,33 @@ class ClassroomCourseTeacherTest extends AdminTestCase
 
         $response->assertStatus(200);
 
+        ClassroomCourseTeacher::query()
+            ->delete();
+
+        $this
+            ->assertTrue(
+                true
+            );
+
     }
 
+    // fails because of rerunning the seeder before the test
     #[Test]
-    public function assign_overlapped_classroom_to_course_fail_validation(): void
+    public function assign_overlapped_classroom_to_course_fails_validation_with_422(): void
     {
+
+        $this
+            ->assertTrue(
+                true
+            );
 
         $first_classroom_course_teacher =
             ClassroomCourseTeacher::first();
+
+        $this
+            ->assertTrue(
+                $first_classroom_course_teacher != null
+            );
 
         $assign_classroom_to_course_request =
             new AssignClassroomToCourseTeacherRequestData(
@@ -94,13 +116,160 @@ class ClassroomCourseTeacherTest extends AdminTestCase
                         ->toArray()
                 );
 
-        // $response->assertStatus(30);
+        $response->assertStatus(422);
 
         info('hello world');
 
         $response
             ->assertOnlyJsonValidationErrors(
-                ['from' => 'يوحد تضارب في يوم وتوقيت الحصة, يرجى اختيار وقت ويوم آخر.']
+
+                ['from' => __('messages.classroom_course_teacher.overlap')]
+            );
+
+    }
+
+    #[Test]
+    public function delete_an_existing_classroom_course_teacher_with_200_response(): void
+    {
+
+        $first_classroom_course_teacher = ClassroomCourseTeacher::first();
+
+        $show_route = $this->main_route.'/'.$first_classroom_course_teacher->id;
+
+        $response = $this->deleteJson($show_route);
+
+        $response->assertStatus(200);
+
+        $open_course = ClassroomCourseTeacher::query()
+            ->whereId($first_classroom_course_teacher->id)
+            ->first();
+
+        $this->assertNull($open_course);
+
+    }
+
+    #[Test]
+    public function update_classroom_course_teacher_with_201_response(): void
+    {
+
+        $random_classroom_course_teacher =
+            ClassroomCourseTeacher::query()
+                ->inRandomOrder()
+                ->first();
+
+        $random_classroom_id =
+            Classroom::first()
+                ->inRandomOrder()
+                ->first()
+                ->id;
+
+        $random_course_teacher_id =
+           CourseTeacher::first()
+               ->inRandomOrder()
+               ->first()
+               ->id;
+
+        $update_classroom_course_teacher_request =
+            new UpdateCourseTeacherClassroomRequestData(
+                $random_classroom_id,
+                $random_course_teacher_id,
+                3,
+                '12:00:00',
+                '14:00:00',
+                $random_classroom_course_teacher->id
+            );
+
+        ClassroomCourseTeacher::query()
+            ->where(
+                'id',
+                '!=',
+                $random_classroom_course_teacher->id
+            )
+            ->where(
+                'day',
+                $update_classroom_course_teacher_request->day
+            )
+            ->where(
+                'from',
+                $update_classroom_course_teacher_request->from
+            )
+            ->where(
+                'to',
+                $update_classroom_course_teacher_request->to
+            )
+            ->where(
+                'classroom_id',
+                $update_classroom_course_teacher_request->classroom_id
+            )
+            ->delete();
+
+        $show_route =
+            $this->main_route
+            .
+            '/'
+            .
+            $random_classroom_course_teacher
+                ->id;
+
+        $response =
+            $this
+                ->patchJson(
+                    $show_route,
+                    $update_classroom_course_teacher_request
+                        ->toArray()
+                );
+
+        $response->assertStatus(200);
+
+    }
+
+    #[Test]
+    public function update_overlapped_classroom_course_teacher_fails_validation_with_422(): void
+    {
+
+        $random_classroom_course_teacher_to_update =
+            ClassroomCourseTeacher::query()
+                ->first();
+
+        $classroom_course_teacher_to_overlapp_with_to_update_one =
+            ClassroomCourseTeacher::query()
+                ->where(
+                    'id',
+                    '!=',
+                    $random_classroom_course_teacher_to_update->id
+                )
+                ->inRandomOrder()
+                ->first();
+
+        $update_classroom_course_teacher_request =
+            new UpdateCourseTeacherClassroomRequestData(
+                $classroom_course_teacher_to_overlapp_with_to_update_one->classroom_id,
+                $classroom_course_teacher_to_overlapp_with_to_update_one->course_teacher_id,
+                $classroom_course_teacher_to_overlapp_with_to_update_one->day,
+                $classroom_course_teacher_to_overlapp_with_to_update_one->from,
+                $classroom_course_teacher_to_overlapp_with_to_update_one->to,
+                $random_classroom_course_teacher_to_update->id
+            );
+        $show_route =
+            $this->main_route
+            .
+            '/'
+            .
+            $random_classroom_course_teacher_to_update
+                ->id;
+
+        $response =
+            $this
+                ->patchJson(
+                    $show_route,
+                    $update_classroom_course_teacher_request
+                        ->toArray()
+                );
+
+        $response
+            ->assertOnlyJsonValidationErrors(
+
+                ['from' => __('messages.classroom_course_teacher.overlap')]
             );
 
     }

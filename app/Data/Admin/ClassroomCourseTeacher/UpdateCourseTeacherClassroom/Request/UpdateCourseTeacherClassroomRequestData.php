@@ -96,9 +96,11 @@ class UpdateCourseTeacherClassroomRequestData extends Data
                                 $request_course_teacher_id
                             );
 
-                    $course_year = $course_teacher->course->year;
+                    $course_year =
+                        $course_teacher->course->academicYearSemester->year;
 
-                    $course_semester = $course_teacher->course->semester;
+                    $course_semester =
+                        $course_teacher->course->academicYearSemester->semester;
 
                     Log::info($course_year);
                     Log::info($course_semester);
@@ -107,10 +109,18 @@ class UpdateCourseTeacherClassroomRequestData extends Data
                         ->where(
                             'id',
                             '!=',
-                            1
+                            $request_id
                         )
-                        ->whereRelation('courseTeacher.course', 'year', $course_year)
-                        ->whereRelation('courseTeacher.course', 'semester', $course_semester)
+                        ->whereRelation(
+                            'courseTeacher.course.academicYearSemester',
+                            'year',
+                            $course_year
+                        )
+                        ->whereRelation(
+                            'courseTeacher.course.academicYearSemester',
+                            'semester',
+                            $course_semester
+                        )
                         ->where('classroom_id', $request_classroom_id)
                         ->where('day', $request_day)
                         ->whereNested(function ($query) use ($request_from, $request_to) {
@@ -132,7 +142,7 @@ class UpdateCourseTeacherClassroomRequestData extends Data
                     // Log::info($overlapped_time_classrooms->where('id', 17)->first()->courseTeacher->course);
 
                     if ($overlapped_time_classrooms->isNotEmpty()) {
-                        $fail('يوحد تضارب في يوم وتوقيت الحصة, يرجى اختيار وقت ويوم آخر.');
+                        $fail(__('messages.classroom_course_teacher.overlap'));
                     }
                 },
             ],
