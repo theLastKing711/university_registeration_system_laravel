@@ -102,9 +102,6 @@ class UpdateCourseTeacherClassroomRequestData extends Data
                     $course_semester =
                         $course_teacher->course->academicYearSemester->semester;
 
-                    Log::info($course_year);
-                    Log::info($course_semester);
-
                     $overlapped_time_classrooms = ClassroomCourseTeacher::query()
                         ->where(
                             'id',

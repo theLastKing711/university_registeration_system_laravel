@@ -152,19 +152,50 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     public function update_classroom_course_teacher_with_201_response(): void
     {
 
-        $random_classroom_course_teacher =
+        $request_day = 3;
+
+        $request_from = '12:00:00';
+
+        $request_to = '14:00:00';
+
+        $random_classroom_course_teacher_to_update =
             ClassroomCourseTeacher::query()
+                ->where(
+                    'day',
+                    '!=',
+                    $request_day
+                )
+                ->where(
+                    'from',
+                    '!=',
+                    $request_from
+                )
+                ->where(
+                    'to',
+                    '!=',
+                    $request_to
+                )
                 ->inRandomOrder()
                 ->first();
 
         $random_classroom_id =
             Classroom::first()
+                ->where(
+                    'id',
+                    '!=',
+                    $random_classroom_course_teacher_to_update->classroom_id
+                )
                 ->inRandomOrder()
                 ->first()
                 ->id;
 
         $random_course_teacher_id =
            CourseTeacher::first()
+               ->where(
+                   'id',
+                   '!=',
+                   $random_classroom_course_teacher_to_update->course_teacher_id
+               )
                ->inRandomOrder()
                ->first()
                ->id;
@@ -173,17 +204,17 @@ class ClassroomCourseTeacherTest extends AdminTestCase
             new UpdateCourseTeacherClassroomRequestData(
                 $random_classroom_id,
                 $random_course_teacher_id,
-                3,
-                '12:00:00',
-                '14:00:00',
-                $random_classroom_course_teacher->id
+                $request_day,
+                $request_from,
+                $request_to,
+                $random_classroom_course_teacher_to_update->id
             );
 
         ClassroomCourseTeacher::query()
             ->where(
                 'id',
                 '!=',
-                $random_classroom_course_teacher->id
+                $update_classroom_course_teacher_request->id
             )
             ->where(
                 'day',
@@ -208,7 +239,7 @@ class ClassroomCourseTeacherTest extends AdminTestCase
             .
             '/'
             .
-            $random_classroom_course_teacher
+            $random_classroom_course_teacher_to_update
                 ->id;
 
         $response =
@@ -220,6 +251,40 @@ class ClassroomCourseTeacherTest extends AdminTestCase
                 );
 
         $response->assertStatus(200);
+
+        $updated_classrom_course_teacher =
+                $random_classroom_course_teacher_to_update
+                    ->fresh();
+
+        $this
+            ->assertNotEquals(
+                $updated_classrom_course_teacher->classroom_id,
+                $random_classroom_course_teacher_to_update->classroom_id
+            );
+
+        $this
+            ->assertNotEquals(
+                $updated_classrom_course_teacher->course_teacher_id,
+                $random_classroom_course_teacher_to_update->course_teacher_id
+            );
+
+        $this
+            ->assertNotEquals(
+                $updated_classrom_course_teacher->day,
+                $random_classroom_course_teacher_to_update->day
+            );
+
+        $this
+            ->assertNotEquals(
+                $updated_classrom_course_teacher->from,
+                $random_classroom_course_teacher_to_update->from
+            );
+
+        $this
+            ->assertNotEquals(
+                $updated_classrom_course_teacher->to,
+                $random_classroom_course_teacher_to_update->to
+            );
 
     }
 
