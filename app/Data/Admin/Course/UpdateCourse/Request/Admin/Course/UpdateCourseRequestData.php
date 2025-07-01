@@ -27,7 +27,7 @@ class UpdateCourseRequestData extends Data
         public int $open_for_students_in_year,
         #[
             OAT\PathParameter(
-                parameter: 'adminsUpdateCoursePathParameterData',
+                parameter: 'adminsCoursesUpdateCoursePathParameterData',
                 name: 'id',
                 schema: new OAT\Schema(
                     type: 'integer',

@@ -11,10 +11,7 @@ use App\Models\CrossListedCourses;
 use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
-use Barryvdh\Debugbar\Facades\Debugbar;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class OpenCourseForRegisterationController extends Controller
@@ -24,13 +21,6 @@ class OpenCourseForRegisterationController extends Controller
     #[SuccessNoContentResponse]
     public function __invoke(OpenCourseForRegisterationRequestData $request)
     {
-
-        Log::info('testing from controller');
-
-        Debugbar::log('hello world from controller');
-
-        // $logged_user =
-        //     Auth::User();
 
         $courses_department =
             Department::query()

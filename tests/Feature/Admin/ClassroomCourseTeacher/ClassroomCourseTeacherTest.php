@@ -16,12 +16,9 @@ use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\TeacherSeeder;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
-use Tests\Feature\Admin\Traits\MediaMockTrait;
 
 class ClassroomCourseTeacherTest extends AdminTestCase
 {
-    use MediaMockTrait;
-
     private string $main_route = '/admins/classroom-course-teachers';
 
     protected function setUp(): void

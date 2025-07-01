@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\ClassroomCourseTeacher\DeleteClassroomCourseTeach
 use App\Http\Controllers\Admin\ClassroomCourseTeacher\UpdateCourseTeacherClassroomController;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCoursesController;
+use App\Http\Controllers\Admin\Course\GetCourseController;
+use App\Http\Controllers\Admin\Course\GetCoursesController;
 use App\Http\Controllers\Admin\Course\UpdateCourseController;
 use App\Http\Controllers\Admin\CourseTeacher\CreateCourseTeacherAttendanceController;
 use App\Http\Controllers\Admin\CourseTeacher\DeleteCourseTeacherAttendaceController;
@@ -268,6 +270,10 @@ Route::prefix('admins')
 
             Route::prefix('courses')
                 ->group(function () {
+
+                    Route::get('', GetCoursesController::class);
+
+                    Route::get('{id}', GetCourseController::class);
 
                     Route::post('', CreateCourseController::class);
 

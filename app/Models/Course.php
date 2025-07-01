@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property int|null $department_id
  * @property string $name
@@ -37,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $prerequisites_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Teacher,\Illuminate\Database\Eloquent\Relations\Pivot> $teachers
  * @property-read int|null $teachers_count
+ *
  * @method static \Database\Factories\CourseFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course newModelQuery()
@@ -65,6 +64,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereOpenForStudentsInYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Course extends Model
@@ -118,22 +118,6 @@ class Course extends Model
     }
 
     /**
-     * The teachers that belong to the Course
-     */
-    public function teachers(): BelongsToMany
-    {
-        return $this->belongsToMany(related: Teacher::class);
-    }
-
-    /**
-     * Get all of the courseTeachers for the Course
-     */
-    public function courseTeachers(): HasMany
-    {
-        return $this->hasMany(CourseTeacher::class);
-    }
-
-    /**
      * Get all of the firstCrossListedCourses for the Course
      */
     public function firstCrossListedCourses(): HasMany
@@ -142,10 +126,38 @@ class Course extends Model
     }
 
     /**
+     * Get all of the firstCrossListedCourses for the Course
+     */
+    public function firstCrossListed(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(
+                Course::class,
+                'cross_listed_courses',
+                'first_course_id',
+                'second_course_id'
+            );
+    }
+
+    /**
      * Get all of the SecondCrossListedCourses for the Course
      */
     public function SecondCrossListedCourses(): HasMany
     {
         return $this->hasMany(CrossListedCourses::class, 'second_course_id');
+    }
+
+    /**
+     * Get all of the secondCrossListedCourses for the Course
+     */
+    public function secondCrossListed(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(
+                Course::class,
+                'cross_listed_courses',
+                'second_course_id',
+                'first_course_id'
+            );
     }
 }

@@ -8,12 +8,9 @@ use App\Models\CourseTeacher;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
-use Tests\Feature\Admin\Traits\MediaMockTrait;
 
 class AdminTest extends AdminTestCase
 {
-    use MediaMockTrait;
-
     private string $main_route = '/admins/admins';
 
     protected function setUp(): void

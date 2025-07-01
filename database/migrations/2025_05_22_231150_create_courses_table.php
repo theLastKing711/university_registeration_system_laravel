@@ -24,7 +24,8 @@ return new class extends Migration
             $table
                 ->integer('open_for_students_in_year')
                 ->default(0);
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

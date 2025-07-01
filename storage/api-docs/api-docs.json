@@ -223,6 +223,24 @@
             ]
         },
         "/admins/courses/{id}": {
+            "get": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "b9be6fb7b186f9faeeba2f4c19ec14b7",
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminCourseGetCourseResponseGetCourseResponseData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "patch": {
                 "tags": [
                     "adminsCourses"
@@ -251,7 +269,7 @@
             },
             "parameters": [
                 {
-                    "$ref": "#/components/parameters/adminsUpdateCoursePathParameterData"
+                    "$ref": "#/components/parameters/adminsCoursesUpdateCoursePathParameterData"
                 }
             ]
         },
@@ -869,6 +887,47 @@
             }
         },
         "/admins/courses": {
+            "get": {
+                "tags": [
+                    "adminsCourses"
+                ],
+                "operationId": "75d0bdefdf21268082775e70bb6b563d",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "department_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminCourseGetCoursesResponseGetCoursesResponsePaginationResultData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "adminsCourses"
@@ -1867,6 +1926,135 @@
                     }
                 },
                 "type": "object"
+            },
+            "AdminCourseGetCourseRequestRequestGetCourseRequestData": {},
+            "AdminCourseGetCourseRequestRequestCrossListedItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminCourseGetCourseResponseGetCourseResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "department_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "credits": {
+                        "type": "integer"
+                    },
+                    "open_for_students_in_year": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    },
+                    "cross_listed_courses": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AdminCourseGetCourseRequestRequestCrossListedItemData"
+                        }
+                    },
+                    "prerequisites": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AdminCourseGetCourseRequestRequestPrerequisiteItemData"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "AdminCourseGetCourseRequestRequestPrerequisiteItemData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCoursesRequestData": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginationQueryParameterData"
+                    }
+                ]
+            },
+            "AdminCourseGetCoursesResponseGetCoursesResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "department_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "credits": {
+                        "type": "integer"
+                    },
+                    "open_for_students_in_year": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminCourseGetCoursesResponseGetCoursesResponsePaginationResultData": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/adminPaginatedAbstract"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AdminCourseGetCoursesResponseGetCoursesResponseData"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
             },
             "UpdateCourseRequestData": {
                 "properties": {
@@ -2880,7 +3068,15 @@
                     "type": "integer"
                 }
             },
-            "adminsUpdateCoursePathParameterData": {
+            "adminsCoursesGetCourseIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsCoursesUpdateCoursePathParameterData": {
                 "name": "id",
                 "in": "path",
                 "required": true,
