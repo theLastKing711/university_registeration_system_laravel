@@ -22,7 +22,7 @@ class CreateCourseTeacherAttendanceRequestData extends Data
         public int $id,
 
         #[DateProperty]
-        public string $date,
+        public string $happened_at,
 
         #[ArrayProperty(StudentAttendanceData::class)]
         public Collection $students_attendance,

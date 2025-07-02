@@ -7,15 +7,12 @@ use OpenApi\Attributes as OAT;
 
 #[
     OAT\PathItem(
-        path: '/admins/course-teachers/{id}/lectures/{id}',
+        path: '/admins/course-teachers/{id}/lectures',
         parameters: [
             new OAT\PathParameter(
                 ref: '#/components/parameters/adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter',
             ),
-            new OAT\PathParameter(
-                ref: '#/components/parameters/adminsUpdateCourseTeacherRequestIdPathParameter',
-            ),
         ],
     ),
 ]
-abstract class CourseTeacherAttendanceController extends Controller {}
+abstract class CourseTeacherLecturesController extends Controller {}

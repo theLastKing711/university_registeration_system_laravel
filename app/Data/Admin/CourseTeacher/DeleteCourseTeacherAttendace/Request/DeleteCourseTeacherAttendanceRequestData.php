@@ -2,7 +2,6 @@
 
 namespace App\Data\Admin\CourseTeacher\DeleteCourseTeacherAttendace\Request;
 
-use App\Data\Shared\Swagger\Property\DateProperty;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Validation\Exists;
@@ -14,10 +13,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class DeleteCourseTeacherAttendanceRequestData extends Data
 {
     public function __construct(
-
-        #[DateProperty]
-        public string $date,
-
         #[
             OAT\PathParameter(
                 parameter: 'adminsDeleteCourseTeacherAttendanceIdPathParameter',
@@ -30,5 +25,18 @@ class DeleteCourseTeacherAttendanceRequestData extends Data
             Exists('course_teacher', 'id')
         ]
         public int $id,
+
+        #[
+            OAT\PathParameter(
+                parameter: 'adminsDeleteCourseTeacherAttendanceLectureIdPathParameter',
+                name: 'lecture_id',
+                schema: new OAT\Schema(
+                    type: 'integer',
+                ),
+            ),
+            FromRouteParameter('lecture_id'),
+            Exists('course_teacher', 'id')
+        ]
+        public int $lecture_id,
     ) {}
 }

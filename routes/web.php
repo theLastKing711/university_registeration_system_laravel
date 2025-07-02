@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Course\GetCoursesController;
 use App\Http\Controllers\Admin\Course\UpdateCourseController;
 use App\Http\Controllers\Admin\CourseTeacher\CreateCourseTeacherAttendanceController;
 use App\Http\Controllers\Admin\CourseTeacher\DeleteCourseTeacherAttendaceController;
+use App\Http\Controllers\Admin\CourseTeacher\GetCourseTeacherLecturesController;
 use App\Http\Controllers\Admin\CourseTeacher\GetCourseTeacherStudentsController;
 use App\Http\Controllers\Admin\CourseTeacher\UpdateCourseTeacherAttendaceController;
 use App\Http\Controllers\Admin\Department\CloseDepartmentForRegisterationController;
@@ -219,7 +220,7 @@ Route::prefix('admins')
                     Route::post('', CreateDepartmentController::class);
 
                     Route::patch('{id}/open-for-registerations', OpenDepartmentForRegisterationController::class);
-                    Route::patch('{id}/close-for-registerations', CloseDepartmentForRegisterationController::class);
+                    Route::patch('{id}/close-for-registerataions', CloseDepartmentForRegisterationController::class);
 
                     Route::delete('', DeleteDepartmentController::class);
 
@@ -228,21 +229,26 @@ Route::prefix('admins')
             Route::prefix('course-teachers')
                 ->group(function () {
 
-                    Route::get('{id}/students', GetCourseTeacherStudentsController::class)
+                    Route::get('{id}/lectures', GetCourseTeacherLecturesController::class)
                         ->middleware([
                             RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                         ]);
 
-                    Route::post('{id}/students', CreateCourseTeacherAttendanceController::class)->middleware([
+                    Route::post('{id}/lectures', CreateCourseTeacherAttendanceController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]);
 
-                    Route::patch('{id}/students', UpdateCourseTeacherAttendaceController::class)
+                    Route::patch('{id}/lectures/{lecture_id}', UpdateCourseTeacherAttendaceController::class)
                         ->middleware([
                             RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                         ]);
 
-                    Route::delete('{id}/students', DeleteCourseTeacherAttendaceController::class)
+                    Route::delete('{id}/lectures/{lecture_id}', DeleteCourseTeacherAttendaceController::class)
+                        ->middleware([
+                            RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                        ]);
+
+                    Route::get('{id}/students', GetCourseTeacherStudentsController::class)
                         ->middleware([
                             RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                         ]);

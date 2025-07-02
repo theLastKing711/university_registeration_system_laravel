@@ -233,6 +233,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereOpenForStudentsInYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Course whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Course,\Illuminate\Database\Eloquent\Relations\Pivot> $firstCrossListed
+ * @property-read int|null $first_cross_listed_count
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Course,\Illuminate\Database\Eloquent\Relations\Pivot> $secondCrossListed
+ * @property-read int|null $second_cross_listed_count
  */
 	class Course extends \Eloquent {}
 }

@@ -190,11 +190,44 @@ class CourseTest extends AdminTestCase
                 )
                 ->id;
 
-        $random_course_id =
+        /** @var Course $random_course_id_to_update */
+        $random_course_id_to_update =
             Course::query()
-                ->inRandomOrder()
-                ->first()
-                ->id;
+                ->with(
+                    'prerequisites',
+                    'firstCrossListed',
+                    'secondCrossListed'
+                )
+                ->where(
+                    'department_id',
+                    $it_department_id
+                )
+                ->first();
+
+        $two_random_prerequisties_ids =
+            Course::query()
+                ->where(
+                    'id',
+                    '!=',
+                    $random_course_id_to_update->id
+                )
+                ->take(2)
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+        $two_random_courses_to_cross_list_ids =
+           Course::query()
+               ->where(
+                   'id',
+                   '!=',
+                   $random_course_id_to_update->id
+               )
+               ->whereNotIn('id', $two_random_prerequisties_ids)
+               ->take(2)
+               ->get()
+               ->pluck('id')
+               ->toArray();
 
         $update_course_request =
             new UpdateCourseRequestData(
@@ -204,7 +237,9 @@ class CourseTest extends AdminTestCase
                 true,
                 3,
                 1,
-                $random_course_id
+                $two_random_courses_to_cross_list_ids,
+                $two_random_prerequisties_ids,
+                $random_course_id_to_update->id
             );
 
         $update_course_route =
@@ -219,6 +254,36 @@ class CourseTest extends AdminTestCase
                 );
 
         $response->assertStatus(200);
+
+        $random_course_id_to_update
+            ->refresh();
+
+        $this
+            ->assertTrue(
+                $random_course_id_to_update
+                    ->prerequisites
+                    ->count()
+                            ==
+                            2
+            );
+
+        $this
+            ->assertTrue(
+                $random_course_id_to_update
+                    ->secondCrossListed
+                    ->count()
+                            ==
+                            0
+            );
+
+        $this
+            ->assertTrue(
+                $random_course_id_to_update
+                    ->firstCrossListed
+                    ->count()
+                            ==
+                            2
+            );
 
         // $updated_course =
         //         Course::query()

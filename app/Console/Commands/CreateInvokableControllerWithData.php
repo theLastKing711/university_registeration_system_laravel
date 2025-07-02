@@ -447,7 +447,7 @@ class CreateInvokableControllerWithData extends Command
 
             $this->info($this->option('pagination'));
 
-            $pagination_option = $this->hasOption('pagination');
+            $pagination_option = $this->option('pagination');
 
             $get_many_path =
             str_replace(

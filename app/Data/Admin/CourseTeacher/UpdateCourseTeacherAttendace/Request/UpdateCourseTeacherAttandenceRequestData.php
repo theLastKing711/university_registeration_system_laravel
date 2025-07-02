@@ -18,7 +18,7 @@ class UpdateCourseTeacherAttandenceRequestData extends Data
     public function __construct(
 
         #[DateProperty]
-        public string $date,
+        public string $happened_at,
 
         #[ArrayProperty(StudentAttendanceItemData::class)]
         /** @var Collection<StudentAttendanceItemData> */
@@ -36,6 +36,19 @@ class UpdateCourseTeacherAttandenceRequestData extends Data
             Exists('course_teacher', 'id')
         ]
         public int $id,
+
+        #[
+            OAT\PathParameter(
+                parameter: 'adminsUpdateCourseTeacherRequestLectureIdPathParameter',
+                name: 'lecture_id',
+                schema: new OAT\Schema(
+                    type: 'integer',
+                ),
+            ),
+            FromRouteParameter('lecture_id'),
+            Exists('lectures', 'id')
+        ]
+        public int $lecture_id,
 
     ) {}
 }

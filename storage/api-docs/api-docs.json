@@ -136,80 +136,11 @@
                 }
             ]
         },
-        "/admins/course-teachers/{id}/students": {
-            "get": {
-                "tags": [
-                    "adminsCourseTeachers"
-                ],
-                "operationId": "06ccdd33b7ec5c8b3918c546f72637da",
-                "responses": {
-                    "200": {
-                        "description": "Items fetched successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/GetCourseTeacherStudentsRespnseData"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "adminsCourseTeachers"
-                ],
-                "operationId": "471e8589aabff2f656f0ccb0d523027c",
-                "parameters": [
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "tags": [
-                    "adminsCourseTeachers"
-                ],
-                "operationId": "3857aae318c5a98d802ced3644cb8512",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherAttendanceRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            },
+        "/admins/course-teachers/{id}/lectures/{id}": {
             "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter"
+                },
                 {
                     "$ref": "#/components/parameters/adminsUpdateCourseTeacherRequestIdPathParameter"
                 }
@@ -219,6 +150,34 @@
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsUpdateCourseTeacherRequestIdPathParameter"
+                }
+            ]
+        },
+        "/admins/course-teachers/{id}/lectures": {
+            "get": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "b243b7f4c2279aea1f0d984910276d34",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AdminCourseTeacherGetCourseTeacherLecturesResponseGetCourseTeacherLecturesResponseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter"
                 }
             ]
         },
@@ -849,12 +808,12 @@
                 }
             }
         },
-        "/admins/course-teachers/course-attendances": {
+        "/admins/course-teachers/{id]/lectures": {
             "post": {
                 "tags": [
                     "adminsCourseTeachers"
                 ],
-                "operationId": "3937c7acf82d774b10f1a3956ef30060",
+                "operationId": "dc9b958105b732f573c0a0e9fd031985",
                 "parameters": [
                     {
                         "name": "date",
@@ -870,6 +829,84 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/CreateCourseTeacherAttendanceRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/course-teachers/{id}/students/{lecture_id}": {
+            "delete": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "57fb31666dc6d028210fa9bba0655b0a",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/course-teachers/{id}/students": {
+            "get": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "06ccdd33b7ec5c8b3918c546f72637da",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetCourseTeacherStudentsRespnseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/course-teachers/{id}/lectures/{lecture_id}": {
+            "patch": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "47842bbf18f55892d0e356455dad4212",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherAttendanceRequestData"
                             }
                         }
                     }
@@ -1810,7 +1847,7 @@
                     "id": {
                         "type": "integer"
                     },
-                    "date": {
+                    "happened_at": {
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
@@ -1851,6 +1888,23 @@
                 },
                 "type": "object"
             },
+            "AdminCourseTeacherGetCourseTeacherLecturesRequestGetCourseTeacherLecturesRequestData": {},
+            "AdminCourseTeacherGetCourseTeacherLecturesResponseGetCourseTeacherLecturesResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "happened_at": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    }
+                },
+                "type": "object"
+            },
             "GetCourseTeacherStudentsRespnseData": {
                 "properties": {
                     "id": {
@@ -1876,7 +1930,7 @@
             },
             "AdminCourseTeacherUpdateCourseTeacherAttendaceRequestUpdateCourseTeacherAttendanceRequestData": {
                 "properties": {
-                    "date": {
+                    "happened_at": {
                         "schema": "string",
                         "type": "string",
                         "format": "datetime",
@@ -1997,9 +2051,19 @@
                 "type": "object"
             },
             "GetCoursesRequestData": {
+                "type": "object",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/PaginationQueryParameterData"
+                    },
+                    {
+                        "properties": {
+                            "department_id": {
+                                "type": "integer",
+                                "nullable": true
+                            }
+                        },
+                        "type": "object"
                     }
                 ]
             },
@@ -2075,6 +2139,18 @@
                     },
                     "open_for_students_in_year": {
                         "type": "integer"
+                    },
+                    "cross_listed_courses_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "prerequisites_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
                 },
                 "type": "object"
@@ -3052,6 +3128,22 @@
                     "type": "integer"
                 }
             },
+            "adminsDeleteCourseTeacherAttendanceLectureIdPathParameter": {
+                "name": "lecture_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsCourseTeacherPathParameterData": {
                 "name": "id",
                 "in": "path",
@@ -3062,6 +3154,14 @@
             },
             "adminsUpdateCourseTeacherRequestIdPathParameter": {
                 "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsUpdateCourseTeacherRequestLectureIdPathParameter": {
+                "name": "lecture_id",
                 "in": "path",
                 "required": true,
                 "schema": {

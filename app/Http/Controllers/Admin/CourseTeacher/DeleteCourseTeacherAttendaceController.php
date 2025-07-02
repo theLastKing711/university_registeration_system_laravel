@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class DeleteCourseTeacherAttendaceController extends CourseTeacherAttendanceController
 {
-    #[OAT\Delete(path: '/admins/course-teachers/{id}/students', tags: ['adminsCourseTeachers'])]
+    #[OAT\Delete(path: '/admins/course-teachers/{id}/students/{lecture_id}', tags: ['adminsCourseTeachers'])]
     #[QueryParameter('date')]
     #[SuccessNoContentResponse]
     public function __invoke(DeleteCourseTeacherAttendanceRequestData $request)
@@ -19,12 +19,8 @@ class DeleteCourseTeacherAttendaceController extends CourseTeacherAttendanceCont
 
         CourseAttendance::query()
             ->where(
-                'course_teacher_id',
-                $request->id
-            )
-            ->where(
-                'date',
-                $request->date
+                'lecture_id',
+                $request->lecture_id
             )
             ->delete();
 

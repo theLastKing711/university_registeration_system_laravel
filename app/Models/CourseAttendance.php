@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $lecture_id
  * @property int $student_id
@@ -17,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Lecture $lecture
  * @property-read \App\Models\User $student
+ *
  * @method static \Database\Factories\CourseAttendanceFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance newModelQuery()
@@ -42,12 +41,15 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereLectureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereStudentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseAttendance whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class CourseAttendance extends Pivot
 {
     /** @use HasFactory<\Database\Factories\CourseAttendanceFactory> */
     use HasFactory;
+
+    public $incrementing = true;
 
     /**
      * Get the student that owns the CourseAttendance

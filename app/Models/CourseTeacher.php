@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $course_id
  * @property int $teacher_id
@@ -30,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $studenAttendances
  * @property-read int|null $studen_attendances_count
  * @property-read \App\Models\Teacher $teacher
+ *
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher newQuery()
@@ -52,6 +51,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereIsMainTeacher($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereTeacherId($value)
+ *
  * @mixin \Eloquent
  */
 class CourseTeacher extends Pivot
@@ -79,7 +79,7 @@ class CourseTeacher extends Pivot
      */
     public function lectures(): HasMany
     {
-        return $this->hasMany(Lecture::class);
+        return $this->hasMany(Lecture::class, 'course_teacher_id');
     }
 
     /**
@@ -134,7 +134,8 @@ class CourseTeacher extends Pivot
             'course_attendance',
             'course_teacher_id',
             'student_id'
-        )->withPivot('updated_at');
+        )
+            ->withPivot('updated_at');
     }
 
     /**

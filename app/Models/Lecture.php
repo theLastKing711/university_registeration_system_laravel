@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property int $course_teacher_id
  * @property string $happened_at
@@ -21,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\CourseTeacher $courseTeacher
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $students
  * @property-read int|null $students_count
+ *
  * @method static \Database\Factories\LectureFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Lecture newModelQuery()
@@ -45,6 +44,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Lecture whereHappenedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Lecture whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Lecture whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Lecture extends Model
@@ -76,6 +76,11 @@ class Lecture extends Model
      */
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'users', 'student_id');
+        return $this->belongsToMany(
+            User::class,
+            'course_attendance',
+            'lecture_id',
+            'student_id'
+        );
     }
 }
