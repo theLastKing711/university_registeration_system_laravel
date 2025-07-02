@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $course_id
  * @property int $academic_year_semester_id
@@ -28,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property-read int|null $students_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Teacher,\Illuminate\Database\Eloquent\Relations\Pivot> $teachers
  * @property-read int|null $teachers_count
+ *
  * @method static \Database\Factories\OpenCourseRegisterationFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static Builder<static>|OpenCourseRegisteration newModelQuery()
@@ -52,6 +51,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static Builder<static>|OpenCourseRegisteration whereCreatedAt($value)
  * @method static Builder<static>|OpenCourseRegisteration whereId($value)
  * @method static Builder<static>|OpenCourseRegisteration whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class OpenCourseRegisteration extends Pivot
@@ -64,7 +64,9 @@ class OpenCourseRegisteration extends Pivot
     protected $table = 'open_course_registerations';
 
     /**
-     * Get the course that owns the openCourseRegisteration
+     * Summary of course
+     *
+     * @return BelongsTo<Course, $this>
      */
     public function course(): BelongsTo
     {
@@ -72,7 +74,9 @@ class OpenCourseRegisteration extends Pivot
     }
 
     /**
-     * Get the academicYearSemester that owns the OpenCourseRegisteration
+     * Summary of academicYearSemester
+     *
+     * @return BelongsTo<AcademicYearSemester, $this>
      */
     public function academicYearSemester(): BelongsTo
     {
@@ -80,7 +84,9 @@ class OpenCourseRegisteration extends Pivot
     }
 
     /**
-     * The teachers that belong to the openCourseRegisteration
+     * Summary of teachers
+     *
+     * @return BelongsToMany<Teacher, $this, Pivot>
      */
     public function teachers(): BelongsToMany
     {
@@ -92,7 +98,9 @@ class OpenCourseRegisteration extends Pivot
     }
 
     /**
-     * Get all of the CourseTeachers for the openCourseRegisteration
+     * Summary of courseTeachers
+     *
+     * @return HasMany<CourseTeacher, $this>
      */
     public function courseTeachers(): HasMany
     {
@@ -104,7 +112,9 @@ class OpenCourseRegisteration extends Pivot
     }
 
     /**
-     * Get the students that owns the openCourseRegisteration
+     * Summary of students
+     *
+     * @return BelongsToMany<User, $this, Pivot>
      */
     public function students(): BelongsToMany
     {
@@ -117,7 +127,9 @@ class OpenCourseRegisteration extends Pivot
     }
 
     /**
-     * Get all of the studentCourseRegisterations for the openCourseRegisteration
+     * Summary of studentCourseRegisterations
+     *
+     * @return HasMany<StudentCourseRegisteration, $this    >
      */
     public function studentCourseRegisterations(): HasMany
     {
@@ -128,12 +140,6 @@ class OpenCourseRegisteration extends Pivot
     }
 
     #[Scope]
-    /**
-     * undocumented function summary
-     *
-     * Undocumented function long description
-     *
-     **/
     protected function getStudents(Builder $query, int $id): void
     {
         $query->where('votes', '>', 100);

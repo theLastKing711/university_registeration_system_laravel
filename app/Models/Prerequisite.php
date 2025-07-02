@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $course_id
  * @property int $prerequisite_id
@@ -16,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Course $course
  * @property-read \App\Models\Course $prerequisite
+ *
  * @method static \Database\Factories\PrerequisiteFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Prerequisite newModelQuery()
@@ -40,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Prerequisite whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Prerequisite wherePrerequisiteId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Prerequisite whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Prerequisite extends Pivot
@@ -50,7 +50,9 @@ class Prerequisite extends Pivot
     protected $table = 'prerequisites';
 
     /**
-     * Get the course that owns the Prerequisite
+     * Summary of course
+     *
+     * @return BelongsTo<Course, $this>
      */
     public function course(): BelongsTo
     {
@@ -58,7 +60,9 @@ class Prerequisite extends Pivot
     }
 
     /**
-     * Get the prerequisite that owns the Prerequisite
+     * Summary of prerequisite
+     *
+     * @return BelongsTo<Course, $this>
      */
     public function prerequisite(): BelongsTo
     {

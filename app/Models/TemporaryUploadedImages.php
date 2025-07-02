@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property int $id
  * @property int $user_id
  * @property string $file_name
@@ -20,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\TemporaryUploadedImagesFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages newModelQuery()
@@ -48,6 +47,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class TemporaryUploadedImages extends Model
@@ -56,7 +56,9 @@ class TemporaryUploadedImages extends Model
     use HasFactory;
 
     /**
-     * Get the user that owns the TemporaryUploadedImages
+     * Summary of user
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $student_id
  * @property int $course_id
@@ -16,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\OpenCourseRegisteration $course
  * @property-read \App\Models\User $student
+ *
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration newQuery()
@@ -40,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereStudentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StudentCourseRegisteration whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class StudentCourseRegisteration extends Pivot
@@ -47,7 +47,9 @@ class StudentCourseRegisteration extends Pivot
     protected $table = 'student_course_registerations';
 
     /**
-     * Get the student that owns the StudentCourseRegisteration
+     * Summary of student
+     *
+     * @return BelongsTo<User, $this>
      */
     public function student(): BelongsTo
     {
@@ -55,7 +57,9 @@ class StudentCourseRegisteration extends Pivot
     }
 
     /**
-     * Get the course that owns the StudentCourseRegisteration
+     * Summary of course
+     *
+     * @return BelongsTo<OpenCourseRegisteration, $this>
      */
     public function course(): BelongsTo
     {

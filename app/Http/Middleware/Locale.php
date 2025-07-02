@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class Locale
@@ -17,6 +16,7 @@ class Locale
      */
     public function handle(Request $request, Closure $next): Response
     {
+        /** @var string $locale */
         $locale = $request->query('locale') ?? config('app.locale');
 
         App::setLocale($locale);

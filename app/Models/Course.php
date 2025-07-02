@@ -73,7 +73,9 @@ class Course extends Model
     use HasFactory;
 
     /**
-     * Get the department that owns the Course
+     * Summary of department
+     *
+     * @return BelongsTo<Department, $this>
      */
     public function department(): BelongsTo
     {
@@ -81,7 +83,9 @@ class Course extends Model
     }
 
     /**
-     * Get all of the prerequisites for the Course
+     * Summary of prerequisites
+     *
+     * @return HasMany<Prerequisite, $this>
      */
     public function prerequisites(): HasMany
     {
@@ -89,7 +93,9 @@ class Course extends Model
     }
 
     /**
-     * The courses that belong to the prerequisite
+     * Summary of coursesPrerequisites
+     *
+     * @return BelongsToMany<$this, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function coursesPrerequisites(): BelongsToMany
     {
@@ -102,7 +108,9 @@ class Course extends Model
     }
 
     /**
-     * The academicYearOpenedInt that belong to the Course
+     * Summary of openedYearsSemesters
+     *
+     * @return BelongsToMany<AcademicYearSemester, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function openedYearsSemesters(): BelongsToMany
     {
@@ -110,7 +118,9 @@ class Course extends Model
     }
 
     /**
-     * Get all of the openCourseRegisterations for the Course
+     * Summary of openCourseRegisterations
+     *
+     * @return HasMany<openCourseRegisteration, $this>
      */
     public function openCourseRegisterations(): HasMany
     {
@@ -118,7 +128,9 @@ class Course extends Model
     }
 
     /**
-     * Get all of the firstCrossListedCourses for the Course
+     * Summary of firstCrossListedCourses
+     *
+     * @return HasMany<CrossListedCourses, $this>
      */
     public function firstCrossListedCourses(): HasMany
     {
@@ -126,7 +138,9 @@ class Course extends Model
     }
 
     /**
-     * Get all of the firstCrossListedCourses for the Course
+     * Summary of firstCrossListed
+     *
+     * @return BelongsToMany<$this, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function firstCrossListed(): BelongsToMany
     {
@@ -140,7 +154,9 @@ class Course extends Model
     }
 
     /**
-     * Get all of the SecondCrossListedCourses for the Course
+     * Summary of SecondCrossListedCourses
+     *
+     * @return HasMany<CrossListedCourses, $this>
      */
     public function SecondCrossListedCourses(): HasMany
     {
@@ -148,7 +164,9 @@ class Course extends Model
     }
 
     /**
-     * Get all of the secondCrossListedCourses for the Course
+     * Summary of secondCrossListed
+     *
+     * @return BelongsToMany<$this, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function secondCrossListed(): BelongsToMany
     {

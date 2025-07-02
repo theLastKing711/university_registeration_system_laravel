@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property int $is_course_registeration_open
@@ -27,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $students_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Teacher> $teachers
  * @property-read int|null $teachers_count
+ *
  * @method static \Database\Factories\DepartmentFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department newModelQuery()
@@ -53,6 +52,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereIsCourseRegisterationOpen($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Department whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Department extends Model
@@ -61,7 +61,9 @@ class Department extends Model
     use HasFactory;
 
     /**
-     * Get all of the students for the Department
+     * Summary of students
+     *
+     * @return HasMany<User, $this>
      */
     public function students(): HasMany
     {
@@ -69,7 +71,9 @@ class Department extends Model
     }
 
     /**
-     * Get all of the courses for the Department
+     * Summary of courses
+     *
+     * @return HasMany<Course, $this>
      */
     public function courses(): HasMany
     {
@@ -77,7 +81,9 @@ class Department extends Model
     }
 
     /**
-     * Get all of the teachers for the Department
+     * Summary of teachers
+     *
+     * @return HasMany<Teacher, $this>
      */
     public function teachers(): HasMany
     {
@@ -85,7 +91,9 @@ class Department extends Model
     }
 
     /**
-     * Get all of the openRegisterations for the Department
+     * Summary of openRegisterations
+     *
+     * @return HasMany<DepartmentRegisterationPeriod, $this>
      */
     public function openRegisterations(): HasMany
     {
@@ -93,7 +101,9 @@ class Department extends Model
     }
 
     /**
-     * The openedAcademicyears that belong to the Department
+     * Summary of openedAcademicyears
+     *
+     * @return BelongsToMany<AcademicYearSemester, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function openedAcademicyears(): BelongsToMany
     {

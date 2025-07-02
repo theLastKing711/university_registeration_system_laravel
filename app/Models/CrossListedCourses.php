@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $first_course_id
  * @property int $second_course_id
@@ -15,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Course $firstCourse
  * @property-read \App\Models\Course $secondCourse
+ *
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CrossListedCourses newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CrossListedCourses newQuery()
@@ -38,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CrossListedCourses whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CrossListedCourses whereSecondCourseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CrossListedCourses whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class CrossListedCourses extends Pivot
@@ -45,7 +45,9 @@ class CrossListedCourses extends Pivot
     protected $table = 'cross_listed_courses';
 
     /**
-     * Get the firstCourse that owns the CrossListedCourses
+     * Summary of firstCourse
+     *
+     * @return BelongsTo<Course, $this>
      */
     public function firstCourse(): BelongsTo
     {
@@ -53,7 +55,9 @@ class CrossListedCourses extends Pivot
     }
 
     /**
-     * Get the secondCourse that owns the CrossListedCourses
+     * Summary of secondCourse
+     *
+     * @return BelongsTo<Course, $this>
      */
     public function secondCourse(): BelongsTo
     {

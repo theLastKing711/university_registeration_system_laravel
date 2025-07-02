@@ -13,8 +13,6 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -29,6 +27,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $permissions_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\Spatie\Permission\Models\Role,\Illuminate\Database\Eloquent\Relations\Pivot> $roles
  * @property-read int|null $roles_count
+ *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
@@ -60,6 +59,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
+ *
  * @property int|null $department_id
  * @property string|null $national_id
  * @property string|null $birthdate
@@ -84,6 +84,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $temporary_uploaded_images_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBirthdate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereDepartmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEnrollmentDate($value)
@@ -91,6 +92,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereManagesDepartmentWithId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNationalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoneNumber($value)
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -120,7 +122,9 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the department that owns the User
+     * Summary of department
+     *
+     * @return BelongsTo<Department, $this>
      */
     public function department(): BelongsTo
     {
@@ -128,7 +132,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all of the temporaryUploadedImages for the User
+     * Summary of temporaryUploadedImages
+     *
+     * @return HasMany<TemporaryUploadedImages, $this>
      */
     public function temporaryUploadedImages(): HasMany
     {
@@ -138,7 +144,9 @@ class User extends Authenticatable
     // student relations
 
     /**
-     * Get all of the attendances for the Student
+     * Summary of lectures
+     *
+     * @return BelongsToMany<CourseTeacher, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function lectures(): BelongsToMany
     {
@@ -151,7 +159,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all of the attendances for the User
+     * Summary of attendances
+     *
+     * @return HasMany<CourseAttendance, $this>
      */
     public function attendances(): HasMany
     {
@@ -162,7 +172,9 @@ class User extends Authenticatable
     }
 
     /**
-     * The studentExams that belong to the User
+     * Summary of examStudent
+     *
+     * @return BelongsToMany<Exam, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function examStudent(): BelongsToMany
     {
@@ -175,7 +187,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all of the exams for the User
+     * Summary of exams
+     *
+     * @return HasMany<ExamStudent, $this>
      */
     public function exams(): HasMany
     {
@@ -187,7 +201,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the students that owns the student
+     * Summary of courses
+     *
+     * @return BelongsToMany<OpenCourseRegisteration, User, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function courses(): BelongsToMany
     {
@@ -200,7 +216,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all of the studentCourseRegisterations for the student
+     * Summary of studentCourseRegisterations
+     *
+     * @return HasMany<StudentCourseRegisteration, $this>
      */
     public function studentCourseRegisterations(): HasMany
     {

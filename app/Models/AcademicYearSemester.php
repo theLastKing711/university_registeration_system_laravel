@@ -55,7 +55,9 @@ class AcademicYearSemester extends Model
     use HasFactory;
 
     /**
-     * Get all of the departmentRegisterationPeriod for the AcademicYearSemester
+     * Summary of departmentRegisterationPeriod
+     *
+     * @return HasMany<DepartmentRegisterationPeriod, $this>
      */
     public function departmentRegisterationPeriod(): HasMany
     {
@@ -63,7 +65,9 @@ class AcademicYearSemester extends Model
     }
 
     /**
-     * The departments that belong to the AcademicYearSemester
+     * Summary of departments
+     *
+     * @return BelongsToMany<Department, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function departments(): BelongsToMany
     {
@@ -71,7 +75,9 @@ class AcademicYearSemester extends Model
     }
 
     /**
-     * Get all of the comments for the AcademiceYearSemester
+     * Summary of openCourseRegisterations
+     *
+     * @return HasMany<OpenCourseRegisteration, $this>
      */
     public function openCourseRegisterations(): HasMany
     {
@@ -79,7 +85,9 @@ class AcademicYearSemester extends Model
     }
 
     /**
-     * The courses that belong to the AcademiceYearSemester
+     * Summary of courses
+     *
+     * @return BelongsToMany<Course, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function courses(): BelongsToMany
     {

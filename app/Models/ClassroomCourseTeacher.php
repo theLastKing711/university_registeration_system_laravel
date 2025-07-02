@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $classroom_id
  * @property int $course_teacher_id
@@ -19,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Classroom $classroom
  * @property-read \App\Models\CourseTeacher $courseTeacher
+ *
  * @method static \Database\Factories\ClassroomCourseTeacherFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ClassroomCourseTeacher newModelQuery()
@@ -46,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ClassroomCourseTeacher whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ClassroomCourseTeacher whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ClassroomCourseTeacher whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class ClassroomCourseTeacher extends Pivot
@@ -54,7 +54,9 @@ class ClassroomCourseTeacher extends Pivot
     use HasFactory;
 
     /**
-     * Get the teacher that owns the ClassroomCourseTeacher
+     * Summary of classroom
+     *
+     * @return BelongsTo<Classroom, $this>
      */
     public function classroom(): BelongsTo
     {
@@ -62,7 +64,9 @@ class ClassroomCourseTeacher extends Pivot
     }
 
     /**
-     * Get the courseTeacher that owns the CourseTeacher
+     * Summary of courseTeacher
+     *
+     * @return BelongsTo<CourseTeacher, $this>
      */
     public function courseTeacher(): BelongsTo
     {

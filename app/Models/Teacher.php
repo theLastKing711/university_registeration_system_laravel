@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property int $department_id
@@ -23,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\OpenCourseRegisteration,\Illuminate\Database\Eloquent\Relations\Pivot> $courses
  * @property-read int|null $courses_count
  * @property-read \App\Models\Department $department
+ *
  * @method static \Database\Factories\TeacherFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Teacher newModelQuery()
@@ -47,6 +46,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Teacher whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Teacher whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Teacher whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Teacher extends Model
@@ -55,7 +55,9 @@ class Teacher extends Model
     use HasFactory;
 
     /**
-     * The courses that belong to the Teacher
+     * Summary of courses
+     *
+     * @return BelongsToMany<OpenCourseRegisteration, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function courses(): BelongsToMany
     {
@@ -65,7 +67,9 @@ class Teacher extends Model
     }
 
     /**
-     * Get all of the courseTeachers for the Teacher
+     * Summary of courseTeachers
+     *
+     * @return HasMany<CourseTeacher, $this>
      */
     public function courseTeachers(): HasMany
     {
@@ -73,7 +77,9 @@ class Teacher extends Model
     }
 
     /**
-     * Get all of the classroomCourseTeachers for the Teacher
+     * Summary of classroomCourseTeachers
+     *
+     * @return HasMany<ClassroomCourseTeacher, $this>
      */
     public function classroomCourseTeachers(): HasMany
     {
@@ -81,7 +87,9 @@ class Teacher extends Model
     }
 
     /**
-     * Get the department that owns the Teacher
+     * Summary of department
+     *
+     * @return BelongsTo<Department, $this>
      */
     public function department(): BelongsTo
     {

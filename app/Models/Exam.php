@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * 
- *
  * @property int $id
  * @property int $course_teacher_id
  * @property int $classroom_id
@@ -27,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property-read int|null $exam_students_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $students
  * @property-read int|null $students_count
+ *
  * @method static \Database\Factories\ExamFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam newModelQuery()
@@ -56,6 +55,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereMaxMark($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Exam whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Exam extends Pivot
@@ -66,7 +66,9 @@ class Exam extends Pivot
     protected $table = 'exams';
 
     /**
-     * Get the classroom that owns the Exam
+     * Summary of classroom
+     *
+     * @return BelongsTo<Classroom, $this>
      */
     public function classroom(): BelongsTo
     {
@@ -74,7 +76,9 @@ class Exam extends Pivot
     }
 
     /**
-     * Get the courseTeacher that owns the Exam
+     * Summary of courseTeacher
+     *
+     * @return BelongsTo<CourseTeacher, $this>
      */
     public function courseTeacher(): BelongsTo
     {
@@ -85,7 +89,9 @@ class Exam extends Pivot
     }
 
     /**
-     * The students that belong to the Exam
+     * Summary of students
+     *
+     * @return BelongsToMany<User, $this, Pivot>
      */
     public function students(): BelongsToMany
     {
@@ -97,7 +103,9 @@ class Exam extends Pivot
     }
 
     /**
-     * Get all of the examStudents for the Exam
+     * Summary of examStudents
+     *
+     * @return HasMany<ExamStudent, $this>
      */
     public function examStudents(): HasMany
     {

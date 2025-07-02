@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ClassroomCourseTeacher;
+use App\Models\Course;
 use App\Models\CourseAttendance;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
@@ -17,6 +18,7 @@ class CourseTeacherSeeder extends Seeder
      */
     public function run(): void
     {
+
         CourseTeacher::query()
             ->with(
                 [

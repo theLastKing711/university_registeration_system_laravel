@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -20,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $course_teachers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Exam> $exams
  * @property-read int|null $exams_count
+ *
  * @method static \Database\Factories\ClassroomFactory factory($count = null, $state = [])
  * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Classroom newModelQuery()
@@ -43,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Classroom whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Classroom whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Classroom whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Classroom extends Model
@@ -51,7 +51,9 @@ class Classroom extends Model
     use HasFactory;
 
     /**
-     * Get all of the classroomCourses for the classroom
+     * Summary of classroomCourseTeachers
+     *
+     * @return HasMany<ClassroomCourseTeacher, $this>
      */
     public function classroomCourseTeachers(): HasMany
     {
@@ -59,7 +61,9 @@ class Classroom extends Model
     }
 
     /**
-     * The courseTeachers  that belong to the classroom
+     * Summary of courseTeachers
+     *
+     * @return BelongsToMany<CourseTeacher, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function courseTeachers(): BelongsToMany
     {
@@ -72,7 +76,9 @@ class Classroom extends Model
     }
 
     /**
-     * Get all of the exams for the Classroom
+     * Summary of exams
+     *
+     * @return HasMany<Exam, $this>
      */
     public function exams(): HasMany
     {

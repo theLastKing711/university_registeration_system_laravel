@@ -53,7 +53,9 @@ class Lecture extends Model
     use HasFactory;
 
     /**
-     * Get the courseTeacher that owns the Lecture
+     * Summary of courseTeacher
+     *
+     * @return BelongsTo<CourseTeacher, $this>
      */
     public function courseTeacher(): BelongsTo
     {
@@ -64,7 +66,9 @@ class Lecture extends Model
     }
 
     /**
-     * Get all of the courseAttendances for the Lecture
+     * Summary of attendances
+     *
+     * @return HasMany<CourseAttendance, $this>
      */
     public function attendances(): HasMany
     {
@@ -72,7 +76,9 @@ class Lecture extends Model
     }
 
     /**
-     * The students that belong to the Lecture
+     * Summary of students
+     *
+     * @return BelongsToMany<User, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
      */
     public function students(): BelongsToMany
     {

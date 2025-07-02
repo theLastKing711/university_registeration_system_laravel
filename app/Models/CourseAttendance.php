@@ -52,7 +52,9 @@ class CourseAttendance extends Pivot
     public $incrementing = true;
 
     /**
-     * Get the student that owns the CourseAttendance
+     * Summary of student
+     *
+     * @return BelongsTo<User, $this>
      */
     public function student(): BelongsTo
     {
@@ -63,7 +65,9 @@ class CourseAttendance extends Pivot
     }
 
     /**
-     * Get the courseTeacher that owns the CourseAttendance
+     * Summary of lecture
+     *
+     * @return BelongsTo<Lecture, $this>
      */
     public function lecture(): BelongsTo
     {

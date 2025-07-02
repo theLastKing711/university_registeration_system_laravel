@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $is_main_teacher
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
  * @property-read int|null $attendances_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClassroomCourseTeacher> $classroomCourseTeachers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Classroom$this> $classroomCourseTeachers
  * @property-read int|null $classroom_course_teachers_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Classroom,\Illuminate\Database\Eloquent\Relations\Pivot> $classrooms
  * @property-read int|null $classrooms_count
@@ -59,7 +59,9 @@ class CourseTeacher extends Pivot
     protected $table = 'course_teacher';
 
     /**
-     * Get the course that owns the CourseTeacher
+     * Summary of course
+     *
+     * @return BelongsTo<OpenCourseRegisteration, $this>
      */
     public function course(): BelongsTo
     {
@@ -67,7 +69,9 @@ class CourseTeacher extends Pivot
     }
 
     /**
-     * Get the teacher that owns the CourseTeacher
+     * Summary of teacher
+     *
+     * @return BelongsTo<Teacher, $this>
      */
     public function teacher(): BelongsTo
     {
@@ -75,7 +79,9 @@ class CourseTeacher extends Pivot
     }
 
     /**
-     * Get all of the lectures for the CourseTeacher
+     * Summary of lectures
+     *
+     * @return HasMany<Lecture, $this>
      */
     public function lectures(): HasMany
     {
@@ -83,7 +89,9 @@ class CourseTeacher extends Pivot
     }
 
     /**
-     * Get all of the classroomCourseTeachers for the CourseTeacher
+     * Summary of classroomCourseTeachers
+     *
+     * @return HasMany<ClassroomCourseTeacher, $this>
      */
     public function classroomCourseTeachers(): HasMany
     {
@@ -95,6 +103,11 @@ class CourseTeacher extends Pivot
                 );
     }
 
+    /**
+     * Summary of classrooms
+     *
+     * @return BelongsToMany<Classroom, $this, Pivot>
+     */
     public function classrooms(): BelongsToMany
     {
         return
@@ -108,7 +121,9 @@ class CourseTeacher extends Pivot
     }
 
     /**
-     * Get all of the exams for the CourseTeacher
+     * Summary of exams
+     *
+     * @return HasMany<Exam, $this>
      */
     public function exams(): HasMany
     {
@@ -125,7 +140,9 @@ class CourseTeacher extends Pivot
     }
 
     /**
-     * Get all of the attendances for the CourseTeacher
+     * Summary of studenAttendances
+     *
+     * @return BelongsToMany<User, $this, Pivot>
      */
     public function studenAttendances(): BelongsToMany
     {
@@ -139,7 +156,9 @@ class CourseTeacher extends Pivot
     }
 
     /**
-     * Get all of the attendances for the CourseTeacher
+     * Summary of attendances
+     *
+     * @return HasMany<CourseAttendance, $this>
      */
     public function attendances(): HasMany
     {
