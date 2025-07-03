@@ -2,7 +2,6 @@
 
 namespace App\Data\Admin\Exam\GetExam\Response;
 
-use App\Data\Admin\Exam\GetExams\Response\ClassroomItemData;
 use App\Data\Shared\Swagger\Property\DateProperty;
 use App\Models\Exam;
 use OpenApi\Attributes as OAT;

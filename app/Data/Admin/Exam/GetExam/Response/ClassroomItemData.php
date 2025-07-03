@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Data\Admin\QueryParameters;
+namespace App\Data\Admin\Exam\GetExam\Response;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[Oat\Schema()]
-class YearSemesterQueryParameterData extends Data
+#[Oat\Schema(schema: 'adminsExamGetExamResponseGetExamResponseData')]
+class ClassroomItemData extends Data
 {
     public function __construct(
         #[OAT\Property]
-        public int $year,
+        public int $id,
         #[OAT\Property]
-        public int $semester,
+        public string $name,
     ) {}
 }

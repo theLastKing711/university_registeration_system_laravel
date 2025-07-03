@@ -25,8 +25,8 @@ class UpdateExamController extends ExamController
                 [
                     'classroom_id' => $request->classroom_id,
                     'course_teacher_id' => $request->course_teacher_id,
-                    'date' => $request->date,
                     'from' => $request->from,
+                    'date' => $request->date,
                     'to' => $request->to,
                     'is_main_exam' => $request->is_main_exam,
                     'max_mark' => $request->max_mark,

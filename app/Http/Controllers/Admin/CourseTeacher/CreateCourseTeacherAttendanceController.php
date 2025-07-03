@@ -6,12 +6,12 @@ use App\Data\Admin\CourseTeacher\CreateCourseTeacherAttendance\Request\CreateCou
 use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
-use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherLecturesController;
+use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherController;
 use App\Models\Lecture;
 use DB;
 use OpenApi\Attributes as OAT;
 
-class CreateCourseTeacherAttendanceController extends CourseTeacherLecturesController
+class CreateCourseTeacherAttendanceController extends CourseTeacherController
 {
     #[OAT\Post(path: '/admins/course-teachers/{id]/lectures', tags: ['adminsCourseTeachers'])]
     #[QueryParameter('date')]

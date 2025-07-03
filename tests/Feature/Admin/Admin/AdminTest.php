@@ -94,4 +94,9 @@ class AdminTest extends AdminTestCase
         $this->assertTrue($admin_has_been_deleted);
 
     }
+
+    public function getShowRoute(string $main_route, int $id)
+    {
+        return $main_route.'/'.$id;
+    }
 }

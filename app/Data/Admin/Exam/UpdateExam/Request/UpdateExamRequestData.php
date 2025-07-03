@@ -93,11 +93,12 @@ class UpdateExamRequestData extends Data
                                 $request_course_teacher_id
                             );
 
-                    $course_year = $course_teacher->course->year;
+                    $course_year = $course_teacher->course->academicYearSemester->year;
 
-                    $course_semester = $course_teacher->course->semester;
+                    $course_semester = $course_teacher->course->academicYearSemester->semester;
 
                     $exams_with_overlapped_timing = Exam::query()
+                        ->with('courseTeacher.course.course')
                         ->where(
                             'id',
                             '!=',
@@ -105,8 +106,16 @@ class UpdateExamRequestData extends Data
                         )
                         ->where('classroom_id', $request_classroom_id)
                         ->where('date', $request_date)
-                        ->whereRelation('courseTeacher.course', 'year', $course_year)
-                        ->whereRelation('courseTeacher.course', 'semester', $course_semester)
+                        ->whereRelation(
+                            'courseTeacher.course.academicYearSemester',
+                            'year',
+                            $course_year
+                        )
+                        ->whereRelation(
+                            'courseTeacher.course.academicYearSemester',
+                            'semester',
+                            $course_semester
+                        )
                         ->whereNested(function ($query) use ($request_from, $request_to) {
                             $query
                                 ->whereNested(function ($query) use ($request_from, $request_to) {
@@ -120,10 +129,21 @@ class UpdateExamRequestData extends Data
                                         ->whereTime('to', '<=', $request_to);
                                 });
                         })
-                        ->get();
+                        ->first();
 
-                    if ($exams_with_overlapped_timing->count() != 0) {
-                        $fail('يوحد تضارب في يوم وتوقيت الفحص, يرجى اختيار وقت ويوم آخر.');
+                    if ($exams_with_overlapped_timing != null) {
+
+                        $overlapped_course_name =
+                            $exams_with_overlapped_timing->courseTeacher->course->course->name;
+
+                        $fail(
+                            __(
+                                'messages.exams.overlap',
+                                [
+                                    'course_name' => $overlapped_course_name,
+                                ]
+                            )
+                        );
                     }
                 },
             ],

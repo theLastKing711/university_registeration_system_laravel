@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\Department\OpenDepartmentForRegisteration\Request;
+namespace App\Data\Admin\Department\UpdateDepartment\Request;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -9,18 +9,16 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[Oat\Schema()]
-class OpenDepartmentForRegisterationData extends Data
+#[Oat\Schema(schema: 'AdminDepartmentUpdateDepartmentRequestUpdateDepartmentRequestData')]
+class UpdateDepartmentRequestData extends Data
 {
     public function __construct(
         #[OAT\Property]
-        public int $course_registeration_year,
-        #[OAT\Property]
-        public int $course_registeration_semester,
+        public string $name,
 
         #[
             OAT\PathParameter(
-                parameter: 'adminsDepartmentIdPathParameterData', // the name used in ref
+                parameter: 'adminsDepartmentUpdateDepartmentIdPathParameter',
                 name: 'id',
                 schema: new OAT\Schema(
                     type: 'integer',
@@ -30,6 +28,5 @@ class OpenDepartmentForRegisterationData extends Data
             Exists('departments', 'id')
         ]
         public int $id,
-
     ) {}
 }

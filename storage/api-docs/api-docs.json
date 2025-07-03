@@ -153,6 +153,34 @@
                 }
             ]
         },
+        "/admins/course-teachers/{id}/exams": {
+            "get": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "f357068b0fd0c00da9eddba050328399",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AdminCourseTeacherGetCourseTeacherExamsResponseGetCourseTeacherExamsResponseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter"
+                }
+            ]
+        },
         "/admins/course-teachers/{id}/lectures": {
             "get": {
                 "tags": [
@@ -178,6 +206,34 @@
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter"
+                }
+            ]
+        },
+        "/admins/course-teachers/{id}/students": {
+            "get": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "06ccdd33b7ec5c8b3918c546f72637da",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetCourseTeacherStudentsRespnseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsCourseTeacherPathParameterData"
                 }
             ]
         },
@@ -233,9 +289,42 @@
             ]
         },
         "/admins/departments/{id}": {
+            "patch": {
+                "tags": [
+                    "adminsDepartments"
+                ],
+                "operationId": "071f656270702388c1ea38d6df277472",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminDepartmentUpdateDepartmentResponseUpdateDepartmentResponseData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsUpdateCourseTeacherClassroomPathParameter"
+                }
+            ]
+        },
+        "/admins/departments/{id}/open-course-registerations": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsDepartmentUpdateDepartmentIdPathParameter"
                 }
             ]
         },
@@ -272,79 +361,6 @@
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsGetDepartmentTeachersPathParameter"
-                }
-            ]
-        },
-        "/admins/departments/{id}/close-for-registerations": {
-            "patch": {
-                "tags": [
-                    "adminsDepartments"
-                ],
-                "operationId": "8130e63bf369f621c0e4dc36c8ea471e",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CloseDepartmentForRegisterationRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            },
-            "parameters": [
-                {
-                    "$ref": "#/components/parameters/CloseDepartmentForRegisterationPathParameterData"
-                }
-            ]
-        },
-        "/admins/courses/getSemesterCourses/{id}": {
-            "parameters": [
-                {
-                    "$ref": "#/components/parameters/adminsDepartmentIdPathParameterData"
-                }
-            ]
-        },
-        "/admins/departments/{id}/open-for-registerations": {
-            "patch": {
-                "tags": [
-                    "adminsDepartments"
-                ],
-                "operationId": "d44fba78bfacc0914c14849237ea78cc",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OpenDepartmentForRegisterationData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            },
-            "parameters": [
-                {
-                    "$ref": "#/components/parameters/adminsDepartmentIdPathParameterData"
                 }
             ]
         },
@@ -872,29 +888,6 @@
                 }
             }
         },
-        "/admins/course-teachers/{id}/students": {
-            "get": {
-                "tags": [
-                    "adminsCourseTeachers"
-                ],
-                "operationId": "06ccdd33b7ec5c8b3918c546f72637da",
-                "responses": {
-                    "200": {
-                        "description": "Items fetched successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/GetCourseTeacherStudentsRespnseData"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/admins/course-teachers/{id}/lectures/{lecture_id}": {
             "patch": {
                 "tags": [
@@ -1021,6 +1014,27 @@
             }
         },
         "/admins/departments": {
+            "get": {
+                "tags": [
+                    "adminsDepartments"
+                ],
+                "operationId": "4cbd9a0aa76915db1cb9e1683b9f8436",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AdminDepartmentGetDepartmentsResponseGetDepartmentsResponseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "adminsDepartments"
@@ -1076,45 +1090,6 @@
                 }
             }
         },
-        "/admins/courses/departments/{id}/open-course-registerations": {
-            "get": {
-                "tags": [
-                    "adminsCourses"
-                ],
-                "operationId": "9f52c241e9beb00f9d261d5098d02a64",
-                "parameters": [
-                    {
-                        "name": "year",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "semester",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Items fetched successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/GetSemesterCoursesResponseData"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/admins/{id}/students": {
             "post": {
                 "tags": [
@@ -1144,36 +1119,6 @@
             }
         },
         "/admins/exams": {
-            "get": {
-                "tags": [
-                    "adminsExams"
-                ],
-                "operationId": "bee9e9faa16a9f411339998a1f626bac",
-                "parameters": [
-                    {
-                        "name": "course_teacher_id",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Items fetched successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/GetExamsResponseData"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             "post": {
                 "tags": [
                     "adminsExams"
@@ -1876,6 +1821,8 @@
                 "type": "object"
             },
             "AdminCourseTeacherDeleteCourseTeacherAttendaceRequestDeleteCourseTeacherAttendanceRequestData": {},
+            "AdminCourseTeacherGetCourseTeacherExamsRequestGetCourseTeacherExamsRequestData": {},
+            "AdminCourseTeacherGetCourseTeacherExamsResponseGetCourseTeacherExamsResponseData": {},
             "AdminCourseTeacherGetCourseTeacherLecturesRequestGetCourseTeacherLecturesRequestData": {},
             "AdminCourseTeacherGetCourseTeacherLecturesResponseGetCourseTeacherLecturesResponseData": {
                 "properties": {
@@ -2143,17 +2090,6 @@
                 },
                 "type": "object"
             },
-            "CloseDepartmentForRegisterationRequestData": {
-                "properties": {
-                    "year": {
-                        "type": "integer"
-                    },
-                    "semester": {
-                        "type": "integer"
-                    }
-                },
-                "type": "object"
-            },
             "CreateDepartmentRequestData": {
                 "properties": {
                     "name": {
@@ -2185,6 +2121,17 @@
                 },
                 "type": "object"
             },
+            "AdminDepartmentGetDepartmentsResponseGetDepartmentsResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "GetSemesterCoursesResponseData": {
                 "properties": {
                     "id": {
@@ -2193,17 +2140,15 @@
                 },
                 "type": "object"
             },
-            "OpenDepartmentForRegisterationData": {
+            "AdminDepartmentUpdateDepartmentRequestUpdateDepartmentRequestData": {
                 "properties": {
-                    "course_registeration_year": {
-                        "type": "integer"
-                    },
-                    "course_registeration_semester": {
-                        "type": "integer"
+                    "name": {
+                        "type": "string"
                     }
                 },
                 "type": "object"
             },
+            "AdminDepartmentUpdateDepartmentResponseUpdateDepartmentResponseData": {},
             "AssignMarkToStudentRequestData": {
                 "properties": {
                     "exam_id": {
@@ -2266,6 +2211,17 @@
             },
             "DeleteExamRequestData": {},
             "GetExamRequestData": {},
+            "adminsExamGetExamResponseGetExamResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "GetExamResponseData": {
                 "properties": {
                     "course_teacher_id": {
@@ -2294,59 +2250,7 @@
                         "type": "boolean"
                     },
                     "classroom": {
-                        "$ref": "#/components/schemas/GetExamsClassroomItemData"
-                    }
-                },
-                "type": "object"
-            },
-            "GetExamsRequestData": {
-                "properties": {
-                    "course_teacher_id": {
-                        "type": "integer"
-                    }
-                },
-                "type": "object"
-            },
-            "GetExamsClassroomItemData": {
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "GetExamsResponseData": {
-                "properties": {
-                    "course_teacher_id": {
-                        "type": "integer"
-                    },
-                    "classroom_id": {
-                        "type": "integer"
-                    },
-                    "max_mark": {
-                        "schema": "string",
-                        "type": "string",
-                        "format": "datetime",
-                        "default": "2024-09-02",
-                        "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02"
-                    },
-                    "from": {
-                        "type": "string",
-                        "default": "08:00:00"
-                    },
-                    "to": {
-                        "type": "string",
-                        "default": "08:00:00"
-                    },
-                    "is_main_exam": {
-                        "type": "boolean"
-                    },
-                    "classroom": {
-                        "$ref": "#/components/schemas/GetExamsClassroomItemData"
+                        "$ref": "#/components/schemas/adminsExamGetExamResponseGetExamResponseData"
                     }
                 },
                 "type": "object"
@@ -2417,17 +2321,6 @@
                 "type": "object"
             },
             "UnRegisterOpenCourseRequestData": {},
-            "YearSemesterQueryParameterData": {
-                "properties": {
-                    "year": {
-                        "type": "integer"
-                    },
-                    "semester": {
-                        "type": "integer"
-                    }
-                },
-                "type": "object"
-            },
             "DeleteStudentRequestData": {},
             "GraduateStudentRequestData": {
                 "properties": {
@@ -3124,6 +3017,14 @@
                     "type": "integer"
                 }
             },
+            "adminsCourseTeacherGetCourseTeacherExamsIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter": {
                 "name": "id",
                 "in": "path",
@@ -3172,14 +3073,6 @@
                     "type": "integer"
                 }
             },
-            "CloseDepartmentForRegisterationPathParameterData": {
-                "name": "id",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
             "adminsGetDepartmentTeachersPathParameter": {
                 "name": "id",
                 "in": "path",
@@ -3188,7 +3081,7 @@
                     "type": "integer"
                 }
             },
-            "adminsDepartmentIdPathParameterData": {
+            "adminsDepartmentUpdateDepartmentIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

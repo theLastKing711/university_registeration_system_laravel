@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin\CourseTeacher;
 use App\Data\Admin\CourseTeacher\GetCourseTeacherLectures\Request\GetCourseTeacherLecturesRequestData;
 use App\Data\Admin\CourseTeacher\GetCourseTeacherLectures\Response\GetCourseTeacherLecturesResponseData;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
-use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherLecturesController;
+use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherController;
 use App\Models\CourseTeacher;
 use OpenApi\Attributes as OAT;
 
-class GetCourseTeacherLecturesController extends CourseTeacherLecturesController
+class GetCourseTeacherLecturesController extends CourseTeacherController
 {
     #[OAT\Get(path: '/admins/course-teachers/{id}/lectures', tags: ['adminsCourseTeachers'])]
     #[SuccessListResponse(GetCourseTeacherLecturesResponseData::class)]

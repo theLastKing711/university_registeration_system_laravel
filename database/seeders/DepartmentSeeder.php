@@ -14,29 +14,24 @@ class DepartmentSeeder extends Seeder
         [
             'id' => 1,
             'name' => 'IT',
-            'is_course_registeration_open' => true,
         ],
         [
             'id' => 2,
             'name' => 'English',
-            'is_course_registeration_open' => true,
 
         ],
         [
             'id' => 3,
             'name' => 'Biology',
-            'is_course_registeration_open' => true,
 
         ],
         [
             'id' => 4,
             'name' => 'Shared', // houses shared courses like arabic or english across all departments.
-            'is_course_registeration_open' => true,
         ],
         [
             'id' => 5,
             'name' => 'Architecture',
-            'is_course_registeration_open' => true,
 
         ],
     ];
@@ -49,9 +44,6 @@ class DepartmentSeeder extends Seeder
             'data' => [
                 'id' => 1,
                 'name' => 'IT',
-                'is_course_registeration_open' => true,
-                'course_registeration_year' => 2014,
-                'course_registeration_semester' => 0,
             ],
             'courses' => [
                 [
@@ -166,9 +158,6 @@ class DepartmentSeeder extends Seeder
             'data' => [
                 'id' => 2,
                 'name' => 'Architecture',
-                'is_course_registeration_open' => true,
-                'course_registeration_year' => 2014,
-                'course_registeration_semester' => 0,
             ],
             'courses' => [
                 [
