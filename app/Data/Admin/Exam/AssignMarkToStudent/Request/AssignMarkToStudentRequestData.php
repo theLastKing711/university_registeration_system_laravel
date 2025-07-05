@@ -4,10 +4,12 @@ namespace App\Data\Admin\Exam\AssignMarkToStudent\Request;
 
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Models\Exam;
+use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Attributes\Validation\Exists;
 use Spatie\LaravelData\Data;
@@ -25,10 +27,22 @@ class AssignMarkToStudentRequestData extends Data
      * @param  \Illuminate\Support\Collection<ExamStudentItemData>  $exam_students
      */
     public function __construct(
-        #[OAT\Property, Exists('exams', 'id')]
-        public int $exam_id,
+
         #[ArrayProperty(ExamStudentItemData::class)]
         public Collection $exam_students,
+
+        #[
+            OAT\PathParameter(
+                parameter: 'adminsExamASsignMarkToStudentIdPathParameter',
+                name: 'id',
+                schema: new OAT\Schema(
+                    type: 'integer',
+                ),
+            ),
+            FromRouteParameter('id'),
+            Exists('exams', 'id')
+        ]
+        public int $id,
     ) {}
 
     public static function rules(ValidationContext $context): array
@@ -36,7 +50,7 @@ class AssignMarkToStudentRequestData extends Data
 
         Log::info($context->payload);
 
-        $exam_id = $context->payload['exam_id'];
+        $exam_id = $context->payload['id'];
 
         $exam_course_students_ids = Exam::query()
             ->with(relations: 'courseTeacher.course.students')
@@ -52,16 +66,45 @@ class AssignMarkToStudentRequestData extends Data
         Log::info($exam_course_students_ids);
 
         return [
-            'exam_students.*.student_id' => Rule::in($exam_course_students_ids),
+            'exam_students.*.student_id' => [
+                function (string $attribute, mixed $value, Closure $fail) use ($exam_course_students_ids) {
+
+                    $student_has_registered_in_exam_course =
+                        $exam_course_students_ids
+                            ->contains($value);
+
+                    if (! $student_has_registered_in_exam_course) {
+                        $fail($attribute,
+                            __(
+                                'messages.exam_students.student unregistered in course',
+                                [
+                                    'id' => $value,
+                                ]
+                            )
+                        );
+                    }
+
+                },
+            ],
         ];
 
     }
 
-    public static function messages(...$args): array
-    {
+    // public static function messages(...$args): array
+    // {
 
-        return [
-            'exam_students.*.student_id' => 'الطالب غير مسجل بالمادة, لايمكن تسجيل له علامة فحص.',
-        ];
-    }
+    //     return [
+    //         // 'exam_students.*.student_id' => 'الطالب غير مسجل بالمادة, لايمكن تسجيل له علامة فحص.',
+    //         'exam_students.*.student_id' => Rule::forEach(function () {
+    //             return [
+    //                 function (string $attribute, mixed $value, Closure $fail) {
+    //                     if ($value === 'foo') {
+    //                         $fail("The {$attribute} is invalid.");
+    //                     }
+    //                 },
+
+    //             ]
+    //         })
+    //     ];
+    // }
 }

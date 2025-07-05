@@ -431,6 +431,39 @@
                 }
             ]
         },
+        "/admins/exams/{id}/students": {
+            "post": {
+                "tags": [
+                    "adminsExams"
+                ],
+                "operationId": "aeef8ebf77290f1d55ff0c7bfff135ad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AssignMarkToStudentRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsExamASsignMarkToStudentIdPathParameter"
+                }
+            ]
+        },
         "/admins/open-course-registerations/{id}": {
             "delete": {
                 "tags": [
@@ -1078,34 +1111,6 @@
                         }
                     }
                 ],
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/admins/{id}/students": {
-            "post": {
-                "tags": [
-                    "adminsStudents"
-                ],
-                "operationId": "6a36b9632ca821242695bbfbb23c6c28",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AssignMarkToStudentRequestData"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "204": {
                         "description": "",
@@ -2151,10 +2156,6 @@
             "AdminDepartmentUpdateDepartmentResponseUpdateDepartmentResponseData": {},
             "AssignMarkToStudentRequestData": {
                 "properties": {
-                    "exam_id": {
-                        "description": "Summary of __construct",
-                        "type": "integer"
-                    },
                     "exam_students": {
                         "description": "Summary of __construct",
                         "type": "array",
@@ -3089,6 +3090,14 @@
                     "type": "integer"
                 }
             },
+            "adminsExamASsignMarkToStudentIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsDeleteExamPathParameter": {
                 "name": "id",
                 "in": "path",
@@ -3224,16 +3233,16 @@
             "description": "adminsDepartments"
         },
         {
-            "name": "adminsStudents",
-            "description": "adminsStudents"
-        },
-        {
             "name": "adminsExams",
             "description": "adminsExams"
         },
         {
             "name": "adminsOpenCourseRegisterations",
             "description": "adminsOpenCourseRegisterations"
+        },
+        {
+            "name": "adminsStudents",
+            "description": "adminsStudents"
         },
         {
             "name": "adminsTeachers",

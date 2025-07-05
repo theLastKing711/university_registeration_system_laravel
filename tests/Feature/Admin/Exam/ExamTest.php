@@ -2,11 +2,15 @@
 
 namespace Tests\Feature\Admin\Exam;
 
+use App\Data\Admin\Exam\AssignMarkToStudent\Request\AssignMarkToStudentRequestData;
+use App\Data\Admin\Exam\AssignMarkToStudent\Request\ExamStudentItemData;
 use App\Data\Admin\Exam\CreateExam\Request\CreateExamRequestData;
 use App\Data\Admin\Exam\UpdateExam\Request\UpdateExamRequestData;
 use App\Models\Classroom;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
+use App\Models\ExamStudent;
+use App\Models\User;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
@@ -17,6 +21,7 @@ use Database\Seeders\ExamStudentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\StudentSeeder;
 use Database\Seeders\TeacherSeeder;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Admin\AdminTest;
 
@@ -209,7 +214,7 @@ class ExamTest extends AdminTest
         $show_route =
             $this->getShowRoute($this->main_route, $exam->id);
 
-        $response = $this->patch(
+        $response = $this->patchJson(
             $show_route,
             $update_exam_request->toArray()
 
@@ -269,7 +274,8 @@ class ExamTest extends AdminTest
             );
 
         $show_route =
-            $this->getShowRoute($this->main_route, $exam->id);
+            $this
+                ->getShowRoute($this->main_route, $exam->id);
 
         $response = $this->patchJson(
             $show_route,
@@ -294,30 +300,136 @@ class ExamTest extends AdminTest
 
     }
 
-    // #[Test]
-    // public function get_department_teachers_with_200_response(): void
-    // {
+    #[Test]
+    public function assign_mark_to_students_with_200_response(): void
+    {
 
-    //     $first_department =
-    //         Department::first();
+        $exam_student_count_before_request =
+            ExamStudent::query()
+                ->count();
 
-    //     $department_teacher_routes =
-    //         $this->main_route
-    //         .
-    //         '/'.
-    //         $first_department->id
-    //         .
-    //         '/'
-    //         .
-    //         'teachers';
+        $exam =
+            Exam::query()
+                ->with('courseTeacher.course.students')
+                ->first();
 
-    //     $response =
-    //         $this
-    //             ->getJson(
-    //                 $department_teacher_routes
-    //             );
+        $exam_students =
+            $exam
+                ->courseTeacher
+                ->course
+                ->students;
 
-    //     $response->assertStatus(200);
+        /** @var Collection<ExamStudentItemData> $exam_students_data description */
+        $exam_students_data =
+            $exam
+                ->students
+                ->map(callback: function ($student) {
 
-    // }
+                    return new ExamStudentItemData(
+                        student_id: $student->id,
+                        mark: fake()->numberBetween(30, 70)
+                    );
+                });
+
+        $assign_mark_mark_to_students_request =
+            new AssignMarkToStudentRequestData(
+                $exam_students_data,
+                $exam->course_teacher_id,
+            );
+
+        $assign_mark_to_stuends_route =
+           $this
+               ->getShowRoute($this->main_route, $exam->id)
+               .
+               '/students';
+
+        $response = $this->postJson(
+            $assign_mark_to_stuends_route,
+            $assign_mark_mark_to_students_request->toArray()
+
+        );
+
+        $response->assertStatus(200);
+
+        $this
+            ->assertDatabaseCount(
+                ExamStudent::class,
+                $exam_student_count_before_request
+                    +
+                    $exam_students->count()
+            );
+    }
+
+    #[Test]
+    public function assign_mark_to_students_fails_student_unregistered_in_course_validation_with_422_response(): void
+    {
+
+        $exam_student_count_before_request =
+            ExamStudent::query()
+                ->count();
+
+        $exam =
+            Exam::query()
+                ->with('courseTeacher.course.students')
+                ->first();
+
+        $exam_students =
+            $exam
+                ->courseTeacher
+                ->course
+                ->students;
+
+        $users_not_registered_in_exam_coruse =
+            User::query()
+                ->whereNotIn(
+                    'id',
+                    $exam_students->pluck('id')
+                )
+                ->take(1)
+                ->get();
+
+        /** @var Collection<ExamStudentItemData> $exam_students_data description */
+        $exam_students_data =
+            $users_not_registered_in_exam_coruse
+                ->map(callback: function ($student) {
+
+                    return new ExamStudentItemData(
+                        student_id: $student->id,
+                        mark: fake()->numberBetween(30, 70)
+                    );
+                });
+
+        $assign_mark_mark_to_students_request =
+            new AssignMarkToStudentRequestData(
+                $exam_students_data,
+                $exam->course_teacher_id,
+            );
+
+        $assign_mark_to_stuends_route =
+           $this
+               ->getShowRoute($this->main_route, $exam->id)
+               .
+               '/students';
+
+        $response = $this->postJson(
+            $assign_mark_to_stuends_route,
+            $assign_mark_mark_to_students_request->toArray()
+
+        );
+
+        $response->assertStatus(422);
+
+        $response
+            ->assertOnlyJsonValidationErrors(
+                [
+                    'exam_students.0.student_id' => __(
+                        'messages.exam_students.student unregistered in course',
+                        [
+                            'id' => $users_not_registered_in_exam_coruse->first()->id,
+                        ]
+                    ),
+                ]
+            );
+
+    }
 }

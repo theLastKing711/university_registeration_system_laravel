@@ -6,13 +6,13 @@ use App\Data\Admin\Exam\AssignMarkToStudent\Request\AssignMarkToStudentRequestDa
 use App\Data\Admin\Exam\AssignMarkToStudent\Request\ExamStudentItemData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Exam\Abstract\ExamController;
 use App\Models\Exam;
 use OpenApi\Attributes as OAT;
 
-class AssignMarkToStudentController extends Controller
+class AssignMarkToStudentController extends ExamController
 {
-    #[OAT\Post(path: '/admins/{id}/students', tags: ['adminsStudents'])]
+    #[OAT\Post(path: '/admins/exams/{id}/students', tags: ['adminsExams'])]
     #[JsonRequestBody(AssignMarkToStudentRequestData::class)]
     #[SuccessNoContentResponse]
     public function __invoke(AssignMarkToStudentRequestData $request)
@@ -22,7 +22,7 @@ class AssignMarkToStudentController extends Controller
             Exam::query()
                 ->firstWhere(
                     'id',
-                    $request->exam_id
+                    $request->id
                 );
 
         $exam_attach_data =
