@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\Exam\CreateExamController;
 use App\Http\Controllers\Admin\Exam\DeleteExamController;
 use App\Http\Controllers\Admin\Exam\GetExamController;
 use App\Http\Controllers\Admin\Exam\UpdateExamController;
+use App\Http\Controllers\Admin\Exam\UpdateStudentExamMarkController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseController;
@@ -252,6 +253,7 @@ Route::prefix('admins')
                     Route::delete('', DeleteDepartmentController::class);
 
                 });
+
             Route::prefix('students')
                 ->middleware([
                     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
@@ -278,6 +280,8 @@ Route::prefix('admins')
                     Route::post('', CreateExamController::class);
 
                     Route::post('{id}/students', AssignMarkToStudentController::class);
+
+                    Route::patch('{id}/students', UpdateStudentExamMarkController::class);
 
                     Route::patch('{id}', UpdateExamController::class);
 

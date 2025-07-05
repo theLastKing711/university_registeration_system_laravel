@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\Exam\AssignMarkToStudent\Request;
+namespace App\Data\Admin\Exam\UpdateStudentExamMark\Request;
 
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Models\Exam;
@@ -18,7 +18,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 #[Oat\Schema()]
 #[MergeValidationRules]
-class AssignMarkToStudentRequestData extends Data
+class UpdateStudentExamMarkRequestData extends Data
 {
     /**
      * Summary of __construct

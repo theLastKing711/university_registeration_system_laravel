@@ -5,7 +5,10 @@ namespace Tests\Feature\Admin\Exam;
 use App\Data\Admin\Exam\AssignMarkToStudent\Request\AssignMarkToStudentRequestData;
 use App\Data\Admin\Exam\AssignMarkToStudent\Request\ExamStudentItemData;
 use App\Data\Admin\Exam\CreateExam\Request\CreateExamRequestData;
+use App\Data\Admin\Exam\DeleteExam\Request\DeleteExamRequestData;
 use App\Data\Admin\Exam\UpdateExam\Request\UpdateExamRequestData;
+use App\Data\Admin\Exam\UpdateStudentExamMark\Request\ExamStudentItemData as RequestExamStudentItemData;
+use App\Data\Admin\Exam\UpdateStudentExamMark\Request\UpdateStudentExamMarkRequestData;
 use App\Models\Classroom;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
@@ -244,6 +247,31 @@ class ExamTest extends AdminTest
     }
 
     #[Test]
+    public function delete_exam_with_200_response(): void
+    {
+
+        $exam =
+            Exam::query()
+                ->first();
+
+        $delete_exam_request =
+            new DeleteExamRequestData(
+                $exam->id
+            );
+
+        $show_route =
+            $this->getShowRoute($this->main_route, $exam->id);
+
+        $response = $this->deleteJson(
+            $show_route,
+            $delete_exam_request->toArray()
+
+        );
+
+        $response->assertStatus(200);
+    }
+
+    #[Test]
     public function update_overlapped_exam_fails_with_422_response(): void
     {
 
@@ -321,15 +349,14 @@ class ExamTest extends AdminTest
 
         /** @var Collection<ExamStudentItemData> $exam_students_data description */
         $exam_students_data =
-            $exam
-                ->students
-                ->map(callback: function ($student) {
+           $exam_students
+               ->map(callback: function ($student) {
 
-                    return new ExamStudentItemData(
-                        student_id: $student->id,
-                        mark: fake()->numberBetween(30, 70)
-                    );
-                });
+                   return new ExamStudentItemData(
+                       student_id: $student->id,
+                       mark: fake()->numberBetween(30, 70)
+                   );
+               });
 
         $assign_mark_mark_to_students_request =
             new AssignMarkToStudentRequestData(
@@ -430,6 +457,102 @@ class ExamTest extends AdminTest
                     ),
                 ]
             );
+
+    }
+
+    #[Test]
+    public function update_student_exam_mark_with_200_response(): void
+    {
+        $exam =
+            Exam::query()
+                ->with('courseTeacher.course.students')
+                ->first();
+
+        $exam_students =
+            ExamStudent::query()
+                ->where(
+                    'exam_id',
+                    $exam->id
+                )
+                ->get();
+
+        // /** @var Collection<RequestExamStudentItemData> $exam_students_data */
+        $exam_students_data =
+            $exam_students
+                ->map(callback: function ($exam_student) {
+
+                    return new RequestExamStudentItemData(
+                        $exam_student->id,
+                        student_id: $exam_student->student_id,
+                        mark: fake()->numberBetween(30, 70)
+                    );
+                });
+
+        $update_student_exam_mark_request =
+            new UpdateStudentExamMarkRequestData(
+                $exam_students_data,
+                $exam->course_teacher_id,
+            );
+
+        $update_student_exam_mark_route =
+           $this
+               ->getShowRoute($this->main_route, $exam->id)
+               .
+               '/students';
+
+        $response = $this->patchJson(
+            $update_student_exam_mark_route,
+            $update_student_exam_mark_request->toArray()
+
+        );
+
+        $exam_student_after_request =
+            ExamStudent::query()
+                ->where(
+                    'exam_id',
+                    $exam->id
+                )
+                ->select('exam_id', 'student_id', 'mark')
+                ->get();
+
+        $response->assertStatus(200);
+
+        // work only  on elequent's collection that is why we passed elequent collection to diff argument instead of spatie data collection
+        // number and order of selected fields in both collections must be the same for it to return desired result here
+        $all_exam_students_has_been_updated =
+            $exam_students_data->map(fn ($request_exam_student_item) => new ExamStudent([
+                'exam_id' => $exam->id,
+                'student_id' => $request_exam_student_item->student_id,
+                'mark' => $request_exam_student_item->mark,
+            ]))
+                ->diff($exam_student_after_request)
+                ->isEmpty();
+
+        $this
+            ->assertTrue(
+                $all_exam_students_has_been_updated
+            );
+
+        // $exam_students
+        //     ->diffAssocUsing(json_decode($exam_students_data), function ($exam_student_index, $exam_students_data_index) {
+
+        //         return 0;
+        //         // $exam_student = $exam_students->first();
+
+        //         // $exam_student_data = $exam_students_data->slice($exam_students_data_index, 1);
+
+        //         // if (
+        //         //     $exam_student->exam_id === $update_student_exam_mark_request->id
+        //         //     // &&
+        //         //     // $exam_student->mark === $exam_students_data->mark
+        //         //     // &&
+        //         //     // $exam_student->student_id === $exam_student_data->student_id
+        //         // ) {
+        //         //     return 0;
+        //         // }
+
+        //         // return 1;
+        //     });
 
     }
 }
