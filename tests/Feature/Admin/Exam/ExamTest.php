@@ -461,7 +461,7 @@ class ExamTest extends AdminTest
     }
 
     #[Test]
-    public function update_student_exam_mark_with_200_response(): void
+    public function update_student_exam_mark_fails_student_unregistered_in_course_validation_with_422_response(): void
     {
         $exam =
             Exam::query()
@@ -533,26 +533,89 @@ class ExamTest extends AdminTest
                 $all_exam_students_has_been_updated
             );
 
-        // $exam_students
-        //     ->diffAssocUsing(json_decode($exam_students_data), function ($exam_student_index, $exam_students_data_index) {
+        // a possible replacment for diff solution above
+        // $exam_students_data->each(function ($exam_student_data) use ($exam) {
+        //     $this
+        //         ->assertDatabaseHas(
+        //             ExamStudent::class,
+        //             [
+        //                 'exam_id' => $exam->id,
+        //                 'student_id' => $exam_student_data->student_id,
+        //                 'mark' => $exam_student_data->mark,
+        //             ],
+        //         );
+        // });
 
-        //         return 0;
-        //         // $exam_student = $exam_students->first();
+    }
 
-        //         // $exam_student_data = $exam_students_data->slice($exam_students_data_index, 1);
+    #[Test]
+    public function update_student_exam_mark_with_200_response(): void
+    {
+        $exam =
+            Exam::query()
+                ->with('courseTeacher.course.students')
+                ->first();
 
-        //         // if (
-        //         //     $exam_student->exam_id === $update_student_exam_mark_request->id
-        //         //     // &&
-        //         //     // $exam_student->mark === $exam_students_data->mark
-        //         //     // &&
-        //         //     // $exam_student->student_id === $exam_student_data->student_id
-        //         // ) {
-        //         //     return 0;
-        //         // }
+        $unregistered_in_exam_course_student =
+            User::query()
+                ->whereNotIn(
+                    'id',
+                    $exam->courseTeacher->course->students->pluck('id')
+                )
+                ->first();
 
-        //         // return 1;
-        //     });
+        $exam_students =
+            ExamStudent::query()
+                ->where(
+                    'exam_id',
+                    $exam->id
+                )
+                ->take(1)
+                ->get();
+
+        // /** @var Collection<RequestExamStudentItemData> $exam_students_data */
+        $exam_students_data =
+            $exam_students
+                ->map(callback: function ($exam_student) use ($unregistered_in_exam_course_student) {
+
+                    return new RequestExamStudentItemData(
+                        $exam_student->id,
+                        student_id: $unregistered_in_exam_course_student->id,
+                        mark: fake()->numberBetween(30, 70)
+                    );
+                });
+
+        $update_student_exam_mark_request =
+            new UpdateStudentExamMarkRequestData(
+                $exam_students_data,
+                $exam->course_teacher_id,
+            );
+
+        $update_student_exam_mark_route =
+           $this
+               ->getShowRoute($this->main_route, $exam->id)
+               .
+               '/students';
+
+        $response = $this->patchJson(
+            $update_student_exam_mark_route,
+            $update_student_exam_mark_request->toArray()
+
+        );
+
+        $response->assertStatus(422);
+
+        $response
+            ->assertOnlyJsonValidationErrors(
+                [
+                    'exam_students.0.student_id' => __(
+                        'messages.exam_students.student unregistered in course',
+                        [
+                            'id' => $unregistered_in_exam_course_student->id,
+                        ]
+                    ),
+                ]
+            );
 
     }
 }
