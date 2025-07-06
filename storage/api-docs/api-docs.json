@@ -458,6 +458,32 @@
                     }
                 }
             },
+            "patch": {
+                "tags": [
+                    "adminsExams"
+                ],
+                "operationId": "d8136e8067bc2b080410a200a1fb0053",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminExamUpdateStudentExamMarkResponseUpdateStudentExamMarkResponseData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsExamASsignMarkToStudentIdPathParameter"
@@ -484,6 +510,39 @@
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminOpenCourseRegisterationPathParameter"
+                }
+            ]
+        },
+        "/admins/open-course-registerations/{id}/teachers": {
+            "post": {
+                "tags": [
+                    "adminsOpenCourseRegisterations"
+                ],
+                "operationId": "b9a5657820bb55ce8cd4244a1e21ea59",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AssignTeacherToCourseRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsOpenCourseRegisterationAssignTeachToCouresIdPathParameter"
                 }
             ]
         },
@@ -1135,34 +1194,6 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/CreateExamRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/admins/open-course-registerations/teachers": {
-            "post": {
-                "tags": [
-                    "adminsOpenCourseRegisterations"
-                ],
-                "operationId": "991d871503e411a02d9f5242097bfdd6",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AssignTeacherToCourseRequestData"
                             }
                         }
                     }
@@ -2156,6 +2187,10 @@
             "AdminDepartmentUpdateDepartmentResponseUpdateDepartmentResponseData": {},
             "AssignMarkToStudentRequestData": {
                 "properties": {
+                    "test_id": {
+                        "description": "Summary of __construct",
+                        "type": "integer"
+                    },
                     "exam_students": {
                         "description": "Summary of __construct",
                         "type": "array",
@@ -2289,11 +2324,35 @@
                 },
                 "type": "object"
             },
-            "AssignTeacherToCourseRequestData": {
+            "adminsExamUpdateExamStudentExamMarkRequestExamStudentItemData": {
                 "properties": {
-                    "course_id": {
+                    "id": {
                         "type": "integer"
                     },
+                    "student_id": {
+                        "type": "integer"
+                    },
+                    "mark": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateStudentExamMarkRequestData": {
+                "properties": {
+                    "exam_students": {
+                        "description": "Summary of __construct",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/adminsExamUpdateExamStudentExamMarkRequestExamStudentItemData"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "AdminExamUpdateStudentExamMarkResponseUpdateStudentExamMarkResponseData": {},
+            "AssignTeacherToCourseRequestData": {
+                "properties": {
                     "teacher_id": {
                         "type": "integer"
                     },
@@ -3115,6 +3174,22 @@
                 }
             },
             "updateExamIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsUpdateStudentExanMarkIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsOpenCourseRegisterationAssignTeachToCouresIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

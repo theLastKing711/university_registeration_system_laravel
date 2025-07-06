@@ -5,6 +5,7 @@ namespace App\Data\Admin\OpenCourseRegisteration\AssignTeacherToCourse\Request;
 use App\Models\OpenCourseRegisteration;
 use Closure;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Attributes\Validation\Bail;
 use Spatie\LaravelData\Attributes\Validation\Exists;
@@ -18,12 +19,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class AssignTeacherToCourseRequestData extends Data
 {
     public function __construct(
-        #[
-            OAT\Property,
-            Bail,
-            Exists('open_course_registerations', 'id'),
-        ]
-        public int $course_id,
+
         #[
             OAT\Property,
             Bail,
@@ -32,6 +28,20 @@ class AssignTeacherToCourseRequestData extends Data
         public int $teacher_id,
         #[OAT\Property]
         public bool $is_main_teacher,
+
+        #[
+            OAT\PathParameter(
+                parameter: 'adminsOpenCourseRegisterationAssignTeachToCouresIdPathParameter',
+                name: 'id',
+                schema: new OAT\Schema(
+                    type: 'integer',
+                ),
+            ),
+            FromRouteParameter('id'),
+            Bail,
+            Exists('open_course_registerations', 'id'),
+        ]
+        public int $id,
     ) {}
 
     public static function stopOnFirstFailure(): bool
@@ -52,7 +62,7 @@ class AssignTeacherToCourseRequestData extends Data
                         $context->payload['is_main_teacher'];
 
                     $request_course_id =
-                    $context->payload['course_id'];
+                    $context->payload['id'];
 
                     $open_course = OpenCourseRegisteration::query()
                         ->with('teachers')
@@ -71,7 +81,9 @@ class AssignTeacherToCourseRequestData extends Data
                         $course_main_teacher != null;
 
                     if ($course_has_main_teacher && $request_is_main_teacher) {
-                        $fail('المتطلب لديه أستاذ نطري, لا يمكن تسجيل أكثر من أستاذ نظري للمتطلب.');
+                        $fail(
+                            __('messages.course_teacher.only_one_main_teacher_per_open_course')
+                        );
                     }
                 },
             ],

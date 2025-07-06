@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('course_teacher_id')
-                ->constrained('course_teacher');
+                ->constrained('course_teacher')
+                ->cascadeOnDelete();
             $table
                 ->foreignId('classroom_id')
-                ->constrained('classrooms');
+                ->constrained('classrooms')
+                ->cascadeOnDelete();
+
             $table->integer('max_mark');
             $table->date('date');
             $table->time('from');

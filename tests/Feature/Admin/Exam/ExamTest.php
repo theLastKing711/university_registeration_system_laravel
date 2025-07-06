@@ -18,7 +18,6 @@ use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\CourseTeacherSeeder;
-use Database\Seeders\DepartmentRegisterationPeriodSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\ExamStudentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
@@ -46,10 +45,10 @@ class ExamTest extends AdminTest
             StudentSeeder::class,
             CourseTeacherSeeder::class,
             ExamStudentSeeder::class,
-            // DepartmentRegisterationPeriodSeeder::class,
         ]);
     }
 
+    // get_exam
     #[Test]
     public function get_exam_with_200_response(): void
     {
@@ -71,6 +70,7 @@ class ExamTest extends AdminTest
 
     }
 
+    // create_exam
     #[Test]
     public function create_exam_with_200_response(): void
     {
@@ -187,147 +187,7 @@ class ExamTest extends AdminTest
 
     }
 
-    #[Test]
-    public function update_exam_with_200_response(): void
-    {
-
-        $safe_update_exam =
-            Exam::query()
-                ->first();
-
-        $safe_update_exam
-            ->delete();
-
-        $exam =
-            Exam::query()
-                ->first();
-
-        $update_exam_request =
-            new UpdateExamRequestData(
-                $safe_update_exam->course_teacher_id,
-                $safe_update_exam->classroom_id,
-                $safe_update_exam->max_mark,
-                $safe_update_exam->date,
-                $safe_update_exam->from,
-                $safe_update_exam->to,
-                $safe_update_exam->is_main_exam,
-                $exam->id
-            );
-
-        $show_route =
-            $this->getShowRoute($this->main_route, $exam->id);
-
-        $response = $this->patchJson(
-            $show_route,
-            $update_exam_request->toArray()
-
-        );
-
-        $response->assertStatus(200);
-
-        $exam_has_been_updated =
-            Exam::query()
-                ->where([
-                    'id' => $exam->id,
-                    'course_teacher_id' => $update_exam_request->course_teacher_id,
-                    'classroom_id' => $update_exam_request->classroom_id,
-                    'max_mark' => $update_exam_request->max_mark,
-                    'date' => $update_exam_request->date,
-                    'from' => $update_exam_request->from,
-                    'to' => $update_exam_request->to,
-                    'is_main_exam' => $update_exam_request->is_main_exam,
-                ])
-                ->first() != null;
-
-        $this
-            ->assertTrue(
-                $exam_has_been_updated
-            );
-
-    }
-
-    #[Test]
-    public function delete_exam_with_200_response(): void
-    {
-
-        $exam =
-            Exam::query()
-                ->first();
-
-        $delete_exam_request =
-            new DeleteExamRequestData(
-                $exam->id
-            );
-
-        $show_route =
-            $this->getShowRoute($this->main_route, $exam->id);
-
-        $response = $this->deleteJson(
-            $show_route,
-            $delete_exam_request->toArray()
-
-        );
-
-        $response->assertStatus(200);
-    }
-
-    #[Test]
-    public function update_overlapped_exam_fails_with_422_response(): void
-    {
-
-        $overlapped_exam =
-            Exam::query()
-                ->first();
-        $exam =
-            Exam::query()
-                ->with('courseTeacher.course.course')
-                ->where(
-                    'id',
-                    '!=',
-                    $overlapped_exam
-                        ->id
-                )
-                ->first();
-
-        $update_exam_request =
-            new UpdateExamRequestData(
-                $overlapped_exam->course_teacher_id,
-                $overlapped_exam->classroom_id,
-                $overlapped_exam->max_mark,
-                $overlapped_exam->date,
-                $overlapped_exam->from,
-                $overlapped_exam->to,
-                $overlapped_exam->is_main_exam,
-                $exam->id
-            );
-
-        $show_route =
-            $this
-                ->getShowRoute($this->main_route, $exam->id);
-
-        $response = $this->patchJson(
-            $show_route,
-            $update_exam_request->toArray()
-
-        );
-
-        $response->assertStatus(422);
-
-        $overrlapped_course_name =
-         $overlapped_exam->courseTeacher->course->course->name;
-
-        $response
-            ->assertOnlyJsonValidationErrors(
-                [
-                    'from' => __(
-                        'messages.exams.overlap',
-                        ['course_name' => $overrlapped_course_name]
-                    ),
-                ]
-            );
-
-    }
-
+    // assign_mark_to_students
     #[Test]
     public function assign_mark_to_students_with_200_response(): void
     {
@@ -460,8 +320,9 @@ class ExamTest extends AdminTest
 
     }
 
+    // update_student_exam_mark
     #[Test]
-    public function update_student_exam_mark_fails_student_unregistered_in_course_validation_with_422_response(): void
+    public function update_student_exam_mark_with_200_response(): void
     {
         $exam =
             Exam::query()
@@ -549,7 +410,7 @@ class ExamTest extends AdminTest
     }
 
     #[Test]
-    public function update_student_exam_mark_with_200_response(): void
+    public function update_student_exam_mark_fails_student_unregistered_in_course_validation_with_422_response(): void
     {
         $exam =
             Exam::query()
@@ -617,5 +478,148 @@ class ExamTest extends AdminTest
                 ]
             );
 
+    }
+
+    // update_exam
+    #[Test]
+    public function update_exam_with_200_response(): void
+    {
+
+        $safe_update_exam =
+            Exam::query()
+                ->first();
+
+        $safe_update_exam
+            ->delete();
+
+        $exam =
+            Exam::query()
+                ->first();
+
+        $update_exam_request =
+            new UpdateExamRequestData(
+                $safe_update_exam->course_teacher_id,
+                $safe_update_exam->classroom_id,
+                $safe_update_exam->max_mark,
+                $safe_update_exam->date,
+                $safe_update_exam->from,
+                $safe_update_exam->to,
+                $safe_update_exam->is_main_exam,
+                $exam->id
+            );
+
+        $show_route =
+            $this->getShowRoute($this->main_route, $exam->id);
+
+        $response = $this->patchJson(
+            $show_route,
+            $update_exam_request->toArray()
+
+        );
+
+        $response->assertStatus(200);
+
+        $exam_has_been_updated =
+            Exam::query()
+                ->where([
+                    'id' => $exam->id,
+                    'course_teacher_id' => $update_exam_request->course_teacher_id,
+                    'classroom_id' => $update_exam_request->classroom_id,
+                    'max_mark' => $update_exam_request->max_mark,
+                    'date' => $update_exam_request->date,
+                    'from' => $update_exam_request->from,
+                    'to' => $update_exam_request->to,
+                    'is_main_exam' => $update_exam_request->is_main_exam,
+                ])
+                ->first() != null;
+
+        $this
+            ->assertTrue(
+                $exam_has_been_updated
+            );
+
+    }
+
+    #[Test]
+    public function update_overlapped_exam_fails_with_422_response(): void
+    {
+
+        $overlapped_exam =
+            Exam::query()
+                ->first();
+        $exam =
+            Exam::query()
+                ->with('courseTeacher.course.course')
+                ->where(
+                    'id',
+                    '!=',
+                    $overlapped_exam
+                        ->id
+                )
+                ->first();
+
+        $update_exam_request =
+            new UpdateExamRequestData(
+                $overlapped_exam->course_teacher_id,
+                $overlapped_exam->classroom_id,
+                $overlapped_exam->max_mark,
+                $overlapped_exam->date,
+                $overlapped_exam->from,
+                $overlapped_exam->to,
+                $overlapped_exam->is_main_exam,
+                $exam->id
+            );
+
+        $show_route =
+            $this
+                ->getShowRoute($this->main_route, $exam->id);
+
+        $response = $this->patchJson(
+            $show_route,
+            $update_exam_request->toArray()
+
+        );
+
+        $response->assertStatus(422);
+
+        $overrlapped_course_name =
+         $overlapped_exam->courseTeacher->course->course->name;
+
+        $response
+            ->assertOnlyJsonValidationErrors(
+                [
+                    'from' => __(
+                        'messages.exams.overlap',
+                        ['course_name' => $overrlapped_course_name]
+                    ),
+                ]
+            );
+
+    }
+
+    // delete_exam
+    #[Test]
+    public function delete_exam_with_200_response(): void
+    {
+
+        $exam =
+            Exam::query()
+                ->first();
+
+        $delete_exam_request =
+            new DeleteExamRequestData(
+                $exam->id
+            );
+
+        $show_route =
+            $this->getShowRoute($this->main_route, $exam->id);
+
+        $response = $this->deleteJson(
+            $show_route,
+            $delete_exam_request->toArray()
+
+        );
+
+        $response->assertStatus(200);
     }
 }

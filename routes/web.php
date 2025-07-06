@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\Exam\UpdateExamController;
 use App\Http\Controllers\Admin\Exam\UpdateStudentExamMarkController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
+use App\Http\Controllers\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseController;
 use App\Http\Controllers\Admin\Student\DeleteStudentController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
@@ -152,20 +153,6 @@ Route::prefix('admins')
 
                 });
 
-            Route::prefix('teachers')
-                ->middleware([
-                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                ])
-                ->group(function () {
-
-                    Route::post('', CreateTeacherController::class);
-
-                    Route::patch('{id}', UpdateTeacherController::class);
-
-                    Route::delete('', DeleteTeachersController::class);
-
-                });
-
             Route::prefix('course-teachers')
                 ->group(function () {
 
@@ -254,22 +241,6 @@ Route::prefix('admins')
 
                 });
 
-            Route::prefix('students')
-                ->middleware([
-                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                ])
-                ->group(function () {
-
-                    Route::post('', action: RegisterStudentController::class);
-
-                    Route::patch('{id}', UpdateStudentController::class);
-
-                    Route::patch('{id}/graduation', GraduateStudentController::class);
-
-                    Route::delete('{id}', DeleteStudentController::class);
-
-                });
-
             Route::prefix('exams')
                 ->middleware([
                     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
@@ -297,11 +268,41 @@ Route::prefix('admins')
                             RolesEnum::oneOfRolesMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER)
                         );
 
-                    Route::post('teachers', AssignTeacherToOpenCourseController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
+                    Route::post('{id}/teachers', AssignTeacherToOpenCourseController::class);
+
+                    Route::delete('{id}/teachers', UnAssignTeacherFromOpenCourseController::class);
 
                     Route::delete('{id}', UnRegisterOpenCourseController::class);
+
+                });
+
+            Route::prefix('students')
+                ->middleware([
+                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                ])
+                ->group(function () {
+
+                    Route::post('', action: RegisterStudentController::class);
+
+                    Route::patch('{id}', UpdateStudentController::class);
+
+                    Route::patch('{id}/graduation', GraduateStudentController::class);
+
+                    Route::delete('{id}', DeleteStudentController::class);
+
+                });
+
+            Route::prefix('teachers')
+                ->middleware([
+                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                ])
+                ->group(function () {
+
+                    Route::post('', CreateTeacherController::class);
+
+                    Route::patch('{id}', UpdateTeacherController::class);
+
+                    Route::delete('', DeleteTeachersController::class);
 
                 });
 

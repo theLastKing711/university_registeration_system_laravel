@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('course_teacher_id')
-                ->constrained('course_teacher');
+                ->constrained('course_teacher')
+                ->cascadeOnDelete();
+
             $table->date('happened_at');
             $table->timestamps();
         });

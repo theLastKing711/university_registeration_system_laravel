@@ -13,8 +13,14 @@ return new class extends Migration
     {
         Schema::create('classroom_course_teacher', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('classroom_id')->constrained();
-            $table->foreignId('course_teacher_id')->constrained('course_teacher');
+            $table
+                ->foreignId('classroom_id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table
+                ->foreignId('course_teacher_id')
+                ->constrained('course_teacher')
+                ->cascadeOnDelete();
             $table->integer('day');
             $table->time('from');
             $table->time('to');
