@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin\Teacher;
 
 use App\Data\Admin\Teacher\CreateTeacher\Request\CreateTeacherRequestData;
 use App\Data\Admin\Teacher\UpdateTeacher\Request\UpdateTeacherRequestData;
+use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\Department;
 use App\Models\Teacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
@@ -20,6 +21,10 @@ class TeacherTest extends AdminTestCase
     {
         parent::setUp();
 
+        $this
+            ->route_builder =
+                RouteBuilder::withMainRoute($this->main_route);
+
         $this->
             seed([
                 AcademicYearSemesterSeeder::class,
@@ -29,9 +34,51 @@ class TeacherTest extends AdminTestCase
 
     }
 
+    // get_teachers
+    #[Test]
+    public function get_teachers_with_200_response(): void
+    {
+
+        $response =
+            $this
+                ->getJson(
+                    $this->main_route
+                );
+
+        $response->assertStatus(200);
+
+    }
+
+    // get_teacher
+    #[Test]
+    public function get_teacher_with_200_response(): void
+    {
+
+        $teacher =
+            Teacher::query()
+                ->first();
+
+        $get_teacher_route =
+            $this
+                ->route_builder
+                ->withPaths(
+                    paths: $teacher->id
+                )
+                ->build();
+
+        $response =
+            $this
+                ->getJson(
+                    $get_teacher_route,
+                );
+
+        $response->assertStatus(200);
+
+    }
+
     // create_teacher
     #[Test]
-    public function create_teacher_with_201_response(): void
+    public function create_teacher_with_200_response(): void
     {
 
         $department_id =
@@ -78,7 +125,7 @@ class TeacherTest extends AdminTestCase
 
     // update_teacher
     #[Test]
-    public function update_teacher_with_201_response(): void
+    public function update_teacher_with_200_response(): void
     {
 
         $teacher =
@@ -99,7 +146,9 @@ class TeacherTest extends AdminTestCase
 
         $update_teacher_route =
             $this
-                ->getShowRoute($teacher->id);
+                ->route_builder
+                ->withPaths($teacher->id)
+                ->build();
 
         $response =
             $this
@@ -133,7 +182,7 @@ class TeacherTest extends AdminTestCase
 
     // delete_teacher
     #[Test]
-    public function delete_teacher_with_201_response(): void
+    public function delete_teacher_with_200_response(): void
     {
 
         $teacher =
@@ -143,8 +192,10 @@ class TeacherTest extends AdminTestCase
         $this->assertNotNull($teacher);
 
         $delete_teacher_route =
-           $this
-               ->getShowRoute($teacher->id);
+            $this
+                ->route_builder
+                ->withPaths($teacher->id)
+                ->build();
 
         $response =
             $this
@@ -171,7 +222,7 @@ class TeacherTest extends AdminTestCase
 
     // delete_teachers
     #[Test]
-    public function delete_teachers_with_201_response(): void
+    public function delete_teachers_with_200_response(): void
     {
 
         $teachers =
@@ -180,12 +231,11 @@ class TeacherTest extends AdminTestCase
                 ->get();
 
         $delete_teacher_route =
-            $this->main_route
-            .
-            $this
-                ->genereateQueryParameters(
-                    $teachers->pluck('id')
-                );
+
+        $this
+            ->route_builder
+            ->withArrayQueryParameter($teachers->pluck('id'))
+            ->build();
 
         $response =
             $this

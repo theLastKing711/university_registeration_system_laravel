@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Admin\Abstractions;
 
+use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Collection;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
@@ -16,6 +16,8 @@ class AdminTestCase extends TestCase
     protected string $main_route = '/admin/users';
 
     public User $admin;
+
+    protected RouteBuilder $route_builder;
 
     protected function setUp(): void
     {
@@ -36,44 +38,6 @@ class AdminTestCase extends TestCase
             User::factory()
                 ->staticAdmin()
                 ->create();
-    }
-
-    /** @param array<int|string> $paths */
-    public function getRoute(...$paths)
-    {
-
-        $route_paths = collect($paths)
-            ->reduce(
-                function ($prev, $curr, $index) {
-                    return $prev.'/'.(string) $curr;
-                },
-                ''
-            );
-
-        return $this->main_route.$route_paths;
-
-    }
-
-    /** @var Collection<string> description */
-    public function genereateQueryParameters(Collection $query_parameters, string $query_parameter_name = 'ids')
-    {
-
-        $query_parameter_name_with_brackets = $query_parameter_name.'[]';
-
-        $query_parameters = $query_parameters
-            ->reduce(
-                function ($prev, $curr, $index) use ($query_parameter_name_with_brackets) {
-                    if ($index === 0) {
-                        return $prev.'?'.$query_parameter_name_with_brackets.'='.$curr;
-                    }
-
-                    return $prev.'&'.$query_parameter_name_with_brackets.'='.$curr;
-                },
-                ''
-            );
-
-        return $query_parameters;
-
     }
 
     // public function post($uri, $data = [], $headers = []): TestResponse

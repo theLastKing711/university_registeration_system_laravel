@@ -6,6 +6,7 @@ use App\Data\Admin\Student\GraduateStudent\Request\GraduateStudentRequestData;
 use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Admin\Student\UpdateStudent\Request\UpdateStudentRequestData;
 use App\Enum\Auth\RolesEnum;
+use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\Department;
 use App\Models\User;
 use Database\Seeders\AcademicYearSemesterSeeder;
@@ -21,6 +22,11 @@ class StudentTest extends AdminTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->route_builder
+            =
+            new RouteBuilder($this->main_route);
 
         $this->
             seed([
@@ -123,9 +129,9 @@ class StudentTest extends AdminTestCase
 
         $update_student_route =
             $this->
-                getRoute(
-                    $student->id,
-                );
+                route_builder
+                    ->withPaths($student->id)
+                    ->build();
 
         $response =
             $this
@@ -177,10 +183,10 @@ class StudentTest extends AdminTestCase
                 ->first();
 
         $delete_student_route =
-            $this->
-                getRoute(
-                    $student->id,
-                );
+             $this->
+                route_builder
+                    ->withPaths($student->id)
+                    ->build();
 
         $response =
             $this
@@ -217,11 +223,13 @@ class StudentTest extends AdminTestCase
             );
 
         $graduate_student_route =
-            $this->
-                getRoute(
-                    $student->id,
-                    'graduation'
-                );
+             $this->
+                route_builder
+                    ->withPaths(
+                        $student->id,
+                        'graduation'
+                    )
+                    ->build();
 
         $response =
             $this

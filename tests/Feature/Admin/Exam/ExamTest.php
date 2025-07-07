@@ -9,6 +9,7 @@ use App\Data\Admin\Exam\DeleteExam\Request\DeleteExamRequestData;
 use App\Data\Admin\Exam\UpdateExam\Request\UpdateExamRequestData;
 use App\Data\Admin\Exam\UpdateStudentExamMark\Request\ExamStudentItemData as RequestExamStudentItemData;
 use App\Data\Admin\Exam\UpdateStudentExamMark\Request\UpdateStudentExamMarkRequestData;
+use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\Classroom;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
@@ -35,6 +36,10 @@ class ExamTest extends AdminTestCase
     {
         parent::setUp();
 
+        $this
+            ->route_builder =
+                RouteBuilder::withMainRoute($this->main_route);
+
         $this->seed([
             AcademicYearSemesterSeeder::class,
             DepartmentSeeder::class,
@@ -58,7 +63,9 @@ class ExamTest extends AdminTestCase
 
         $show_route =
             $this
-                ->getRoute($first_exam->id);
+                ->route_builder
+                ->withPaths($first_exam->id)
+                ->build();
 
         $response =
             $this
@@ -225,11 +232,13 @@ class ExamTest extends AdminTestCase
             );
 
         $assign_mark_to_stuends_route =
-           $this
-               ->getRoute(
-                   $exam->id,
-                   'students'
-               );
+            $this->
+                route_builder
+                    ->withPaths(
+                        $exam->id,
+                        'students'
+                    )
+                    ->build();
 
         $response = $this->postJson(
             $assign_mark_to_stuends_route,
@@ -295,10 +304,12 @@ class ExamTest extends AdminTestCase
 
         $assign_mark_to_stuends_route =
            $this
-               ->getRoute(
+               ->route_builder
+               ->withPaths(
                    $exam->id,
                    'students'
-               );
+               )
+               ->build();
 
         $response = $this->postJson(
             $assign_mark_to_stuends_route,
@@ -359,10 +370,12 @@ class ExamTest extends AdminTestCase
 
         $update_student_exam_mark_route =
            $this
-               ->getRoute(
+               ->route_builder
+               ->withPaths(
                    $exam->id,
                    'students'
-               );
+               )
+               ->build();
 
         $response = $this->patchJson(
             $update_student_exam_mark_route,
@@ -457,10 +470,12 @@ class ExamTest extends AdminTestCase
 
         $update_student_exam_mark_route =
            $this
-               ->getRoute(
+               ->route_builder
+               ->withPaths(
                    $exam->id,
                    'students'
-               );
+               )
+               ->build();
 
         $response = $this->patchJson(
             $update_student_exam_mark_route,
@@ -513,7 +528,10 @@ class ExamTest extends AdminTestCase
             );
 
         $show_route =
-            $this->getRoute($exam->id);
+            $this->
+                route_builder
+                    ->withPaths($exam->id)
+                    ->build();
 
         $response = $this->patchJson(
             $show_route,
@@ -575,8 +593,10 @@ class ExamTest extends AdminTestCase
             );
 
         $show_route =
-            $this
-                ->getRoute($exam->id);
+            $this->
+                route_builder
+                    ->withPaths($exam->id)
+                    ->build();
 
         $response = $this->patchJson(
             $show_route,
@@ -616,7 +636,10 @@ class ExamTest extends AdminTestCase
             );
 
         $show_route =
-            $this->getRoute($exam->id);
+            $this->
+                route_builder
+                    ->withPaths($exam->id)
+                    ->build();
 
         $response = $this->deleteJson(
             $show_route,

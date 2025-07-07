@@ -45,6 +45,8 @@ use App\Http\Controllers\Admin\Student\UpdateStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
+use App\Http\Controllers\Admin\Teacher\GetTeacherController;
+use App\Http\Controllers\Admin\Teacher\GetTeachersController;
 use App\Http\Controllers\Admin\Teacher\UpdateTeacherController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksThisSemesterController;
@@ -298,6 +300,10 @@ Route::prefix('admins')
                     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                 ])
                 ->group(function () {
+
+                    Route::get('', GetTeachersController::class);
+
+                    Route::get('{id}', GetTeacherController::class);
 
                     Route::post('', CreateTeacherController::class);
 
