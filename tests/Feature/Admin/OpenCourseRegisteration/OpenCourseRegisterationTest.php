@@ -24,7 +24,7 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class OpenCourseRegisterationTest extends AdminTestCase
 {
-    private string $main_route = '/admins/open-course-registerations';
+    protected string $main_route = '/admins/open-course-registerations';
 
     protected function setUp(): void
     {

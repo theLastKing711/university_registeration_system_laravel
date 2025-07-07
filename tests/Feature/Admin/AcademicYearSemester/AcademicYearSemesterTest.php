@@ -17,7 +17,7 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class AcademicYearSemesterTest extends AdminTestCase
 {
-    private string $main_route = '/admins/academic-year-semesters';
+    protected string $main_route = '/admins/academic-year-semesters';
 
     protected function setUp(): void
     {

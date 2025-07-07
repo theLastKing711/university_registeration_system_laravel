@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Student\UpdateStudentController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
+use App\Http\Controllers\Admin\Teacher\DeleteTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
 use App\Http\Controllers\Admin\Teacher\UpdateTeacherController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksController;
@@ -301,6 +302,8 @@ Route::prefix('admins')
                     Route::post('', CreateTeacherController::class);
 
                     Route::patch('{id}', UpdateTeacherController::class);
+
+                    Route::delete('{id}', DeleteTeacherController::class);
 
                     Route::delete('', DeleteTeachersController::class);
 

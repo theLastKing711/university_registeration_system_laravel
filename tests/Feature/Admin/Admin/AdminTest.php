@@ -11,7 +11,7 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class AdminTest extends AdminTestCase
 {
-    private string $main_route = '/admins/admins';
+    protected string $main_route = '/admins/admins';
 
     protected function setUp(): void
     {
@@ -93,10 +93,5 @@ class AdminTest extends AdminTestCase
 
         $this->assertTrue($admin_has_been_deleted);
 
-    }
-
-    public function getShowRoute(string $main_route, int $id)
-    {
-        return $main_route.'/'.$id;
     }
 }

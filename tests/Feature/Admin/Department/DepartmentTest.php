@@ -12,7 +12,7 @@ use Tests\Feature\Admin\Admin\AdminTest;
 
 class DepartmentTest extends AdminTest
 {
-    private string $main_route = '/admins/departments';
+    protected string $main_route = '/admins/departments';
 
     protected function setUp(): void
     {

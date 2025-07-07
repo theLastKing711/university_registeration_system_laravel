@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\Teacher\UpdateTeacher\Request;
+namespace App\Data\Admin\Teacher\DeleteTeacher\Request;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -9,20 +9,13 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[Oat\Schema()]
-class UpdateTeacherRequestData extends Data
+#[Oat\Schema(schema: 'AdminTeacherDeleteTeacherRequestDeleteTeacherRequestData')]
+class DeleteTeacherRequestData extends Data
 {
     public function __construct(
-        #[OAT\Property]
-        public string $name,
-        #[
-            OAT\Property,
-            Exists('departments', 'id')
-        ]
-        public int $department_id,
         #[
             OAT\PathParameter(
-                parameter: 'adminsTeacherPathParameter',
+                parameter: 'adminsTeacherIdPathParameter',
                 name: 'id',
                 schema: new OAT\Schema(
                     type: 'integer',

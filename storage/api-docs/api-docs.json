@@ -629,6 +629,22 @@
             ]
         },
         "/admins/teachers/{id}": {
+            "delete": {
+                "tags": [
+                    "adminsTeachers"
+                ],
+                "operationId": "b7382d58e37030a00665556444c3f601",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "patch": {
                 "tags": [
                     "adminsTeachers"
@@ -657,7 +673,7 @@
             },
             "parameters": [
                 {
-                    "$ref": "#/components/parameters/adminsUpdateTeacherPathParameter"
+                    "$ref": "#/components/parameters/adminsTeacherPathParameter"
                 }
             ]
         },
@@ -1226,6 +1242,36 @@
                         }
                     }
                 },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/opencourseregisterations/{id}/teachers": {
+            "delete": {
+                "tags": [
+                    "adminsOpenCourseRegisterations"
+                ],
+                "operationId": "3bafad573953f4ec6606d38df60ba4ec",
+                "parameters": [
+                    {
+                        "name": "teachers_ids[]",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
                 "responses": {
                     "204": {
                         "description": "",
@@ -2380,6 +2426,7 @@
                 },
                 "type": "object"
             },
+            "AdminOpenCourseRegisterationUnAssignTeacherFromOpenCourseRequestUnAssignTeacherFromOpenCourseRequestData": {},
             "UnRegisterOpenCourseRequestData": {},
             "DeleteStudentRequestData": {},
             "GraduateStudentRequestData": {
@@ -2490,6 +2537,7 @@
                 },
                 "type": "object"
             },
+            "AdminTeacherDeleteTeacherRequestDeleteTeacherRequestData": {},
             "DeleteTeachersRequestData": {
                 "properties": {
                     "ids": {
@@ -3197,6 +3245,22 @@
                     "type": "integer"
                 }
             },
+            "adminsOpenCourseRegisterationUnAssignTeacherFromOpenCourseTeacherRequestDataIdPathParameter": {
+                "name": "teachers_ids",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsOpenCourseRegisterationUnAssignTeacherFromOpenCourseRequestDataIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminOpenCourseRegisterationPathParameter": {
                 "name": "id",
                 "in": "path",
@@ -3229,7 +3293,15 @@
                     "type": "integer"
                 }
             },
-            "adminsUpdateTeacherPathParameter": {
+            "adminsTeacherIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsTeacherPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

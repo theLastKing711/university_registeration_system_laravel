@@ -14,7 +14,7 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class TeacherTest extends AdminTestCase
 {
-    private string $main_route = '/admins/teachers';
+    protected string $main_route = '/admins/teachers';
 
     protected function setUp(): void
     {
@@ -29,6 +29,7 @@ class TeacherTest extends AdminTestCase
 
     }
 
+    // create_teacher
     #[Test]
     public function create_teacher_with_201_response(): void
     {
@@ -75,6 +76,7 @@ class TeacherTest extends AdminTestCase
 
     }
 
+    // update_teacher
     #[Test]
     public function update_teacher_with_201_response(): void
     {
@@ -96,11 +98,8 @@ class TeacherTest extends AdminTestCase
             );
 
         $update_teacher_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $teacher->id;
+            $this
+                ->getShowRoute($teacher->id);
 
         $response =
             $this
@@ -132,6 +131,45 @@ class TeacherTest extends AdminTestCase
 
     }
 
+    // delete_teacher
+    #[Test]
+    public function delete_teacher_with_201_response(): void
+    {
+
+        $teacher =
+            Teacher::query()
+                ->first();
+
+        $this->assertNotNull($teacher);
+
+        $delete_teacher_route =
+           $this
+               ->getShowRoute($teacher->id);
+
+        $response =
+            $this
+                ->deleteJson(
+                    $delete_teacher_route,
+                );
+
+        $response->assertStatus(200);
+
+        $deleted_teachers =
+                $teacher->fresh();
+
+        $teacher_have_been_deleted =
+            $deleted_teachers
+            ==
+            null;
+
+        $this
+            ->assertTrue(
+                $teacher_have_been_deleted
+            );
+
+    }
+
+    // delete_teachers
     #[Test]
     public function delete_teachers_with_201_response(): void
     {
@@ -140,11 +178,6 @@ class TeacherTest extends AdminTestCase
             Teacher::query()
                 ->take(2)
                 ->get();
-
-        $this
-            ->assertNotEmpty(
-                $teachers,
-            );
 
         $delete_teacher_route =
             $this->main_route

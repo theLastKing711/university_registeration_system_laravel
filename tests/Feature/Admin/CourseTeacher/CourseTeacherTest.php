@@ -25,7 +25,7 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class CourseTeacherTest extends AdminTestCase
 {
-    private string $main_route = '/admins/course-teachers';
+    protected string $main_route = '/admins/course-teachers';
 
     protected function setUp(): void
     {

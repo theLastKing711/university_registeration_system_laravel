@@ -16,7 +16,7 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class StudentTest extends AdminTestCase
 {
-    private string $main_route = '/admins/students';
+    protected string $main_route = '/admins/students';
 
     protected function setUp(): void
     {
@@ -122,11 +122,10 @@ class StudentTest extends AdminTestCase
             );
 
         $update_student_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $student->id;
+            $this->
+                getRoute(
+                    $student->id,
+                );
 
         $response =
             $this
@@ -178,11 +177,10 @@ class StudentTest extends AdminTestCase
                 ->first();
 
         $delete_student_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $student->id;
+            $this->
+                getRoute(
+                    $student->id,
+                );
 
         $response =
             $this
@@ -219,15 +217,11 @@ class StudentTest extends AdminTestCase
             );
 
         $graduate_student_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $student->id
-            .
-            '/'
-            .
-            'graduation';
+            $this->
+                getRoute(
+                    $student->id,
+                    'graduation'
+                );
 
         $response =
             $this

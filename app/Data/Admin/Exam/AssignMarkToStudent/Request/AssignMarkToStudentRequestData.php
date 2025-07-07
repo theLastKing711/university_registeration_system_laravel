@@ -27,8 +27,6 @@ class AssignMarkToStudentRequestData extends Data
      */
     public function __construct(
 
-        #[OAT\Property]
-        public int $test_id,
         #[
             ArrayProperty(ExamStudentItemData::class),
         ]

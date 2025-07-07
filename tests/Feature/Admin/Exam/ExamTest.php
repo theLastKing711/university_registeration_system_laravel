@@ -25,11 +25,11 @@ use Database\Seeders\StudentSeeder;
 use Database\Seeders\TeacherSeeder;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Admin\Admin\AdminTest;
+use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
-class ExamTest extends AdminTest
+class ExamTest extends AdminTestCase
 {
-    private string $main_route = '/admins/exams';
+    protected string $main_route = '/admins/exams';
 
     protected function setUp(): void
     {
@@ -58,7 +58,7 @@ class ExamTest extends AdminTest
 
         $show_route =
             $this
-                ->getShowRoute($this->main_route, $first_exam->id);
+                ->getRoute($first_exam->id);
 
         $response =
             $this
@@ -226,9 +226,10 @@ class ExamTest extends AdminTest
 
         $assign_mark_to_stuends_route =
            $this
-               ->getShowRoute($this->main_route, $exam->id)
-               .
-               '/students';
+               ->getRoute(
+                   $exam->id,
+                   'students'
+               );
 
         $response = $this->postJson(
             $assign_mark_to_stuends_route,
@@ -294,9 +295,10 @@ class ExamTest extends AdminTest
 
         $assign_mark_to_stuends_route =
            $this
-               ->getShowRoute($this->main_route, $exam->id)
-               .
-               '/students';
+               ->getRoute(
+                   $exam->id,
+                   'students'
+               );
 
         $response = $this->postJson(
             $assign_mark_to_stuends_route,
@@ -357,9 +359,10 @@ class ExamTest extends AdminTest
 
         $update_student_exam_mark_route =
            $this
-               ->getShowRoute($this->main_route, $exam->id)
-               .
-               '/students';
+               ->getRoute(
+                   $exam->id,
+                   'students'
+               );
 
         $response = $this->patchJson(
             $update_student_exam_mark_route,
@@ -454,9 +457,10 @@ class ExamTest extends AdminTest
 
         $update_student_exam_mark_route =
            $this
-               ->getShowRoute($this->main_route, $exam->id)
-               .
-               '/students';
+               ->getRoute(
+                   $exam->id,
+                   'students'
+               );
 
         $response = $this->patchJson(
             $update_student_exam_mark_route,
@@ -509,7 +513,7 @@ class ExamTest extends AdminTest
             );
 
         $show_route =
-            $this->getShowRoute($this->main_route, $exam->id);
+            $this->getRoute($exam->id);
 
         $response = $this->patchJson(
             $show_route,
@@ -572,7 +576,7 @@ class ExamTest extends AdminTest
 
         $show_route =
             $this
-                ->getShowRoute($this->main_route, $exam->id);
+                ->getRoute($exam->id);
 
         $response = $this->patchJson(
             $show_route,
@@ -612,7 +616,7 @@ class ExamTest extends AdminTest
             );
 
         $show_route =
-            $this->getShowRoute($this->main_route, $exam->id);
+            $this->getRoute($exam->id);
 
         $response = $this->deleteJson(
             $show_route,

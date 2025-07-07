@@ -13,7 +13,7 @@ class AdminTestCase extends TestCase
 {
     use RefreshDatabase;
 
-    private string $main_route = '/admin/users';
+    protected string $main_route = '/admin/users';
 
     public User $admin;
 
@@ -38,9 +38,20 @@ class AdminTestCase extends TestCase
                 ->create();
     }
 
-    public function getShowRoute(string $main_route, int $id)
+    /** @param array<int|string> $paths */
+    public function getRoute(...$paths)
     {
-        return $main_route.'/'.$id;
+
+        $route_paths = collect($paths)
+            ->reduce(
+                function ($prev, $curr, $index) {
+                    return $prev.'/'.(string) $curr;
+                },
+                ''
+            );
+
+        return $this->main_route.$route_paths;
+
     }
 
     /** @var Collection<string> description */
