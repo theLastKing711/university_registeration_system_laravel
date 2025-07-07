@@ -593,7 +593,9 @@ class CreateInvokableControllerWithData extends Command
                 #[SuccessListResponse($get_many_data_name)]
                 public function __invoke($path_variable_declaration)
                 {
+                    return $get_many_data_class::collect(
 
+                    );
                 }
             }
 
