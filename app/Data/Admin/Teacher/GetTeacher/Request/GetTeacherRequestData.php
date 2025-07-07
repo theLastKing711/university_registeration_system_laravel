@@ -15,11 +15,7 @@ class GetTeacherRequestData extends Data
     public function __construct(
         #[
             OAT\PathParameter(
-                parameter: 'adminsTeacherIdPathParameter',
-                name: 'id',
-                schema: new OAT\Schema(
-                    type: 'integer',
-                ),
+                ref: 'adminsTeacherIdPathParameter'
             ),
             FromRouteParameter('id'),
             Exists('teachers', 'id')

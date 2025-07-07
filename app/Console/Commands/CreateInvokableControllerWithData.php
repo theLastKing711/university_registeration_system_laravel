@@ -411,7 +411,9 @@ class CreateInvokableControllerWithData extends Command
                 #[SuccessItemResponse($get_one_data_name)]
                 public function __invoke($path_variable_declaration)
                 {
-
+                    return $get_one_data_class::from(
+                        
+                    );
                 }
             }
 
@@ -515,6 +517,11 @@ class CreateInvokableControllerWithData extends Command
 
                 $pagination_path = $get_many_path.'PaginationResultData';
 
+                $response_path = $get_many_path.'Data';
+
+                $resposne_class =
+                    $get_many_data_class_without_data.'Data';
+
                 $query_parameter_path_with_Data = $query_parameter_path.'Data';
 
                 $fileContents = <<<EOT
@@ -526,6 +533,7 @@ class CreateInvokableControllerWithData extends Command
                 use App\Http\Controllers\Controller;
                 use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
                 use App\Data\\$pagination_path;
+                use App\Data\\$response_path;
                 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
                 use OpenApi\Attributes as OAT;
 
@@ -538,7 +546,9 @@ class CreateInvokableControllerWithData extends Command
                     #[SuccessItemResponse($pagination_class::class)]
                     public function __invoke($query_file_class_name \$request)
                     {
+                        return $resposne_class::collect(
 
+                        );
                     }
                 }
 

@@ -15,7 +15,7 @@ class DeleteTeacherRequestData extends Data
     public function __construct(
         #[
             OAT\PathParameter(
-                parameter: 'adminsTeacherIdPathParameter',
+                parameter: '#/components/parameters/adminsTeacherPathParameter',
                 name: 'id',
                 schema: new OAT\Schema(
                     type: 'integer',

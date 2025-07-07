@@ -6,11 +6,11 @@ use Illuminate\Support\Collection;
 
 class RouteBuilder
 {
-    private string $route;
+    private string $route = '';
 
     private bool $question_mark_used = false;
 
-    public function __construct(string $main_route)
+    private function __construct(string $main_route)
     {
         $this->route = $main_route;
     }
@@ -44,23 +44,23 @@ class RouteBuilder
 
     }
 
-    /** @param array<int, array<string, int|string>> query_parameters */
-    public function withQueryParameter(array $query_parameters)
+    /** @param array<string, int|string> query_parameters */
+    public function withQueryParameters(array $query_parameters)
     {
 
-        collect(
+        $query_parameters = collect(
             $query_parameters
         )
             ->reduce(
-                function ($prev, $curr, $index) {
+                function ($prev, $curr, $key) {
 
-                    $query_parameter_key = array_keys($curr)[0];
+                    $query_parameter_key = $key;
 
-                    $query_parameter_value = array_values($curr)[0];
+                    $query_parameter_value = $curr;
 
                     $query_parameter = $query_parameter_key.'='.$query_parameter_value;
 
-                    if ($index === 0 && ! $this->question_mark_used) {
+                    if (! $this->question_mark_used) {
                         $this->question_mark_used = true;
 
                         return $prev.'?'.$query_parameter;
@@ -70,6 +70,14 @@ class RouteBuilder
                 },
                 ''
             );
+
+        $this->route =
+            $this
+                ->route
+                .
+                $query_parameters;
+
+        return $this;
 
     }
 
@@ -86,7 +94,7 @@ class RouteBuilder
             collect($array_query_parameters_values)
                 ->reduce(
                     function ($prev, $curr, $index) use ($array_query_parameter_name_with_brackets) {
-                        if ($index === 0 && ! $this->question_mark_used) {
+                        if (! $this->question_mark_used) {
 
                             $this->question_mark_used = true;
 

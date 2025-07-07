@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Teacher;
 
 use App\Data\Admin\Teacher\CreateTeacher\Request\CreateTeacherRequestData;
+use App\Data\Admin\Teacher\GetTeachersPaginated\Response\GetTeachersPaginatedResponsePaginationResultData;
 use App\Data\Admin\Teacher\UpdateTeacher\Request\UpdateTeacherRequestData;
 use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\Department;
@@ -46,6 +47,47 @@ class TeacherTest extends AdminTestCase
                 );
 
         $response->assertStatus(200);
+
+    }
+
+    // get_teachers_paginated
+    #[Test]
+    public function get_teachers_paginated_with_200_response(): void
+    {
+
+        $per_page = 1;
+
+        $get_teachers_paginated_route =
+            $this
+                ->route_builder
+                ->withPaths('paginated')
+                ->withQueryParameters([
+                    'perPage' => $per_page,
+                ])
+                ->build();
+
+        $response =
+            $this
+                ->getJson(
+                    $get_teachers_paginated_route
+                );
+
+        $response->assertStatus(200);
+
+        $response_data =
+            GetTeachersPaginatedResponsePaginationResultData::from($response->json());
+
+        $response_data_has_correct_count =
+            $response_data
+                ->data
+                ->count()
+            ==
+            $per_page;
+
+        $this
+            ->assertTrue(
+                $response_data_has_correct_count
+            );
 
     }
 
@@ -231,11 +273,10 @@ class TeacherTest extends AdminTestCase
                 ->get();
 
         $delete_teacher_route =
-
-        $this
-            ->route_builder
-            ->withArrayQueryParameter($teachers->pluck('id'))
-            ->build();
+            $this
+                ->route_builder
+                ->withArrayQueryParameter($teachers->pluck('id'))
+                ->build();
 
         $response =
             $this

@@ -629,6 +629,24 @@
             ]
         },
         "/admins/teachers/{id}": {
+            "get": {
+                "tags": [
+                    "adminsTeachers"
+                ],
+                "operationId": "528aa8a8dc3c95572f7ebcec40a7ab0d",
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminTeacherGetTeacherResponseGetTeacherResponseData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "adminsTeachers"
@@ -1313,6 +1331,27 @@
             }
         },
         "/admins/teachers": {
+            "get": {
+                "tags": [
+                    "adminsTeachers"
+                ],
+                "operationId": "71167afadaa0d48e7049df61729a2f29",
+                "responses": {
+                    "200": {
+                        "description": "Items fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AdminTeacherGetTeachersResponseGetTeachersResponseData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "adminsTeachers"
@@ -1362,6 +1401,42 @@
                         "content": {
                             "application/json": {
                                 "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/teachers/paginated": {
+            "get": {
+                "tags": [
+                    "adminsTeachers"
+                ],
+                "operationId": "8607dc035573d6ddaa7ce9697c7696bb",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminTeacherGetTeachersPaginatedResponseGetTeachersPaginatedResponsePaginationResultData"
+                                }
                             }
                         }
                     }
@@ -2233,10 +2308,6 @@
             "AdminDepartmentUpdateDepartmentResponseUpdateDepartmentResponseData": {},
             "AssignMarkToStudentRequestData": {
                 "properties": {
-                    "test_id": {
-                        "description": "Summary of __construct",
-                        "type": "integer"
-                    },
                     "exam_students": {
                         "description": "Summary of __construct",
                         "type": "array",
@@ -2549,6 +2620,56 @@
                 },
                 "type": "object"
             },
+            "AdminTeacherGetTeacherRequestGetTeacherRequestData": {},
+            "AdminTeacherGetTeacherResponseGetTeacherResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "GetTeachersPaginatedRequestData": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginationQueryParameterData"
+                    }
+                ]
+            },
+            "AdminTeacherGetTeachersPaginatedResponseGetTeachersPaginatedResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminTeacherGetTeachersPaginatedResponseGetTeachersPaginatedResponsePaginationResultData": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/adminPaginatedAbstract"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AdminTeacherGetTeachersPaginatedResponseGetTeachersPaginatedResponseData"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "AdminTeacherGetTeachersResponseGetTeachersResponseData": {},
             "UpdateTeacherRequestData": {
                 "properties": {
                     "name": {
@@ -3293,13 +3414,16 @@
                     "type": "integer"
                 }
             },
-            "adminsTeacherIdPathParameter": {
+            "#/components/parameters/adminsTeacherPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,
                 "schema": {
                     "type": "integer"
                 }
+            },
+            "id": {
+                "$ref": "adminsTeacherIdPathParameter"
             },
             "adminsTeacherPathParameter": {
                 "name": "id",

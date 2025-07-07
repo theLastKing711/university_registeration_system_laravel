@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class DeleteTeachersController extends Controller
 {
-    #[OAT\Delete(path: '/admins/teachers/{id}', tags: ['adminsTeachers'])]
+    #[OAT\Delete(path: '/admins/teachers', tags: ['adminsTeachers'])]
     #[ListQueryParameter]
     #[SuccessNoContentResponse]
     public function __invoke(DeleteTeachersRequestData $request)
