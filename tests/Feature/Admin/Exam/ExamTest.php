@@ -9,7 +9,6 @@ use App\Data\Admin\Exam\DeleteExam\Request\DeleteExamRequestData;
 use App\Data\Admin\Exam\UpdateExam\Request\UpdateExamRequestData;
 use App\Data\Admin\Exam\UpdateStudentExamMark\Request\ExamStudentItemData as RequestExamStudentItemData;
 use App\Data\Admin\Exam\UpdateStudentExamMark\Request\UpdateStudentExamMarkRequestData;
-use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\Classroom;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
@@ -30,15 +29,13 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class ExamTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/exams';
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $this
-            ->route_builder =
-                RouteBuilder::withMainRoute($this->main_route);
+            ->route_builder
+            ->withPaths('exams');
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
@@ -82,6 +79,11 @@ class ExamTest extends AdminTestCase
     public function create_exam_with_200_response(): void
     {
 
+        $create_exam_rotue =
+            $this
+                ->route_builder
+                ->build();
+
         Exam::query()
             ->delete();
 
@@ -108,7 +110,7 @@ class ExamTest extends AdminTestCase
         $response =
             $this
                 ->postJson(
-                    $this->main_route,
+                    $create_exam_rotue,
                     $create_exam_request->toArray()
 
                 );
@@ -144,6 +146,12 @@ class ExamTest extends AdminTestCase
     #[Test]
     public function create_overlapping_exam_fails_validation_with_422_response(): void
     {
+
+        $create_exam_rotue =
+            $this
+                ->route_builder
+                ->build();
+
         $exams_count_beofre_request =
             Exam::query()->count();
 
@@ -166,7 +174,7 @@ class ExamTest extends AdminTestCase
         $response =
             $this
                 ->postJson(
-                    $this->main_route,
+                    $create_exam_rotue,
                     $create_exam_request->toArray()
 
                 );

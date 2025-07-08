@@ -13,7 +13,7 @@ class AdminTestCase extends TestCase
 {
     use RefreshDatabase;
 
-    protected string $main_route = '/admin/users';
+    protected string $main_route = '/admins';
 
     public User $admin;
 
@@ -22,6 +22,10 @@ class AdminTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->route_builder =
+                RouteBuilder::withMainRoute($this->main_route);
 
         //        parent::withHeader('Accept', 'application/json');
 

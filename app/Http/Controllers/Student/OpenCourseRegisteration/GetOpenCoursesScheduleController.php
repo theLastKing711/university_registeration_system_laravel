@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Student\OpenCourseRegisteration;
 
 use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
-use App\Data\Student\OpenCourseRegisteration\GetCoursesScheduleThisSemester\Request\GetCoursesScheduleThisSemesterRequestData;
 use App\Data\Student\OpenCourseRegisteration\GetCoursesScheduleThisSemester\Response\GetCoursesScheduleThisSemesterResponseData;
 use App\Http\Controllers\Controller;
 use App\Models\ClassroomCourseTeacher;
@@ -14,11 +13,11 @@ use OpenApi\Attributes as OAT;
 
 class GetOpenCoursesScheduleController extends Controller
 {
-    #[OAT\Get(path: '/students/course-registerations/offered-courses/schedule', tags: ['studentsCourses'])]
+    #[OAT\Get(path: '/students/open-course-registerations/schedule', tags: ['studentsCourses'])]
     #[QueryParameter('year')]
     #[QueryParameter('semester')]
     #[SuccessListResponse(GetCoursesScheduleThisSemesterResponseData::class)]
-    public function __invoke(GetCoursesScheduleThisSemesterRequestData $request)
+    public function __invoke()
     {
 
         // return $logged_user =

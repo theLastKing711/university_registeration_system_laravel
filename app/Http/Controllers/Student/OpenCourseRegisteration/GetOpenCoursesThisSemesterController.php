@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Student\OpenCourseRegisteration;
 
-use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
 use App\Data\Student\OpenCourseRegisteration\GetOpenCoursesThisSemester\Response\GetOpenCoursesThisSemesterResponseData;
-use App\Data\Student\OpenCourseRegisteration\QueryParameters\GetOpenCoursesThisSemesterQueryParameterData;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
@@ -17,21 +15,17 @@ use OpenApi\Attributes as OAT;
 
 class GetOpenCoursesThisSemesterController extends Controller
 {
-    #[OAT\Get(path: '/students/course-offerings/offered-courses/this-semester', tags: ['studentsCourses'])]
-    #[QueryParameter('year', 'integer')]
-    #[QueryParameter('semester', 'integer')]
+    #[OAT\Get(path: '/students/open-course-registerations', tags: ['studentsOpenCourseRegisterations'])]
     #[SuccessListResponse(GetOpenCoursesThisSemesterResponseData::class)]
-    public function __invoke(GetOpenCoursesThisSemesterQueryParameterData $queryParameterData)
+    public function __invoke()
     {
 
-        /** @var User $logged_user */
         $logged_user =
             User::query()
                 ->with('department')
                 ->firstWhere(
                     'id',
-                    1
-                    // operator: Auth::User()->id
+                    Auth::User()->id
                 );
 
         $departments =
@@ -59,15 +53,13 @@ class GetOpenCoursesThisSemesterController extends Controller
                 'department_id',
                 $logged_user->department_id
             )
-            ->orderBy('year', 'desc')
-            ->orderBy('semester', 'desc')
+            ->orderBy('academic_year_semester_id', 'desc')
             ->first();
 
         return DB::table('courses')
             ->leftJoin('departments', 'courses.department_id', 'departments.id')
             ->join('open_course_registerations', 'open_course_registerations.course_id', 'courses.id')
-            ->where('open_course_registerations.year', $department_latest_open_registeration->year)
-            ->where('open_course_registerations.semester', $department_latest_open_registeration->semester)
+            ->where('open_course_registerations.academic_year_semester_id', $department_latest_open_registeration->academic_year_semester_id)
             ->whereNested(function ($query) use ($logged_user_department) {
                 $query
                     ->where('departments.id', $logged_user_department->id)

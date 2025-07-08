@@ -7,7 +7,6 @@ use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Controller;
-use App\Models\Course;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OAT;
@@ -19,12 +18,6 @@ class CreateAdminController extends Controller
     #[SuccessNoContentResponse]
     public function __invoke(CreateAdminRequestData $request)
     {
-
-        // Course::query()
-        //     ->has('firstCrossListedCourses', 1)
-        //     ->orHas('SecondCrossListedCourses', 1)
-        //     ->first()
-        //     ->id;
 
         DB::transaction(function () use ($request) {
             $user = User::query()

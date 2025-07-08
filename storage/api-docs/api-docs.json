@@ -1617,12 +1617,12 @@
                 }
             }
         },
-        "/students/course-registerations/offered-courses/schedule": {
+        "/students/open-course-registerations/schedule": {
             "get": {
                 "tags": [
                     "studentsCourses"
                 ],
-                "operationId": "d305f81ac462a0a8f98bb04cb8658f90",
+                "operationId": "cc3b034d88646171f0fef504055dbf1d",
                 "parameters": [
                     {
                         "name": "year",
@@ -1656,12 +1656,12 @@
                 }
             }
         },
-        "/students/course-offerings/offered-courses/this-semester": {
+        "/students/open-course-registerations": {
             "get": {
                 "tags": [
-                    "studentsCourses"
+                    "studentsOpenCourseRegisterations"
                 ],
-                "operationId": "f136f76729d98c1212eeba2c1f1051cb",
+                "operationId": "fb86732421d7e3c676b1696dbc421f96",
                 "parameters": [
                     {
                         "name": "year",

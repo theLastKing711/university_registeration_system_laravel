@@ -64,58 +64,6 @@ use Illuminate\Support\Facades\Route;
 //         Route::post('', [FileController::class, 'store']);
 //     });
 
-Route::prefix('students')
-    ->middleware(['api', 'auth:sanctum', RolesEnum::oneRoleOnlyMiddleware(RolesEnum::STUDENT)])
-    ->group(function () {
-
-        Route::prefix('course-registerations')
-            ->group(function () {
-
-                Route::prefix('offered-courses')
-                    ->group(function () {
-
-                        Route::prefix('this-semester')
-                            ->group(function () {
-
-                                Route::get('', action: GetOpenCoursesThisSemesterController::class);
-                                Route::get('schedule', GetOpenCoursesScheduleController::class);
-
-                            });
-
-                    });
-
-                Route::prefix('registered-courses')
-                    ->group(function () {
-
-                        Route::prefix('this-semester')
-                            ->group(function () {
-
-                                Route::get('', GetStudentRegisteredOpenCoursesThisSemesterController::class);
-                                Route::post('', RegisterOpenCoursesController::class);
-                                // Route::delete('{id}', UnRegisterOpenCourseController::class);
-
-                            });
-
-                        Route::prefix('marks')
-                            ->group(function () {
-
-                                Route::get('', GetCoursesMarksController::class);
-
-                                Route::prefix('this-semester')
-                                    ->group(function () {
-
-                                        Route::get('', GetCoursesMarksThisSemesterController::class);
-
-                                    });
-
-                            });
-
-                    });
-
-            });
-
-    });
-
 Route::prefix('admins')
     ->middleware(['api'])
     ->group(function () {
@@ -325,5 +273,64 @@ Route::prefix('admins')
             Route::post('login', [AuthController::class, 'login']);
             Route::post('logout', [AuthController::class, 'logout']);
         });
+
+    });
+
+Route::prefix('students')
+    ->middleware(['api', 'auth:sanctum', RolesEnum::oneRoleOnlyMiddleware(RolesEnum::STUDENT)])
+    ->group(function () {
+
+        Route::prefix('open-course-registerations')->group(function () {
+
+            Route::get('', action: GetOpenCoursesThisSemesterController::class);
+            Route::get('schedule', GetOpenCoursesScheduleController::class);
+
+        });
+
+        // Route::prefix('course-registerations')
+        //     ->group(function () {
+
+        //         Route::prefix('offered-courses')
+        //             ->group(function () {
+
+        //                 Route::prefix('this-semester')
+        //                     ->group(function () {
+
+        //                         Route::get('', action: GetOpenCoursesThisSemesterController::class);
+        //                         Route::get('schedule', GetOpenCoursesScheduleController::class);
+
+        //                     });
+
+        //             });
+
+        //         Route::prefix('registered-courses')
+        //             ->group(function () {
+
+        //                 Route::prefix('this-semester')
+        //                     ->group(function () {
+
+        //                         Route::get('', GetStudentRegisteredOpenCoursesThisSemesterController::class);
+        //                         Route::post('', RegisterOpenCoursesController::class);
+        //                         // Route::delete('{id}', UnRegisterOpenCourseController::class);
+
+        //                     });
+
+        //                 Route::prefix('marks')
+        //                     ->group(function () {
+
+        //                         Route::get('', GetCoursesMarksController::class);
+
+        //                         Route::prefix('this-semester')
+        //                             ->group(function () {
+
+        //                                 Route::get('', GetCoursesMarksThisSemesterController::class);
+
+        //                             });
+
+        //                     });
+
+        //             });
+
+        //     });
 
     });

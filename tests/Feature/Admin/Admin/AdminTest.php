@@ -4,18 +4,20 @@ namespace Tests\Feature\Admin\Admin;
 
 use App\Data\Admin\Admin\CreateAdmin\Request\CreateAdminRequestData;
 use App\Enum\Auth\RolesEnum;
-use App\Models\CourseTeacher;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class AdminTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/admins';
-
     protected function setUp(): void
     {
+
         parent::setUp();
+
+        $this
+            ->route_builder
+            ->withPaths('admins');
 
     }
 
@@ -23,21 +25,18 @@ class AdminTest extends AdminTestCase
     public function create_admin_with_201_response(): void
     {
 
-        CourseTeacher::query()
-            ->delete();
-
         $create_admin_request =
             new CreateAdminRequestData(
                 'tamer',
                 'tamer'
             );
 
-        $assign_a_teacher_to_an_open_course_route = $this->main_route;
-
         $response =
             $this
                 ->postJson(
-                    $assign_a_teacher_to_an_open_course_route,
+                    $this
+                        ->route_builder
+                        ->build(),
                     $create_admin_request
                         ->toArray()
                 );
@@ -46,11 +45,11 @@ class AdminTest extends AdminTestCase
 
         $created_admin =
                 User::query()
-                    ->where(
+                    ->firstWhere(
                         'name',
-                        $create_admin_request->name
-                    )
-                    ->first();
+                        $create_admin_request
+                            ->name
+                    );
 
         $admin_has_been_created =
             $created_admin != null;
@@ -80,7 +79,15 @@ class AdminTest extends AdminTestCase
 
         $show_route = $this->main_route.'/?ids[]='.$first_admin->id;
 
-        $response = $this->deleteJson($show_route);
+        $delete_admin_route =
+            $this
+                ->route_builder
+                ->withArrayQueryParameter(
+                    [$first_admin->id]
+                )
+                ->build();
+
+        $response = $this->deleteJson($delete_admin_route);
 
         $response->assertStatus(200);
 

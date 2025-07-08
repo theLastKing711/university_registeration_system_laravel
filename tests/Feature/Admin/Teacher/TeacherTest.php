@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin\Teacher;
 use App\Data\Admin\Teacher\CreateTeacher\Request\CreateTeacherRequestData;
 use App\Data\Admin\Teacher\GetTeachersPaginated\Response\GetTeachersPaginatedResponsePaginationResultData;
 use App\Data\Admin\Teacher\UpdateTeacher\Request\UpdateTeacherRequestData;
-use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\Department;
 use App\Models\Teacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
@@ -16,15 +15,13 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class TeacherTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/teachers';
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $this
-            ->route_builder =
-                RouteBuilder::withMainRoute($this->main_route);
+            ->route_builder
+            ->withPaths('teachers');
 
         $this->
             seed([
@@ -40,10 +37,20 @@ class TeacherTest extends AdminTestCase
     public function get_teachers_with_200_response(): void
     {
 
+        $get_teachers_route =
+            $this
+                ->route_builder
+                ->build();
+
+        $this
+            ->assertNotNull(
+                $this->route_builder
+            );
+
         $response =
             $this
                 ->getJson(
-                    $this->main_route
+                    $get_teachers_route
                 );
 
         $response->assertStatus(200);
@@ -135,7 +142,9 @@ class TeacherTest extends AdminTestCase
             );
 
         $create_teacher_route =
-            $this->main_route;
+            $this->
+                route_builder
+                    ->build();
 
         $response =
             $this
@@ -275,7 +284,9 @@ class TeacherTest extends AdminTestCase
         $delete_teacher_route =
             $this
                 ->route_builder
-                ->withArrayQueryParameter($teachers->pluck('id'))
+                ->withArrayQueryParameter(
+                    $teachers->pluck('id')
+                )
                 ->build();
 
         $response =

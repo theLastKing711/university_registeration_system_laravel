@@ -13,7 +13,7 @@ class CreateInvokableControllerWithData extends Command
      *
      * @var string
      */
-    protected $signature = 'make:data-controller {name} {--request==} {--query==} {--post==} {--post-form==} {--patch==} {--patch-form==} {--get-one==} {--get-many==} {--delete-one==} {--delete-many==} {--pagination==}';
+    protected $signature = 'make:data-controller {name} {--request==} {--model==} {--query==} {--post==} {--post-form==} {--patch==} {--patch-form==} {--get-one==} {--get-many==} {--delete-one==} {--delete-many==} {--pagination==}';
 
     /**
      * The console command description.
@@ -27,6 +27,16 @@ class CreateInvokableControllerWithData extends Command
      */
     public function handle()
     {
+
+        $model_option = $this->option('model');
+
+        $model_path =
+            $model_option
+            ?
+            'use App\\Models\\'.$model_option.';'
+            :
+            '';
+
         /** @var string $path */
         $path =
             str_replace(

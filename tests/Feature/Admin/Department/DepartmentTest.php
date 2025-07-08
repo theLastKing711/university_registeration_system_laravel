@@ -8,11 +8,11 @@ use App\Models\Department;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\DepartmentSeeder;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Admin\Admin\AdminTest;
+use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
-class DepartmentTest extends AdminTest
+class DepartmentTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/departments';
+    private string $main_route = '/admins/departments';
 
     protected function setUp(): void
     {
