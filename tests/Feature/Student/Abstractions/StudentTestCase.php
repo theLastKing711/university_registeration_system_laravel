@@ -13,11 +13,9 @@ class StudentTestCase extends TestCase
 {
     use RefreshDatabase;
 
-    protected string $main_route = '/students';
+    protected string $main_route = '/admins';
 
     public User $student;
-
-    protected RouteBuilder $route_builder;
 
     protected function setUp(): void
     {

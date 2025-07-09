@@ -17,8 +17,6 @@ class AdminTestCase extends TestCase
 
     public User $admin;
 
-    protected RouteBuilder $route_builder;
-
     protected function setUp(): void
     {
         parent::setUp();

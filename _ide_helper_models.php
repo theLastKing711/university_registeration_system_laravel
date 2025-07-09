@@ -293,7 +293,7 @@ namespace App\Models{
  * @property int $is_main_teacher
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CourseAttendance> $attendances
  * @property-read int|null $attendances_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClassroomCourseTeacher> $classroomCourseTeachers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Classroom$this> $classroomCourseTeachers
  * @property-read int|null $classroom_course_teachers_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Classroom,\Illuminate\Database\Eloquent\Relations\Pivot> $classrooms
  * @property-read int|null $classrooms_count

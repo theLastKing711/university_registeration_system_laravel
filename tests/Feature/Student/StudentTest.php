@@ -22,8 +22,7 @@ class StudentTest extends StudentTestCase
         parent::setUp();
 
         $this
-            ->route_builder
-            ->withPaths('open-course-registerations');
+            ->withRoutePaths('teachers');
 
         $this->
             seed([
@@ -31,12 +30,12 @@ class StudentTest extends StudentTestCase
                 DepartmentSeeder::class,
                 ClassroomSeeder::class,
                 TeacherSeeder::class,
-                CourseSeeder::class,
-                OpenCourseRegisterationSeeder::class,
-                StudentSeeder::class,
-                CourseTeacherSeeder::class,
-                ExamStudentSeeder::class,
-                DepartmentRegisterationPeriodSeeder::class,
+                // CourseSeeder::class,
+                // OpenCourseRegisterationSeeder::class,
+                // StudentSeeder::class,
+                // CourseTeacherSeeder::class,
+                // ExamStudentSeeder::class,
+                // DepartmentRegisterationPeriodSeeder::class,
             ]);
 
     }
@@ -46,16 +45,8 @@ class StudentTest extends StudentTestCase
     public function get_open_courses_this_semester_with_200_response(): void
     {
 
-        $get_open_courses_this_semester =
-            $this
-                ->route_builder
-                ->build();
-
         $response =
-            $this
-                ->getJson(
-                    $get_open_courses_this_semester
-                );
+            $this->getJsonData();
 
         $response->assertStatus(200);
 

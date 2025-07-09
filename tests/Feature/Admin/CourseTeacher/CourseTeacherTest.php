@@ -25,11 +25,14 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class CourseTeacherTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/course-teachers';
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->withRoutePaths(
+                'course-teachers'
+            );
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
@@ -53,22 +56,14 @@ class CourseTeacherTest extends AdminTestCase
                 ->has('lectures')
                 ->first();
 
-        $course_teachers_lectures_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $first_course_teacher->id
-            .
-            '/'
-            .
-            'lectures';
-
         $response =
             $this
-                ->getJson(
-                    $course_teachers_lectures_route,
-                );
+                ->withRoutePaths(
+                    $first_course_teacher->id,
+                    'lectures'
+                )
+
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -112,25 +107,17 @@ class CourseTeacherTest extends AdminTestCase
                     $first_course_teacher->id
                 )->get();
 
-        $course_teachers_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $first_course_teacher->id
-            .
-            '/'
-            .
-            'lectures';
-
         $response =
             $this
-                ->postJson(
-                    $course_teachers_route,
+                ->withRoutePaths(
+                    $first_course_teacher->id,
+                    'lectures'
+                )
+                ->postJsonData(
                     new CreateCourseTeacherAttendanceRequestData(
-                        $first_course_teacher->id,
                         '2014-04-04',
-                        $course_teacher_attendance_data
+                        $course_teacher_attendance_data,
+                        $first_course_teacher->id,
                     )->toArray()
                 );
 
@@ -174,25 +161,14 @@ class CourseTeacherTest extends AdminTestCase
                     );
                 });
 
-        $course_teachers_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $random_lecture->courseTeacher->id
-            .
-            '/'
-            .
-            'lectures'
-            .
-            '/'
-            .
-            $random_lecture->id;
-
         $response =
             $this
-                ->patchJson(
-                    $course_teachers_route,
+                ->withRoutePaths(
+                    $random_lecture->courseTeacher->id,
+                    'lectures',
+                    $random_lecture->id
+                )
+                ->patchJsonData(
                     new UpdateCourseTeacherAttandenceRequestData(
                         '2014-04-16',
                         $course_teacher_attendance_data,
@@ -217,26 +193,14 @@ class CourseTeacherTest extends AdminTestCase
                 )
                 ->first();
 
-        $course_teachers_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $random_lecture->courseTeacher->id
-            .
-            '/'
-            .
-            'lectures'
-            .
-            '/'
-            .
-            $random_lecture->id;
-
         $response =
             $this
-                ->deleteJson(
-                    $course_teachers_route,
-                );
+                ->withRoutePaths(
+                    $random_lecture->courseTeacher->id,
+                    'lectures',
+                    $random_lecture->id
+                )
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 
@@ -250,22 +214,13 @@ class CourseTeacherTest extends AdminTestCase
             CourseTeacher::query()
                 ->first();
 
-        $course_teachers_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $first_course_teacher->id
-            .
-            '/'
-            .
-            'students';
-
         $response =
             $this
-                ->getJson(
-                    $course_teachers_route,
-                );
+                ->withRoutePaths(
+                    $first_course_teacher->id,
+                    'students'
+                )
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -290,22 +245,13 @@ class CourseTeacherTest extends AdminTestCase
             CourseTeacher::query()
                 ->first();
 
-        $course_teachers_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $first_course_teacher->id
-            .
-            '/'
-            .
-            'exams';
-
         $response =
             $this
-                ->getJson(
-                    $course_teachers_route,
-                );
+                ->withRoutePaths(
+                    $first_course_teacher->id,
+                    'exams'
+                )
+                ->getJsonData();
 
         $response->assertStatus(200);
 

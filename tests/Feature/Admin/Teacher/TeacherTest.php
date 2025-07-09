@@ -20,8 +20,9 @@ class TeacherTest extends AdminTestCase
         parent::setUp();
 
         $this
-            ->route_builder
-            ->withPaths('teachers');
+            ->withRoutePaths(
+                'teachers'
+            );
 
         $this->
             seed([
@@ -37,21 +38,9 @@ class TeacherTest extends AdminTestCase
     public function get_teachers_with_200_response(): void
     {
 
-        $get_teachers_route =
-            $this
-                ->route_builder
-                ->build();
-
-        $this
-            ->assertNotNull(
-                $this->route_builder
-            );
-
         $response =
             $this
-                ->getJson(
-                    $get_teachers_route
-                );
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -64,20 +53,14 @@ class TeacherTest extends AdminTestCase
 
         $per_page = 1;
 
-        $get_teachers_paginated_route =
+        $response =
             $this
-                ->route_builder
-                ->withPaths('paginated')
+                ->withRoutePaths('paginated')
                 ->withQueryParameters([
                     'perPage' => $per_page,
                 ])
-                ->build();
 
-        $response =
-            $this
-                ->getJson(
-                    $get_teachers_paginated_route
-                );
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -107,19 +90,12 @@ class TeacherTest extends AdminTestCase
             Teacher::query()
                 ->first();
 
-        $get_teacher_route =
-            $this
-                ->route_builder
-                ->withPaths(
-                    paths: $teacher->id
-                )
-                ->build();
-
         $response =
             $this
-                ->getJson(
-                    $get_teacher_route,
-                );
+                ->withRoutePaths(
+                    $teacher->id
+                )
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -141,15 +117,9 @@ class TeacherTest extends AdminTestCase
                 $department_id
             );
 
-        $create_teacher_route =
-            $this->
-                route_builder
-                    ->build();
-
         $response =
             $this
-                ->postJson(
-                    $create_teacher_route,
+                ->postJsonData(
                     $create_teacher_request
                         ->toArray()
                 );
@@ -195,16 +165,10 @@ class TeacherTest extends AdminTestCase
                 $teacher->id
             );
 
-        $update_teacher_route =
-            $this
-                ->route_builder
-                ->withPaths($teacher->id)
-                ->build();
-
         $response =
             $this
-                ->patchJson(
-                    $update_teacher_route,
+                ->withRoutePaths($teacher->id)
+                ->patchJsonData(
                     $update_teacher_request
                         ->toArray()
                 );
@@ -240,19 +204,10 @@ class TeacherTest extends AdminTestCase
             Teacher::query()
                 ->first();
 
-        $this->assertNotNull($teacher);
-
-        $delete_teacher_route =
-            $this
-                ->route_builder
-                ->withPaths($teacher->id)
-                ->build();
-
         $response =
             $this
-                ->deleteJson(
-                    $delete_teacher_route,
-                );
+                ->withRoutePaths($teacher->id)
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 
@@ -281,19 +236,12 @@ class TeacherTest extends AdminTestCase
                 ->take(2)
                 ->get();
 
-        $delete_teacher_route =
+        $response =
             $this
-                ->route_builder
                 ->withArrayQueryParameter(
                     $teachers->pluck('id')
                 )
-                ->build();
-
-        $response =
-            $this
-                ->deleteJson(
-                    $delete_teacher_route,
-                );
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 

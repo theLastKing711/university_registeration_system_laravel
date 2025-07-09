@@ -2405,8 +2405,9 @@ namespace PHPSTORM_META {
 'validation.required_with_all','validation.required_without','validation.required_without_all','validation.same','validation.size.array',
 'validation.size.file','validation.size.numeric','validation.size.string','validation.starts_with','validation.string',
 'validation.timezone','validation.unique','validation.uploaded','validation.uppercase','validation.url',
-'validation.ulid','validation.uuid','validation.custom.attribute-name.rule-name','messages.classroom_course_teacher.overlap','enum::validation.enum',
-'enum::validation.enum_index','enum::validation.enum_name','enum::validation.enum_value','enum::validation.enums.Spatie\\Enum\\Enumerable.slugged_name','enum::validation.enums.Spatie\\Enum\\Enumerable.slugged_other_name',);
+'validation.ulid','validation.uuid','validation.custom.attribute-name.rule-name','messages.classroom_course_teacher.overlap','messages.course_teacher.only_one_main_teacher_per_open_course',
+'messages.exams.overlap','messages.exam_students.student unregistered in course','enum::validation.enum','enum::validation.enum_index','enum::validation.enum_name',
+'enum::validation.enum_value','enum::validation.enums.Spatie\\Enum\\Enumerable.slugged_name','enum::validation.enums.Spatie\\Enum\\Enumerable.slugged_other_name',);
         registerArgumentsSet('env', 
 'APP_NAME','APP_ENV','APP_KEY','APP_DEBUG','APP_TIMEZONE',
 'APP_URL','APP_LOCALE','APP_FALLBACK_LOCALE','APP_FAKER_LOCALE','APP_MAINTENANCE_DRIVER',

@@ -15,15 +15,7 @@ class UnAssignTeacherFromOpenCourseRequestData extends Data
     public function __construct(
 
         #[
-            OAT\PathParameter(
-                parameter: 'adminsOpenCourseRegisterationUnAssignTeacherFromOpenCourseTeacherRequestDataIdPathParameter',
-                name: 'teachers_ids',
-                schema: new OAT\Schema(
-                    type: 'integer',
-                ),
-            ),
-            FromRouteParameter('teachers_ids'),
-            Exists('open_course_registerations', 'id')
+            Exists('teachers', 'id')
         ]
         /** @var array<int> */
         public array $teachers_ids,

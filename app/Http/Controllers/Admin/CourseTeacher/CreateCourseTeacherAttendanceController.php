@@ -13,7 +13,7 @@ use OpenApi\Attributes as OAT;
 
 class CreateCourseTeacherAttendanceController extends CourseTeacherController
 {
-    #[OAT\Post(path: '/admins/course-teachers/{id]/lectures', tags: ['adminsCourseTeachers'])]
+    #[OAT\Post(path: '/admins/course-teachers/{id}/lectures', tags: ['adminsCourseTeachers'])]
     #[QueryParameter('date')]
     #[JsonRequestBody(CreateCourseTeacherAttendanceRequestData::class)]
     #[SuccessNoContentResponse]
@@ -33,17 +33,10 @@ class CreateCourseTeacherAttendanceController extends CourseTeacherController
 
         DB::transaction(function () use ($request, $attendace_attach_data) {
 
-            $new_lecture = Lecture::create([
+            Lecture::create([
                 'happened_at' => $request->happened_at,
-            ]);
-
-            Lecture::query()
-                ->whereRelation(
-                    'courseTeacher',
-                    'id',
-                    $request->id
-                )
-                ->first()
+                'course_teacher_id' => $request->id,
+            ])
                 ->students()
                 ->attach($attendace_attach_data);
 

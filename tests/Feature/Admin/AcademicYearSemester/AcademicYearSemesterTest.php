@@ -17,11 +17,14 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class AcademicYearSemesterTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/academic-year-semesters';
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->withRoutePaths(
+                'academic-year-semesters'
+            );
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
@@ -32,29 +35,20 @@ class AcademicYearSemesterTest extends AdminTestCase
     }
 
     #[Test]
-    public function get_academic_years_semesters_with_201_response(): void
+    public function get_academic_years_semesters_with_200_response(): void
     {
 
         $first_department =
             Department::first();
 
-        $get_academic_years_semesters_route =
-            $this
-                ->main_route
-                .
-                '?department_id='
-                .
-                $first_department->id
-                .
-                '&year=2014'
-                .
-                '&semester=0';
-
         $response =
             $this
-                ->getJson(
-                    $get_academic_years_semesters_route,
-                );
+                ->withQueryParameters([
+                    'department_ids' => $first_department->id,
+                    'year' => 2014,
+                    'semester' => 0,
+                ])
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -77,7 +71,7 @@ class AcademicYearSemesterTest extends AdminTestCase
     }
 
     #[Test]
-    public function create_academic_year_semester_with_201_response(): void
+    public function create_academic_year_semester_with_200_response(): void
     {
 
         $create_academic_year_semester_request =
@@ -88,8 +82,7 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $this->main_route,
+                ->postJsonData(
                     $create_academic_year_semester_request
                         ->toArray()
                 );
@@ -113,27 +106,19 @@ class AcademicYearSemesterTest extends AdminTestCase
     }
 
     #[Test]
-    public function delete_academic_year_semester_with_201_response(): void
+    public function delete_academic_year_semester_with_200_response(): void
     {
 
         $first_academic_year_semester =
             AcademicYearSemester::query()
                 ->first();
 
-        $show_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $first_academic_year_semester
-                ->id;
-
         $response =
             $this
-                ->deleteJson(
-                    $show_route
-
-                );
+                ->withRoutePaths(
+                    $first_academic_year_semester->id
+                )
+                ->deleteJsonData();
 
         $response
             ->assertStatus(
@@ -157,7 +142,7 @@ class AcademicYearSemesterTest extends AdminTestCase
     }
 
     #[Test]
-    public function update_academic_year_semester_with_201_response(): void
+    public function update_academic_year_semester_with_200_response(): void
     {
 
         $update_academic_year_semester_request =
@@ -174,18 +159,13 @@ class AcademicYearSemesterTest extends AdminTestCase
                     $update_academic_year_semester_request->id
                 );
 
-        $show_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $first_academic_year_semester
-                ->id;
-
         $response =
             $this
-                ->patchJson(
-                    $show_route,
+                ->withRoutePaths(
+                    $first_academic_year_semester
+                        ->id
+                )
+                ->patchJsonData(
                     $update_academic_year_semester_request
                         ->toArray()
                 );
@@ -211,7 +191,7 @@ class AcademicYearSemesterTest extends AdminTestCase
     }
 
     #[Test]
-    public function open_department_for_registeration_with_201_response(): void
+    public function open_department_for_registeration_with_200_response(): void
     {
 
         $academic_year_semester =
@@ -235,13 +215,13 @@ class AcademicYearSemesterTest extends AdminTestCase
                 $academic_year_semester->id
             );
 
-        $open_department_for_registeration_route =
-            $this->main_route.'/'.$academic_year_semester->id.'/departments';
-
         $response =
             $this
-                ->postJson(
-                    $open_department_for_registeration_route,
+                ->withRoutePaths(
+                    $academic_year_semester->id,
+                    'departments'
+                )
+                ->postJsonData(
                     $open_department_for_registeration_request
                         ->toArray()
                 );

@@ -58,17 +58,12 @@ class ExamTest extends AdminTestCase
         $first_exam =
             Exam::first();
 
-        $show_route =
-            $this
-                ->route_builder
-                ->withPaths($first_exam->id)
-                ->build();
-
         $response =
             $this
-                ->getJson(
-                    $show_route
-                );
+                ->withRoutePaths(
+                    $first_exam->id
+                )
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -78,11 +73,6 @@ class ExamTest extends AdminTestCase
     #[Test]
     public function create_exam_with_200_response(): void
     {
-
-        $create_exam_rotue =
-            $this
-                ->route_builder
-                ->build();
 
         Exam::query()
             ->delete();
@@ -109,10 +99,8 @@ class ExamTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $create_exam_rotue,
+                ->postJsonData(
                     $create_exam_request->toArray()
-
                 );
 
         $response->assertStatus(200);
@@ -146,12 +134,6 @@ class ExamTest extends AdminTestCase
     #[Test]
     public function create_overlapping_exam_fails_validation_with_422_response(): void
     {
-
-        $create_exam_rotue =
-            $this
-                ->route_builder
-                ->build();
-
         $exams_count_beofre_request =
             Exam::query()->count();
 
@@ -173,10 +155,8 @@ class ExamTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $create_exam_rotue,
+                ->postJsonData(
                     $create_exam_request->toArray()
-
                 );
 
         $response->assertStatus(422);
@@ -239,20 +219,14 @@ class ExamTest extends AdminTestCase
                 $exam->course_teacher_id,
             );
 
-        $assign_mark_to_stuends_route =
-            $this->
-                route_builder
-                    ->withPaths(
-                        $exam->id,
-                        'students'
-                    )
-                    ->build();
+        $response = $this
+            ->withRoutePaths(
+                $exam->id,
+                'students'
+            )->postJsonData(
+                $assign_mark_mark_to_students_request->toArray()
 
-        $response = $this->postJson(
-            $assign_mark_to_stuends_route,
-            $assign_mark_mark_to_students_request->toArray()
-
-        );
+            );
 
         $response->assertStatus(200);
 
@@ -310,20 +284,15 @@ class ExamTest extends AdminTestCase
                 $exam->course_teacher_id,
             );
 
-        $assign_mark_to_stuends_route =
-           $this
-               ->route_builder
-               ->withPaths(
-                   $exam->id,
-                   'students'
-               )
-               ->build();
+        $response = $this
+            ->withRoutePaths(
+                $exam->id,
+                'students'
+            )
+            ->postJsonData(
+                $assign_mark_mark_to_students_request->toArray()
 
-        $response = $this->postJson(
-            $assign_mark_to_stuends_route,
-            $assign_mark_mark_to_students_request->toArray()
-
-        );
+            );
 
         $response->assertStatus(422);
 
@@ -376,20 +345,15 @@ class ExamTest extends AdminTestCase
                 $exam->course_teacher_id,
             );
 
-        $update_student_exam_mark_route =
-           $this
-               ->route_builder
-               ->withPaths(
-                   $exam->id,
-                   'students'
-               )
-               ->build();
+        $response = $this
+            ->withRoutePaths(
+                $exam->id,
+                'students'
+            )
+            ->patchJsonData(
+                $update_student_exam_mark_request->toArray()
 
-        $response = $this->patchJson(
-            $update_student_exam_mark_route,
-            $update_student_exam_mark_request->toArray()
-
-        );
+            );
 
         $exam_student_after_request =
             ExamStudent::query()
@@ -476,20 +440,15 @@ class ExamTest extends AdminTestCase
                 $exam->course_teacher_id,
             );
 
-        $update_student_exam_mark_route =
-           $this
-               ->route_builder
-               ->withPaths(
-                   $exam->id,
-                   'students'
-               )
-               ->build();
+        $response = $this
+            ->withRoutePaths(
+                $exam->id,
+                'students'
+            )
+            ->patchJsonData(
+                $update_student_exam_mark_request->toArray()
 
-        $response = $this->patchJson(
-            $update_student_exam_mark_route,
-            $update_student_exam_mark_request->toArray()
-
-        );
+            );
 
         $response->assertStatus(422);
 
@@ -535,17 +494,14 @@ class ExamTest extends AdminTestCase
                 $exam->id
             );
 
-        $show_route =
-            $this->
-                route_builder
-                    ->withPaths($exam->id)
-                    ->build();
+        $response = $this
+            ->withRoutePaths(
+                $exam->id
+            )
+            ->patchJsonData(
+                $update_exam_request->toArray()
 
-        $response = $this->patchJson(
-            $show_route,
-            $update_exam_request->toArray()
-
-        );
+            );
 
         $response->assertStatus(200);
 
@@ -600,17 +556,14 @@ class ExamTest extends AdminTestCase
                 $exam->id
             );
 
-        $show_route =
-            $this->
-                route_builder
-                    ->withPaths($exam->id)
-                    ->build();
+        $response = $this
+            ->withRoutePaths(
+                $exam->id
+            )
+            ->patchJsonData(
+                $update_exam_request->toArray()
 
-        $response = $this->patchJson(
-            $show_route,
-            $update_exam_request->toArray()
-
-        );
+            );
 
         $response->assertStatus(422);
 
@@ -643,17 +596,14 @@ class ExamTest extends AdminTestCase
                 $exam->id
             );
 
-        $show_route =
-            $this->
-                route_builder
-                    ->withPaths($exam->id)
-                    ->build();
+        $response = $this
+            ->withRoutePaths(
+                $exam->id
+            )
+            ->deleteJsonData(
+                $delete_exam_request->toArray()
 
-        $response = $this->deleteJson(
-            $show_route,
-            $delete_exam_request->toArray()
-
-        );
+            );
 
         $response->assertStatus(200);
     }

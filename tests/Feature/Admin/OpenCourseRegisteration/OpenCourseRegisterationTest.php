@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin\OpenCourseRegisteration;
 
 use App\Data\Admin\OpenCourseRegisteration\AssignTeacherToCourse\Request\AssignTeacherToCourseRequestData;
 use App\Data\Admin\OpenCourseRegisteration\OpenCourseForRegisteration\Request\OpenCourseForRegisterationRequestData;
-use App\Data\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourse\Request\UnAssignTeacherFromOpenCourseRequestData;
 use App\Models\AcademicYearSemester;
 use App\Models\Course;
 use App\Models\CourseTeacher;
@@ -24,11 +23,14 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class OpenCourseRegisterationTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/open-course-registerations';
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->withRoutePaths(
+                'open-course-registerations'
+            );
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
@@ -61,19 +63,13 @@ class OpenCourseRegisterationTest extends AdminTestCase
                 $open_course_id
             );
 
-        $assign_a_teacher_to_an_open_course_route =
-        $this->main_route
-        .
-        '/'
-        .
-        $open_course_id
-        .
-        '/teachers';
-
         $response =
             $this
-                ->postJson(
-                    $assign_a_teacher_to_an_open_course_route,
+                ->withRoutePaths(
+                    $open_course_id,
+                    'teachers'
+                )
+                ->postJsonData(
                     $assign_a_teacher_to_an_open_course
                         ->toArray()
                 );
@@ -100,42 +96,29 @@ class OpenCourseRegisterationTest extends AdminTestCase
     #[Test]
     public function un_assign_a_teacher_from_an_open_course_with_200_response(): void
     {
-        $course_teacher =
-            CourseTeacher::query()
+        $open_course_id =
+            OpenCourseRegisteration::query()
+                ->with('teachers')
                 ->first();
-
-        $this->assertNotNull($course_teacher);
-
-        $un_assign_a_teacher_from_an_open_course =
-            new UnAssignTeacherFromOpenCourseRequestData(
-                [$course_teacher->teacher_id],
-                $course_teacher->course_id,
-            );
-
-        $un_assign_a_teacher_from_an_open_course_route =
-        $this->main_route
-        .
-        '/'
-        .
-        $course_teacher->course_id
-        .
-        '/teachers?teachers_ids[]='
-        .
-        $course_teacher->teacher_id;
 
         $response =
             $this
-                ->deleteJson(
-                    $un_assign_a_teacher_from_an_open_course_route,
-                );
+                ->withRoutePaths(
+                    $open_course_id->id,
+                    'teachers',
+                )
+                ->withArrayQueryParameter(
+                    $open_course_id->teachers->pluck('id'),
+                    array_query_parameter_name: 'teachers_ids'
+                )
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 
         $course_teacher_has_been_deleted =
-                $course_teacher
+                $open_course_id
                     ->fresh()
-                    ==
-                    null;
+                    ->teachers->isEmpty();
 
         $this
             ->assertTrue(
@@ -165,19 +148,13 @@ class OpenCourseRegisterationTest extends AdminTestCase
                 $open_course_id
             );
 
-        $assign_a_teacher_to_an_open_course_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $open_course_id
-            .
-            '/teachers';
-
         $response =
             $this
-                ->postJson(
-                    $assign_a_teacher_to_an_open_course_route,
+                ->withRoutePaths(
+                    $open_course_id,
+                    'teachers',
+                )
+                ->postJsonData(
                     $assign_a_teacher_to_an_open_course
                         ->toArray()
                 );
@@ -202,11 +179,13 @@ class OpenCourseRegisterationTest extends AdminTestCase
     {
 
         $it_deparmtent_id =
-            Department::firstWhere('name', 'IT')->id;
+            Department::query()
+                ->firstWhere('name', 'IT')
+                ->id;
 
         $twenty_sixteent_year_semester_zero_id =
-            AcademicYearSemester::where('year', '2006')
-                ->where('semester', 0)
+            AcademicYearSemester::where('year', '2014')
+                ->where('semester', operator: 0)
                 ->first()
                 ->id;
 
@@ -228,8 +207,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $this->main_route,
+                ->postJsonData(
                     $open_course_registeration_request_data
                         ->toArray()
                 );
@@ -265,16 +243,19 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
     }
 
-    //
+    // delete_an_existing_open_course
     #[Test]
     public function delete_an_existing_open_course_with_200_response(): void
     {
 
         $open_course_registeration = OpenCourseRegisteration::first();
 
-        $show_route = $this->main_route.'/'.$open_course_registeration->id;
-
-        $response = $this->deleteJson($show_route);
+        $response =
+             $this
+                 ->withRoutePaths(
+                     $open_course_registeration->id
+                 )
+                 ->deleteJsonData();
 
         $response->assertStatus(200);
 

@@ -16,13 +16,12 @@ class AdminTest extends AdminTestCase
         parent::setUp();
 
         $this
-            ->route_builder
-            ->withPaths('admins');
+            ->withRoutePaths('admins');
 
     }
 
     #[Test]
-    public function create_admin_with_201_response(): void
+    public function create_admin_with_200_response(): void
     {
 
         $create_admin_request =
@@ -33,10 +32,7 @@ class AdminTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $this
-                        ->route_builder
-                        ->build(),
+                ->postJsonData(
                     $create_admin_request
                         ->toArray()
                 );
@@ -77,17 +73,12 @@ class AdminTest extends AdminTestCase
             User::query()
                 ->first();
 
-        $show_route = $this->main_route.'/?ids[]='.$first_admin->id;
+        $this->withArrayQueryParameter([
+            $first_admin->id,
+        ]);
 
-        $delete_admin_route =
-            $this
-                ->route_builder
-                ->withArrayQueryParameter(
-                    [$first_admin->id]
-                )
-                ->build();
-
-        $response = $this->deleteJson($delete_admin_route);
+        $response =
+            $this->deleteJsonData();
 
         $response->assertStatus(200);
 

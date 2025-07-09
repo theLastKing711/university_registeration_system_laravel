@@ -17,11 +17,14 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class CourseTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/courses';
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->withRoutePaths(
+                'courses'
+            );
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
@@ -43,18 +46,12 @@ class CourseTest extends AdminTestCase
                 )
                 ->id;
 
-        $courses_route =
-            $this->main_route
-            .
-            '?department_id='
-            .
-            $it_department_id;
-
         $response =
             $this
-                ->getJson(
-                    $courses_route,
-                );
+                ->withQueryParameters([
+                    'department_id' => $it_department_id,
+                ])
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -96,18 +93,12 @@ class CourseTest extends AdminTestCase
                 ->first()
                 ->id;
 
-        $course_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $request_course_id;
-
         $response =
             $this
-                ->getJson(
-                    $course_route,
-                );
+                ->withRoutePaths(
+                    $request_course_id
+                )
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -152,8 +143,7 @@ class CourseTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $course_route,
+                ->postJsonData(
                     $create_course_request
                         ->toArray()
                 );
@@ -242,13 +232,12 @@ class CourseTest extends AdminTestCase
                 $random_course_id_to_update->id
             );
 
-        $update_course_route =
-            $this->main_route.'/'.$update_course_request->id;
-
         $response =
             $this
-                ->patchJson(
-                    $update_course_route,
+                ->withRoutePaths(
+                    $update_course_request->id
+                )
+                ->patchJsonData(
                     $update_course_request
                         ->toArray()
                 );
@@ -302,9 +291,12 @@ class CourseTest extends AdminTestCase
             Course::query()
                 ->first();
 
-        $show_route = $this->main_route.'/?ids[]='.$first_course->id;
-
-        $response = $this->deleteJson($show_route);
+        $response =
+            $this
+                ->withArrayQueryParameter([
+                    $first_course->id,
+                ])
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 

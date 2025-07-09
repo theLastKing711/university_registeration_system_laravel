@@ -6,7 +6,6 @@ use App\Data\Admin\Student\GraduateStudent\Request\GraduateStudentRequestData;
 use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Admin\Student\UpdateStudent\Request\UpdateStudentRequestData;
 use App\Enum\Auth\RolesEnum;
-use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\Department;
 use App\Models\User;
 use Database\Seeders\AcademicYearSemesterSeeder;
@@ -17,16 +16,14 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class StudentTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/students';
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $this
-            ->route_builder
-            =
-            new RouteBuilder($this->main_route);
+            ->withRoutePaths(
+                'students'
+            );
 
         $this->
             seed([
@@ -38,7 +35,7 @@ class StudentTest extends AdminTestCase
     }
 
     #[Test]
-    public function register_student_with_201_response(): void
+    public function register_student_with_200_response(): void
     {
 
         $department_id =
@@ -57,13 +54,9 @@ class StudentTest extends AdminTestCase
                 fake()->password(),
             );
 
-        $register_student_route =
-            $this->main_route;
-
         $response =
             $this
-                ->postJson(
-                    $register_student_route,
+                ->postJsonData(
                     $register_student_request
                         ->toArray()
                 );
@@ -97,7 +90,7 @@ class StudentTest extends AdminTestCase
     }
 
     #[Test]
-    public function update_student_with_201_response(): void
+    public function update_student_with_200_response(): void
     {
 
         $student =
@@ -127,16 +120,12 @@ class StudentTest extends AdminTestCase
                 $student->id
             );
 
-        $update_student_route =
-            $this->
-                route_builder
-                    ->withPaths($student->id)
-                    ->build();
-
         $response =
             $this
-                ->patchJson(
-                    $update_student_route,
+                ->withRoutePaths(
+                    $student->id
+                )
+                ->patchJsonData(
                     $update_student_request
                         ->toArray()
                 );
@@ -170,7 +159,7 @@ class StudentTest extends AdminTestCase
     }
 
     #[Test]
-    public function delete_student_with_201_response(): void
+    public function delete_student_with_200_response(): void
     {
 
         $student =
@@ -182,17 +171,12 @@ class StudentTest extends AdminTestCase
                 )
                 ->first();
 
-        $delete_student_route =
-             $this->
-                route_builder
-                    ->withPaths($student->id)
-                    ->build();
-
         $response =
             $this
-                ->deleteJson(
-                    $delete_student_route,
-                );
+                ->withRoutePaths(
+                    $student->id
+                )
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 
@@ -210,7 +194,7 @@ class StudentTest extends AdminTestCase
     }
 
     #[Test]
-    public function graduate_student_with_201_response(): void
+    public function graduate_student_with_200_response(): void
     {
 
         $student =
@@ -222,19 +206,13 @@ class StudentTest extends AdminTestCase
                 '2018-01-1'
             );
 
-        $graduate_student_route =
-             $this->
-                route_builder
-                    ->withPaths(
-                        $student->id,
-                        'graduation'
-                    )
-                    ->build();
-
         $response =
             $this
-                ->patchJson(
-                    $graduate_student_route,
+                ->withRoutePaths(
+                    $student->id,
+                    'graduation'
+                )
+                ->patchJsonData(
                     $graduate_student_request
                         ->toArray()
                 );

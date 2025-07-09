@@ -19,11 +19,13 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class ClassroomCourseTeacherTest extends AdminTestCase
 {
-    protected string $main_route = '/admins/classroom-course-teachers';
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->route_builder
+            ->withPaths('classroom-course-teachers');
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
@@ -38,7 +40,7 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     }
 
     #[Test]
-    public function assign_classroom_to_course_with_201_response(): void
+    public function assign_classroom_to_course_with_200_response(): void
     {
 
         ClassroomCourseTeacher::query()
@@ -60,8 +62,7 @@ class ClassroomCourseTeacherTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $this->main_route,
+                ->postJsonData(
                     $assign_classroom_to_course_request
                         ->toArray()
                 );
@@ -107,8 +108,7 @@ class ClassroomCourseTeacherTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $this->main_route,
+                ->postJsonData(
                     $assign_classroom_to_course_request
                         ->toArray()
                 );
@@ -131,9 +131,12 @@ class ClassroomCourseTeacherTest extends AdminTestCase
 
         $first_classroom_course_teacher = ClassroomCourseTeacher::first();
 
-        $show_route = $this->main_route.'/'.$first_classroom_course_teacher->id;
-
-        $response = $this->deleteJson($show_route);
+        $response =
+            $this
+                ->withRoutePaths(
+                    $first_classroom_course_teacher->id
+                )
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 
@@ -146,7 +149,7 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     }
 
     #[Test]
-    public function update_classroom_course_teacher_with_201_response(): void
+    public function update_classroom_course_teacher_with_200_response(): void
     {
 
         $request_day = 3;
@@ -231,18 +234,12 @@ class ClassroomCourseTeacherTest extends AdminTestCase
             )
             ->delete();
 
-        $show_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $random_classroom_course_teacher_to_update
-                ->id;
-
         $response =
             $this
-                ->patchJson(
-                    $show_route,
+                ->withRoutePaths(
+                    $random_classroom_course_teacher_to_update->id
+                )
+                ->patchJsonData(
                     $update_classroom_course_teacher_request
                         ->toArray()
                 );
@@ -312,18 +309,13 @@ class ClassroomCourseTeacherTest extends AdminTestCase
                 $classroom_course_teacher_to_overlapp_with_to_update_one->to,
                 $random_classroom_course_teacher_to_update->id
             );
-        $show_route =
-            $this->main_route
-            .
-            '/'
-            .
-            $random_classroom_course_teacher_to_update
-                ->id;
 
         $response =
             $this
-                ->patchJson(
-                    $show_route,
+                ->withRoutePaths(
+                    $random_classroom_course_teacher_to_update->id
+                )
+                ->patchJsonData(
                     $update_classroom_course_teacher_request
                         ->toArray()
                 );

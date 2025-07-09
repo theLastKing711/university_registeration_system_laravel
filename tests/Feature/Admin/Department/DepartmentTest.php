@@ -12,11 +12,13 @@ use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
 class DepartmentTest extends AdminTestCase
 {
-    private string $main_route = '/admins/departments';
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this
+            ->route_builder
+            ->withPaths('departments');
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
@@ -30,9 +32,7 @@ class DepartmentTest extends AdminTestCase
 
         $response =
             $this
-                ->getJson(
-                    $this->main_route,
-                );
+                ->getJsonData();
 
         $response->assertStatus(200);
 
@@ -49,10 +49,8 @@ class DepartmentTest extends AdminTestCase
 
         $response =
             $this
-                ->postJson(
-                    $this->main_route,
+                ->postJsonData(
                     $create_course_department_request->toArray()
-
                 );
 
         $response->assertStatus(200);
@@ -68,7 +66,7 @@ class DepartmentTest extends AdminTestCase
 
         $this
             ->assertTrue(
-                $department_has_been_created
+                condition: $department_has_been_created
             );
 
     }
@@ -81,19 +79,20 @@ class DepartmentTest extends AdminTestCase
             Department::query()
                 ->first();
 
-        $show_route = $this->main_route.'/'.$first_department->id;
-
         $update_department_request =
             new UpdateDepartmentRequestData(
                 'test department',
                 $first_department->id
             )->toArray();
 
-        $response = $this->patch(
-            $show_route,
-            $update_department_request
-
-        );
+        $response =
+            $this
+                ->withRoutePaths(
+                    $first_department->id
+                )
+                ->patchJsonData(
+                    $update_department_request
+                );
 
         $response->assertStatus(200);
 
@@ -120,9 +119,12 @@ class DepartmentTest extends AdminTestCase
             Department::query()
                 ->first();
 
-        $show_route = $this->main_route.'/?ids[]='.$first_department->id;
-
-        $response = $this->deleteJson($show_route);
+        $response =
+            $this
+                ->withArrayQueryParameter([
+                    $first_department->id,
+                ])
+                ->deleteJsonData();
 
         $response->assertStatus(200);
 
@@ -144,21 +146,13 @@ class DepartmentTest extends AdminTestCase
         $first_department =
             Department::first();
 
-        $department_teacher_routes =
-            $this->main_route
-            .
-            '/'.
-            $first_department->id
-            .
-            '/'
-            .
-            'teachers';
-
         $response =
             $this
-                ->getJson(
-                    $department_teacher_routes
-                );
+                ->withRoutePaths(
+                    $first_department->id,
+                    'teachers'
+                )
+                ->getJsonData();
 
         $response->assertStatus(200);
 
