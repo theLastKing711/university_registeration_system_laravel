@@ -18,6 +18,7 @@ use Database\Seeders\DepartmentRegisterationPeriodSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\TeacherSeeder;
+use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -189,20 +190,28 @@ class OpenCourseRegisterationTest extends AdminTestCase
                 ->first()
                 ->id;
 
-        $course_that_has_cross_one_listed_course_id =
+        $course_that_has_cross_one_listed_course =
             Course::query()
+                ->with('department.openedAcademicyears')
+                ->whereHas(
+                    'department',
+                    fn (Builder $query) => $query
+                        ->has(
+                            'openedAcademicyears',
+
+                        )
+                )
                 ->has('firstCrossListedCourses', 1)
-                ->orHas('SecondCrossListedCourses', 1)
-                ->first()
-                ->id;
+                // ->orHas('SecondCrossListedCourses', 1)
+                ->first();
 
         $before_course_open_count = OpenCourseRegisteration::count();
 
         $open_course_registeration_request_data =
             OpenCourseForRegisterationRequestData::from([
-                'academic_year_semester_id' => $twenty_sixteent_year_semester_zero_id,
-                'department_id' => $it_deparmtent_id,
-                'courses_ids' => [$course_that_has_cross_one_listed_course_id],
+                'academic_year_semester_id' => $course_that_has_cross_one_listed_course->department->openedAcademicyears->first()->id,
+                'department_id' => $course_that_has_cross_one_listed_course->department->id,
+                'courses_ids' => [$course_that_has_cross_one_listed_course->id],
             ]);
 
         $response =
