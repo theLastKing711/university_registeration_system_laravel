@@ -4,10 +4,8 @@ namespace Tests\Feature\Admin\OpenCourseRegisteration;
 
 use App\Data\Admin\OpenCourseRegisteration\AssignTeacherToCourse\Request\AssignTeacherToCourseRequestData;
 use App\Data\Admin\OpenCourseRegisteration\OpenCourseForRegisteration\Request\OpenCourseForRegisterationRequestData;
-use App\Models\AcademicYearSemester;
 use App\Models\Course;
 use App\Models\CourseTeacher;
-use App\Models\Department;
 use App\Models\OpenCourseRegisteration;
 use App\Models\Teacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
@@ -179,17 +177,6 @@ class OpenCourseRegisterationTest extends AdminTestCase
     public function open_course_for_registeration_and_open_related_cross_listed_courses_with_200_response(): void
     {
 
-        $it_deparmtent_id =
-            Department::query()
-                ->firstWhere('name', 'IT')
-                ->id;
-
-        $twenty_sixteent_year_semester_zero_id =
-            AcademicYearSemester::where('year', '2014')
-                ->where('semester', operator: 0)
-                ->first()
-                ->id;
-
         $course_that_has_cross_one_listed_course =
             Course::query()
                 ->with('department.openedAcademicyears')
@@ -222,20 +209,6 @@ class OpenCourseRegisterationTest extends AdminTestCase
                 );
 
         $response->assertStatus(200);
-
-        $created_open_courses =
-            OpenCourseRegisteration::query()
-                ->where(
-                    'academic_year_semester_id',
-                    $open_course_registeration_request_data
-                        ->academic_year_semester_id
-                )
-                ->whereIn(
-                    'course_id',
-                    $open_course_registeration_request_data
-                        ->courses_ids
-                )
-                ->get();
 
         $after_course_open_count = OpenCourseRegisteration::count();
 

@@ -15,10 +15,10 @@ class StudentSeeder extends Seeder
     public function run(): void
     {
 
-        $it_courses =
-            OpenCourseRegisteration::query()
-                ->whereRelation('course.department', 'id', 1)
-                ->get();
+        // $it_courses =
+        //     OpenCourseRegisteration::query()
+        //         ->whereRelation('course.department', 'id', 1)
+        //         ->get();
 
         User::factory()
             ->withStudentRole()

@@ -30,7 +30,8 @@ return new class extends Migration
             $table
                 ->foreignId('manages_department_with_id')
                 ->nullable()
-                ->constrained('departments');
+                ->constrained('departments')
+                ->cascadeOnDelete();
 
             $table->rememberToken();
             $table->timestamps();

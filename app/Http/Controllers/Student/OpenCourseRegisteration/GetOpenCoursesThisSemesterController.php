@@ -53,13 +53,16 @@ class GetOpenCoursesThisSemesterController extends Controller
                 'department_id',
                 $logged_user->department_id
             )
-            ->orderBy('academic_year_semester_id', 'desc')
             ->first();
 
         return DB::table('courses')
             ->leftJoin('departments', 'courses.department_id', 'departments.id')
             ->join('open_course_registerations', 'open_course_registerations.course_id', 'courses.id')
-            ->where('open_course_registerations.academic_year_semester_id', $department_latest_open_registeration->academic_year_semester_id)
+            // ->join('academic_year_semester', 'academic_year_semester.id', 'open_course_registerations.academic_year_semester_id')
+            ->where(
+                'open_course_registerations.academic_year_semester_id',
+                $department_latest_open_registeration->academic_year_semester_id
+            )
             ->whereNested(function ($query) use ($logged_user_department) {
                 $query
                     ->where('departments.id', $logged_user_department->id)

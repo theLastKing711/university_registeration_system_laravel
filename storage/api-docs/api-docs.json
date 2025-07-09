@@ -203,6 +203,41 @@
                     }
                 }
             },
+            "post": {
+                "tags": [
+                    "adminsCourseTeachers"
+                ],
+                "operationId": "b70afe69770f6e7adc9afc6ff5bf7306",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCourseTeacherAttendanceRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
             "parameters": [
                 {
                     "$ref": "#/components/parameters/adminsCourseTeachersGetCourseTeachersLecturesIdPathParameter"
@@ -950,43 +985,6 @@
                 }
             }
         },
-        "/admins/course-teachers/{id]/lectures": {
-            "post": {
-                "tags": [
-                    "adminsCourseTeachers"
-                ],
-                "operationId": "dc9b958105b732f573c0a0e9fd031985",
-                "parameters": [
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CreateCourseTeacherAttendanceRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/admins/course-teachers/{id}/students/{lecture_id}": {
             "delete": {
                 "tags": [
@@ -1620,25 +1618,9 @@
         "/students/open-course-registerations/schedule": {
             "get": {
                 "tags": [
-                    "studentsCourses"
+                    "studentsOpenCourseRegisterations"
                 ],
                 "operationId": "cc3b034d88646171f0fef504055dbf1d",
-                "parameters": [
-                    {
-                        "name": "year",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "semester",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Items fetched successfully",
@@ -1662,22 +1644,6 @@
                     "studentsOpenCourseRegisterations"
                 ],
                 "operationId": "fb86732421d7e3c676b1696dbc421f96",
-                "parameters": [
-                    {
-                        "name": "year",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "semester",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Items fetched successfully",
@@ -1946,9 +1912,6 @@
             },
             "CreateCourseTeacherAttendanceRequestData": {
                 "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
                     "happened_at": {
                         "schema": "string",
                         "type": "string",
@@ -3230,6 +3193,14 @@
                     "type": "integer"
                 }
             },
+            "adminsCourseTeacherIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsDeleteCourseTeacherAttendanceIdPathParameter": {
                 "name": "id",
                 "in": "path",
@@ -3360,14 +3331,6 @@
             },
             "adminsOpenCourseRegisterationAssignTeachToCouresIdPathParameter": {
                 "name": "id",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "adminsOpenCourseRegisterationUnAssignTeacherFromOpenCourseTeacherRequestDataIdPathParameter": {
-                "name": "teachers_ids",
                 "in": "path",
                 "required": true,
                 "schema": {
@@ -3526,10 +3489,6 @@
         {
             "name": "studentMarks",
             "description": "studentMarks"
-        },
-        {
-            "name": "studentsCourses",
-            "description": "studentsCourses"
         },
         {
             "name": "studentsOpenCourseRegisterations",

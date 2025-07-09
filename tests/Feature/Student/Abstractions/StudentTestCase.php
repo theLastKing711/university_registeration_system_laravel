@@ -4,16 +4,21 @@ namespace Tests\Feature\Student\Abstractions;
 
 use App\Helpers\RotueBuilder\RouteBuilder;
 use App\Models\User;
-use Database\Factories\StudentFactory;
+use Database\Seeders\AcademicYearSemesterSeeder;
+use Database\Seeders\ClassroomSeeder;
+use Database\Seeders\CourseSeeder;
+use Database\Seeders\DepartmentRegisterationPeriodSeeder;
+use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
+use Database\Seeders\StudentSeeder;
+use Database\Seeders\TeacherSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StudentTestCase extends TestCase
 {
     use RefreshDatabase;
-
-    protected string $main_route = '/admins';
 
     public User $student;
 
@@ -23,19 +28,32 @@ class StudentTestCase extends TestCase
 
         $this
             ->route_builder =
-                RouteBuilder::withMainRoute($this->main_route);
+                RouteBuilder::withMainRoute('students');
 
-        $this->seed(RolesAndPermissionsSeeder::class);
+        $this->seed(
+            [
+                AcademicYearSemesterSeeder::class,
+                RolesAndPermissionsSeeder::class,
+                DepartmentSeeder::class,
+                ClassroomSeeder::class,
+                TeacherSeeder::class,
+                CourseSeeder::class,
+                OpenCourseRegisterationSeeder::class,
+                StudentSeeder::class,
+                DepartmentRegisterationPeriodSeeder::class,
+            ]
+        );
 
         $this->createStudent();
 
-        // $this->actingAs($this->student);
+        $this->actingAs($this->student);
     }
 
     private function createStudent(): void
     {
         $this->student =
-            StudentFactory::staticStudent()
-                ->create();
+            User::query()
+                ->has(relation: 'courses', operator: '>', count: 1)
+                ->first();
     }
 }
