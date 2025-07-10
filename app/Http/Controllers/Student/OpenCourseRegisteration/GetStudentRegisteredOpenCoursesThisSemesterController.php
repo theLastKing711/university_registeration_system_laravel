@@ -8,6 +8,7 @@ use App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThis
 use App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThisSemester\Response\GetStudentRegisteredOpenCoursesThisSemesterResponsePaginationResultData;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use OpenApi\Attributes as OAT;
 
 class GetStudentRegisteredOpenCoursesThisSemesterController extends Controller
@@ -24,16 +25,13 @@ class GetStudentRegisteredOpenCoursesThisSemesterController extends Controller
                 ->with(
                     [
                         'department' => [
-                            'openRegisterations' => fn ($query) => $query
-                                ->orderByDesc('year')
-                                ->orderBy('semester'),
+                            'openRegisterations',
                         ],
                     ]
                 )
                 ->firstWhere(
                     'id',
-                    1
-                    // operator: Auth::User()->id
+                    operator: Auth::User()->id
                 );
 
         $current_year_semester =
@@ -51,14 +49,8 @@ class GetStudentRegisteredOpenCoursesThisSemesterController extends Controller
                     'courses' => fn ($query) => $query
                         ->with('course')
                         ->where(
-                            'year',
-                            2014
-                            // $current_year_semester->year
-                        )
-                        ->where(
-                            'semester',
-                            1
-                            // $current_year_semester->semester
+                            'academic_year_semester_id',
+                            $current_year_semester->id
                         ),
                 ])
                 ->courses

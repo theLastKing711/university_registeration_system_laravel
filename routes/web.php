@@ -284,8 +284,11 @@ Route::prefix('students')
 
             Route::get('', action: GetOpenCoursesThisSemesterController::class);
             Route::get('schedule', GetOpenCoursesScheduleController::class);
+            Route::get('registered-courses/this-semester', GetStudentRegisteredOpenCoursesThisSemesterController::class);
 
             Route::post('', RegisterInOpenCoursesController::class);
+
+            Route::delete('{id}', UnRegisterOpenCourseController::class);
 
         });
 
