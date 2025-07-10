@@ -26,7 +26,7 @@ class OpenCourseRegisterationFactory extends Factory
         ];
     }
 
-    public function openFrom2014To2015(): static
+    public function openFrom2014To2016ForEachSequence(): static
     {
 
         $academic_semesters_years =
@@ -40,13 +40,21 @@ class OpenCourseRegisterationFactory extends Factory
             $academic_semesters_years
                 ->where('year', 2015);
 
+        $two_thouthand_sixteen_semester_ids =
+            $academic_semesters_years
+                ->where('year', 2016)
+                ->where('semester', 0);
+
         return
             $this->forEachSequence(
                 [
                     'academic_year_semester_id' => $this->faker->randomElement($two_thouthand_fourthen_semester_ids),
                 ],
                 [
-                    'academic_year_semester_id' => $this->faker->randomElement($two_thouthand_fourthen_semester_ids),
+                    'academic_year_semester_id' => $this->faker->randomElement($two_thouthand_fifteen_semester_ids),
+                ],
+                [
+                    'academic_year_semester_id' => $this->faker->randomElement($two_thouthand_sixteen_semester_ids),
                 ],
             );
     }

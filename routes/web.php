@@ -54,7 +54,7 @@ use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksThisSeme
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesScheduleController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesThisSemesterController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThisSemesterController;
-use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterOpenCoursesController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterInOpenCoursesController;
 use Illuminate\Support\Facades\Route;
 
 // Route::prefix('files')
@@ -285,6 +285,8 @@ Route::prefix('students')
             Route::get('', action: GetOpenCoursesThisSemesterController::class);
             Route::get('schedule', GetOpenCoursesScheduleController::class);
 
+            Route::post('', RegisterInOpenCoursesController::class);
+
         });
 
         // Route::prefix('course-registerations')
@@ -310,7 +312,7 @@ Route::prefix('students')
         //                     ->group(function () {
 
         //                         Route::get('', GetStudentRegisteredOpenCoursesThisSemesterController::class);
-        //                         Route::post('', RegisterOpenCoursesController::class);
+        //                         Route::post('', RegisterInOpenCoursesController::class);
         //                         // Route::delete('{id}', UnRegisterOpenCourseController::class);
 
         //                     });

@@ -253,7 +253,7 @@ class OpenCourseRegisterationSeeder extends Seeder
 
                    return
                        OpenCourseRegisteration::factory()
-                           ->openFrom2014To2015()
+                           ->openFrom2014To2016()
                            ->hasTwoTeachers()
                            ->create([
                                'course_id' => $course->id,

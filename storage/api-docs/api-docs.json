@@ -1659,6 +1659,32 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "studentsOpenCourseRegisterations"
+                ],
+                "operationId": "11c47e1652b06804a65fe8b776fe3801",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterInOpenCoursesRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/students/course-registerations/registered-courses/this-semester": {
@@ -1691,32 +1717,6 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/GetStudentRegisteredOpenCoursesThisSemesterResponsePaginationResultData"
                                 }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "studentsOpenCourseRegisterations"
-                ],
-                "operationId": "350be431e4d840bca2432335ddfdb641",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RegisterOpenCoursesRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
                             }
                         }
                     }
@@ -3107,9 +3107,9 @@
                 },
                 "type": "object"
             },
-            "RegisterOpenCoursesRequestData": {
+            "RegisterInOpenCoursesRequestData": {
                 "properties": {
-                    "course_ids": {
+                    "open_courses_ids": {
                         "type": "array",
                         "items": {
                             "type": "integer"

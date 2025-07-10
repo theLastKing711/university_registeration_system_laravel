@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Student\OpenCourseRegisteration;
 
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
-use App\Data\Student\OpenCourseRegisteration\RegisterCourses\Request\RegisterOpenCoursesRequestData;
+use App\Data\Student\OpenCourseRegisteration\RegisterCourses\Request\RegisterInOpenCoursesRequestData;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use OpenApi\Attributes as OAT;
 
-class RegisterOpenCoursesController extends Controller
+class RegisterInOpenCoursesController extends Controller
 {
-    #[OAT\Post(path: '/students/course-registerations/registered-courses/this-semester', tags: ['studentsOpenCourseRegisterations'])]
-    #[JsonRequestBody(RegisterOpenCoursesRequestData::class)]
+    #[OAT\Post(path: '/students/open-course-registerations', tags: ['studentsOpenCourseRegisterations'])]
+    #[JsonRequestBody(RegisterInOpenCoursesRequestData::class)]
     #[SuccessNoContentResponse]
-    public function __invoke(RegisterOpenCoursesRequestData $request)
+    public function __invoke(RegisterInOpenCoursesRequestData $request)
     {
 
         $student =
@@ -27,7 +27,7 @@ class RegisterOpenCoursesController extends Controller
         $student
             ->courses()
             ->attach(
-                $request->course_ids,
+                $request->open_courses_ids,
             );
 
     }

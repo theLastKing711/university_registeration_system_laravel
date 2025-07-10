@@ -15,5 +15,8 @@ return [
     'exam_students' => [
         'student unregistered in course' => 'الطالب صاحب المعرف :id غير مسجل بالمادة, لايمكن تسجيل له علامة فحص.',
     ],
+    'open_coruse_registeraions' => [
+        'unfinished_required_prerequisites' => ':courses_codes لا يمكن التسجيل بالمقرر بسسب عدم إنهاء المتطلبات التالية للمقرر',
+    ],
 
 ];
