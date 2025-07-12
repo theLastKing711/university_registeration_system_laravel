@@ -57,7 +57,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $assign_a_teacher_to_an_open_course =
             new AssignTeacherToCourseRequestData(
-                OpenCourseRegisteration::first()->id,
+                Teacher::first()->id,
                 Teacher::first()->id,
                 $open_course_id
             );
@@ -142,7 +142,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $assign_a_teacher_to_an_open_course =
             new AssignTeacherToCourseRequestData(
-                OpenCourseRegisteration::first()->id,
+                Teacher::first()->id,
                 Teacher::first()->id,
                 $open_course_id
             );
@@ -230,7 +230,8 @@ class OpenCourseRegisterationTest extends AdminTestCase
     public function delete_an_existing_open_course_with_200_response(): void
     {
 
-        $open_course_registeration = OpenCourseRegisteration::first();
+        $open_course_registeration =
+            OpenCourseRegisteration::first();
 
         $response =
              $this

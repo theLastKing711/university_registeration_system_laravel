@@ -35,7 +35,7 @@ class DeleteCourseTeacherAttendanceRequestData extends Data
                 ),
             ),
             FromRouteParameter('lecture_id'),
-            Exists('course_teacher', 'id')
+            Exists('lectures', 'id')
         ]
         public int $lecture_id,
     ) {}

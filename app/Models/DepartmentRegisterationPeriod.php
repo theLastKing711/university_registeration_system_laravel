@@ -71,4 +71,19 @@ class DepartmentRegisterationPeriod extends Pivot
     {
         return $this->belongsTo(AcademicYearSemester::class);
     }
+
+    public static function GetDepartmentActiveAcademicYearSemesterByDepartmentId(int $department_id)
+    {
+        return
+            DepartmentRegisterationPeriod::query()
+                ->where(
+                    [
+                        'department_id' => $department_id,
+                        'is_open_for_students' => true,
+
+                    ]
+                )
+                ->first()
+                ->academic_year_semester_id;
+    }
 }

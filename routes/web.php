@@ -55,6 +55,7 @@ use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesScheduleC
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesThisSemesterController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThisSemesterController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterInOpenCoursesController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\UnRegisterFromOpenCourseController;
 use Illuminate\Support\Facades\Route;
 
 // Route::prefix('files')
@@ -293,7 +294,7 @@ Route::prefix('students')
 
             Route::post('', RegisterInOpenCoursesController::class);
 
-            Route::delete('{id}', UnRegisterOpenCourseController::class);
+            Route::delete('{id}', UnRegisterFromOpenCourseController::class);
 
         });
 

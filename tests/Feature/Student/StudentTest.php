@@ -104,28 +104,32 @@ class StudentTest extends StudentTestCase
     public function register_in_open_course_with_200_response(): void
     {
 
-        $student_department_courses_ids =
+        $student =
+            User::factory()
+                ->staticStudent()
+                ->fromItDepartment()
+                ->create();
+
+        $department_active_year_semester_id =
+            DepartmentRegisterationPeriod::GetDepartmentActiveAcademicYearSemesterByDepartmentId(
+                $this->student->department_id
+            );
+
+        $two_student_depratment_courses =
             OpenCourseRegisteration::query()
-                ->doesntHave('course.coursesPrerequisites')
-                ->whereHas(
-                    'course',
-                    fn ($query) => $query
-                        ->whereHas(
-                            'department',
-                            fn ($query) => $query
-                                ->where(
-                                    'id',
-                                    $this->student->department_id
-                                )
-                        )
+                ->where(
+                    'academic_year_semester_id',
+                    $department_active_year_semester_id
                 )
+                ->doesntHave('course.prerequisites')
                 ->take(2)
-                ->get()
-                ->pluck('id');
+                ->get();
+
+        $this->actingAs($student);
 
         $register_in_open_course_request =
             new RegisterInOpenCoursesRequestData(
-                $student_department_courses_ids
+                $two_student_depratment_courses->pluck('id')
                     ->toArray()
             );
 
@@ -143,22 +147,16 @@ class StudentTest extends StudentTestCase
     public function register_in_open_course_with_unfinished_required_prerequisites_fails_validation_with_422_response(): void
     {
 
-        $department_registeration_period =
-            DepartmentRegisterationPeriod::query()
-                ->where(
-                    [
-                        'department_id' => $this->student->department_id,
-                        'is_open_for_students' => true,
-                    ]
-                )
-                ->first();
+        $department_active_year_semester_id =
+           DepartmentRegisterationPeriod::GetDepartmentActiveAcademicYearSemesterByDepartmentId(
+               $this->student->department_id
+           );
 
         $student_department_courses =
             OpenCourseRegisteration::query()
                 ->where(
                     'academic_year_semester_id',
-                    $department_registeration_period
-                        ->academic_year_semester_id
+                    $department_active_year_semester_id
                 )
                 ->whereHas(
                     'course',
@@ -233,23 +231,17 @@ class StudentTest extends StudentTestCase
     public function register_in_open_course_with_duplicate_registered_course_fails_validation_with_422_response(): void
     {
 
-        $department_registeration_period =
-            DepartmentRegisterationPeriod::query()
-                ->where(
-                    [
-                        'department_id' => $this->student->department_id,
-                        'is_open_for_students' => true,
-                    ]
-                )
-                ->first();
+        $department_active_year_semester_id =
+            DepartmentRegisterationPeriod::GetDepartmentActiveAcademicYearSemesterByDepartmentId(
+                $this->student->department_id
+            );
 
         $two_open_courses_this_year_semester =
             OpenCourseRegisteration::query()
                 ->doesntHave('course.prerequisites')
                 ->where(
                     'academic_year_semester_id',
-                    $department_registeration_period
-                        ->academic_year_semester_id
+                    $department_active_year_semester_id
                 )
                 ->take(2)
                 ->get();
@@ -307,33 +299,40 @@ class StudentTest extends StudentTestCase
     {
 
         $student_registered_open_course =
-            StudentCourseRegisteration::query()
-                ->with('course')
-                ->firstWhere(
-                    'student_id',
-                    $this->student->id
-                );
+            OpenCourseRegisteration::query()
+                ->whereHas(
+                    'studentCourseRegisterations',
+                    fn ($query) => $query
+                        ->where(
+                            'student_id',
+                            $this->student->id
+                        )
+                )
+                ->first();
 
         $response =
             $this
                 ->withRoutePaths(
                     $student_registered_open_course
-                        ->course
                         ->id
                 )
                 ->deleteJsonData();
 
-        $student_registered_open_course_after_request =
-            $student_registered_open_course->fresh();
-
-        $open_course_has_been_deleted =
-            $student_registered_open_course_after_request
-             ===
+        $user_has_unregistered_open_course =
+            StudentCourseRegisteration::query()
+                ->where(
+                    [
+                        'student_id' => $this->student->id,
+                        'course_id' => $student_registered_open_course->id,
+                    ]
+                )
+                ->first()
+             ==
             null;
 
         $this
             ->assertTrue(
-                $open_course_has_been_deleted
+                $user_has_unregistered_open_course
             );
 
     }

@@ -26,6 +26,7 @@ class AssignTeacherToCourseRequestData extends Data
             Exists('teachers', 'id'),
         ]
         public int $teacher_id,
+
         #[OAT\Property]
         public bool $is_main_teacher,
 

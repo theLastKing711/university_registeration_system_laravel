@@ -22,15 +22,10 @@ class GetCoursesMarksThisSemesterController extends Controller
 
         $logged_user = Auth::User();
 
-        $current_semester_year =
-            DepartmentRegisterationPeriod::query()
-                ->where(
-                    [
-                        'department_id' => $logged_user->department_id,
-                        'is_open_for_students' => true,
-                    ]
-                )
-                ->first();
+        $department_active_year_semester_id =
+            DepartmentRegisterationPeriod::GetDepartmentActiveAcademicYearSemesterByDepartmentId(
+                $logged_user->department_id
+            );
 
         $student_marks =
             StudentCourseRegisteration::query()
@@ -46,7 +41,7 @@ class GetCoursesMarksThisSemesterController extends Controller
                     fn ($query) => $query
                         ->where(
                             'academic_year_semester_id',
-                            $current_semester_year
+                            $department_active_year_semester_id
                         )
                 )
                 ->whereHas(
