@@ -14,7 +14,7 @@ use OpenApi\Attributes as OAT;
 
 class GetCoursesMarksController extends Controller
 {
-    #[OAT\Get(path: '/students/course-registerations/registered-courses/marks', tags: ['studentMarks'])]
+    #[OAT\Get(path: '/students/open-course-registerations/marks', tags: ['studentMarks'])]
     #[QueryParameter('page', 'integer')]
     #[QueryParameter('perPage', 'integer')]
     #[SuccessItemResponse(GetCoursesMarksResponsePaginationResultData::class)]

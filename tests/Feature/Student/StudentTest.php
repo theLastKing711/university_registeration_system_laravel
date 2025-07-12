@@ -6,6 +6,7 @@ use App\Data\Student\OpenCourseRegisteration\RegisterCourses\Request\RegisterInO
 use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
 use App\Models\StudentCourseRegisteration;
+use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Student\Abstractions\StudentTestCase;
 
@@ -20,7 +21,7 @@ class StudentTest extends StudentTestCase
 
     }
 
-    // get_teachers
+    // get_open_courses_this_semester
     #[Test]
     public function get_open_courses_this_semester_with_200_response(): void
     {
@@ -33,7 +34,7 @@ class StudentTest extends StudentTestCase
             ->assertStatus(200);
     }
 
-    // get_teachers
+    // get_student_course_schedule_this_semester
     #[Test]
     public function get_student_course_schedule_this_semester_with_200_response(): void
     {
@@ -46,6 +47,56 @@ class StudentTest extends StudentTestCase
                 ->getJsonData();
 
         $response->assertStatus(200);
+    }
+
+    // get_student_open_course_marks
+    #[Test]
+    public function get_student_open_course_marks_with_200_response(): void
+    {
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    'marks'
+                )
+                ->getJsonData();
+
+        $response
+            ->assertStatus(200);
+    }
+
+    // get_student_marks_this_semester
+    #[Test]
+    public function get_student_student_course_marks_this_semester_with_200_response(): void
+    {
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    'marks',
+                    'this-semester',
+                )
+                ->getJsonData();
+
+        $response
+            ->assertStatus(200);
+    }
+
+    // get_student_registered_open_courses_this_semester
+    #[Test]
+    public function get_student_registered_open_courses_this_semester_with_200_response(): void
+    {
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    'registered-courses',
+                    'this-semester'
+                )
+                ->getJsonData();
+
+        $response
+            ->assertStatus(200);
     }
 
     // register_in_open_course
@@ -178,6 +229,78 @@ class StudentTest extends StudentTestCase
 
     }
 
+    #[Test]
+    public function register_in_open_course_with_duplicate_registered_course_fails_validation_with_422_response(): void
+    {
+
+        $department_registeration_period =
+            DepartmentRegisterationPeriod::query()
+                ->where(
+                    [
+                        'department_id' => $this->student->department_id,
+                        'is_open_for_students' => true,
+                    ]
+                )
+                ->first();
+
+        $two_open_courses_this_year_semester =
+            OpenCourseRegisteration::query()
+                ->doesntHave('course.prerequisites')
+                ->where(
+                    'academic_year_semester_id',
+                    $department_registeration_period
+                        ->academic_year_semester_id
+                )
+                ->take(2)
+                ->get();
+
+        $student = User::factory()
+            ->staticStudent()
+            ->fromItDepartment()
+            ->withOpenCourses($two_open_courses_this_year_semester)
+            ->create();
+
+        $this->actingAs($student);
+
+        $register_in_open_course_request =
+            new RegisterInOpenCoursesRequestData(
+                $two_open_courses_this_year_semester->pluck('id')
+                    ->toArray()
+            );
+
+        $response =
+            $this
+                ->postJsonData(
+                    $register_in_open_course_request
+                        ->toArray()
+                );
+
+        $response->assertStatus(422);
+
+        $validation_message =
+            __(
+                'messages.open_coruse_registeraions.duplicate_registered_course',
+                [
+                    'course_code' => $two_open_courses_this_year_semester
+                        ->first()
+                        ->course
+                        ->code,
+
+                ]
+            );
+
+        $response
+            ->assertJsonValidationErrors(
+                [
+                    'open_courses_ids.0' => $validation_message,
+                ]
+            );
+
+        $response
+            ->assertJsonCount(2, 'errors');
+
+    }
+
     // un_register_open_course
     #[Test]
     public function un_register_open_course_with_200_response(): void
@@ -213,21 +336,5 @@ class StudentTest extends StudentTestCase
                 $open_course_has_been_deleted
             );
 
-    }
-
-    #[Test]
-    public function get_student_registered_open_courses_this_semester_with_200_response(): void
-    {
-
-        $response =
-            $this
-                ->withRoutePaths(
-                    'registered-courses',
-                    'this-semester'
-                )
-                ->getJsonData();
-
-        $response
-            ->assertStatus(200);
     }
 }

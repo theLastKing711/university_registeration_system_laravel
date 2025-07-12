@@ -54,6 +54,7 @@ class StudentTestCase extends TestCase
         $this->student =
             User::query()
                 ->has(relation: 'courses', operator: '>', count: 1)
+                ->has('studentCourseRegisterations')
                 ->first();
     }
 }

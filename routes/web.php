@@ -284,6 +284,11 @@ Route::prefix('students')
 
             Route::get('', action: GetOpenCoursesThisSemesterController::class);
             Route::get('schedule', GetOpenCoursesScheduleController::class);
+
+            Route::get('marks', GetCoursesMarksController::class);
+
+            Route::get('marks/this-semester', GetCoursesMarksThisSemesterController::class);
+
             Route::get('registered-courses/this-semester', GetStudentRegisteredOpenCoursesThisSemesterController::class);
 
             Route::post('', RegisterInOpenCoursesController::class);
@@ -322,8 +327,6 @@ Route::prefix('students')
 
         //                 Route::prefix('marks')
         //                     ->group(function () {
-
-        //                         Route::get('', GetCoursesMarksController::class);
 
         //                         Route::prefix('this-semester')
         //                             ->group(function () {

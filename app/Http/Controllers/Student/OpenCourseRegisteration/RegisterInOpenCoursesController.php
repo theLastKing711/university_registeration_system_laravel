@@ -7,6 +7,7 @@ use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Data\Student\OpenCourseRegisteration\RegisterCourses\Request\RegisterInOpenCoursesRequestData;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use OpenApi\Attributes as OAT;
 
 class RegisterInOpenCoursesController extends Controller
@@ -21,7 +22,7 @@ class RegisterInOpenCoursesController extends Controller
             User::query()
                 ->firstWhere(
                     'id',
-                    operator: 1
+                    operator: Auth::User()->id
                 );
 
         $student

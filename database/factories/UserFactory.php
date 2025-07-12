@@ -8,6 +8,7 @@ use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -204,6 +205,38 @@ class UserFactory extends Factory
         });
 
     }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<OpenCourseRegisteration>  $courses
+     */
+    public function withOpenCourses(Collection $courses): static
+    {
+
+        return $this->afterCreating(function (User $student) use ($courses) {
+            $student
+                ->courses()
+                ->attach(
+                    $courses->pluck('id')
+                );
+        });
+
+    }
+
+    // /**
+    //  * @param  \Illuminate\Database\Eloquent\Collection<OpenCourseRegisteration>  $courses
+    //  */
+    // public function withExams(Collection $courses): static
+    // {
+
+    //     return $this->afterCreating(function (User $student) use ($courses){
+    //         $student
+    //             ->studentCourseRegisterations()
+    //             ->createMany(
+    //                 $courses
+    //             )
+    //     });
+
+    // }
 
     public function staticStudent(): static
     {

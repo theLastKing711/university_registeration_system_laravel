@@ -13,7 +13,7 @@ use OpenApi\Attributes as OAT;
 
 class GetStudentRegisteredOpenCoursesThisSemesterController extends Controller
 {
-    #[OAT\Get(path: '/students/course-registerations/registered-courses/this-semester', tags: ['studentsOpenCourseRegisterations'])]
+    #[OAT\Get(path: '/students/open-course-registerations/registered-courses/this-semester', tags: ['studentsOpenCourseRegisterations'])]
     #[QueryParameter('page', 'integer')]
     #[QueryParameter('perPage', 'integer')]
     #[SuccessItemResponse(GetStudentRegisteredOpenCoursesThisSemesterResponsePaginationResultData::class)]
