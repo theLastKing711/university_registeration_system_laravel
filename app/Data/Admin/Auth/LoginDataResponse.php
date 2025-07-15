@@ -2,7 +2,6 @@
 
 namespace App\Data\Admin\Auth;
 
-use App\Models\User;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
 
@@ -19,15 +18,4 @@ class LoginDataResponse extends Data
         #[OAT\Property(type: 'string')]
         public string $created_at,
     ) {}
-
-    // public static function fromModel(User $user): self
-    // {
-    //     return new self(
-    //         id: $user->id,
-    //         name: $user->name,
-    //         email: $user->email,
-    //         created_at: $user->created_at
-    //     );
-    // }
-
 }

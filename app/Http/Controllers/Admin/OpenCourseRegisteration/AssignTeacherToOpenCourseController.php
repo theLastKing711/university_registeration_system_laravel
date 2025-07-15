@@ -6,7 +6,10 @@ use App\Data\Admin\OpenCourseRegisteration\AssignTeacherToCourse\Request\AssignT
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\Abstract\OpenCourseRegisterationTeacherController;
+use App\Mail\TeacherCourseAssignmentEmail;
 use App\Models\OpenCourseRegisteration;
+use App\Models\Teacher;
+use Illuminate\Support\Facades\Mail;
 use OpenApi\Attributes as OAT;
 
 class AssignTeacherToOpenCourseController extends OpenCourseRegisterationTeacherController
@@ -17,6 +20,24 @@ class AssignTeacherToOpenCourseController extends OpenCourseRegisterationTeacher
     public function __invoke(AssignTeacherToCourseRequestData $request)
     {
 
+        $coruse_name =
+            OpenCourseRegisteration::query()
+                ->with('course')
+                ->firstWhere(
+                    'id',
+                    $request->id
+                )
+                ->course
+                ->name;
+
+        $teacher_name =
+            Teacher::query()
+                ->firstWhere(
+                    'id',
+                    $request->id
+                )
+                ->name;
+
         OpenCourseRegisteration::query()
             ->firstWhere(
                 'id',
@@ -26,6 +47,14 @@ class AssignTeacherToOpenCourseController extends OpenCourseRegisterationTeacher
             ->attach(
                 [$request->teacher_id],
                 ['is_main_teacher' => $request->is_main_teacher]
+            );
+
+        Mail::to('lastking711@protonmail.com')
+            ->send(
+                new TeacherCourseAssignmentEmail(
+                    $teacher_name,
+                    $coruse_name
+                )
             );
 
     }

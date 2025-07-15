@@ -242,9 +242,9 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $open_course = OpenCourseRegisteration::query()
-            ->whereId($open_course_registeration->id)
-            ->first();
+        $open_course =
+            $open_course_registeration
+                ->fresh();
 
         $this->assertNull($open_course);
 

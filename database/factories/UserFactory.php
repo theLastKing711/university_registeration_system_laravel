@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enum\Auth\RolesEnum;
 use App\Models\Department;
+use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Carbon\Carbon;
@@ -211,6 +212,26 @@ class UserFactory extends Factory
      */
     public function withOpenCourses(Collection $courses): static
     {
+
+        return $this->afterCreating(function (User $student) use ($courses) {
+            $student
+                ->courses()
+                ->attach(
+                    $courses->pluck('id')
+                );
+        });
+
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<OpenCourseRegisteration>  $courses
+     */
+    public function withOpenCoursesInActiveYearSemseter(User $student, Collection $courses): static
+    {
+
+        DepartmentRegisterationPeriod::GetDepartmentActiveAcademicYearSemesterByDepartmentId(
+            $student->department_id
+        );
 
         return $this->afterCreating(function (User $student) use ($courses) {
             $student

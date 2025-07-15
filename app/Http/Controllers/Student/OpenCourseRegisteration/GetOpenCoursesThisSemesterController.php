@@ -51,7 +51,6 @@ class GetOpenCoursesThisSemesterController extends Controller
         return DB::table('courses')
             ->leftJoin('departments', 'courses.department_id', 'departments.id')
             ->join('open_course_registerations', 'open_course_registerations.course_id', 'courses.id')
-            // ->join('academic_year_semester', 'academic_year_semester.id', 'open_course_registerations.academic_year_semester_id')
             ->where(
                 'open_course_registerations.academic_year_semester_id',
                 $department_active_year_semester_id
