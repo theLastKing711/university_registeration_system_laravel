@@ -3,19 +3,20 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class TeacherCourseAssignmentEmail extends Mailable
+class TeacherCourseAssignmentEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(private string $teacher_name, private string $course_name)
+    public function __construct(public string $teacher_name, public string $course_name)
     {
         //
     }
@@ -38,7 +39,7 @@ class TeacherCourseAssignmentEmail extends Mailable
         return new Content(
             view: 'mail.test-email',
             with: [
-                'name' => $this->teacher_name,
+                'teacher_name' => $this->teacher_name,
                 'course_name' => $this->course_name,
             ]
         );

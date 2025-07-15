@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin\OpenCourseRegisteration;
 
 use App\Data\Admin\OpenCourseRegisteration\AssignTeacherToCourse\Request\AssignTeacherToCourseRequestData;
 use App\Data\Admin\OpenCourseRegisteration\OpenCourseForRegisteration\Request\OpenCourseForRegisterationRequestData;
+use App\Mail\TeacherCourseAssignmentEmail;
 use App\Models\Course;
 use App\Models\CourseTeacher;
 use App\Models\OpenCourseRegisteration;
@@ -17,6 +18,8 @@ use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\TeacherSeeder;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -45,20 +48,29 @@ class OpenCourseRegisterationTest extends AdminTestCase
     }
 
     // assign_a_teacher_to_an_open_course
+    // Laravel automatically sets the QUEUE_CONNECTION to sync when running tests via phpunit
     #[Test]
     public function assign_a_teacher_to_an_open_course_with_200_response(): void
     {
+        Mail::fake();
 
         CourseTeacher::query()
             ->delete();
 
+        $open_course =
+            OpenCourseRegisteration::first();
+
+        $teacher_to_assign_course_to =
+            Teacher::first();
+
         $open_course_id =
-            OpenCourseRegisteration::first()->id;
+            $open_course
+                ->id;
 
         $assign_a_teacher_to_an_open_course =
             new AssignTeacherToCourseRequestData(
-                Teacher::first()->id,
-                Teacher::first()->id,
+                $teacher_to_assign_course_to->id,
+                false,
                 $open_course_id
             );
 
@@ -88,6 +100,21 @@ class OpenCourseRegisterationTest extends AdminTestCase
                 ->get();
 
         $this->assertCount(1, $created_open_courses);
+
+        // Assert that mailable was queued
+        Mail::assertQueued(
+            TeacherCourseAssignmentEmail::class,
+            function (TeacherCourseAssignmentEmail $mail) use ($open_course, $teacher_to_assign_course_to) {
+
+                return
+                    $mail->course_name == $open_course->course->name
+                    &&
+                    $mail->teacher_name == $teacher_to_assign_course_to->name;
+
+            }
+        );
+
+        Mail::assertQueuedCount(1);
 
     }
 
