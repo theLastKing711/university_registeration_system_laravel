@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class OpenCourseRegisterationFactory extends Factory
 {
+    public const PRICES = [200, 300, 400, 500];
+
     /**
      * Define the model's default state.
      *
@@ -22,7 +24,7 @@ class OpenCourseRegisterationFactory extends Factory
     {
         return [
             //
-            // 'semester' => $this->faker->numberBetween(0, 2),
+            'price_in_usd' => $this->faker->randomElement(self::PRICES),
         ];
     }
 

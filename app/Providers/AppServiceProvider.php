@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +35,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registeHttpClientMacros();
+    }
+
+    public function registeHttpClientMacros()
+    {
+
+        // https://currency.getgeoapi.com/ site
+        Http::macro('CurrencyConverter', function (): PendingRequest {
+
+            return Http::baseUrl(
+                config('services.currencty_converter.base_route')
+            )
+                ->withQueryParameters([
+                    'api_key' => config('services.currencty_converter.api_key'),
+                ]);
+        });
+
+        // Http::withUrlParameters
+
     }
 }

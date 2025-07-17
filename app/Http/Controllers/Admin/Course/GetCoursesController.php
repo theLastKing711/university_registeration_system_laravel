@@ -20,6 +20,7 @@ class GetCoursesController extends Controller
     #[SuccessItemResponse(GetCoursesResponsePaginationResultData::class)]
     public function __invoke(GetCoursesRequestData $request)
     {
+
         $courses =
             Course::query()
                 ->where(

@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Student\OpenCourseRegisteration;
 
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
 use App\Data\Student\OpenCourseRegisteration\GetOpenCoursesThisSemester\Response\GetOpenCoursesThisSemesterResponseData;
+use App\Enum\Currency;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
+use App\Models\UsdCurrencyExchangeRate;
 use App\Models\User;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use OpenApi\Attributes as OAT;
 
 class GetOpenCoursesThisSemesterController extends Controller
@@ -20,23 +23,20 @@ class GetOpenCoursesThisSemesterController extends Controller
     public function __invoke()
     {
 
+        $syp_usd_exchange_rate =
+            UsdCurrencyExchangeRate::query()
+                ->firstWhere(
+                    'currency',
+                    Currency::SYP->value
+                )
+                ->rate;
+
         $logged_user =
             User::query()
                 ->with('department')
                 ->firstWhere(
                     'id',
                     Auth::User()->id
-                );
-
-        $departments =
-            Department::query()
-                ->where(
-                    'id',
-                    $logged_user->id
-                )
-                ->orWhere(
-                    'id',
-                    null
                 );
 
         $logged_user_department =
@@ -61,7 +61,13 @@ class GetOpenCoursesThisSemesterController extends Controller
                     ->orWhere('courses.department_id', null);
 
             })
-            ->select('open_course_registerations.*', 'courses.*')
+            ->select(
+                'courses.*',
+                'open_course_registerations.id',
+            )
+            ->addSelect(
+                FacadesDB::raw("open_course_registerations.price_in_usd * {$syp_usd_exchange_rate} as price"),
+            )
             ->paginate(perPage: 10);
 
         // return

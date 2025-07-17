@@ -25120,6 +25120,28 @@ namespace Illuminate\Routing {
             }
     }
 
+namespace Illuminate\Http\Client {
+    /**
+     * 
+     *
+     * @mixin \Illuminate\Http\Client\PendingRequest
+     */
+    class Factory {
+        /**
+         * 
+         *
+         * @see \App\Providers\AppServiceProvider::boot()
+         * @return \Illuminate\Http\Client\PendingRequest 
+         * @static 
+         */
+        public static function CurrencyConverter()
+        {
+            return \Illuminate\Http\Client\Factory::CurrencyConverter();
+        }
+
+            }
+    }
+
 
 namespace  {
     class App extends \Illuminate\Support\Facades\App {}

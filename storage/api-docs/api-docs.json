@@ -737,6 +737,29 @@
                 }
             ]
         },
+        "/students/open-course-registerations/{id}": {
+            "delete": {
+                "tags": [
+                    "studentsOpenCourseRegisterations"
+                ],
+                "operationId": "d333a8832a2e026cd30a041049d605b7",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsTeacherPathParameter"
+                }
+            ]
+        },
         "/admins/academic-year-semesters": {
             "get": {
                 "tags": [
@@ -1540,12 +1563,12 @@
                 }
             }
         },
-        "/students/course-registerations/registered-courses/marks": {
+        "/students/open-course-registerations/marks": {
             "get": {
                 "tags": [
                     "studentMarks"
                 ],
-                "operationId": "34c488b6336a87804d42eecf39727d4b",
+                "operationId": "1f0fa01ba61b05052fe38bfc3cdbf5ca",
                 "parameters": [
                     {
                         "name": "page",
@@ -1576,12 +1599,12 @@
                 }
             }
         },
-        "/students/course-registerations/registered-courses/marks/this-semester": {
+        "/students/open-course-registerations/marks/this-semester": {
             "get": {
                 "tags": [
                     "studentMarks"
                 ],
-                "operationId": "55004ca01553426906b8eeb1ffe1d228",
+                "operationId": "0be188eaf025f62dfa7618abff4abe04",
                 "parameters": [
                     {
                         "name": "year",
@@ -1687,12 +1710,12 @@
                 }
             }
         },
-        "/students/course-registerations/registered-courses/this-semester": {
+        "/students/open-course-registerations/registered-courses/this-semester": {
             "get": {
                 "tags": [
                     "studentsOpenCourseRegisterations"
                 ],
-                "operationId": "aaaa0fc8f8aee6742ba77eac947a8fc2",
+                "operationId": "8f2101013078b2afd098d20164f977d7",
                 "parameters": [
                     {
                         "name": "page",
@@ -2442,6 +2465,18 @@
                 },
                 "type": "object"
             },
+            "app\\Data\\Admin\\OpenCourseRegisteration\\OpenCourseForRegisteration\\Request\\OpenCourseData.php": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "price": {
+                        "type": "string",
+                        "default": 0
+                    }
+                },
+                "type": "object"
+            },
             "OpenCourseForRegisterationRequestData": {
                 "properties": {
                     "academic_year_semester_id": {
@@ -2451,10 +2486,10 @@
                         "type": "integer",
                         "nullable": true
                     },
-                    "courses_ids": {
+                    "courses": {
                         "type": "array",
                         "items": {
-                            "type": "integer"
+                            "$ref": "#/components/schemas/app\\Data\\Admin\\OpenCourseRegisteration\\OpenCourseForRegisteration\\Request\\OpenCourseData.php"
                         }
                     }
                 },
@@ -2923,10 +2958,7 @@
                     "course": {
                         "$ref": "#/components/schemas/GetCoursesMarkssCourseItemData"
                     },
-                    "year": {
-                        "type": "integer"
-                    },
-                    "semester": {
+                    "academic_year_semester_id": {
                         "type": "integer"
                     },
                     "final_mark": {
@@ -3118,6 +3150,7 @@
                 },
                 "type": "object"
             },
+            "StudentOpenCourseRegisterationUnRegisterFromOpenCourseRequestUnRegisterFromOpenCourseRequestData": {},
             "LoginRequestData": {},
             "RegisterRequestData": {
                 "properties": {
@@ -3134,6 +3167,13 @@
                     }
                 },
                 "type": "object"
+            },
+            "Currency": {
+                "type": "string",
+                "enum": [
+                    "USD",
+                    "SYP"
+                ]
             },
             "Gender": {
                 "description": "[0 => Male, 1 => Female]",
@@ -3418,6 +3458,14 @@
                 "required": false,
                 "schema": {
                     "type": "string"
+                }
+            },
+            "studentsOpenCourseRegisterationIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
                 }
             }
         },

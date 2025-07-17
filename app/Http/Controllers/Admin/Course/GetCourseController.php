@@ -15,6 +15,7 @@ class GetCourseController extends CourseController
     #[SuccessItemResponse(GetCourseResponseData::class)]
     public function __invoke(GetCourseRequestData $request)
     {
+
         $course =
             Course::query()
                 ->with(

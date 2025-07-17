@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'currencty_converter' => [
+        'base_route' => env('CURRENCY_CONVERTER_BASE_ROUTE'),
+        'api_key' => env('CURRENCY_CONVERTER_API_KEY'),
+    ],
+
 ];

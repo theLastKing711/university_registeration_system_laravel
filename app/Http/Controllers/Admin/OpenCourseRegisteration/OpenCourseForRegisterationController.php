@@ -35,15 +35,26 @@ class OpenCourseForRegisterationController extends Controller
                 ])
                 ->whereIn(
                     'id',
-                    $request->courses_ids
+                    $request->courses->pluck('id')
                 )
                 ->get()
-                ->each(function (Course $course) use ($department_active_year_semester_id) {
+                ->each(function (Course $course) use ($department_active_year_semester_id, $request) {
+
+                    $course_data =
+                        $request
+                            ->courses
+                            ->firstWhere(
+                                'id',
+                                $course->id
+                            );
 
                     $open_course_registeration = new OpenCourseRegisteration;
 
                     $open_course_registeration->academic_year_semester_id =
                         $department_active_year_semester_id;
+
+                    $open_course_registeration->price_in_usd =
+                        $course_data->price;
 
                     $course
                         ->openCourseRegisterations()
@@ -72,12 +83,15 @@ class OpenCourseForRegisterationController extends Controller
                             $cross_listed_courses_ids
                         )
                         ->get()
-                        ->each(function (Course $cross_lised_course) use ($department_active_year_semester_id) {
+                        ->each(function (Course $cross_lised_course) use ($department_active_year_semester_id, $course_data) {
 
                             $open_course_registeration = new OpenCourseRegisteration;
 
                             $open_course_registeration->academic_year_semester_id =
                                 $department_active_year_semester_id;
+
+                            $open_course_registeration->price_in_usd =
+                                $course_data->price;
 
                             $cross_lised_course
                                 ->openCourseRegisterations()

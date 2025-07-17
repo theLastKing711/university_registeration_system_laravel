@@ -34,7 +34,7 @@ class AssignTeacherToOpenCourseController extends OpenCourseRegisterationTeacher
             Teacher::query()
                 ->firstWhere(
                     'id',
-                    $request->id
+                    $request->teacher_id
                 )
                 ->name;
 

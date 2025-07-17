@@ -13,6 +13,7 @@ use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\StudentSeeder;
 use Database\Seeders\TeacherSeeder;
+use Database\Seeders\UsdCurrencyExchangeRateSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -41,6 +42,7 @@ class StudentTestCase extends TestCase
                 OpenCourseRegisterationSeeder::class,
                 StudentSeeder::class,
                 DepartmentRegisterationPeriodSeeder::class,
+                UsdCurrencyExchangeRateSeeder::class,
             ]
         );
 

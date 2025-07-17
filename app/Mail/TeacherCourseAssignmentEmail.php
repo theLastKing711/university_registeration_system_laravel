@@ -27,7 +27,7 @@ class TeacherCourseAssignmentEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'My Test Email',
+            subject: 'Course Assignment',
         );
     }
 

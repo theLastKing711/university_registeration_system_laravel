@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ClassroomSeeder::class,
             TeacherSeeder::class,
             CourseSeeder::class,
+            UsdCurrencyExchangeRateSeeder::class,
             OpenCourseRegisterationSeeder::class,
             StudentSeeder::class,
             CourseTeacherSeeder::class,

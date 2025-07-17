@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\OpenCourseRegisteration;
 
 use App\Data\Admin\OpenCourseRegisteration\AssignTeacherToCourse\Request\AssignTeacherToCourseRequestData;
+use App\Data\Admin\OpenCourseRegisteration\OpenCourseForRegisteration\Request\CourseData;
 use App\Data\Admin\OpenCourseRegisteration\OpenCourseForRegisteration\Request\OpenCourseForRegisterationRequestData;
 use App\Mail\TeacherCourseAssignmentEmail;
 use App\Models\Course;
@@ -17,9 +18,9 @@ use Database\Seeders\DepartmentRegisterationPeriodSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\TeacherSeeder;
+use Database\Seeders\UsdCurrencyExchangeRateSeeder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -43,6 +44,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
             OpenCourseRegisterationSeeder::class,
             DepartmentRegisterationPeriodSeeder::class,
             CourseTeacherSeeder::class,
+            UsdCurrencyExchangeRateSeeder::class,
         ]);
 
     }
@@ -52,6 +54,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
     #[Test]
     public function assign_a_teacher_to_an_open_course_with_200_response(): void
     {
+
         Mail::fake();
 
         CourseTeacher::query()
@@ -101,7 +104,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $this->assertCount(1, $created_open_courses);
 
-        // Assert that mailable was queued
+        // Assert that mailable was queued with and view passed correct parameters
         Mail::assertQueued(
             TeacherCourseAssignmentEmail::class,
             function (TeacherCourseAssignmentEmail $mail) use ($open_course, $teacher_to_assign_course_to) {
@@ -225,7 +228,12 @@ class OpenCourseRegisterationTest extends AdminTestCase
             OpenCourseForRegisterationRequestData::from([
                 'academic_year_semester_id' => $course_that_has_cross_one_listed_course->department->openedAcademicyears->first()->id,
                 'department_id' => $course_that_has_cross_one_listed_course->department->id,
-                'courses_ids' => [$course_that_has_cross_one_listed_course->id],
+                'courses' => [
+                    new CourseData(
+                        $course_that_has_cross_one_listed_course->id,
+                        fake()->randomElement([200, 300, 400])
+                    ),
+                ],
             ]);
 
         $response =

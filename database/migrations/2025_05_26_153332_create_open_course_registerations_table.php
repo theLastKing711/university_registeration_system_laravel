@@ -21,7 +21,7 @@ return new class extends Migration
                 ->foreignId('academic_year_semester_id')
                 ->constrained()
                 ->cascadeOnDelete();
-
+            $table->decimal('price_in_usd', '6', '2');
             // $table->unique(['course_id', 'year', 'semester']);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
