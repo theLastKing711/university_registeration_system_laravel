@@ -52,7 +52,5 @@ class AppServiceProvider extends ServiceProvider
                 ]);
         });
 
-        // Http::withUrlParameters
-
     }
 }

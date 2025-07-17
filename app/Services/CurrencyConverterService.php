@@ -27,7 +27,7 @@ class CurrencyConverterService
                      'format' => 'json',
                  ]
              )
-             ->get(self::CONVERT_CURRENCT_PATH);
+             ->get(self::CONVERT_CURRENCT_PATH)['rates']['SYP']['rate'];
 
     }
 

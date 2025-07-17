@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Admin\UsdCurrencyExchangeRate\UpdateUsdSypExchangeRateAction;
 use App\Enum\Currency;
 use App\Models\UsdCurrencyExchangeRate;
 use App\Services\CurrencyConverterService;
@@ -10,27 +11,31 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-Schedule::call(function (CurrencyConverterService $currency_converter_service) {
+// Schedule::call(function (CurrencyConverterService $currency_converter_service) {
 
-    try {
-        $response =
-           $currency_converter_service
-               ->FromUsdToSyp();
+//     try {
+//         $syp_exchange_rate =
+//            $currency_converter_service
+//                ->FromUsdToSyp();
 
-        $syp_exchange_rate =
-            $response['rates']['SYP']['rate'];
+//         UsdCurrencyExchangeRate::query()
+//             ->firstWhere(
+//                 'currency',
+//                 Currency::SYP->value
+//             )
+//             ->update([
+//                 'rate' => $syp_exchange_rate,
+//             ]);
 
-        UsdCurrencyExchangeRate::query()
-            ->firstWhere(
-                'currency',
-                Currency::SYP->value
-            )
-            ->update([
-                'rate' => $syp_exchange_rate,
-            ]);
+//     } catch (\Throwable $th) {
+//         throw $th;
+//     }
 
-    } catch (\Throwable $th) {
-        throw $th;
-    }
+// })->everyMinute();
 
-})->hourly();
+Schedule::call(function (UpdateUsdSypExchangeRateAction $updateUsdSypExchangeRateAction) {
+
+    $updateUsdSypExchangeRateAction
+        ->execute();
+
+})->everyMinute();
