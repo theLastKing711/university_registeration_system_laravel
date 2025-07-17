@@ -25130,7 +25130,7 @@ namespace Illuminate\Http\Client {
         /**
          * 
          *
-         * @see \App\Providers\AppServiceProvider::boot()
+         * @see \App\Providers\AppServiceProvider::registeHttpClientMacros()
          * @return \Illuminate\Http\Client\PendingRequest 
          * @static 
          */

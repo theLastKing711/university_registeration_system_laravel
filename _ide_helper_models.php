@@ -694,6 +694,8 @@ namespace App\Models{
  * @method static Builder<static>|OpenCourseRegisteration whereId($value)
  * @method static Builder<static>|OpenCourseRegisteration whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $price_in_usd
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|OpenCourseRegisteration wherePriceInUsd($value)
  */
 	class OpenCourseRegisteration extends \Eloquent {}
 }
@@ -869,6 +871,43 @@ namespace App\Models{
  * @mixin \Eloquent
  */
 	class TemporaryUploadedImages extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $currency
+ * @property string $rate
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\UsdCurrencyExchangeRateFactory factory($count = null, $state = [])
+ * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate newQuery()
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate whereRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UsdCurrencyExchangeRate whereUpdatedAt($value)
+ */
+	class UsdCurrencyExchangeRate extends \Eloquent {}
 }
 
 namespace App\Models{

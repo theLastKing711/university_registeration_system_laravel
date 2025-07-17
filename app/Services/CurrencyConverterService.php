@@ -3,13 +3,10 @@
 namespace App\Services;
 
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 class CurrencyConverterService
 {
-    // public const BASE_URL = 'https://api.getgeoapi.com/v2/';
-
     private const CONVERT_CURRENCT_PATH = '/currency/convert';
 
     public function __construct(
