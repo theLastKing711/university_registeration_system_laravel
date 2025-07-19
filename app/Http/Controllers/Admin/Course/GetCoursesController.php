@@ -9,6 +9,7 @@ use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Services\UsdCurrencyExchangeRate\UsdCurrencyExchangeRateService;
 use OpenApi\Attributes as OAT;
 
 class GetCoursesController extends Controller
@@ -18,8 +19,13 @@ class GetCoursesController extends Controller
     #[QueryParameter('perPage', 'integer')]
     #[QueryParameter('department_id', 'integer')]
     #[SuccessItemResponse(GetCoursesResponsePaginationResultData::class)]
-    public function __invoke(GetCoursesRequestData $request)
+    public function __invoke(GetCoursesRequestData $request, UsdCurrencyExchangeRateService $usdCurrencyExchangeRateService)
     {
+
+        // $usdCurrencyExchangeRateService
+        //     ->updateUsdSypExchangeRateFromAnExternalApi();
+
+        // return;
 
         $courses =
             Course::query()
