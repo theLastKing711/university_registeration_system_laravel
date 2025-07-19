@@ -4,32 +4,30 @@ namespace App\Actions\Admin\UsdCurrencyExchangeRate;
 
 use App\Enum\Currency;
 use App\Models\UsdCurrencyExchangeRate;
-use App\Services\CurrencyConverterService;
 
 class UpdateUsdSypExchangeRateAction
 {
-    public function __construct(public CurrencyConverterService $currency_converter_service) {}
-
-    public function execute()
+    public function execute(int $usd_syp_exchange_rate)
     {
 
-        try {
-            $syp_exchange_rate =
-               $this->currency_converter_service
-                   ->FromUsdToSyp();
-
+        $usd_syp_exchange_rate = tap(
             UsdCurrencyExchangeRate::query()
                 ->firstWhere(
                     'currency',
                     Currency::SYP->value
-                )
-                ->update([
-                    'rate' => $syp_exchange_rate,
-                ]);
+                ),
+            function ($exchange) use ($usd_syp_exchange_rate) {
 
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+                $exchange
+                    ->update([
+                        'rate' => $usd_syp_exchange_rate,
+                    ]);
+            }
+        );
+
+        return
+            $usd_syp_exchange_rate
+                ->fresh();
 
     }
 }

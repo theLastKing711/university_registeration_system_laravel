@@ -4,6 +4,7 @@ use App\Actions\Admin\UsdCurrencyExchangeRate\UpdateUsdSypExchangeRateAction;
 use App\Enum\Currency;
 use App\Models\UsdCurrencyExchangeRate;
 use App\Services\CurrencyConverterService;
+use App\Services\UsdCurrencyExchangeRate\UsdCurrencyExchangeRateService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -33,9 +34,16 @@ Artisan::command('inspire', function () {
 
 // })->everyMinute();
 
-Schedule::call(function (UpdateUsdSypExchangeRateAction $updateUsdSypExchangeRateAction) {
+Schedule::call(function (UsdCurrencyExchangeRateService $usd_currency_exchange_rate_service) {
 
-    $updateUsdSypExchangeRateAction
-        ->execute();
+    $usd_currency_exchange_rate_service
+        ->updateUsdSypExchangeRateFromAnExternalApi();
 
 })->everyMinute();
+
+Schedule::call(function (UpdateUsdSypExchangeRateAction $usd_currency_exchange_rate_service) {
+
+    $usd_currency_exchange_rate_service
+        ->execute(200);
+
+})->everySecond();

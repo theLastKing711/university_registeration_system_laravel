@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\API;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 class CurrencyConverterService
@@ -14,7 +13,7 @@ class CurrencyConverterService
         // protected string $api_key,
     ) {}
 
-    public function FromUsdToSyp(): Response
+    public function FromUsdToSyp(): int
     {
 
         return
