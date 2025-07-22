@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -56,9 +57,14 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  */
 class CourseTeacher extends Pivot
 {
+    /** @use HasFactory<\Database\Factories\CourseTeacherFactory> */
+    use HasFactory;
+
     protected $table = 'course_teacher';
 
-    /**
+    public $incrementing = true;
+
+    /*
      * Summary of course
      *
      * @return BelongsTo<OpenCourseRegisteration, $this>

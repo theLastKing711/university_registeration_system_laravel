@@ -53,6 +53,8 @@ class ClassroomCourseTeacher extends Pivot
     /** @use HasFactory<\Database\Factories\ClassroomCourseTeacherFactory> */
     use HasFactory;
 
+    public $incrementing = true;
+
     /**
      * Summary of classroom
      *

@@ -49,6 +49,8 @@ class Prerequisite extends Pivot
 
     protected $table = 'prerequisites';
 
+    public $incrementing = true;
+
     /**
      * Summary of course
      *

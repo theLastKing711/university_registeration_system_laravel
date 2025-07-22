@@ -8,7 +8,9 @@ use App\Data\Admin\Course\GetCourses\Response\GetCoursesResponseData;
 use App\Data\Admin\Course\GetCourses\Response\GetCoursesResponsePaginationResultData;
 use App\Data\Admin\Course\UpdateCourse\Request\Admin\Course\UpdateCourseRequestData;
 use App\Models\Course;
+use App\Models\CrossListedCourses;
 use App\Models\Department;
+use App\Models\Prerequisite;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\DepartmentSeeder;
@@ -29,7 +31,6 @@ class CourseTest extends AdminTestCase
         $this->seed([
             AcademicYearSemesterSeeder::class,
             DepartmentSeeder::class,
-            CourseSeeder::class,
         ]);
 
     }
@@ -37,6 +38,9 @@ class CourseTest extends AdminTestCase
     #[Test]
     public function get_courses_with_200_response(): void
     {
+
+        $this
+            ->seed(CourseSeeder::class);
 
         $it_department_id =
             Department::query()
@@ -87,16 +91,29 @@ class CourseTest extends AdminTestCase
     public function get_course_with_200_response(): void
     {
 
-        $request_course_id =
-            Course::query()
-                ->has('firstCrossListed')
-                ->first()
-                ->id;
+        $courses =
+            Course::factory()
+                ->count(2)
+                ->create();
+
+        $main_course =
+            $courses->first();
+
+        /** @var Course $cross_listed_course */
+        $cross_listed_course =
+            $courses
+                ->skip(1)
+                ->take(1)
+                ->first();
+
+        $main_course
+            ->firstCrossListed()
+            ->attach([$cross_listed_course]);
 
         $response =
             $this
                 ->withRoutePaths(
-                    $request_course_id
+                    $main_course->id
                 )
                 ->getJsonData();
 
@@ -121,25 +138,19 @@ class CourseTest extends AdminTestCase
     public function create_course_with_200_response(): void
     {
 
-        $it_department_id =
-            Department::query()
-                ->firstWhere(
-                    'name',
-                    'IT'
-                )
-                ->id;
+        $new_course =
+            Course::factory()
+                ->create();
 
         $create_course_request =
             new CreateCourseRequestData(
-                $it_department_id,
-                'testing',
-                'TEST',
-                true,
-                3,
-                1
+                $new_course->department_id,
+                $new_course->name,
+                $new_course->code,
+                $new_course->is_active,
+                $new_course->credits,
+                $new_course->open_for_students_in_year
             );
-
-        $course_route = $this->main_route;
 
         $response =
             $this
@@ -150,20 +161,18 @@ class CourseTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $created_course =
-                Course::query()
-                    ->where(
-                        'name',
-                        $create_course_request->name
-                    )
-                    ->first();
-
-        $course_has_been_created =
-            $created_course != null;
-
         $this
-            ->assertTrue(
-                $course_has_been_created
+            ->assertDatabaseHas(
+                Course::class,
+                [
+                    'id' => $new_course->id,
+                    'department_id' => $new_course->department_id,
+                    'name' => $new_course->name,
+                    'code' => $new_course->code,
+                    'is_active' => $new_course->is_active,
+                    'credits' => $new_course->credits,
+                    'open_for_students_in_year' => $new_course->open_for_students_in_year,
+                ]
             );
 
     }
@@ -172,64 +181,34 @@ class CourseTest extends AdminTestCase
     public function update_course_with_200_response(): void
     {
 
-        $it_department_id =
-            Department::query()
-                ->firstWhere(
-                    'name',
-                    'IT'
+        /** @var Course $new_course */
+        $new_course =
+            Course::factory()
+                ->has(
+                    Course::factory()->count(2),
+                    'firstCrossListed'
                 )
-                ->id;
+                ->has(
+                    Course::factory()->count(2),
+                    'coursesPrerequisites'
+                )
+                ->create();
 
-        /** @var Course $random_course_id_to_update */
-        $random_course_id_to_update =
-            Course::query()
-                ->with(
-                    'prerequisites',
-                    'firstCrossListed',
-                    'secondCrossListed'
-                )
-                ->where(
-                    'department_id',
-                    $it_department_id
-                )
-                ->first();
+        $prerequiestes_count = 3;
 
-        $two_random_prerequisties_ids =
-            Course::query()
-                ->where(
-                    'id',
-                    '!=',
-                    $random_course_id_to_update->id
-                )
-                ->take(2)
-                ->get()
-                ->pluck('id')
-                ->toArray();
-
-        $two_random_courses_to_cross_list_ids =
-           Course::query()
-               ->where(
-                   'id',
-                   '!=',
-                   $random_course_id_to_update->id
-               )
-               ->whereNotIn('id', $two_random_prerequisties_ids)
-               ->take(2)
-               ->get()
-               ->pluck('id')
-               ->toArray();
+        $cross_listed_count = 1;
 
         $update_course_request =
             new UpdateCourseRequestData(
-                $it_department_id,
-                'testing',
-                'TEST',
+                Department::inRandomOrder()->first()->id,
+                'TEST COURSE',
+                'CED200',
                 true,
+                2,
                 3,
-                1,
-                $two_random_courses_to_cross_list_ids,
-                $two_random_prerequisties_ids,
-                $random_course_id_to_update->id
+                Course::factory($cross_listed_count)->create()->pluck('id')->toArray(),
+                Course::factory($prerequiestes_count)->create()->pluck('id')->toArray(),
+                $new_course->id
             );
 
         $response =
@@ -244,21 +223,21 @@ class CourseTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $random_course_id_to_update
+        $new_course
             ->refresh();
 
         $this
             ->assertTrue(
-                $random_course_id_to_update
+                $new_course
                     ->prerequisites
                     ->count()
                             ==
-                            2
+                            $prerequiestes_count
             );
 
         $this
             ->assertTrue(
-                $random_course_id_to_update
+                $new_course
                     ->secondCrossListed
                     ->count()
                             ==
@@ -267,19 +246,46 @@ class CourseTest extends AdminTestCase
 
         $this
             ->assertTrue(
-                $random_course_id_to_update
+                $new_course
                     ->firstCrossListed
                     ->count()
                             ==
-                            2
+                            $cross_listed_count
             );
 
-        // $updated_course =
-        //         Course::query()
-        //             ->firstWhere(
-        //                 'id',
-        //                 $update_course_request->id
-        //             );
+        $this
+            ->assertDatabaseHas(
+                Course::class,
+                [
+                    'id' => $new_course->id,
+                    'department_id' => $new_course->department_id,
+                    'name' => $new_course->name,
+                    'code' => $new_course->code,
+                    'is_active' => $new_course->is_active,
+                    'credits' => $new_course->credits,
+                    'open_for_students_in_year' => $new_course->open_for_students_in_year,
+                ]
+            );
+
+        foreach ($update_course_request->prerequisites_ids as $key => $prerequisite_id) {
+            $this->assertDatabaseHas(
+                Prerequisite::class,
+                [
+                    'course_id' => $update_course_request->id,
+                    'prerequisite_id' => $prerequisite_id,
+                ]
+            );
+        }
+
+        foreach ($update_course_request->cross_listed_courses_ids as $key => $cross_listed_course_id) {
+            $this->assertDatabaseHas(
+                CrossListedCourses::class,
+                [
+                    'first_course_id' => $update_course_request->id,
+                    'second_course_id' => $cross_listed_course_id,
+                ]
+            );
+        }
 
     }
 
@@ -287,21 +293,21 @@ class CourseTest extends AdminTestCase
     public function delete_course_with_200_response(): void
     {
 
-        $first_course =
-            Course::query()
-                ->first();
+        $new_course =
+            Course::factory()
+                ->create();
 
         $response =
             $this
                 ->withArrayQueryParameter([
-                    $first_course->id,
+                    $new_course->id,
                 ])
                 ->deleteJsonData();
 
         $response->assertStatus(200);
 
         $deleted_course = Course::query()
-            ->whereId($first_course->id)
+            ->whereId($new_course->id)
             ->first();
 
         $course_has_been_deleted =

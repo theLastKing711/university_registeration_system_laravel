@@ -6,34 +6,38 @@ use App\Models\CourseAttendance;
 use App\Models\CourseTeacher;
 use App\Models\Lecture;
 use App\Models\User;
+use Illuminate\Container\Attributes\Context;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 
 class CourseAttendanceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @param  Collection<CourseTeacher>  $course_teachers
+     * @param  Collection<Lecture>  $lectures
      */
-    public function run(): void
-    {
-        CourseTeacher::query()
-            ->with(
+    public function run(
+        #[Context('course_teacher')] Collection $course_teachers,
+        #[Context('lectures')] Collection $context_lectures
+    ): void {
+        $course_teachers
+            ->load(
                 [
                     'course' => [
                         'students',
-                        'academicYearSemester',
                     ],
                 ]
             )
-            ->get()
-            ->each(function (CourseTeacher $course_teacher) {
+            ->each(function (CourseTeacher $course_teacher) use ($context_lectures) {
 
                 $lectures =
-                    Lecture::query()
+                    $context_lectures
                         ->where(
                             'course_teacher_id',
                             $course_teacher->id
-                        )
-                        ->get();
+                        );
 
                 $course_teacher
                     ->course

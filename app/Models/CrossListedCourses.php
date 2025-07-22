@@ -44,6 +44,8 @@ class CrossListedCourses extends Pivot
 {
     protected $table = 'cross_listed_courses';
 
+    public $incrementing = true;
+
     /**
      * Summary of firstCourse
      *

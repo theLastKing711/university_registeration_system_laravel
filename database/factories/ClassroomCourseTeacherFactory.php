@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Classroom;
+use App\Models\CourseTeacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,6 +25,7 @@ class ClassroomCourseTeacherFactory extends Factory
             Classroom::all();
 
         return [
+            'course_teacher_id' => $this->faker->randomElement(CourseTeacher::all())->id,
             'classroom_id' => $this->faker->randomElement($classrooms)->id,
             'day' => $this->faker->numberBetween(2, 6),
         ];

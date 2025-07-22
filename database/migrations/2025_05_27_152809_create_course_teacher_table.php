@@ -25,6 +25,7 @@ return new class extends Migration
             $table
                 ->boolean('is_main_teacher')
                 ->default(true);
+            $table->timestamps();
 
         });
     }

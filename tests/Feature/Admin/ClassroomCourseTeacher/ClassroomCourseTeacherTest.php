@@ -8,7 +8,6 @@ use App\Models\Classroom;
 use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseTeacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
-use Database\Seeders\ClassroomCourseTeacherSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\CourseTeacherSeeder;
@@ -44,11 +43,6 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     public function assign_classroom_to_course_with_200_response(): void
     {
 
-        $this
-            ->assertTrue(
-                true
-            );
-
         $assign_classroom_to_course_request =
             new AssignClassroomToCourseTeacherRequestData(
                 Classroom::first()->id,
@@ -82,21 +76,19 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     public function assign_overlapped_classroom_to_course_fails_validation_with_422(): void
     {
 
-        $this
-            ->seed([
-                ClassroomCourseTeacherSeeder::class,
-            ]);
-
-        $first_classroom_course_teacher =
-            ClassroomCourseTeacher::first();
+        $new_classroom_course_teacher =
+            ClassroomCourseTeacher::factory()
+                ->withCourseTeacherId(CourseTeacher::first()->id)
+                ->withRandomFromTo()
+                ->create();
 
         $assign_classroom_to_course_request =
             new AssignClassroomToCourseTeacherRequestData(
-                $first_classroom_course_teacher->classroom_id,
-                $first_classroom_course_teacher->course_teacher_id,
-                $first_classroom_course_teacher->day,
-                $first_classroom_course_teacher->from,
-                $first_classroom_course_teacher->to
+                $new_classroom_course_teacher->classroom_id,
+                $new_classroom_course_teacher->course_teacher_id,
+                $new_classroom_course_teacher->day,
+                $new_classroom_course_teacher->from,
+                $new_classroom_course_teacher->to
             );
 
         $response =
@@ -107,8 +99,6 @@ class ClassroomCourseTeacherTest extends AdminTestCase
                 );
 
         $response->assertStatus(422);
-
-        info('hello world');
 
         $response
             ->assertOnlyJsonValidationErrors(
@@ -150,10 +140,10 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     public function update_classroom_course_teacher_with_200_response(): void
     {
 
-        $this
-            ->seed([
-                ClassroomCourseTeacherSeeder::class,
-            ]);
+        $new_classroom_course_teacher =
+            ClassroomCourseTeacher::factory()
+                ->withRandomFromTo()
+                ->create();
 
         $request_day = 3;
 
@@ -161,56 +151,14 @@ class ClassroomCourseTeacherTest extends AdminTestCase
 
         $request_to = '14:00:00';
 
-        $random_classroom_course_teacher_to_update =
-            ClassroomCourseTeacher::query()
-                ->where(
-                    'day',
-                    '!=',
-                    $request_day
-                )
-                ->where(
-                    'from',
-                    '!=',
-                    $request_from
-                )
-                ->where(
-                    'to',
-                    '!=',
-                    $request_to
-                )
-                ->inRandomOrder()
-                ->first();
-
-        $random_classroom_id =
-            Classroom::first()
-                ->where(
-                    'id',
-                    '!=',
-                    $random_classroom_course_teacher_to_update->classroom_id
-                )
-                ->inRandomOrder()
-                ->first()
-                ->id;
-
-        $random_course_teacher_id =
-           CourseTeacher::first()
-               ->where(
-                   'id',
-                   '!=',
-                   $random_classroom_course_teacher_to_update->course_teacher_id
-               )
-               ->inRandomOrder()
-               ->first()
-               ->id;
-
         $update_classroom_course_teacher_request =
             new UpdateCourseTeacherClassroomRequestData(
-                $random_classroom_id,
-                $random_course_teacher_id,
+                $new_classroom_course_teacher->classroom_id,
+                $new_classroom_course_teacher->course_teacher_id,
                 $request_day,
                 $request_from,
                 $request_to,
-                $random_classroom_course_teacher_to_update->id
+                $new_classroom_course_teacher->id
             );
 
         ClassroomCourseTeacher::query()
@@ -240,7 +188,7 @@ class ClassroomCourseTeacherTest extends AdminTestCase
         $response =
             $this
                 ->withRoutePaths(
-                    $random_classroom_course_teacher_to_update->id
+                    $new_classroom_course_teacher->id
                 )
                 ->patchJsonData(
                     $update_classroom_course_teacher_request
@@ -249,38 +197,17 @@ class ClassroomCourseTeacherTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $updated_classrom_course_teacher =
-                $random_classroom_course_teacher_to_update
-                    ->fresh();
-
         $this
-            ->assertNotEquals(
-                $updated_classrom_course_teacher->classroom_id,
-                $random_classroom_course_teacher_to_update->classroom_id
-            );
-
-        $this
-            ->assertNotEquals(
-                $updated_classrom_course_teacher->course_teacher_id,
-                $random_classroom_course_teacher_to_update->course_teacher_id
-            );
-
-        $this
-            ->assertNotEquals(
-                $updated_classrom_course_teacher->day,
-                $random_classroom_course_teacher_to_update->day
-            );
-
-        $this
-            ->assertNotEquals(
-                $updated_classrom_course_teacher->from,
-                $random_classroom_course_teacher_to_update->from
-            );
-
-        $this
-            ->assertNotEquals(
-                $updated_classrom_course_teacher->to,
-                $random_classroom_course_teacher_to_update->to
+            ->assertDatabaseHas(
+                ClassroomCourseTeacher::class,
+                [
+                    'id' => $update_classroom_course_teacher_request->id,
+                    'classroom_id' => $update_classroom_course_teacher_request->classroom_id,
+                    'course_teacher_id' => $update_classroom_course_teacher_request->course_teacher_id,
+                    'day' => $update_classroom_course_teacher_request->day,
+                    'from' => $update_classroom_course_teacher_request->from,
+                    'to' => $update_classroom_course_teacher_request->to,
+                ]
             );
 
     }
@@ -289,32 +216,23 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     public function update_overlapped_classroom_course_teacher_fails_validation_with_422(): void
     {
 
-        $this
-            ->seed([
-                ClassroomCourseTeacherSeeder::class,
-            ]);
-
         $random_classroom_course_teacher_to_update =
-            ClassroomCourseTeacher::query()
-                ->first();
+            ClassroomCourseTeacher::factory()
+                ->withRandomFromTo()
+                ->create();
 
-        $classroom_course_teacher_to_overlapp_with_to_update_one =
-            ClassroomCourseTeacher::query()
-                ->where(
-                    'id',
-                    '!=',
-                    $random_classroom_course_teacher_to_update->id
-                )
-                ->inRandomOrder()
-                ->first();
+        $classroom_course_teacher_to_conflict_with =
+            ClassroomCourseTeacher::factory()
+                ->withRandomFromTo()
+                ->create();
 
         $update_classroom_course_teacher_request =
             new UpdateCourseTeacherClassroomRequestData(
-                $classroom_course_teacher_to_overlapp_with_to_update_one->classroom_id,
-                $classroom_course_teacher_to_overlapp_with_to_update_one->course_teacher_id,
-                $classroom_course_teacher_to_overlapp_with_to_update_one->day,
-                $classroom_course_teacher_to_overlapp_with_to_update_one->from,
-                $classroom_course_teacher_to_overlapp_with_to_update_one->to,
+                $classroom_course_teacher_to_conflict_with->classroom_id,
+                $classroom_course_teacher_to_conflict_with->course_teacher_id,
+                $classroom_course_teacher_to_conflict_with->day,
+                $classroom_course_teacher_to_conflict_with->from,
+                $classroom_course_teacher_to_conflict_with->to,
                 $random_classroom_course_teacher_to_update->id
             );
 
@@ -328,11 +246,47 @@ class ClassroomCourseTeacherTest extends AdminTestCase
                         ->toArray()
                 );
 
+        $response->assertStatus(422);
+
         $response
             ->assertOnlyJsonValidationErrors(
 
                 ['from' => __('messages.classroom_course_teacher.overlap')]
             );
+
+    }
+
+    #[Test]
+    public function update_overlapped_classroom_course_teacher_success_validation_when_same_record_overlap_with_itself_with_200(): void
+    {
+
+        $classroom_course_teacher_to_update =
+            ClassroomCourseTeacher::factory()
+                ->withRandomFromTo()
+                ->create();
+
+        $update_classroom_course_teacher_request =
+            new UpdateCourseTeacherClassroomRequestData(
+                $classroom_course_teacher_to_update->classroom_id,
+                $classroom_course_teacher_to_update->course_teacher_id,
+                $classroom_course_teacher_to_update->day,
+                $classroom_course_teacher_to_update->from,
+                $classroom_course_teacher_to_update->to,
+                $classroom_course_teacher_to_update->id
+            );
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    $classroom_course_teacher_to_update->id
+                )
+                ->patchJsonData(
+                    $update_classroom_course_teacher_request
+                        ->toArray()
+                );
+
+        $response
+            ->assertStatus(200);
 
     }
 }

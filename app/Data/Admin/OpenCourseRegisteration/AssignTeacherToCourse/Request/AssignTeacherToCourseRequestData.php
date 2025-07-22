@@ -63,7 +63,7 @@ class AssignTeacherToCourseRequestData extends Data
                         $context->payload['is_main_teacher'];
 
                     $request_course_id =
-                    $context->payload['id'];
+                        $context->payload['id'];
 
                     $open_course = OpenCourseRegisteration::query()
                         ->with('teachers')

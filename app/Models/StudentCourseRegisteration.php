@@ -46,6 +46,8 @@ class StudentCourseRegisteration extends Pivot
 {
     protected $table = 'student_course_registerations';
 
+    public $incrementing = true;
+
     /**
      * Summary of student
      *

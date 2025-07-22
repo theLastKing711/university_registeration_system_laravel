@@ -13,7 +13,6 @@ use App\Models\Teacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
-use Database\Seeders\CourseTeacherSeeder;
 use Database\Seeders\DepartmentRegisterationPeriodSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
@@ -43,7 +42,6 @@ class OpenCourseRegisterationTest extends AdminTestCase
             CourseSeeder::class,
             OpenCourseRegisterationSeeder::class,
             DepartmentRegisterationPeriodSeeder::class,
-            CourseTeacherSeeder::class,
             UsdCurrencyExchangeRateSeeder::class,
         ]);
 
@@ -56,9 +54,6 @@ class OpenCourseRegisterationTest extends AdminTestCase
     {
 
         Mail::fake();
-
-        CourseTeacher::query()
-            ->delete();
 
         $open_course =
             OpenCourseRegisteration::first();
@@ -125,34 +120,76 @@ class OpenCourseRegisterationTest extends AdminTestCase
     #[Test]
     public function un_assign_a_teacher_from_an_open_course_with_200_response(): void
     {
-        $open_course =
-            OpenCourseRegisteration::query()
-                ->with('teachers')
-                ->first();
+
+        /** @var CourseTeacher $course_teacher */
+        $course_teacher =
+            CourseTeacher::factory()
+                ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $open_course->id,
+                    $course_teacher->course_id,
                     'teachers',
                 )
                 ->withArrayQueryParameter(
-                    $open_course->teachers->pluck('id'),
-                    array_query_parameter_name: 'teachers_ids'
+                    [$course_teacher->teacher_id],
+                    'teachers_ids'
                 )
                 ->deleteJsonData();
 
         $response->assertStatus(200);
 
-        $course_teacher_has_been_deleted =
-                $open_course
-                    ->fresh()
-                    ->teachers->isEmpty();
-
         $this
-            ->assertTrue(
-                $course_teacher_has_been_deleted
+            ->assertDatabaseMissing(
+                CourseTeacher::class,
+                [
+                    'teacher_id' => $course_teacher->id,
+                    'course_id' => $course_teacher->course_id,
+                    'is_main_teacher' => $course_teacher->is_main_teacher,
+                ]
             );
+
+    }
+
+    #[Test]
+    public function assign_a_teacher_to_an_open_course_success_with_one_main_teacher_and_one_non_main_teacher_with_200_response(): void
+    {
+
+        $open_course_id =
+            OpenCourseRegisteration::query()
+                ->first()
+                ->id;
+
+        $main_teacher_same_open_course_conflicted_course_teacher =
+            CourseTeacher::factory()
+                ->mainTeacher()
+                ->withCourseId($open_course_id)
+                ->withTeacherId(
+                    teacher_id: Teacher::query()->inRandomOrder()->first()->id
+                )
+                ->create();
+
+        $assign_a_teacher_to_an_open_course =
+            new AssignTeacherToCourseRequestData(
+                Teacher::inRandomOrder()->first()->id,
+                false,
+                $main_teacher_same_open_course_conflicted_course_teacher->course_id
+            );
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    $open_course_id,
+                    'teachers',
+                )
+                ->postJsonData(
+                    $assign_a_teacher_to_an_open_course
+                        ->toArray()
+                );
+
+        $response
+            ->assertStatus(200);
 
     }
 
@@ -162,19 +199,23 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $open_course_id =
             OpenCourseRegisteration::query()
-                ->whereRelation(
-                    'courseTeachers',
-                    'is_main_teacher',
-                    true
-                )
                 ->first()
                 ->id;
 
+        $main_teacher_same_open_course_conflicted_course_teacher =
+            CourseTeacher::factory()
+                ->mainTeacher()
+                ->withCourseId($open_course_id)
+                ->withTeacherId(
+                    teacher_id: Teacher::query()->inRandomOrder()->first()->id
+                )
+                ->create();
+
         $assign_a_teacher_to_an_open_course =
             new AssignTeacherToCourseRequestData(
-                Teacher::first()->id,
-                Teacher::first()->id,
-                $open_course_id
+                Teacher::inRandomOrder()->first()->id,
+                true,
+                $main_teacher_same_open_course_conflicted_course_teacher->course_id
             );
 
         $response =

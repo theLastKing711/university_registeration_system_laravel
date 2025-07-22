@@ -12,6 +12,7 @@ use App\Models\Lecture;
 use App\Models\OpenCourseRegisteration;
 use App\Models\Teacher;
 use App\Models\User;
+use Context;
 use Illuminate\Database\Seeder;
 
 class CourseTeacherSeeder extends Seeder
@@ -71,6 +72,11 @@ class CourseTeacherSeeder extends Seeder
                 ->attach($teachers_attach_data);
 
         });
+
+        Context::add(
+            'course_teacher',
+            CourseTeacher::all()
+        );
 
         // CourseTeacher::query()
         //     ->with(
