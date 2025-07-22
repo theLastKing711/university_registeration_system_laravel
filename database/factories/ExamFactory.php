@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Classroom;
+use App\Models\CourseTeacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,7 +25,12 @@ class ExamFactory extends Factory
             Classroom::all();
 
         return [
+            'course_teacher_id' => fake()->randomElement(CourseTeacher::all())->first()->id,
             'classroom_id' => fake()->randomElement($this->classrooms)->id,
+            'max_mark' => fake()->numberBetween(30, 70),
+            'date' => fake()->date(),
+            'is_main_exam' => fake()->boolean(),
+
         ];
     }
 
@@ -58,6 +64,35 @@ class ExamFactory extends Factory
                 "0{$exam_to}:00:00"
                 :
                 "{$exam_to}:00:00";
+
+            return
+                [
+                    'from' => $exam_from,
+                    'to' => $exam_to,
+                ];
+        });
+    }
+
+    public function withFromTo(int $from, int $to)
+    {
+
+        $exam_to = strval($from);
+
+        $exam_from = strval($to);
+
+        $exam_from =
+            strlen($exam_from) === 1 ? "0{$exam_from}:00:00"
+            :
+            "{$exam_from}:00:00";
+
+        $exam_to =
+            strlen($exam_to) === 1
+            ?
+            "0{$exam_to}:00:00"
+            :
+            "{$exam_to}:00:00";
+
+        return $this->state(function (array $attributes) use ($exam_from, $exam_to) {
 
             return
                 [

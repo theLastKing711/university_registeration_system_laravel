@@ -125,7 +125,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
     #[Test]
     public function un_assign_a_teacher_from_an_open_course_with_200_response(): void
     {
-        $open_course_id =
+        $open_course =
             OpenCourseRegisteration::query()
                 ->with('teachers')
                 ->first();
@@ -133,11 +133,11 @@ class OpenCourseRegisterationTest extends AdminTestCase
         $response =
             $this
                 ->withRoutePaths(
-                    $open_course_id->id,
+                    $open_course->id,
                     'teachers',
                 )
                 ->withArrayQueryParameter(
-                    $open_course_id->teachers->pluck('id'),
+                    $open_course->teachers->pluck('id'),
                     array_query_parameter_name: 'teachers_ids'
                 )
                 ->deleteJsonData();
@@ -145,7 +145,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
         $response->assertStatus(200);
 
         $course_teacher_has_been_deleted =
-                $open_course_id
+                $open_course
                     ->fresh()
                     ->teachers->isEmpty();
 

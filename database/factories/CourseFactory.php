@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Course;
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,11 +25,17 @@ class CourseFactory extends Factory
 
     public function belongsToItDepartment(): static
     {
-        return $this->afterCreating(function (Course $course) {
+
+        $it_department_id =
+            Department::query()
+                ->firstWhere('name', 'IT')
+                ->id;
+
+        return $this->afterCreating(function (Course $course) use ($it_department_id) {
 
             $course
                 ->departments()
-                ->attach([1]);
+                ->attach([$it_department_id]);
 
         });
     }

@@ -13,9 +13,12 @@ use App\Models\CourseTeacher;
 use App\Models\Lecture;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
+use Database\Seeders\CourseAttendanceSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\CourseTeacherSeeder;
 use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\ExamSeeder;
+use Database\Seeders\LectureSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\StudentSeeder;
 use Database\Seeders\TeacherSeeder;
@@ -43,6 +46,8 @@ class CourseTeacherTest extends AdminTestCase
             OpenCourseRegisterationSeeder::class,
             StudentSeeder::class,
             CourseTeacherSeeder::class,
+            LectureSeeder::class,
+            CourseAttendanceSeeder::class,
         ]);
 
     }
@@ -240,6 +245,11 @@ class CourseTeacherTest extends AdminTestCase
     #[Test]
     public function get_course_teacher_exams_with_200_response(): void
     {
+
+        $this
+            ->seed([
+                ExamSeeder::class,
+            ]);
 
         $first_course_teacher =
             CourseTeacher::query()

@@ -6,8 +6,11 @@ use App\Models\ClassroomCourseTeacher;
 use App\Models\Course;
 use App\Models\CourseAttendance;
 use App\Models\CourseTeacher;
+use App\Models\Department;
 use App\Models\Exam;
 use App\Models\Lecture;
+use App\Models\OpenCourseRegisteration;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,81 +22,131 @@ class CourseTeacherSeeder extends Seeder
     public function run(): void
     {
 
-        CourseTeacher::query()
-            ->with(
-                [
-                    'course' => [
-                        'students',
-                        'academicYearSemester',
-                    ],
-                ]
-            )
-            ->get()
-            ->each(function (CourseTeacher $course_teacher, $index) {
+        $open_courses =
+            OpenCourseRegisteration::all();
 
-                $course =
-                    $course_teacher
-                        ->course;
+        $it_department_id =
+            Department::query()
+                ->firstWhere(
+                    'name',
+                    'IT'
+                )
+                ->id;
 
-                $course_year =
-                    $course
-                        ->academicYearSemester
-                        ->year;
+        $open_courses->each(function (OpenCourseRegisteration $course) use ($it_department_id) {
 
-                $course_semester =
-                    $course
-                        ->academicYearSemester
-                        ->semester;
+            $random_two_teachers_ids =
+                Teacher::query()
+                    ->where(
+                        'department_id',
+                        $it_department_id,
+                    )
+                    ->inRandomOrder()
+                    ->take(2)
+                    ->pluck('id');
 
-                if ($course_teacher->is_main_teacher) {
+            $teachers_attach_data =
+                collect(value: [$random_two_teachers_ids[0], $random_two_teachers_ids[1]])
+                    ->mapWithKeys(function ($teacher_id, $index) use (&$z) {
 
-                    Exam::factory()
-                        ->semesterMainExamsMaxMarkSequence()
-                        ->withRandomFromTo()
-                        ->withRandomExamDate($course_year, $course_semester)
-                        ->withCourseTeacherId($course_teacher->id)
-                        ->create();
-                } else {
-                    Exam::factory()
-                        ->semesterPracticalExamsSequence()
-                        ->withRandomFromTo()
-                        ->withRandomExamDate($course_year, $course_semester)
-                        ->withCourseTeacherId($course_teacher->id)
-                        ->create();
-                }
+                        if ($index % 2 === 0) {
 
-                ClassroomCourseTeacher::factory()
-                    ->withCourseTeacherId($course_teacher->id)
-                    ->withRandomFromTo()
-                    ->count(2)
-                    ->create();
+                            return [
+                                $teacher_id => [
+                                    'is_main_teacher' => true,
+                                ],
+                            ];
+                        }
 
-                $lectures = Lecture::factory()
-                    ->withCourseTeacherId($course_teacher->id)
-                    ->with15LecturesForEachSequence($course_year, $course_semester)
-                    ->create();
+                        return [
+                            $teacher_id => [
+                                'is_main_teacher' => false,
+                            ],
+                        ];
+                    })
+                    ->all();
 
-                // ->hasAttached(
-                //     $it_courses,
-                //     fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)], // runs once per it_course
-                //     'courses' // the many to many relation for User Model we insert for $it_course
-                // )
+            $course
+                ->teachers()
+                ->attach($teachers_attach_data);
 
-                $course_teacher
-                    ->course
-                    ->students
-                    ->each(callback: function (User $student) use ($lectures) {
+        });
 
-                        CourseAttendance::factory()
-                            ->withStudentId($student->id)
-                            ->withLectureIdsForEachSequence($lectures)
-                            ->create();
+        // CourseTeacher::query()
+        //     ->with(
+        //         [
+        //             'course' => [
+        //                 'students',
+        //                 'academicYearSemester',
+        //             ],
+        //         ]
+        //     )
+        //     ->get()
+        //     ->each(function (CourseTeacher $course_teacher, $index) {
 
-                    });
+        //         $course =
+        //             $course_teacher
+        //                 ->course;
 
-                // }
+        //         $course_year =
+        //             $course
+        //                 ->academicYearSemester
+        //                 ->year;
 
-            });
+        //         $course_semester =
+        //             $course
+        //                 ->academicYearSemester
+        //                 ->semester;
+
+        //         if ($course_teacher->is_main_teacher) {
+
+        //             Exam::factory()
+        //                 ->semesterMainExamsMaxMarkSequence()
+        //                 ->withRandomFromTo()
+        //                 ->withRandomExamDate($course_year, $course_semester)
+        //                 ->withCourseTeacherId($course_teacher->id)
+        //                 ->create();
+        //         } else {
+        //             Exam::factory()
+        //                 ->semesterPracticalExamsSequence()
+        //                 ->withRandomFromTo()
+        //                 ->withRandomExamDate($course_year, $course_semester)
+        //                 ->withCourseTeacherId($course_teacher->id)
+        //                 ->create();
+        //         }
+
+        //         ClassroomCourseTeacher::factory()
+        //             ->withCourseTeacherId($course_teacher->id)
+        //             ->withRandomFromTo()
+        //             ->count(2)
+        //             ->create();
+
+        //         $lectures = Lecture::factory()
+        //             ->withCourseTeacherId($course_teacher->id)
+        //             ->with15LecturesForEachSequence($course_year, $course_semester)
+        //             ->create();
+
+        //         // ->hasAttached(
+        //         //     $it_courses,
+        //         //     fn (): mixed => ['final_mark' => fake()->numberBetween(30, 100)], // runs once per it_course
+        //         //     'courses' // the many to many relation for User Model we insert for $it_course
+        //         // )
+
+        //         $course_teacher
+        //             ->course
+        //             ->students
+        //             ->each(callback: function (User $student) use ($lectures) {
+
+        //                 CourseAttendance::factory()
+        //                     ->withStudentId($student->id)
+        //                     ->withLectureIdsForEachSequence($lectures)
+        //                     ->create();
+
+        //             });
+
+        //         // }
+
+        //     });
 
     }
 }

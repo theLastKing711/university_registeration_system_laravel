@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseTeacher;
-use App\Models\Lecture;
 use Illuminate\Database\Seeder;
 
-class LectureSeeder extends Seeder
+class ClassroomCourseTeacherSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -25,23 +25,10 @@ class LectureSeeder extends Seeder
             ->get()
             ->each(function (CourseTeacher $course_teacher, $index) {
 
-                $course =
-                    $course_teacher
-                        ->course;
-
-                $course_year =
-                    $course
-                        ->academicYearSemester
-                        ->year;
-
-                $course_semester =
-                    $course
-                        ->academicYearSemester
-                        ->semester;
-
-                Lecture::factory()
+                ClassroomCourseTeacher::factory()
                     ->withCourseTeacherId($course_teacher->id)
-                    ->with15LecturesForEachSequence($course_year, $course_semester)
+                    ->withRandomFromTo()
+                    ->count(2)
                     ->create();
 
             });

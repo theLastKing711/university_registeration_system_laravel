@@ -60,6 +60,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  */
 class Exam extends Pivot
 {
+    public $incrementing = true;
+
     /** @use HasFactory<\Database\Factories\ExamFactory> */
     use HasFactory;
 

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Course;
-use App\Models\OpenCourseRegisteration;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -263,41 +262,6 @@ class CourseSeeder extends Seeder
             ->insert(
                 $cross_listed_courses
                     ->toArray()
-            );
-
-        // $this->seedItCourses();
-
-        // $courses = collect(self::COURSES);
-
-        // Course::insert(
-        //     $courses
-        //         ->pluck('data')
-        //         ->toArray()
-        // );
-
-        // $prequesites =
-        //     $courses
-        //         ->pluck('prerequisites')
-        //         ->flatten(1);
-
-        // DB::table('prerequisites')
-        //     ->insert($prequesites->toArray());
-    }
-
-    public function seedItCourses(): void
-    {
-
-        $it_courses = collect(self::IT_COURSES);
-
-        Course::factory()
-            ->belongsToItDepartment()
-            ->has(
-                OpenCourseRegisteration::factory()
-                    ->openFrom2014To2019()
-                // ->withThreeSemesters()
-            )
-            ->createMany(
-                ...$it_courses->pluck('data')->toArray()
             );
     }
 }

@@ -46,7 +46,7 @@ class UpdatesSypExchangeRateActionTest extends TestCase
                             ->rate == $new_usd_syp_exchange_rate
             );
 
-             $this
+        $this
             ->assertDatabaseHas(
                 UsdCurrencyExchangeRate::class,
                 [
@@ -55,7 +55,7 @@ class UpdatesSypExchangeRateActionTest extends TestCase
                     
                 ]
             );
-            
+                
     }
     
 

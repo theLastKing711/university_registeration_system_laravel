@@ -30,12 +30,14 @@ class UsdCurrencyExchangeRateServiceTest extends TestCase
             15000;
 
         $this
-            ->mock(CurrencyConverterService::class, function (MockInterface $mock) use ($new_usd_syp_exchange_rate) {
-                $mock
-                    ->shouldReceive('FromUsdToSyp') // the services calls this function
-                    ->once() // at least onse
-                    ->andReturn($new_usd_syp_exchange_rate); // the value that it returns when called
-            });
+            ->mock(
+                CurrencyConverterService::class,
+                function (MockInterface $mock) use ($new_usd_syp_exchange_rate) {
+                    $mock
+                        ->shouldReceive('FromUsdToSyp') // the services calls this function
+                        ->once() // at least onse
+                        ->andReturn($new_usd_syp_exchange_rate); // the value that it returns when called
+                });
 
         app(
             UsdCurrencyExchangeRateService::class

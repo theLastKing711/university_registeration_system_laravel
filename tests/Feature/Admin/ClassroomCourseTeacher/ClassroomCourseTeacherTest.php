@@ -8,6 +8,7 @@ use App\Models\Classroom;
 use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseTeacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
+use Database\Seeders\ClassroomCourseTeacherSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\CourseTeacherSeeder;
@@ -42,9 +43,6 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     #[Test]
     public function assign_classroom_to_course_with_200_response(): void
     {
-
-        ClassroomCourseTeacher::query()
-            ->delete();
 
         $this
             ->assertTrue(
@@ -85,17 +83,12 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     {
 
         $this
-            ->assertTrue(
-                true
-            );
+            ->seed([
+                ClassroomCourseTeacherSeeder::class,
+            ]);
 
         $first_classroom_course_teacher =
             ClassroomCourseTeacher::first();
-
-        $this
-            ->assertTrue(
-                $first_classroom_course_teacher != null
-            );
 
         $assign_classroom_to_course_request =
             new AssignClassroomToCourseTeacherRequestData(
@@ -129,6 +122,11 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     public function delete_an_existing_classroom_course_teacher_with_200_response(): void
     {
 
+        ClassroomCourseTeacher::factory()
+            ->withCourseTeacherId(CourseTeacher::first()->id)
+            ->withRandomFromTo()
+            ->create();
+
         $first_classroom_course_teacher = ClassroomCourseTeacher::first();
 
         $response =
@@ -151,6 +149,11 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     #[Test]
     public function update_classroom_course_teacher_with_200_response(): void
     {
+
+        $this
+            ->seed([
+                ClassroomCourseTeacherSeeder::class,
+            ]);
 
         $request_day = 3;
 
@@ -285,6 +288,11 @@ class ClassroomCourseTeacherTest extends AdminTestCase
     #[Test]
     public function update_overlapped_classroom_course_teacher_fails_validation_with_422(): void
     {
+
+        $this
+            ->seed([
+                ClassroomCourseTeacherSeeder::class,
+            ]);
 
         $random_classroom_course_teacher_to_update =
             ClassroomCourseTeacher::query()

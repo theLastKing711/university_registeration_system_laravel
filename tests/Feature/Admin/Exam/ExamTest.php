@@ -19,6 +19,7 @@ use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\CourseTeacherSeeder;
 use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\ExamSeeder;
 use Database\Seeders\ExamStudentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\StudentSeeder;
@@ -46,6 +47,7 @@ class ExamTest extends AdminTestCase
             OpenCourseRegisterationSeeder::class,
             StudentSeeder::class,
             CourseTeacherSeeder::class,
+            ExamSeeder::class,
             ExamStudentSeeder::class,
         ]);
     }
@@ -240,7 +242,7 @@ class ExamTest extends AdminTestCase
     }
 
     #[Test]
-    public function assign_mark_to_students_fails_student_unregistered_in_course_validation_with_422_response(): void
+    public function assign_mark_to_students_fails_with_student_unregistered_in_course_validation_with_422_response(): void
     {
 
         $exam_student_count_before_request =
@@ -405,7 +407,7 @@ class ExamTest extends AdminTestCase
                 ->with('courseTeacher.course.students')
                 ->first();
 
-        $unregistered_in_exam_course_student =
+        $student_unregistered_in_exam_course =
             User::query()
                 ->whereNotIn(
                     'id',
@@ -425,11 +427,11 @@ class ExamTest extends AdminTestCase
         // /** @var Collection<RequestExamStudentItemData> $exam_students_data */
         $exam_students_data =
             $exam_students
-                ->map(callback: function ($exam_student) use ($unregistered_in_exam_course_student) {
+                ->map(callback: function ($exam_student) use ($student_unregistered_in_exam_course) {
 
                     return new RequestExamStudentItemData(
                         $exam_student->id,
-                        student_id: $unregistered_in_exam_course_student->id,
+                        student_id: $student_unregistered_in_exam_course->id,
                         mark: fake()->numberBetween(30, 70)
                     );
                 });
@@ -458,7 +460,7 @@ class ExamTest extends AdminTestCase
                     'exam_students.0.student_id' => __(
                         'messages.exam_students.student unregistered in course',
                         [
-                            'id' => $unregistered_in_exam_course_student->id,
+                            'id' => $student_unregistered_in_exam_course->id,
                         ]
                     ),
                 ]
@@ -471,43 +473,45 @@ class ExamTest extends AdminTestCase
     public function update_exam_with_200_response(): void
     {
 
-        $safe_update_exam =
-            Exam::query()
-                ->first();
-
-        $safe_update_exam
+        // or we don't seed it in set up, and seed it only when needed
+        Exam::query()
             ->delete();
 
         $exam =
-            Exam::query()
-                ->first();
+            Exam::factory()
+                ->withRandomFromTo()
+                ->withRandomExamDate(2014, 0)
+                ->withCourseTeacherId(CourseTeacher::first()->id)
+                ->create();
 
         $update_exam_request =
             new UpdateExamRequestData(
-                $safe_update_exam->course_teacher_id,
-                $safe_update_exam->classroom_id,
-                $safe_update_exam->max_mark,
-                $safe_update_exam->date,
-                $safe_update_exam->from,
-                $safe_update_exam->to,
-                $safe_update_exam->is_main_exam,
+                CourseTeacher::first()->id,
+                Classroom::first()->id,
+                40,
+                fake()->date(),
+                '04:00:00',
+                '06:00:00',
+                true,
                 $exam->id
             );
 
-        $response = $this
-            ->withRoutePaths(
-                $exam->id
-            )
-            ->patchJsonData(
-                $update_exam_request->toArray()
+        $response =
+            $this
+                ->withRoutePaths(
+                    $exam->id
+                )
+                ->patchJsonData(
+                    $update_exam_request->toArray()
 
-            );
+                );
 
         $response->assertStatus(200);
 
-        $exam_has_been_updated =
-            Exam::query()
-                ->where([
+        $this
+            ->assertDatabaseHas(
+                Exam::class,
+                [
                     'id' => $exam->id,
                     'course_teacher_id' => $update_exam_request->course_teacher_id,
                     'classroom_id' => $update_exam_request->classroom_id,
@@ -516,12 +520,7 @@ class ExamTest extends AdminTestCase
                     'from' => $update_exam_request->from,
                     'to' => $update_exam_request->to,
                     'is_main_exam' => $update_exam_request->is_main_exam,
-                ])
-                ->first() != null;
-
-        $this
-            ->assertTrue(
-                $exam_has_been_updated
+                ]
             );
 
     }
