@@ -27,40 +27,45 @@ class ExamSeeder extends Seeder
             )
             ->each(function (CourseTeacher $course_teacher, $index) {
 
-                $course =
-                    $course_teacher
-                        ->course;
-
-                $course_year =
-                    $course
-                        ->academicYearSemester
-                        ->year;
-
-                $course_semester =
-                    $course
-                        ->academicYearSemester
-                        ->semester;
-
-                if ($course_teacher->is_main_teacher) {
-
-                    Exam::factory()
-                        ->semesterMainExamsMaxMarkSequence()
-                        ->withRandomFromTo()
-                        ->withRandomExamDate($course_year, $course_semester)
-                        ->withCourseTeacherId($course_teacher->id)
-                        ->create();
-
-                } else {
-
-                    Exam::factory()
-                        ->semesterPracticalExamsSequence()
-                        ->withRandomFromTo()
-                        ->withRandomExamDate($course_year, $course_semester)
-                        ->withCourseTeacherId($course_teacher->id)
-                        ->create();
-
-                }
+                $this->createExamsFromCourseTeacher($course_teacher);
 
             });
+    }
+
+    public function createExamsFromCourseTeacher(CourseTeacher $course_teacher)
+    {
+        $course =
+                 $course_teacher
+                     ->course;
+
+        $course_year =
+            $course
+                ->academicYearSemester
+                ->year;
+
+        $course_semester =
+            $course
+                ->academicYearSemester
+                ->semester;
+
+        if ($course_teacher->is_main_teacher) {
+
+            Exam::factory()
+                ->semesterMainExamsMaxMarkSequence()
+                ->withRandomFromTo()
+                ->withRandomExamDate($course_year, $course_semester)
+                ->withCourseTeacherId($course_teacher->id)
+                ->create();
+
+        } else {
+
+            Exam::factory()
+                ->semesterPracticalExamsSequence()
+                ->withRandomFromTo()
+                ->withRandomExamDate($course_year, $course_semester)
+                ->withCourseTeacherId($course_teacher->id)
+                ->create();
+
+        }
     }
 }

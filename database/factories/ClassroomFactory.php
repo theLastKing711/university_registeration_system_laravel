@@ -53,8 +53,6 @@ class ClassroomFactory extends Factory
 
         return [
             'name' => fake()->randomElement(array: self::CLASSROOMS),
-            'from' => $random_start_time->toTimeString(),
-            'to' => $random_end_time->toTimeString(),
         ];
     }
 }

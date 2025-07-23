@@ -13,14 +13,13 @@ use App\Models\Classroom;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
 use App\Models\ExamStudent;
+use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\CourseTeacherSeeder;
 use Database\Seeders\DepartmentSeeder;
-use Database\Seeders\ExamSeeder;
-use Database\Seeders\ExamStudentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\StudentSeeder;
 use Database\Seeders\TeacherSeeder;
@@ -47,8 +46,6 @@ class ExamTest extends AdminTestCase
             OpenCourseRegisterationSeeder::class,
             StudentSeeder::class,
             CourseTeacherSeeder::class,
-            ExamSeeder::class,
-            ExamStudentSeeder::class,
         ]);
     }
 
@@ -57,13 +54,14 @@ class ExamTest extends AdminTestCase
     public function get_exam_with_200_response(): void
     {
 
-        $first_exam =
-            Exam::first();
+        $exam = Exam::factory()
+            ->withRandomFromTo()
+            ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $first_exam->id
+                    $exam->id
                 )
                 ->getJsonData();
 
@@ -76,17 +74,13 @@ class ExamTest extends AdminTestCase
     public function create_exam_with_200_response(): void
     {
 
-        Exam::query()
-            ->delete();
-
-        $exams_count_beofre_request =
-            Exam::query()->count();
-
         $course_teacher =
-            CourseTeacher::first();
+            CourseTeacher::factory()
+                ->create();
 
         $classroom =
-            Classroom::first();
+            Classroom::factory()
+                ->create();
 
         $create_exam_request =
             new CreateExamRequestData(
@@ -107,52 +101,45 @@ class ExamTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $exam_has_been_created =
-            Exam::query()
-                ->where([
-                    'course_teacher_id' => $create_exam_request->course_teacher_id,
-                    'classroom_id' => $create_exam_request->classroom_id,
-                    'date' => $create_exam_request->date,
-                    'from' => $create_exam_request->from,
-                    'to' => $create_exam_request->to,
-                ])
-                ->first()
-                !=
-                null;
-
         $this
             ->assertDatabaseCount(
                 Exam::class,
-                $exams_count_beofre_request + 1
+                1
             );
 
         $this
-            ->assertTrue(
-                $exam_has_been_created
+            ->assertDatabaseHas(
+                Exam::class,
+                [
+                    'course_teacher_id' => $course_teacher->id,
+                    'classroom_id' => $classroom->id,
+                    'max_mark' => $create_exam_request->max_mark,
+                    'date' => $create_exam_request->date,
+                    'from' => $create_exam_request->from,
+                    'to' => $create_exam_request->to,
+                    'is_main_exam' => $create_exam_request->is_main_exam,
+                ]
             );
 
     }
 
     #[Test]
-    public function create_overlapping_exam_fails_validation_with_422_response(): void
+    public function create_exam_fails_overlap_validation_with_422_response(): void
     {
-        $exams_count_beofre_request =
-            Exam::query()->count();
-
-        $overlapped_exam =
-            Exam::query()
-                ->with('courseTeacher.course.course')
-                ->first();
+        $exam_to_overlap_with =
+            Exam::factory()
+                ->withRandomFromTo()
+                ->create();
 
         $create_exam_request =
             new CreateExamRequestData(
-                $overlapped_exam->course_teacher_id,
-                $overlapped_exam->classroom_id,
-                $overlapped_exam->max_mark,
-                $overlapped_exam->date,
-                $overlapped_exam->from,
-                $overlapped_exam->to,
-                $overlapped_exam->is_main_exam
+                $exam_to_overlap_with->course_teacher_id,
+                $exam_to_overlap_with->classroom_id,
+                $exam_to_overlap_with->max_mark,
+                $exam_to_overlap_with->date,
+                $exam_to_overlap_with->from,
+                $exam_to_overlap_with->to,
+                $exam_to_overlap_with->is_main_exam
             );
 
         $response =
@@ -163,8 +150,18 @@ class ExamTest extends AdminTestCase
 
         $response->assertStatus(422);
 
+        $this
+            ->assertDatabaseCount(
+                Exam::class,
+                1
+            );
+
         $overrlapped_course_name =
-          $overlapped_exam->courseTeacher->course->course->name;
+          $exam_to_overlap_with
+              ->courseTeacher
+              ->course
+              ->course
+              ->name;
 
         $response
             ->assertOnlyJsonValidationErrors(
@@ -176,27 +173,28 @@ class ExamTest extends AdminTestCase
                 ]
             );
 
-        $this
-            ->assertDatabaseCount(
-                Exam::class,
-                $exams_count_beofre_request
-            );
-
     }
 
     // assign_mark_to_students
     #[Test]
     public function assign_mark_to_students_with_200_response(): void
     {
-
-        $exam_student_count_before_request =
-            ExamStudent::query()
-                ->count();
-
         $exam =
-            Exam::query()
-                ->with('courseTeacher.course.students')
-                ->first();
+            Exam::factory()
+                ->withRandomFromTo()
+                ->has(
+                    CourseTeacher::factory()
+                        ->has(
+                            OpenCourseRegisteration::factory()
+                                ->hasAttached(
+                                    User::factory()
+                                        ->count(count: 5),
+                                    ['final_mark' => 40],
+                                    'students'
+                                )
+                        )
+                )
+                ->create();
 
         $exam_students =
             $exam
@@ -232,27 +230,42 @@ class ExamTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $this
-            ->assertDatabaseCount(
-                ExamStudent::class,
-                $exam_student_count_before_request
-                    +
-                    $exam_students->count()
-            );
+        $exam_students_data
+            ->each(function ($exam_student) use ($exam) {
+                $this
+                    ->assertDatabaseHas(
+                        ExamStudent::class,
+                        [
+                            'exam_id' => $exam->id,
+                            'student_id' => $exam_student->student_id,
+                            'mark' => $exam_student->mark,
+                        ]
+                    );
+            });
     }
 
     #[Test]
     public function assign_mark_to_students_fails_with_student_unregistered_in_course_validation_with_422_response(): void
     {
 
-        $exam_student_count_before_request =
-            ExamStudent::query()
-                ->count();
-
         $exam =
-            Exam::query()
-                ->with('courseTeacher.course.students')
-                ->first();
+           Exam::factory()
+               ->withRandomFromTo()
+               ->for(
+                   CourseTeacher::factory()
+                       ->for(
+                           OpenCourseRegisteration::factory()
+                               ->hasAttached(
+                                   User::factory()
+                                       ->withStudentRole()
+                                       ->count(count: 5),
+                                   ['final_mark' => 40],
+                                   'students'
+                               ),
+                           'course'
+                       )
+               )
+               ->create();
 
         $exam_students =
             $exam
@@ -260,18 +273,15 @@ class ExamTest extends AdminTestCase
                 ->course
                 ->students;
 
-        $users_not_registered_in_exam_coruse =
-            User::query()
-                ->whereNotIn(
-                    'id',
-                    $exam_students->pluck('id')
-                )
-                ->take(1)
-                ->get();
+        $users_unregistered_in_exam_coruse =
+            User::factory()
+                ->withStudentRole()
+                ->count(3)
+                ->create();
 
-        /** @var Collection<ExamStudentItemData> $exam_students_data description */
+        /** @var Collection<ExamStudentItemData> $exam_students_data */
         $exam_students_data =
-            $users_not_registered_in_exam_coruse
+            $users_unregistered_in_exam_coruse
                 ->map(callback: function ($student) {
 
                     return new ExamStudentItemData(
@@ -299,12 +309,12 @@ class ExamTest extends AdminTestCase
         $response->assertStatus(422);
 
         $response
-            ->assertOnlyJsonValidationErrors(
+            ->assertJsonValidationErrors(
                 [
                     'exam_students.0.student_id' => __(
                         'messages.exam_students.student unregistered in course',
                         [
-                            'id' => $users_not_registered_in_exam_coruse->first()->id,
+                            'id' => $users_unregistered_in_exam_coruse->first()->id,
                         ]
                     ),
                 ]
@@ -316,18 +326,41 @@ class ExamTest extends AdminTestCase
     #[Test]
     public function update_student_exam_mark_with_200_response(): void
     {
+
+        $open_course_students =
+            User::factory(3)
+                ->withStudentRole()
+                ->create();
         $exam =
-            Exam::query()
-                ->with('courseTeacher.course.students')
-                ->first();
+         Exam::factory()
+             ->withRandomFromTo()
+             ->for(
+                 CourseTeacher::factory()
+                     ->for(
+                         OpenCourseRegisteration::factory()
+                             ->hasAttached(
+                                 $open_course_students,
+                                 ['final_mark' => 40],
+                                 'students'
+                             ),
+                         'course'
+                     )
+             )
+             ->hasAttached(
+                 $open_course_students,
+                 fn ($data) => ['mark' => fake()->numberBetween(30, 70)],
+                 'students'
+             )
+             ->create();
 
         $exam_students =
-            ExamStudent::query()
-                ->where(
-                    'exam_id',
-                    $exam->id
-                )
-                ->get();
+            $exam
+                ->examStudents;
+
+        $this
+            ->assertNotEmpty(
+                $exam->courseTeacher->course->students
+            );
 
         // /** @var Collection<RequestExamStudentItemData> $exam_students_data */
         $exam_students_data =
@@ -402,27 +435,41 @@ class ExamTest extends AdminTestCase
     #[Test]
     public function update_student_exam_mark_fails_student_unregistered_in_course_validation_with_422_response(): void
     {
+        $open_course_students =
+            User::factory()
+                ->withStudentRole()
+                ->create();
         $exam =
-            Exam::query()
-                ->with('courseTeacher.course.students')
-                ->first();
+         Exam::factory()
+             ->withRandomFromTo()
+             ->for(
+                 CourseTeacher::factory()
+                     ->for(
+                         OpenCourseRegisteration::factory()
+                             ->hasAttached(
+                                 $open_course_students,
+                                 ['final_mark' => 40],
+                                 'students'
+                             ),
+                         'course'
+                     )
+             )
+             ->hasAttached(
+                 $open_course_students,
+                 fn ($data) => ['mark' => fake()->numberBetween(30, 70)],
+                 'students'
+             )
+             ->create();
 
+        /** @var Collection<User> $student_unregistered_in_exam_course */
         $student_unregistered_in_exam_course =
-            User::query()
-                ->whereNotIn(
-                    'id',
-                    $exam->courseTeacher->course->students->pluck('id')
-                )
-                ->first();
+            User::factory()
+                ->withStudentRole()
+                ->create();
 
         $exam_students =
-            ExamStudent::query()
-                ->where(
-                    'exam_id',
-                    $exam->id
-                )
-                ->take(1)
-                ->get();
+            $exam
+                ->examStudents;
 
         // /** @var Collection<RequestExamStudentItemData> $exam_students_data */
         $exam_students_data =
@@ -449,13 +496,12 @@ class ExamTest extends AdminTestCase
             )
             ->patchJsonData(
                 $update_student_exam_mark_request->toArray()
-
             );
 
         $response->assertStatus(422);
 
         $response
-            ->assertOnlyJsonValidationErrors(
+            ->assertJsonValidationErrors(
                 [
                     'exam_students.0.student_id' => __(
                         'messages.exam_students.student unregistered in course',
@@ -472,10 +518,6 @@ class ExamTest extends AdminTestCase
     #[Test]
     public function update_exam_with_200_response(): void
     {
-
-        // or we don't seed it in set up, and seed it only when needed
-        Exam::query()
-            ->delete();
 
         $exam =
             Exam::factory()
@@ -526,32 +568,27 @@ class ExamTest extends AdminTestCase
     }
 
     #[Test]
-    public function update_overlapped_exam_fails_with_422_response(): void
+    public function update_exam_fails_overlap_validation_with_422_response(): void
     {
 
-        $overlapped_exam =
-            Exam::query()
-                ->first();
+        $exam_to_overlap_with =
+            Exam::factory()
+                ->withRandomFromTo()
+                ->create();
         $exam =
-            Exam::query()
-                ->with('courseTeacher.course.course')
-                ->where(
-                    'id',
-                    '!=',
-                    $overlapped_exam
-                        ->id
-                )
-                ->first();
+            Exam::factory()
+                ->withRandomFromTo()
+                ->create();
 
         $update_exam_request =
             new UpdateExamRequestData(
-                $overlapped_exam->course_teacher_id,
-                $overlapped_exam->classroom_id,
-                $overlapped_exam->max_mark,
-                $overlapped_exam->date,
-                $overlapped_exam->from,
-                $overlapped_exam->to,
-                $overlapped_exam->is_main_exam,
+                $exam_to_overlap_with->course_teacher_id,
+                $exam_to_overlap_with->classroom_id,
+                $exam_to_overlap_with->max_mark,
+                $exam_to_overlap_with->date,
+                $exam_to_overlap_with->from,
+                $exam_to_overlap_with->to,
+                $exam_to_overlap_with->is_main_exam,
                 $exam->id
             );
 
@@ -567,7 +604,7 @@ class ExamTest extends AdminTestCase
         $response->assertStatus(422);
 
         $overrlapped_course_name =
-         $overlapped_exam->courseTeacher->course->course->name;
+         $exam_to_overlap_with->courseTeacher->course->course->name;
 
         $response
             ->assertOnlyJsonValidationErrors(
@@ -587,8 +624,9 @@ class ExamTest extends AdminTestCase
     {
 
         $exam =
-            Exam::query()
-                ->first();
+            Exam::factory()
+                ->withRandomFromTo()
+                ->create();
 
         $delete_exam_request =
             new DeleteExamRequestData(

@@ -28,24 +28,7 @@ class LectureSeeder extends Seeder
             )
             ->each(function (CourseTeacher $course_teacher, $index) {
 
-                $course =
-                    $course_teacher
-                        ->course;
-
-                $course_year =
-                    $course
-                        ->academicYearSemester
-                        ->year;
-
-                $course_semester =
-                    $course
-                        ->academicYearSemester
-                        ->semester;
-
-                Lecture::factory()
-                    ->withCourseTeacherId($course_teacher->id)
-                    ->with15LecturesForEachSequence($course_year, $course_semester)
-                    ->create();
+                $this->create15LecturesForCourseTeacher($course_teacher);
 
             });
 
@@ -54,5 +37,27 @@ class LectureSeeder extends Seeder
             Lecture::all()
         );
 
+    }
+
+    private function create15LecturesForCourseTeacher(CourseTeacher $courseTeacher)
+    {
+        $course =
+            $courseTeacher
+                ->course;
+
+        $course_year =
+            $course
+                ->academicYearSemester
+                ->year;
+
+        $course_semester =
+            $course
+                ->academicYearSemester
+                ->semester;
+
+        Lecture::factory()
+            ->withCourseTeacherId($courseTeacher->id)
+            ->with15LecturesForEachSequence($course_year, $course_semester)
+            ->create();
     }
 }

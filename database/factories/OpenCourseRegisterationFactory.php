@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\AcademicYearSemester;
+use App\Models\Course;
 use App\Models\Exam;
 use App\Models\OpenCourseRegisteration;
 use App\Models\Teacher;
@@ -23,7 +24,8 @@ class OpenCourseRegisterationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'academic_year_semester_id' => AcademicYearSemester::inRandomOrder()->first()->id,
+            'course_id' => Course::inRandomOrder()->first()->id,
             'price_in_usd' => $this->faker->randomElement(self::PRICES),
         ];
     }

@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class DeleteCourseTeacherAttendaceController extends CourseTeacherAttendanceController
 {
-    #[OAT\Delete(path: '/admins/course-teachers/{id}/students/{lecture_id}', tags: ['adminsCourseTeachers'])]
+    #[OAT\Delete(path: '/admins/course-teachers/{id}/lectures/{lecture_id}', tags: ['adminsCourseTeachers'])]
     #[QueryParameter('date')]
     #[SuccessNoContentResponse]
     public function __invoke(DeleteCourseTeacherAttendanceRequestData $request)

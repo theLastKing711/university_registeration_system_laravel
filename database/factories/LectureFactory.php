@@ -18,7 +18,7 @@ class LectureFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'happened_at' => $this->faker->date(),
         ];
     }
 
@@ -29,6 +29,17 @@ class LectureFactory extends Factory
                 state(
                     [
                         'course_teacher_id' => $course_teacher_id,
+                    ]
+                );
+    }
+
+    public function happened_at(string $happened_at): static
+    {
+        return
+            $this->
+                state(
+                    [
+                        'happened_t' => $happened_at,
                     ]
                 );
     }

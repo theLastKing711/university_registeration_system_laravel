@@ -10,14 +10,14 @@ use App\Data\Admin\CourseTeacher\UpdateCourseTeacherAttendace\Request\StudentAtt
 use App\Data\Admin\CourseTeacher\UpdateCourseTeacherAttendace\Request\UpdateCourseTeacherAttandenceRequestData;
 use App\Models\CourseAttendance;
 use App\Models\CourseTeacher;
+use App\Models\Exam;
 use App\Models\Lecture;
+use App\Models\User;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
-use Database\Seeders\CourseAttendanceSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\CourseTeacherSeeder;
 use Database\Seeders\DepartmentSeeder;
-use Database\Seeders\ExamSeeder;
 use Database\Seeders\LectureSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\StudentSeeder;
@@ -47,7 +47,6 @@ class CourseTeacherTest extends AdminTestCase
             StudentSeeder::class,
             CourseTeacherSeeder::class,
             LectureSeeder::class,
-            CourseAttendanceSeeder::class,
         ]);
 
     }
@@ -146,16 +145,21 @@ class CourseTeacherTest extends AdminTestCase
     public function update_course_teacher_student_attendance_with_200_response(): void
     {
 
-        $random_lecture =
-            Lecture::query()
-                ->with(
-                    'courseTeacher',
-                    'students'
+        /** @var Lecture $lecture */
+        $lecture =
+            Lecture::factory()
+                ->for(
+                    CourseTeacher::first()
                 )
-                ->first();
+                ->hasAttached(
+                    User::factory()
+                        ->count(5),
+                    fn ($attributes) => ['is_student_present' => fake()->boolean()],
+                    'students'
+                )->create();
 
-        $course_teacher_attendance_data =
-            $random_lecture
+        $student_attendance_data =
+            $lecture
                 ->courseTeacher
                 ->course
                 ->students
@@ -166,23 +170,50 @@ class CourseTeacherTest extends AdminTestCase
                     );
                 });
 
+        $updateCourseTeacherAttandenceRequestData =
+            new UpdateCourseTeacherAttandenceRequestData(
+                '2014-04-16',
+                $student_attendance_data,
+                $lecture->courseTeacher->id,
+                $lecture->id
+            );
+
         $response =
             $this
                 ->withRoutePaths(
-                    $random_lecture->courseTeacher->id,
+                    $lecture->courseTeacher->id,
                     'lectures',
-                    $random_lecture->id
+                    $lecture->id
                 )
                 ->patchJsonData(
-                    new UpdateCourseTeacherAttandenceRequestData(
-                        '2014-04-16',
-                        $course_teacher_attendance_data,
-                        $random_lecture->courseTeacher->id,
-                        $random_lecture->id
-                    )->toArray()
+                    $updateCourseTeacherAttandenceRequestData
+                        ->toArray()
                 );
 
         $response->assertStatus(200);
+
+        $this
+            ->assertDatabaseHas(
+                Lecture::class,
+                [
+                    'id' => $updateCourseTeacherAttandenceRequestData->lecture_id,
+                    'happened_at' => $updateCourseTeacherAttandenceRequestData->happened_at,
+                ]
+            );
+
+        $student_attendance_data
+            ->each(function ($student_attendance) use ($lecture) {
+                $this
+                    ->assertDatabaseHas(
+                        CourseAttendance::class,
+                        [
+                            'lecture_id' => $lecture->id,
+                            'student_id' => $student_attendance->id,
+                            'is_student_present' => $student_attendance->is_student_present,
+                        ]
+                    );
+
+            });
 
     }
 
@@ -246,19 +277,20 @@ class CourseTeacherTest extends AdminTestCase
     public function get_course_teacher_exams_with_200_response(): void
     {
 
-        $this
-            ->seed([
-                ExamSeeder::class,
-            ]);
-
-        $first_course_teacher =
-            CourseTeacher::query()
-                ->first();
+        /** @var CourseTeacher $course_teacher description */
+        $course_teacher =
+            CourseTeacher::factory()
+                ->has(
+                    Exam::factory()
+                        ->withRandomFromTo()
+                        ->semesterMainExamsMaxMarkSequence()
+                )
+                ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $first_course_teacher->id,
+                    $course_teacher->id,
                     'exams'
                 )
                 ->getJsonData();

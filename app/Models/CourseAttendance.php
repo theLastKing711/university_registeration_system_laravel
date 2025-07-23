@@ -49,6 +49,8 @@ class CourseAttendance extends Pivot
     /** @use HasFactory<\Database\Factories\CourseAttendanceFactory> */
     use HasFactory;
 
+    protected $table = 'course_attendance';
+
     public $incrementing = true;
 
     /**

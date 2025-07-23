@@ -9,7 +9,6 @@ use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Admin\CourseTeacher\Abstract\CourseTeacherAttendanceController;
 use App\Models\Lecture;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class UpdateCourseTeacherAttendaceController extends CourseTeacherAttendanceController
@@ -19,8 +18,6 @@ class UpdateCourseTeacherAttendaceController extends CourseTeacherAttendanceCont
     #[SuccessNoContentResponse]
     public function __invoke(UpdateCourseTeacherAttandenceRequestData $request)
     {
-        Log::info($request->all());
-
         $student_attendace_attach_data =
             $request
                 ->students_attendandces
