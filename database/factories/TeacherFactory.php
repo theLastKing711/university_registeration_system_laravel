@@ -62,16 +62,6 @@ class TeacherFactory extends Factory
             ...self::TEACHERS
         );
 
-        // $it_department = Department::query()
-        //     ->firstWhere(
-        //         'id',
-        //         1,
-        //     );
-
-        // return
-        //     $it_department
-        //         ->teachers;
-
     }
 
     public function alternateMainTeacher(): static
