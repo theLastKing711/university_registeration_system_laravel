@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\AcademicYearSemester;
 use App\Models\Course;
 use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -26,7 +25,6 @@ class CourseFactory extends Factory
             'is_active' => $this->faker->boolean(),
             'credits' => 3,
             'open_for_students_in_year' => 0,
-            'academic_year_semester_id' => AcademicYearSemester::inRandomOrder()->first(),
         ];
     }
 

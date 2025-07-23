@@ -24625,6 +24625,25 @@ namespace Illuminate\Support {
         }
 
             }
+    /**
+     * 
+     *
+     */
+    class Str {
+        /**
+         * 
+         *
+         * @see \App\Providers\AppServiceProvider::registerStrMacros()
+         * @param int $time
+         * @return string 
+         * @static 
+         */
+        public static function parseTimeStringFromInt($time)
+        {
+            return \Illuminate\Support\Str::parseTimeStringFromInt($time);
+        }
+
+            }
     }
 
 namespace Illuminate\Http {

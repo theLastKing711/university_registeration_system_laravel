@@ -5,12 +5,10 @@ namespace Tests\Feature\Admin\Student;
 use App\Data\Admin\Student\GraduateStudent\Request\GraduateStudentRequestData;
 use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Admin\Student\UpdateStudent\Request\UpdateStudentRequestData;
-use App\Enum\Auth\RolesEnum;
 use App\Models\Department;
 use App\Models\User;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\DepartmentSeeder;
-use Database\Seeders\StudentSeeder;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -29,7 +27,6 @@ class StudentTest extends AdminTestCase
             seed([
                 AcademicYearSemesterSeeder::class,
                 DepartmentSeeder::class,
-                StudentSeeder::class,
             ]);
 
     }
@@ -63,28 +60,17 @@ class StudentTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $created_student =
-                User::query()
-                    ->where(
-                        'name',
-                        $register_student_request->name
-                    )
-                    ->first();
-
-        $student_has_been_created =
-            $created_student != null;
-
         $this
-            ->assertTrue(
-                $student_has_been_created
-            );
-
-        $created_student_has_student_role =
-            $created_student->hasRole(RolesEnum::STUDENT);
-
-        $this
-            ->assertTrue(
-                $created_student_has_student_role
+            ->assertDatabaseHas(
+                User::class,
+                [
+                    'department_id' => $register_student_request->department_id,
+                    'national_id' => $register_student_request->national_id,
+                    'birthDate' => $register_student_request->birthdate,
+                    'enrollment_date' => $register_student_request->enrollment_date,
+                    'phone_number' => $register_student_request->phone_number,
+                    'name' => $register_student_request->name,
+                ]
             );
 
     }
@@ -93,14 +79,11 @@ class StudentTest extends AdminTestCase
     public function update_student_with_200_response(): void
     {
 
-        $student =
-            User::query()
-                ->whereRelation(
-                    'roles',
-                    'name',
-                    RolesEnum::STUDENT->value
-                )
-                ->first();
+        /** @var User $new_students */
+        $new_student =
+            User::factory()
+                ->withStudentRole()
+                ->create();
 
         $department_id =
             Department::query()
@@ -117,13 +100,13 @@ class StudentTest extends AdminTestCase
                 fake()->phoneNumber(),
                 fake()->name(),
                 fake()->password(),
-                $student->id
+                $new_student->id
             );
 
         $response =
             $this
                 ->withRoutePaths(
-                    $student->id
+                    $new_student->id
                 )
                 ->patchJsonData(
                     $update_student_request
@@ -132,28 +115,18 @@ class StudentTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $updated_student =
-                User::query()
-                    ->where(
-                        [
-                            'id' => $student->id,
-                            'department_id' => $update_student_request->department_id,
-                            'national_id' => $update_student_request->national_id,
-                            'birthdate' => $update_student_request->birthdate,
-                            'enrollment_date' => $update_student_request->enrollment_date,
-                            'graduation_date' => $update_student_request->graduation_date,
-                            'phone_number' => $update_student_request->phone_number,
-                            'name' => $update_student_request->name,
-                        ]
-                    )
-                    ->first();
-
-        $student_has_been_updated =
-            $updated_student != null;
-
         $this
-            ->assertTrue(
-                $student_has_been_updated
+            ->assertDatabaseHas(
+                User::class,
+                [
+                    'id' => $new_student->id,
+                    'department_id' => $update_student_request->department_id,
+                    'national_id' => $update_student_request->national_id,
+                    'birthDate' => $update_student_request->birthdate,
+                    'enrollment_date' => $update_student_request->enrollment_date,
+                    'phone_number' => $update_student_request->phone_number,
+                    'name' => $update_student_request->name,
+                ]
             );
 
     }
@@ -162,33 +135,26 @@ class StudentTest extends AdminTestCase
     public function delete_student_with_200_response(): void
     {
 
-        $student =
-            User::query()
-                ->whereRelation(
-                    'roles',
-                    'name',
-                    RolesEnum::STUDENT->value
-                )
-                ->first();
+        $new_student =
+             User::factory()
+                 ->withStudentRole()
+                 ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $student->id
+                    $new_student->id
                 )
                 ->deleteJsonData();
 
         $response->assertStatus(200);
 
-        $deleted_student =
-                $student->fresh();
-
-        $student_has_been_deleted =
-            $deleted_student == null;
-
         $this
-            ->assertTrue(
-                $student_has_been_deleted
+            ->assertDatabaseMissing(
+                User::class,
+                [
+                    'id' => $new_student->id,
+                ]
             );
 
     }
@@ -197,9 +163,10 @@ class StudentTest extends AdminTestCase
     public function graduate_student_with_200_response(): void
     {
 
-        $student =
-            User::query()
-                ->first();
+        $new_student =
+             User::factory()
+                 ->withStudentRole()
+                 ->create();
 
         $graduate_student_request =
             new GraduateStudentRequestData(
@@ -209,7 +176,7 @@ class StudentTest extends AdminTestCase
         $response =
             $this
                 ->withRoutePaths(
-                    $student->id,
+                    $new_student->id,
                     'graduation'
                 )
                 ->patchJsonData(
@@ -219,22 +186,13 @@ class StudentTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $graduated_student =
-                User::query()
-                    ->where(
-                        [
-                            'id' => $student->id,
-                            'graduation_date' => $graduate_student_request->graduation_date,
-                        ]
-                    )
-                    ->first();
-
-        $student_has_been_graduated =
-            $graduated_student != null;
-
         $this
-            ->assertTrue(
-                $student_has_been_graduated
+            ->assertDatabaseHas(
+                User::class,
+                [
+                    'id' => $new_student->id,
+                    'graduation_date' => $graduate_student_request->graduation_date,
+                ]
             );
 
     }

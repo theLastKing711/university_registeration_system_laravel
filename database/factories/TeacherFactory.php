@@ -51,6 +51,7 @@ class TeacherFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'department_id' => Department::inRandomOrder()->first()->id,
         ];
     }
 

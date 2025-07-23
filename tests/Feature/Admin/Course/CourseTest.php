@@ -306,7 +306,8 @@ class CourseTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $deleted_course = Course::query()
+        $deleted_course =
+        Course::query()
             ->whereId($new_course->id)
             ->first();
 

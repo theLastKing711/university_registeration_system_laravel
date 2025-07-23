@@ -9,7 +9,7 @@ use App\Models\Department;
 use App\Models\Teacher;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\DepartmentSeeder;
-use Database\Seeders\TeacherSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -28,7 +28,6 @@ class TeacherTest extends AdminTestCase
             seed([
                 AcademicYearSemesterSeeder::class,
                 DepartmentSeeder::class,
-                TeacherSeeder::class,
             ]);
 
     }
@@ -37,6 +36,9 @@ class TeacherTest extends AdminTestCase
     #[Test]
     public function get_teachers_with_200_response(): void
     {
+
+        Teacher::factory(5)
+            ->create();
 
         $response =
             $this
@@ -51,6 +53,9 @@ class TeacherTest extends AdminTestCase
     public function get_teachers_paginated_with_200_response(): void
     {
 
+        Teacher::factory(5)
+            ->create();
+
         $per_page = 1;
 
         $response =
@@ -59,7 +64,6 @@ class TeacherTest extends AdminTestCase
                 ->withQueryParameters([
                     'perPage' => $per_page,
                 ])
-
                 ->getJsonData();
 
         $response->assertStatus(200);
@@ -67,17 +71,12 @@ class TeacherTest extends AdminTestCase
         $response_data =
             GetTeachersPaginatedResponsePaginationResultData::from($response->json());
 
-        $response_data_has_correct_count =
+        $this->assertEquals(
+            $per_page,
             $response_data
                 ->data
                 ->count()
-            ==
-            $per_page;
-
-        $this
-            ->assertTrue(
-                $response_data_has_correct_count
-            );
+        );
 
     }
 
@@ -86,14 +85,14 @@ class TeacherTest extends AdminTestCase
     public function get_teacher_with_200_response(): void
     {
 
-        $teacher =
-            Teacher::query()
-                ->first();
+        $new_teacher =
+             Teacher::factory()
+                 ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $teacher->id
+                    $new_teacher->id
                 )
                 ->getJsonData();
 
@@ -106,15 +105,10 @@ class TeacherTest extends AdminTestCase
     public function create_teacher_with_200_response(): void
     {
 
-        $department_id =
-            Department::query()
-                ->first()
-                ->id;
-
         $create_teacher_request =
             new CreateTeacherRequestData(
                 fake()->name(),
-                $department_id
+                Department::value('id')
             );
 
         $response =
@@ -126,20 +120,13 @@ class TeacherTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $created_teacher =
-                Teacher::query()
-                    ->where(
-                        'name',
-                        $create_teacher_request->name
-                    )
-                    ->first();
-
-        $teacher_has_been_created =
-            $created_teacher != null;
-
         $this
-            ->assertTrue(
-                $teacher_has_been_created
+            ->assertDatabaseHas(
+                Teacher::class,
+                [
+                    'name' => $create_teacher_request->name,
+                    'department_id' => $create_teacher_request->department_id,
+                ]
             );
 
     }
@@ -149,25 +136,20 @@ class TeacherTest extends AdminTestCase
     public function update_teacher_with_200_response(): void
     {
 
-        $teacher =
-            Teacher::query()
-                ->first();
-
-        $department_id =
-            Department::query()
-                ->first()
-                ->id;
+        $new_teacher =
+           Teacher::factory()
+               ->create();
 
         $update_teacher_request =
             new UpdateTeacherRequestData(
                 fake()->name,
-                $department_id,
-                $teacher->id
+                $new_teacher->department_id,
+                $new_teacher->id
             );
 
         $response =
             $this
-                ->withRoutePaths($teacher->id)
+                ->withRoutePaths($new_teacher->id)
                 ->patchJsonData(
                     $update_teacher_request
                         ->toArray()
@@ -175,22 +157,14 @@ class TeacherTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $updated_teacher =
-                Teacher::query()
-                    ->where(
-                        [
-                            'id' => $teacher->id,
-                            'name' => $update_teacher_request->name,
-                        ]
-                    )
-                    ->first();
-
-        $teacher_has_been_updated =
-            $updated_teacher != null;
-
         $this
-            ->assertTrue(
-                $teacher_has_been_updated
+            ->assertDatabaseHas(
+                Teacher::class,
+                [
+                    'id' => $new_teacher->id,
+                    'name' => $update_teacher_request->name,
+                    'department_id' => $update_teacher_request->department_id,
+                ]
             );
 
     }
@@ -200,28 +174,23 @@ class TeacherTest extends AdminTestCase
     public function delete_teacher_with_200_response(): void
     {
 
-        $teacher =
-            Teacher::query()
-                ->first();
+        $new_teacher =
+          Teacher::factory()
+              ->create();
 
         $response =
             $this
-                ->withRoutePaths($teacher->id)
+                ->withRoutePaths($new_teacher->id)
                 ->deleteJsonData();
 
         $response->assertStatus(200);
 
-        $deleted_teachers =
-                $teacher->fresh();
-
-        $teacher_have_been_deleted =
-            $deleted_teachers
-            ==
-            null;
-
         $this
-            ->assertTrue(
-                $teacher_have_been_deleted
+            ->assertDatabaseMissing(
+                Teacher::class,
+                [
+                    'id' => $new_teacher->id,
+                ]
             );
 
     }
@@ -231,29 +200,24 @@ class TeacherTest extends AdminTestCase
     public function delete_teachers_with_200_response(): void
     {
 
-        $teachers =
-            Teacher::query()
-                ->take(2)
-                ->get();
+        /** @var Collection<Teacher> $new_teachers */
+        $new_teachers =
+            Teacher::factory(2)
+                ->create();
 
         $response =
             $this
                 ->withArrayQueryParameter(
-                    $teachers->pluck('id')
+                    $new_teachers->pluck('id')
                 )
                 ->deleteJsonData();
 
         $response->assertStatus(200);
 
-        $deleted_teachers =
-                $teachers->fresh();
-
-        $teachers_have_been_deleted =
-            $deleted_teachers->isEmpty();
-
         $this
-            ->assertTrue(
-                $teachers_have_been_deleted
+            ->assertDatabaseCount(
+                Teacher::class,
+                0
             );
 
     }

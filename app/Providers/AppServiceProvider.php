@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registeHttpClientMacros();
+
+        $this->registerStrMacros();
     }
 
     public function registeHttpClientMacros()
@@ -50,6 +53,24 @@ class AppServiceProvider extends ServiceProvider
                 ->withQueryParameters([
                     'api_key' => config('services.currencty_converter.api_key'),
                 ]);
+        });
+
+    }
+
+    public function registerStrMacros(): void
+    {
+
+        Str::macro('parseTimeStringFromInt', function (int $time): string {
+
+            $time_as_string = strval($time);
+
+            return
+                strlen($time_as_string) === 1
+                    ?
+                    "0{$time_as_string}:00:00"
+                    :
+                    "{$time_as_string}:00:00";
+
         });
 
     }

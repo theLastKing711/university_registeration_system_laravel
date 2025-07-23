@@ -330,6 +330,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereIsMainTeacher($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereTeacherId($value)
  * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\CourseTeacherFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CourseTeacher whereUpdatedAt($value)
  */
 	class CourseTeacher extends \Eloquent {}
 }

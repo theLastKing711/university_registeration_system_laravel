@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Classroom;
 use App\Models\CourseTeacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ClassroomCourseTeacher>
@@ -55,23 +56,33 @@ class ClassroomCourseTeacherFactory extends Factory
                 16,
             ];
 
-            $exam_from = fake()->randomElement($exam_times);
-
-            $exam_to = strval($exam_from + 2);
-
-            $exam_from = strval($exam_from);
-
             $exam_from =
-                strlen($exam_from) === 1 ? "0{$exam_from}:00:00"
-                :
-                "{$exam_from}:00:00";
+                fake()->randomElement($exam_times);
 
             $exam_to =
-                strlen($exam_to) === 1
-                ?
-                "0{$exam_to}:00:00"
-                :
-                "{$exam_to}:00:00";
+                Str::parseTimeStringFromInt($exam_from + 2);
+
+            $exam_from =
+                Str::parseTimeStringFromInt($exam_from);
+
+            return
+                [
+                    'from' => $exam_from,
+                    'to' => $exam_to,
+                ];
+        });
+    }
+
+    public function withFromTo(int $from, int $to)
+    {
+
+        $exam_to =
+            Str::parseTimeStringFromInt($from + 2);
+
+        $exam_from =
+            Str::parseTimeStringFromInt($to);
+
+        return $this->state(function (array $attributes) use ($exam_from, $exam_to) {
 
             return
                 [
