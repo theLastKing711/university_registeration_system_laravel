@@ -26,11 +26,11 @@ class AcademicYearSemesterTest extends AdminTestCase
                 'academic-year-semesters'
             );
 
-        $this->seed([
-            AcademicYearSemesterSeeder::class,
-            DepartmentSeeder::class,
-            DepartmentRegisterationPeriodSeeder::class,
-        ]);
+        // $this->seed([
+        //     AcademicYearSemesterSeeder::class,
+        //     DepartmentSeeder::class,
+        //     DepartmentRegisterationPeriodSeeder::class,
+        // ]);
 
     }
 
@@ -38,13 +38,13 @@ class AcademicYearSemesterTest extends AdminTestCase
     public function get_academic_years_semesters_with_200_response(): void
     {
 
-        $first_department =
+        $department =
             Department::first();
 
         $response =
             $this
                 ->withQueryParameters([
-                    'department_ids' => $first_department->id,
+                    'department_ids' => $department->id,
                     'year' => 2014,
                     'semester' => 0,
                 ])
@@ -58,14 +58,10 @@ class AcademicYearSemesterTest extends AdminTestCase
                     ->json()
             );
 
-        $repsonse_has_data =
-            $pagination_response_data
-                ->data
-                ->isNotEmpty();
-
         $this
-            ->assertTrue(
-                $repsonse_has_data,
+            ->assertNotEmpty(
+                $pagination_response_data
+                    ->data
             );
 
     }
@@ -89,19 +85,14 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $created_academic_year_semester =
-            AcademicYearSemester::query()
-                ->where(
-                    'year',
-                    $create_academic_year_semester_request->year
-                )
-                ->where(
-                    'semester',
-                    $create_academic_year_semester_request->semester
-                )
-                ->first();
-
-        $this->assertNotNull($created_academic_year_semester);
+        $this
+            ->assertDatabaseHas(
+                AcademicYearSemester::class,
+                [
+                    'year' => $create_academic_year_semester_request->year,
+                    'semester' => $create_academic_year_semester_request->semester,
+                ]
+            );
 
     }
 
@@ -109,14 +100,14 @@ class AcademicYearSemesterTest extends AdminTestCase
     public function delete_academic_year_semester_with_200_response(): void
     {
 
-        $first_academic_year_semester =
-            AcademicYearSemester::query()
-                ->first();
+        $new_academic_year_semester =
+            AcademicYearSemester::factory()
+                ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $first_academic_year_semester->id
+                    $new_academic_year_semester->id
                 )
                 ->deleteJsonData();
 
@@ -125,18 +116,13 @@ class AcademicYearSemesterTest extends AdminTestCase
                 200
             );
 
-        $created_academic_year_semester =
-            AcademicYearSemester::query()
-                ->where(
-                    'id',
-                    $first_academic_year_semester
-                        ->id
-                )
-                ->first();
-
         $this
-            ->assertNull(
-                $created_academic_year_semester
+            ->assertDatabaseMissing(
+                AcademicYearSemester::class,
+                [
+                    'semester' => $new_academic_year_semester->semester,
+                    'year' => $new_academic_year_semester->year,
+                ]
             );
 
     }
@@ -145,6 +131,10 @@ class AcademicYearSemesterTest extends AdminTestCase
     public function update_academic_year_semester_with_200_response(): void
     {
 
+        $new_academic_year_semester =
+            AcademicYearSemester::factory()
+                ->create();
+
         $update_academic_year_semester_request =
             new UpdateAcademicYearSemesterRequestData(
                 2018,
@@ -152,7 +142,7 @@ class AcademicYearSemesterTest extends AdminTestCase
                 AcademicYearSemester::first()->id
             );
 
-        $first_academic_year_semester =
+        $new_academic_year_semester =
             AcademicYearSemester::query()
                 ->firstWhere(
                     'id',
@@ -162,7 +152,7 @@ class AcademicYearSemesterTest extends AdminTestCase
         $response =
             $this
                 ->withRoutePaths(
-                    $first_academic_year_semester
+                    $new_academic_year_semester
                         ->id
                 )
                 ->patchJsonData(
@@ -172,20 +162,14 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $updated_academic_year_semester =
-                $first_academic_year_semester
-                    ->fresh();
-
         $this
-            ->assertEquals(
-                $update_academic_year_semester_request->year,
-                $updated_academic_year_semester->year
-            );
-
-        $this
-            ->assertEquals(
-                $update_academic_year_semester_request->semester,
-                $updated_academic_year_semester->semester
+            ->assertDatabaseHas(
+                AcademicYearSemester::class,
+                [
+                    'id' => $new_academic_year_semester->id,
+                    'semester' => $update_academic_year_semester_request->semester,
+                    'year' => $update_academic_year_semester_request->year,
+                ]
             );
 
     }
@@ -194,31 +178,25 @@ class AcademicYearSemesterTest extends AdminTestCase
     public function open_department_for_registeration_with_200_response(): void
     {
 
-        $academic_year_semester =
-            AcademicYearSemester::query()
-                ->where(
-                    'year',
-                    2016
-                )
-                ->where(
-                    'semester',
-                    1
-                )
-                ->first();
+        $new_academic_year_semester =
+            AcademicYearSemester::factory()
+                ->create();
 
-        $first_two_departments_ids =
-            Department::all()->pluck('id')->take(2)->toArray();
+        $two_department_ids =
+            Department::factory(2)
+                ->create()
+                ->pluck('id');
 
         $open_department_for_registeration_request =
             new OpenDepartmentsForRegisterationRequestData(
-                $first_two_departments_ids,
-                $academic_year_semester->id
+                $two_department_ids->toArray(),
+                $new_academic_year_semester->id
             );
 
         $response =
             $this
                 ->withRoutePaths(
-                    $academic_year_semester->id,
+                    $new_academic_year_semester->id,
                     'departments'
                 )
                 ->postJsonData(
@@ -228,25 +206,10 @@ class AcademicYearSemesterTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $created_department_registeration_periods =
-            DepartmentRegisterationPeriod::query()
-                ->whereIn(
-                    'department_id',
-                    $open_department_for_registeration_request->departments_ids
-                )
-                ->where(
-                    'academic_year_semester_id',
-                    $open_department_for_registeration_request->id
-                )
-                ->get();
-
-        $departments_has_opened_for_registeration =
-            $created_department_registeration_periods
-                ->count() == 2;
-
         $this
-            ->assertTrue(
-                $departments_has_opened_for_registeration
+            ->assertDatabaseCount(
+                DepartmentRegisterationPeriod::class,
+                $two_department_ids->count()
             );
 
     }

@@ -17,7 +17,8 @@ class AcademicYearSemesterFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'semester' => $this->faker->numberBetween(0, 3),
+            'year' => $this->faker->numberBetween(2014, 2016),
         ];
     }
 
