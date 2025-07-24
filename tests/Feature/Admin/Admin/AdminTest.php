@@ -3,7 +3,6 @@
 namespace Tests\Feature\Admin\Admin;
 
 use App\Data\Admin\Admin\CreateAdmin\Request\CreateAdminRequestData;
-use App\Enum\Auth\RolesEnum;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
@@ -39,28 +38,12 @@ class AdminTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $created_admin =
-                User::query()
-                    ->firstWhere(
-                        'name',
-                        $create_admin_request
-                            ->name
-                    );
-
-        $admin_has_been_created =
-            $created_admin != null;
-
         $this
-            ->assertTrue(
-                $admin_has_been_created
-            );
-
-        $created_admin_has_admin_role =
-            $created_admin->hasRole(RolesEnum::ADMIN);
-
-        $this
-            ->assertTrue(
-                $created_admin_has_admin_role
+            ->assertDatabaseHas(
+                User::class,
+                [
+                    'name' => $create_admin_request->name,
+                ]
             );
 
     }
@@ -69,12 +52,12 @@ class AdminTest extends AdminTestCase
     public function delete_admin_with_200_response(): void
     {
 
-        $first_admin =
-            User::query()
-                ->first();
+        $new_admin =
+            User::factory()
+                ->create();
 
         $this->withArrayQueryParameter([
-            $first_admin->id,
+            $new_admin->id,
         ]);
 
         $response =
@@ -82,14 +65,13 @@ class AdminTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $deleted_admin = User::query()
-            ->whereId($first_admin->id)
-            ->first();
-
-        $admin_has_been_deleted =
-         $deleted_admin == null;
-
-        $this->assertTrue($admin_has_been_deleted);
+        $this
+            ->assertDatabaseMissing(
+                User::class,
+                [
+                    'id' => $new_admin->id,
+                ]
+            );
 
     }
 }

@@ -12,8 +12,8 @@ use App\Models\CrossListedCourses;
 use App\Models\Department;
 use App\Models\Prerequisite;
 use Database\Seeders\AcademicYearSemesterSeeder;
-use Database\Seeders\CourseSeeder;
 use Database\Seeders\DepartmentSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -39,21 +39,18 @@ class CourseTest extends AdminTestCase
     public function get_courses_with_200_response(): void
     {
 
-        $this
-            ->seed(CourseSeeder::class);
+        /** @var Collection<Course> $new_courses */
+        $new_courses =
+            Course::factory(5)
+                ->create();
 
-        $it_department_id =
-            Department::query()
-                ->firstWhere(
-                    'name',
-                    'IT'
-                )
-                ->id;
+        $department =
+            $new_courses->first();
 
         $response =
             $this
                 ->withQueryParameters([
-                    'department_id' => $it_department_id,
+                    'department_id' => $department->id,
                 ])
                 ->getJsonData();
 
@@ -62,27 +59,23 @@ class CourseTest extends AdminTestCase
         $resposne_data =
                 GetCoursesResponsePaginationResultData::from($response->json());
 
-        $response_has_data =
-            $resposne_data
-                ->data
-                ->isNotEmpty();
-
         $this
-            ->assertTrue(
-                $response_has_data
+            ->assertNotEmpty(
+                $resposne_data
+                    ->data
             );
 
-        $resposne_has_courses_only_from_it_department = $resposne_data
+        $resposne_has_courses_only_from_its_department = $resposne_data
             ->data
             ->every(
                 fn (GetCoursesResponseData $course) => $course->department_id
                     ==
-                    $it_department_id
+                    $department->id
             );
 
         $this
             ->assertTrue(
-                $resposne_has_courses_only_from_it_department
+                $resposne_has_courses_only_from_its_department
             );
 
     }
@@ -306,15 +299,13 @@ class CourseTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $deleted_course =
-        Course::query()
-            ->whereId($new_course->id)
-            ->first();
-
-        $course_has_been_deleted =
-         $deleted_course == null;
-
-        $this->assertTrue($course_has_been_deleted);
+        $this
+            ->assertDatabaseMissing(
+                Course::class,
+                [
+                    'id' => $new_course->id,
+                ]
+            );
 
     }
 }

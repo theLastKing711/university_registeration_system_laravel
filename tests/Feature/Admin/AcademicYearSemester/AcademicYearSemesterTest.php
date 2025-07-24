@@ -9,9 +9,6 @@ use App\Data\Admin\AcademicYearSemester\UpdateAcademicYearSemester\Request\Updat
 use App\Models\AcademicYearSemester;
 use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
-use Database\Seeders\AcademicYearSemesterSeeder;
-use Database\Seeders\DepartmentRegisterationPeriodSeeder;
-use Database\Seeders\DepartmentSeeder;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -25,13 +22,6 @@ class AcademicYearSemesterTest extends AdminTestCase
             ->withRoutePaths(
                 'academic-year-semesters'
             );
-
-        // $this->seed([
-        //     AcademicYearSemesterSeeder::class,
-        //     DepartmentSeeder::class,
-        //     DepartmentRegisterationPeriodSeeder::class,
-        // ]);
-
     }
 
     #[Test]

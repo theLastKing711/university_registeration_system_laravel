@@ -56,18 +56,20 @@ class OpenCourseRegisterationTest extends AdminTestCase
         Mail::fake();
 
         $open_course =
-            OpenCourseRegisteration::first();
+            OpenCourseRegisteration::factory()
+                ->create();
 
-        $teacher_to_assign_course_to =
-            Teacher::first();
+        $teacher =
+            Teacher::factory()
+                ->create();
 
         $open_course_id =
             $open_course
                 ->id;
 
-        $assign_a_teacher_to_an_open_course =
+        $assign_a_teacher_to_an_open_course_request =
             new AssignTeacherToCourseRequestData(
-                $teacher_to_assign_course_to->id,
+                $teacher->id,
                 false,
                 $open_course_id
             );
@@ -79,35 +81,30 @@ class OpenCourseRegisterationTest extends AdminTestCase
                     'teachers'
                 )
                 ->postJsonData(
-                    $assign_a_teacher_to_an_open_course
+                    $assign_a_teacher_to_an_open_course_request
                         ->toArray()
                 );
 
         $response->assertStatus(200);
 
-        $created_open_courses =
-            CourseTeacher::query()
-                ->where(
-                    'course_id',
-                    $assign_a_teacher_to_an_open_course->id,
-                )
-                ->where(
-                    'teacher_id',
-                    $assign_a_teacher_to_an_open_course->teacher_id
-                )
-                ->get();
-
-        $this->assertCount(1, $created_open_courses);
+        $this
+            ->assertDatabaseHas(
+                CourseTeacher::class,
+                [
+                    'course_id' => $assign_a_teacher_to_an_open_course_request->id,
+                    'teacher_id' => $assign_a_teacher_to_an_open_course_request->teacher_id,
+                ]
+            );
 
         // Assert that mailable was queued with and view passed correct parameters
         Mail::assertQueued(
             TeacherCourseAssignmentEmail::class,
-            function (TeacherCourseAssignmentEmail $mail) use ($open_course, $teacher_to_assign_course_to) {
+            function (TeacherCourseAssignmentEmail $mail) use ($open_course, $teacher) {
 
                 return
                     $mail->course_name == $open_course->course->name
                     &&
-                    $mail->teacher_name == $teacher_to_assign_course_to->name;
+                    $mail->teacher_name == $teacher->name;
 
             }
         );
@@ -156,40 +153,44 @@ class OpenCourseRegisterationTest extends AdminTestCase
     public function assign_a_teacher_to_an_open_course_success_with_one_main_teacher_and_one_non_main_teacher_with_200_response(): void
     {
 
-        $open_course_id =
-            OpenCourseRegisteration::query()
-                ->first()
-                ->id;
-
-        $main_teacher_same_open_course_conflicted_course_teacher =
+        $new_course_teacher =
             CourseTeacher::factory()
                 ->mainTeacher()
-                ->withCourseId($open_course_id)
-                ->withTeacherId(
-                    teacher_id: Teacher::query()->inRandomOrder()->first()->id
-                )
                 ->create();
 
-        $assign_a_teacher_to_an_open_course =
+        $new_teacher =
+            Teacher::factory()
+                ->create();
+
+        $assign_a_teacher_to_an_open_course_request =
             new AssignTeacherToCourseRequestData(
-                Teacher::inRandomOrder()->first()->id,
+                $new_teacher->id,
                 false,
-                $main_teacher_same_open_course_conflicted_course_teacher->course_id
+                $new_course_teacher->course_id
             );
 
         $response =
             $this
                 ->withRoutePaths(
-                    $open_course_id,
+                    $new_course_teacher->course->id,
                     'teachers',
                 )
                 ->postJsonData(
-                    $assign_a_teacher_to_an_open_course
+                    $assign_a_teacher_to_an_open_course_request
                         ->toArray()
                 );
 
         $response
             ->assertStatus(200);
+
+        $this
+            ->assertDatabaseHas(
+                CourseTeacher::class,
+                [
+                    'course_id' => $new_course_teacher->course_id,
+                    'teacher_id' => $new_teacher->id,
+                ]
+            );
 
     }
 
@@ -197,31 +198,26 @@ class OpenCourseRegisterationTest extends AdminTestCase
     public function assign_a_teacher_to_an_open_course_fails_only_one_main_teacher_per_course_validation_with_422_response(): void
     {
 
-        $open_course_id =
-            OpenCourseRegisteration::query()
-                ->first()
-                ->id;
-
-        $main_teacher_same_open_course_conflicted_course_teacher =
+        $new_course_teacher =
             CourseTeacher::factory()
                 ->mainTeacher()
-                ->withCourseId($open_course_id)
-                ->withTeacherId(
-                    teacher_id: Teacher::query()->inRandomOrder()->first()->id
-                )
+                ->create();
+
+        $new_teacher =
+            Teacher::factory()
                 ->create();
 
         $assign_a_teacher_to_an_open_course =
             new AssignTeacherToCourseRequestData(
-                Teacher::inRandomOrder()->first()->id,
+                $new_teacher->id,
                 true,
-                $main_teacher_same_open_course_conflicted_course_teacher->course_id
+                $new_course_teacher->course_id
             );
 
         $response =
             $this
                 ->withRoutePaths(
-                    $open_course_id,
+                    $new_course_teacher->course->id,
                     'teachers',
                 )
                 ->postJsonData(
@@ -249,19 +245,27 @@ class OpenCourseRegisterationTest extends AdminTestCase
     {
 
         $course_that_has_cross_one_listed_course =
-            Course::query()
-                ->with('department.openedAcademicyears')
-                ->whereHas(
-                    'department',
-                    fn (Builder $query) => $query
-                        ->has(
-                            'openedAcademicyears',
-
-                        )
+            Course::factory()
+                ->hasAttached(
+                    Course::factory(),
+                    [],
+                    'firstCrossListed'
                 )
-                ->has('firstCrossListedCourses', 1)
-                // ->orHas('SecondCrossListedCourses', 1)
-                ->first();
+                ->create();
+
+        // Course::query()
+        //     ->with('department.openedAcademicyears')
+        //     ->whereHas(
+        //         'department',
+        //         fn (Builder $query) => $query
+        //             ->has(
+        //                 'openedAcademicyears',
+
+        //             )
+        //     )
+        //     ->has('firstCrossListedCourses', 1)
+        //     // ->orHas('SecondCrossListedCourses', 1)
+        //     ->first();
 
         $before_course_open_count = OpenCourseRegisteration::count();
 
@@ -288,7 +292,10 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $after_course_open_count = OpenCourseRegisteration::count();
 
-        $number_of_added_courses = 2;
+        $number_of_added_courses =
+            1
+            +
+            $course_that_has_cross_one_listed_course->firstCrossListed->count();
 
         $two_courses_has_been_registered =
                     $before_course_open_count + $number_of_added_courses
@@ -306,23 +313,32 @@ class OpenCourseRegisterationTest extends AdminTestCase
     public function delete_an_existing_open_course_with_200_response(): void
     {
 
-        $open_course_registeration =
-            OpenCourseRegisteration::first();
+        $new_open_course_registeration =
+            OpenCourseRegisteration::factory()
+                ->create();
 
         $response =
              $this
                  ->withRoutePaths(
-                     $open_course_registeration->id
+                     $new_open_course_registeration->id
                  )
                  ->deleteJsonData();
 
         $response->assertStatus(200);
 
         $open_course =
-            $open_course_registeration
+            $new_open_course_registeration
                 ->fresh();
 
         $this->assertNull($open_course);
+
+        $this
+            ->assertDatabaseMissing(
+                OpenCourseRegisteration::class,
+                [
+                    'id' => $new_open_course_registeration->id,
+                ]
+            );
 
     }
 }

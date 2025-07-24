@@ -6,7 +6,6 @@ use App\Data\Admin\Department\CreateDepartment\Request\CreateDepartmentRequestDa
 use App\Data\Admin\Department\UpdateDepartment\Request\UpdateDepartmentRequestData;
 use App\Models\Department;
 use Database\Seeders\AcademicYearSemesterSeeder;
-use Database\Seeders\DepartmentSeeder;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 
@@ -22,13 +21,15 @@ class DepartmentTest extends AdminTestCase
 
         $this->seed([
             AcademicYearSemesterSeeder::class,
-            DepartmentSeeder::class,
         ]);
     }
 
     #[Test]
     public function get_departments_with_200_response(): void
     {
+
+        Department::factory(2)
+            ->create();
 
         $response =
             $this
@@ -55,18 +56,12 @@ class DepartmentTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $department_has_been_created =
-            Department::query()
-                ->firstWhere(
-                    'name',
-                    $create_course_department_request->name
-                )
-                !=
-                null;
-
         $this
-            ->assertTrue(
-                condition: $department_has_been_created
+            ->assertDatabaseHas(
+                Department::class,
+                [
+                    'name' => $create_course_department_request->name,
+                ]
             );
 
     }
@@ -75,38 +70,34 @@ class DepartmentTest extends AdminTestCase
     public function update_department_with_200_response(): void
     {
 
-        $first_department =
-            Department::query()
-                ->first();
+        $new_department =
+            Department::factory()
+                ->create();
 
         $update_department_request =
             new UpdateDepartmentRequestData(
                 'test department',
-                $first_department->id
-            )->toArray();
+                $new_department->id
+            );
 
         $response =
             $this
                 ->withRoutePaths(
-                    $first_department->id
+                    $new_department->id
                 )
                 ->patchJsonData(
-                    $update_department_request
+                    $update_department_request->toArray()
                 );
 
         $response->assertStatus(200);
 
-        $updated_department =
-            $first_department->fresh();
-
-        $department_has_been_updated =
-            $updated_department->name
-            !==
-            $first_department->name;
-
         $this
-            ->assertTrue(
-                $department_has_been_updated
+            ->assertDatabaseHas(
+                Department::class,
+                [
+                    'id' => $new_department->id,
+                    'name' => $update_department_request->name,
+                ]
             );
 
     }
@@ -115,27 +106,24 @@ class DepartmentTest extends AdminTestCase
     public function delete_department_with_200_response(): void
     {
 
-        $first_department =
-            Department::query()
-                ->first();
-
+        $new_department =
+            Department::factory()
+                ->create();
         $response =
             $this
                 ->withArrayQueryParameter([
-                    $first_department->id,
+                    $new_department->id,
                 ])
                 ->deleteJsonData();
 
         $response->assertStatus(200);
-
-        $deleted_department = Department::query()
-            ->whereId($first_department->id)
-            ->first();
-
-        $department_has_been_deleted =
-         $deleted_department == null;
-
-        $this->assertTrue($department_has_been_deleted);
+        $this
+            ->assertDatabaseMissing(
+                Department::class,
+                [
+                    'id' => $new_department->id,
+                ]
+            );
 
     }
 
@@ -143,13 +131,14 @@ class DepartmentTest extends AdminTestCase
     public function get_department_teachers_with_200_response(): void
     {
 
-        $first_department =
-            Department::first();
+        $new_department =
+            Department::factory()
+         ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $first_department->id,
+                    $new_department->id,
                     'teachers'
                 )
                 ->getJsonData();

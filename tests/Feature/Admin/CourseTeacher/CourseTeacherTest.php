@@ -12,13 +12,12 @@ use App\Models\CourseAttendance;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
 use App\Models\Lecture;
+use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\ClassroomSeeder;
 use Database\Seeders\CourseSeeder;
-use Database\Seeders\CourseTeacherSeeder;
 use Database\Seeders\DepartmentSeeder;
-use Database\Seeders\LectureSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\StudentSeeder;
 use Database\Seeders\TeacherSeeder;
@@ -45,8 +44,6 @@ class CourseTeacherTest extends AdminTestCase
             CourseSeeder::class,
             OpenCourseRegisterationSeeder::class,
             StudentSeeder::class,
-            CourseTeacherSeeder::class,
-            LectureSeeder::class,
         ]);
 
     }
@@ -56,9 +53,11 @@ class CourseTeacherTest extends AdminTestCase
     {
 
         $first_course_teacher =
-            CourseTeacher::query()
-                ->has('lectures')
-                ->first();
+           CourseTeacher::factory()
+               ->has(
+                   Lecture::factory(5)
+               )
+               ->create();
 
         $response =
             $this
@@ -77,23 +76,21 @@ class CourseTeacherTest extends AdminTestCase
     public function create_course_teacher_student_attendance_with_200_response(): void
     {
 
-        $first_course_teacher =
-             CourseTeacher::query()
-                 ->with('course.students')
-                 ->first();
-
-        $course_students_count =
-            $first_course_teacher
-                ->course
-                ->students
-                ->count();
-
-        $course_attendance_count_before_request =
-            CourseAttendance::query()
-                ->count();
+        $new_course_teacher =
+            CourseTeacher::factory()
+                ->has(
+                    OpenCourseRegisteration::factory()
+                        ->has(
+                            User::factory(10)
+                                ->withStudentRole(),
+                            'students'
+                        ),
+                    'course'
+                )
+                ->create();
 
         $course_teacher_attendance_data =
-            $first_course_teacher
+            $new_course_teacher
                 ->course
                 ->students
                 ->map(function ($student) {
@@ -103,40 +100,26 @@ class CourseTeacherTest extends AdminTestCase
                     );
                 });
 
-        $attendance_count =
-            CourseAttendance::query()
-                ->whereRelation(
-                    'lecture.courseTeacher',
-                    'id',
-                    $first_course_teacher->id
-                )->get();
-
         $response =
             $this
                 ->withRoutePaths(
-                    $first_course_teacher->id,
+                    $new_course_teacher->id,
                     'lectures'
                 )
                 ->postJsonData(
                     new CreateCourseTeacherAttendanceRequestData(
                         '2014-04-04',
                         $course_teacher_attendance_data,
-                        $first_course_teacher->id,
+                        $new_course_teacher->id,
                     )->toArray()
                 );
 
         $response->assertStatus(200);
 
-        $course_attendance_count_after_request =
-            CourseAttendance::query()
-                ->count();
-
         $this
-            ->assertEquals(
-                $course_attendance_count_after_request,
-                $course_attendance_count_before_request
-                +
-                $course_students_count
+            ->assertDatabaseCount(
+                CourseAttendance::class,
+                $course_teacher_attendance_data->count()
             );
 
     }
@@ -149,14 +132,16 @@ class CourseTeacherTest extends AdminTestCase
         $lecture =
             Lecture::factory()
                 ->for(
-                    CourseTeacher::first()
+                    CourseTeacher::factory(),
+                    'courseTeacher'
                 )
                 ->hasAttached(
                     User::factory()
                         ->count(5),
                     fn ($attributes) => ['is_student_present' => fake()->boolean()],
                     'students'
-                )->create();
+                )
+                ->create();
 
         $student_attendance_data =
             $lecture
@@ -221,24 +206,36 @@ class CourseTeacherTest extends AdminTestCase
     public function delete_course_teacher_student_attendance_with_200_response(): void
     {
 
-        $random_lecture =
-            Lecture::query()
-                ->with(
-                    'courseTeacher',
+        $new_lecture =
+            Lecture::factory()
+                ->for(
+                    CourseTeacher::factory(),
+                    'courseTeacher'
+                )
+                ->hasAttached(
+                    User::factory(5)
+                        ->withStudentRole(),
+                    fn ($attributes) => ['is_student_present' => fake()->boolean()],
                     'students'
                 )
-                ->first();
+                ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $random_lecture->courseTeacher->id,
+                    $new_lecture->courseTeacher->id,
                     'lectures',
-                    $random_lecture->id
+                    $new_lecture->id
                 )
                 ->deleteJsonData();
 
         $response->assertStatus(200);
+
+        $this
+            ->assertDatabaseCount(
+                CourseAttendance::class,
+                0
+            );
 
     }
 
@@ -246,14 +243,24 @@ class CourseTeacherTest extends AdminTestCase
     public function get_course_teacher_students_with_200_response(): void
     {
 
-        $first_course_teacher =
-            CourseTeacher::query()
-                ->first();
+        $new_course_teacher =
+            CourseTeacher::factory()
+                ->for(
+                    OpenCourseRegisteration::factory()
+                        ->hasAttached(
+                            User::factory()
+                                ->withStudentRole(),
+                            fn ($attributes) => ['final_mark' => fake()->numberBetween(30, 70)],
+                            'students'
+                        ),
+                    'course'
+                )
+                ->create();
 
         $response =
             $this
                 ->withRoutePaths(
-                    $first_course_teacher->id,
+                    $new_course_teacher->id,
                     'students'
                 )
                 ->getJsonData();

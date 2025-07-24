@@ -24,7 +24,8 @@ class GetCourseTeacherStudentsController extends CourseTeacherController
                     $request->id,
                 )
                 ->course
-                ->students;
+                ->students
+                ->select('id', 'name');
 
         return
             GetCourseTeacherStudentsRespnseData::collect(

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\CourseTeacher;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,6 +19,7 @@ class LectureFactory extends Factory
     public function definition(): array
     {
         return [
+            'course_teacher_id' => CourseTeacher::inRandomOrder()->first()?->id,
             'happened_at' => $this->faker->date(),
         ];
     }
