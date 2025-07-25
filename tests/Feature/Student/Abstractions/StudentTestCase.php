@@ -33,6 +33,7 @@ class StudentTestCase extends TestCase
 
         $this->seed(
             [
+                UsdCurrencyExchangeRateSeeder::class,
                 AcademicYearSemesterSeeder::class,
                 RolesAndPermissionsSeeder::class,
                 DepartmentSeeder::class,
@@ -42,7 +43,6 @@ class StudentTestCase extends TestCase
                 OpenCourseRegisterationSeeder::class,
                 StudentSeeder::class,
                 DepartmentRegisterationPeriodSeeder::class,
-                UsdCurrencyExchangeRateSeeder::class,
             ]
         );
 

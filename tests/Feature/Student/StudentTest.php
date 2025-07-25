@@ -3,6 +3,9 @@
 namespace Tests\Feature\Student;
 
 use App\Data\Student\OpenCourseRegisteration\RegisterCourses\Request\RegisterInOpenCoursesRequestData;
+use App\Models\AcademicYearSemester;
+use App\Models\Course;
+use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
 use App\Models\OpenCourseRegisteration;
 use App\Models\StudentCourseRegisteration;
@@ -26,12 +29,51 @@ class StudentTest extends StudentTestCase
     public function get_open_courses_this_semester_with_200_response(): void
     {
 
+        $academic_year_semester =
+            AcademicYearSemester::factory()
+                ->create();
+
+        $department =
+            Department::factory()
+                ->hasAttached(
+                    $academic_year_semester,
+                    fn ($attributes) => ['is_open_for_students' => true],
+                    'openedAcademicyears'
+                )
+                ->has(
+                    Course::factory(3)
+                        ->has(
+                            OpenCourseRegisteration::factory(3)
+                                ->withAcadeicYearSemesterId(
+                                    $academic_year_semester->id
+                                ),
+                            'openCourseRegisterations'
+                        )
+                )
+                ->create();
+
+        $open_courses =
+                $department
+                    ->courses
+                    ->pluck('openCourseRegisterations')
+                    ->flatten(1);
+
+        User::factory()
+            ->withStudentRole()
+            ->hasAttached(
+                $open_courses,
+                [],
+                'courses'
+            )
+            ->create();
+
         $response =
             $this
                 ->getJsonData();
 
         $response
             ->assertStatus(200);
+
     }
 
     // get_student_course_schedule_this_semester
@@ -67,7 +109,7 @@ class StudentTest extends StudentTestCase
 
     // get_student_marks_this_semester
     #[Test]
-    public function get_student_student_course_marks_this_semester_with_200_response(): void
+    public function get_student_course_marks_this_semester_with_200_response(): void
     {
 
         $response =

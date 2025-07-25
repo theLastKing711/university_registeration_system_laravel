@@ -30,6 +30,15 @@ class OpenCourseRegisterationFactory extends Factory
         ];
     }
 
+    public function withAcadeicYearSemesterId(int $academic_year_semesterId): static
+    {
+
+        return $this->state(fn (array $attributes) => [
+            'academic_year_semester_id' => $academic_year_semesterId,
+        ]
+        );
+    }
+
     public function openFrom2014To2016ForEachSequence(): static
     {
 
