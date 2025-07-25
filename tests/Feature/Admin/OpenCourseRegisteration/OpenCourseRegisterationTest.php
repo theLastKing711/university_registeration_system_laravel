@@ -18,7 +18,6 @@ use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\OpenCourseRegisterationSeeder;
 use Database\Seeders\TeacherSeeder;
 use Database\Seeders\UsdCurrencyExchangeRateSeeder;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
@@ -40,7 +39,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
             ClassroomSeeder::class,
             TeacherSeeder::class,
             CourseSeeder::class,
-            OpenCourseRegisterationSeeder::class,
+            // OpenCourseRegisterationSeeder::class,
             DepartmentRegisterationPeriodSeeder::class,
             UsdCurrencyExchangeRateSeeder::class,
         ]);
@@ -244,7 +243,7 @@ class OpenCourseRegisterationTest extends AdminTestCase
     public function open_course_for_registeration_and_open_related_cross_listed_courses_with_200_response(): void
     {
 
-        $course_that_has_cross_one_listed_course =
+        $course =
             Course::factory()
                 ->hasAttached(
                     Course::factory(),
@@ -253,31 +252,17 @@ class OpenCourseRegisterationTest extends AdminTestCase
                 )
                 ->create();
 
-        // Course::query()
-        //     ->with('department.openedAcademicyears')
-        //     ->whereHas(
-        //         'department',
-        //         fn (Builder $query) => $query
-        //             ->has(
-        //                 'openedAcademicyears',
-
-        //             )
-        //     )
-        //     ->has('firstCrossListedCourses', 1)
-        //     // ->orHas('SecondCrossListedCourses', 1)
-        //     ->first();
-
-        $before_course_open_count = OpenCourseRegisteration::count();
+        $course_data =
+            new CourseData(
+                $course->id,
+                fake()->randomElement([200, 300, 400])
+            );
 
         $open_course_registeration_request_data =
             OpenCourseForRegisterationRequestData::from([
-                'academic_year_semester_id' => $course_that_has_cross_one_listed_course->department->openedAcademicyears->first()->id,
-                'department_id' => $course_that_has_cross_one_listed_course->department->id,
+                'department_id' => $course->department->id,
                 'courses' => [
-                    new CourseData(
-                        $course_that_has_cross_one_listed_course->id,
-                        fake()->randomElement([200, 300, 400])
-                    ),
+                    $course_data,
                 ],
             ]);
 
@@ -290,20 +275,43 @@ class OpenCourseRegisterationTest extends AdminTestCase
 
         $response->assertStatus(200);
 
-        $after_course_open_count = OpenCourseRegisteration::count();
+        Course::query()
+            ->whereIn(
+                'id',
+                [$course->id]
+            )
+            ->get()
+            ->concat(
+                $course
+                    ->firstCrossListed
+            )
+            ->each(function ($opened_course) use ($course_data) {
+                $this
+                    ->assertDatabaseHas(
+                        OpenCourseRegisteration::class,
+                        [
+                            'course_id' => $opened_course->id,
+                            'price_in_usd' => $course_data->price,
+                        ]
+                    );
+
+            });
+
+        $this
+            ->assertDatabaseCount(
+                OpenCourseRegisteration::class,
+                2
+            );
 
         $number_of_added_courses =
             1
             +
-            $course_that_has_cross_one_listed_course->firstCrossListed->count();
+            $course->firstCrossListed->count();
 
-        $two_courses_has_been_registered =
-                    $before_course_open_count + $number_of_added_courses
-                    ==
-                    $after_course_open_count;
         $this
-            ->assertTrue(
-                $two_courses_has_been_registered
+            ->assertDatabaseCount(
+                OpenCourseRegisteration::class,
+                $number_of_added_courses
             );
 
     }
@@ -325,12 +333,6 @@ class OpenCourseRegisterationTest extends AdminTestCase
                  ->deleteJsonData();
 
         $response->assertStatus(200);
-
-        $open_course =
-            $new_open_course_registeration
-                ->fresh();
-
-        $this->assertNull($open_course);
 
         $this
             ->assertDatabaseMissing(

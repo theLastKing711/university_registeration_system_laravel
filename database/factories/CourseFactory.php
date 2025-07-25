@@ -19,7 +19,7 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'department_id' => $this->faker->randomElement(Department::all())->id,
+            'department_id' => $this->faker->randomElement(Department::all())?->id,
             'name' => $this->faker->name,
             'code' => $this->faker->text(5),
             'is_active' => $this->faker->boolean(),

@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('first_course_id')
-                ->constrained('courses');
+                ->constrained('courses')
+                ->cascadeOnDelete();
             $table
                 ->foreignId('second_course_id')
-                ->constrained('courses');
+                ->constrained('courses')
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
