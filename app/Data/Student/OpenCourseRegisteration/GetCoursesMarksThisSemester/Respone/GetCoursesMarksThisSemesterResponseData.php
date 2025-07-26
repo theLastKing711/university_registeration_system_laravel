@@ -18,9 +18,11 @@ class GetCoursesMarksThisSemesterResponseData extends Data
         #[OAT\Property]
         public CourseItemData $course,
         #[OAT\Property]
-        public int $year,
-        #[OAT\Property]
-        public int $semester,
+        public int $academic_year_semester_id,
+        // #[OAT\Property]
+        // public int $year,
+        // #[OAT\Property]
+        // public int $semester,
         #[OAT\Property]
         public int $final_mark,
         // #[DateProperty]
@@ -37,8 +39,7 @@ class GetCoursesMarksThisSemesterResponseData extends Data
         return new self(
             id: $student_course_registeration->id,
             course: CourseItemData::from($course),
-            year: $student_course_registeration->course->year,
-            semester: $student_course_registeration->course->semester,
+            academic_year_semester_id: $student_course_registeration->course->academic_year_semester_id,
             final_mark: $student_course_registeration->final_mark,
             // date_applied: $student_course_registeration->created_at,
         );

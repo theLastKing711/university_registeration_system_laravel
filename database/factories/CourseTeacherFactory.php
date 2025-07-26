@@ -34,6 +34,15 @@ class CourseTeacherFactory extends Factory
 
     }
 
+    public function withdepartmentId(int $department_id): static
+    {
+
+        return $this->state(fn (array $attributes) => [
+            'department_id' => $department_id,
+        ]);
+
+    }
+
     public function withCourseId(int $course_id): static
     {
 

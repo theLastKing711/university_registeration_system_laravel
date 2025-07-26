@@ -12,6 +12,14 @@ use Illuminate\Support\Str;
  */
 class ClassroomCourseTeacherFactory extends Factory
 {
+    const EXAM_TIMES = [
+        8,
+        10,
+        12,
+        14,
+        16,
+    ];
+
     protected $table = 'classroom_course_teacher';
 
     /**
@@ -22,6 +30,15 @@ class ClassroomCourseTeacherFactory extends Factory
     public function definition(): array
     {
 
+        $from =
+            fake()->randomElement(self::EXAM_TIMES);
+
+        $to =
+                Str::parseTimeStringFromInt($from + 2);
+
+        $from =
+                Str::parseTimeStringFromInt($from);
+
         $classrooms =
             Classroom::all();
 
@@ -29,6 +46,8 @@ class ClassroomCourseTeacherFactory extends Factory
             'course_teacher_id' => $this->faker->randomElement(CourseTeacher::all())->id,
             'classroom_id' => $this->faker->randomElement($classrooms)->id,
             'day' => $this->faker->numberBetween(2, 6),
+            'from' => $from,
+            'to' => $to,
         ];
     }
 

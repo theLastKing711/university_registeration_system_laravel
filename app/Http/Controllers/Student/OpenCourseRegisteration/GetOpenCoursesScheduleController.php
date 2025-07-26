@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ClassroomCourseTeacher;
 use DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 
 class GetOpenCoursesScheduleController extends Controller
@@ -17,8 +16,6 @@ class GetOpenCoursesScheduleController extends Controller
     #[SuccessListResponse(GetCoursesScheduleThisSemesterResponseData::class)]
     public function __invoke()
     {
-
-        Log::info('hello world');
 
         $student_course_schedule =
             ClassroomCourseTeacher::query()

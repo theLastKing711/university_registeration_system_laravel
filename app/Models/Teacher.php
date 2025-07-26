@@ -87,6 +87,16 @@ class Teacher extends Model
     }
 
     /**
+     * Summary of classrooms
+     *
+     * @return BelongsToMany<Classroom, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
+     */
+    public function classrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_course_teacher');
+    }
+
+    /**
      * Summary of department
      *
      * @return BelongsTo<Department, $this>

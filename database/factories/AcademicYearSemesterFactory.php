@@ -22,6 +22,16 @@ class AcademicYearSemesterFactory extends Factory
         ];
     }
 
+    public function withYearSemster(int $year, int $semester): static
+    {
+
+        return $this->state(fn (array $attributes) => [
+            'year' => $year,
+            'semester' => $semester,
+        ]
+        );
+    }
+
     public function OpenFromYearToYearForEachSequence(int $start_year, int $end_year): static
     {
 

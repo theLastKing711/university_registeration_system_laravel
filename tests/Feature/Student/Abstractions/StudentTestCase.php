@@ -34,29 +34,29 @@ class StudentTestCase extends TestCase
         $this->seed(
             [
                 UsdCurrencyExchangeRateSeeder::class,
-                AcademicYearSemesterSeeder::class,
-                RolesAndPermissionsSeeder::class,
-                DepartmentSeeder::class,
                 ClassroomSeeder::class,
-                TeacherSeeder::class,
-                CourseSeeder::class,
-                OpenCourseRegisterationSeeder::class,
-                StudentSeeder::class,
-                DepartmentRegisterationPeriodSeeder::class,
+                // AcademicYearSemesterSeeder::class,
+                RolesAndPermissionsSeeder::class,
+                // DepartmentSeeder::class,
+                // TeacherSeeder::class,
+                // CourseSeeder::class,
+                // OpenCourseRegisterationSeeder::class,
+                // StudentSeeder::class,
+                // DepartmentRegisterationPeriodSeeder::class,
             ]
         );
 
-        $this->createStudent();
+        // $this->createStudent();
 
-        $this->actingAs($this->student);
+        // $this->actingAs($this->student);
     }
 
-    private function createStudent(): void
-    {
-        $this->student =
-            User::query()
-                ->has(relation: 'courses', operator: '>', count: 1)
-                ->has('studentCourseRegisterations')
-                ->first();
-    }
+    // private function createStudent(): void
+    // {
+    //     $this->student =
+    //         User::query()
+    //             ->has(relation: 'courses', operator: '>', count: 1)
+    //             ->has('studentCourseRegisterations')
+    //             ->first();
+    // }
 }

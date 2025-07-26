@@ -98,6 +98,16 @@ class UserFactory extends Factory
         );
     }
 
+    public function withDepartmentId(int $department_id): static
+    {
+
+        return $this->state(fn (array $attributes) => [
+            'department_id' => $department_id,
+        ]
+        );
+
+    }
+
     public function fromEnglishDepartment(): static
     {
 

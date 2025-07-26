@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student\OpenCourseRegisteration;
 use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
 use App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThisSemester\Request\GetStudentRegisteredOpenCoursesThisSemesterRequestData;
+use App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThisSemester\Response\GetStudentRegisteredOpenCoursesThisSemesterResponseData;
 use App\Data\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThisSemester\Response\GetStudentRegisteredOpenCoursesThisSemesterResponsePaginationResultData;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -54,29 +55,12 @@ class GetStudentRegisteredOpenCoursesThisSemesterController extends Controller
                         ),
                 ])
                 ->courses
-                ->paginate(1);
+                ->paginate(10);
 
         return
-            GetStudentRegisteredOpenCoursesThisSemesterRequestData::collect(
+            GetStudentRegisteredOpenCoursesThisSemesterResponseData::collect(
                 $student_registered_courses
             );
-
-        // return
-        //     StudentCourseRegisteration::query()
-        //         ->withWhereHas('course', function ($query) {
-        //             $query
-        //                 ->where(
-        //                     'year',
-        //                     2014
-        //                     // $current_year_semester->year
-        //                 )
-        //                 ->where(
-        //                     'semester',
-        //                     1
-        //                     // $current_year_semester->semester
-        //                 );
-        //         })
-        //         ->paginate(1);
 
     }
 }

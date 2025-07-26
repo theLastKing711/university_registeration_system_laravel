@@ -15,9 +15,7 @@ class GetStudentRegisteredOpenCoursesThisSemesterResponseData extends Data
         #[OAT\Property]
         public int $id,
         #[OAT\Property]
-        public int $year,
-        #[OAT\Property]
-        public int $semester,
+        public int $academic_year_semester_id,
         #[DateProperty]
         public string $created_at,
         #[OAT\Property]
