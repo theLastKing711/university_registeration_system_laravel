@@ -6,7 +6,9 @@ use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Enum\Auth\RolesEnum;
+use App\Facades\CloudUploadService;
 use App\Http\Controllers\Controller;
+use App\Models\TemporaryUploadedImages;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OAT;
@@ -19,7 +21,14 @@ class RegisterStudentController extends Controller
     public function __invoke(RegisterStudentRequestData $request)
     {
 
-        DB::transaction(function () use ($request) {
+        /** @var TemporaryUploadedImages $temporary_uploaded_profile_picture */
+        $temporary_uploaded_profile_picture =
+            TemporaryUploadedImages::firstWhere(
+                'public_id',
+                $request->temporary_profile_picture_public
+            );
+
+        DB::transaction(function () use ($request, $temporary_uploaded_profile_picture) {
 
             $student = new User;
 
@@ -34,6 +43,24 @@ class RegisterStudentController extends Controller
             $student->save();
 
             $student->assignRole(RolesEnum::STUDENT);
+
+            $student
+                ->medially()
+                ->create([
+                    'file_url' => $temporary_uploaded_profile_picture->file_url,
+                    'file_name' => $temporary_uploaded_profile_picture->file_name,
+                    'file_type' => $temporary_uploaded_profile_picture->file_type,
+                    'size' => $temporary_uploaded_profile_picture->size,
+                    'collection_name' => $temporary_uploaded_profile_picture->collection_name,
+                    'thumbnail_url' => $temporary_uploaded_profile_picture->thumbnail_url,
+                ]);
+
+            $temporary_uploaded_profile_picture
+                ->delete();
+
+            CloudUploadService::destroy(
+                $temporary_uploaded_profile_picture->public_id
+            );
 
         });
 

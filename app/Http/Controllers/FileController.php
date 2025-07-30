@@ -10,6 +10,7 @@ use App\Data\Shared\Swagger\Request\FormDataRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
+use App\Enum\FileUploadDirectory;
 use App\Models\Media;
 use App\Models\TemporaryUploadedImages;
 use App\Models\User;
@@ -215,7 +216,7 @@ class FileController extends Controller
 
                 // $uploaded_media = Media::fromCloudinaryUploadResponse($response);
 
-                $uploaded_media = TemporaryUploadedImages::fromCloudinaryUploadResponse($response, $logged_user->id);
+                $uploaded_media = TemporaryUploadedImages::fromCloudinaryUploadResponse($response, $logged_user->id, FileUploadDirectory::USER_PROFILE_PICTURE);
 
                 $temporary_uploaded_images->push($uploaded_media);
 

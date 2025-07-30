@@ -6,9 +6,9 @@ use App\Enum\FileUploadDirectory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TemporaryUploadedImages>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Media>
  */
-class TemporaryUploadedImagesFactory extends Factory
+class MediaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -21,16 +21,15 @@ class TemporaryUploadedImagesFactory extends Factory
             'file_name' => fake()->name(),
             'file_url' => fake()->imageUrl(),
             'size' => fake()->numberBetween(1000, 10000),
-            'public_id' => fake()->password(10, 12),
             'collection_name' => fake()->randomElement(FileUploadDirectory::cases())->value,
             'thumbnail_url' => fake()->imageUrl(),
         ];
     }
 
-    public function withCollectionName(FileUploadDirectory $fileUploadDirectory): static
+    public function withCollectionName(FileUploadDirectory $fileUploadDirectory)
     {
 
-        return $this->state(fn (array $attributes) => [
+        return $this->state([
             'collection_name' => $fileUploadDirectory,
         ]);
 

@@ -26,5 +26,8 @@ class RegisterStudentRequestData extends Data
         public string $name,
         #[OAT\Property]
         public string $password,
+
+        #[OAT\Property]
+        public ?string $temporary_profile_picture_public,
     ) {}
 }

@@ -23,7 +23,10 @@ class SingleMedia extends Data
     {
 
         /** @var Media $first_media */
-        $first_media = $mediable->medially->first();
+        $first_media =
+            $mediable
+                ->medially
+                ->first();
 
         return new self(
             id: $first_media->id,

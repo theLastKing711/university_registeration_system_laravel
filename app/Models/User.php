@@ -3,10 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Interfaces\IUploadable;
+use App\Trait\Uploadable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -95,10 +99,10 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements IUploadable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, Uploadable;
 
     /**
      * The attributes that are mass assignable.
@@ -131,15 +135,15 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class);
     }
 
-    /**
-     * Summary of temporaryUploadedImages
-     *
-     * @return HasMany<TemporaryUploadedImages, $this>
-     */
-    public function temporaryUploadedImages(): HasMany
-    {
-        return $this->hasMany(TemporaryUploadedImages::class);
-    }
+    //     /**
+    //  * Summary of temporaryUploadedImages
+    //  *
+    //  * @return MorphMany<TemporaryUploadedImages, $this>|MorphMany<TemporaryUploadedImages, \Eloquent>
+    //  */
+    // public function temporaryUploadImages(): MorphMany
+    // {
+    //     return $this->morphMany(TemporaryUploadedImages::class, 'uploadable');
+    // }
 
     // student relations
 

@@ -582,6 +582,24 @@
             ]
         },
         "/admins/students/{id}": {
+            "get": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "04ff842bbd4272ae8e34aeead711c33c",
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminStudentResponseGetStudentResponseData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "adminsStudents"
@@ -1008,12 +1026,12 @@
                 }
             }
         },
-        "/admins/course-teachers/{id}/students/{lecture_id}": {
+        "/admins/course-teachers/{id}/lectures/{lecture_id}": {
             "delete": {
                 "tags": [
                     "adminsCourseTeachers"
                 ],
-                "operationId": "57fb31666dc6d028210fa9bba0655b0a",
+                "operationId": "95e741e19b3454bd10cdcfe7f0761212",
                 "parameters": [
                     {
                         "name": "date",
@@ -1033,9 +1051,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/admins/course-teachers/{id}/lectures/{lecture_id}": {
+            },
             "patch": {
                 "tags": [
                     "adminsCourseTeachers"
@@ -1335,6 +1351,34 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/RegisterStudentRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/students/profile-picture": {
+            "post": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "0ab04e4991e9f750f6394a51850c0055",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminStudentUploadStudentProfileRequestUploadStudentProfilePictureRequestData"
                             }
                         }
                     }
@@ -2479,9 +2523,6 @@
             },
             "OpenCourseForRegisterationRequestData": {
                 "properties": {
-                    "academic_year_semester_id": {
-                        "type": "integer"
-                    },
                     "department_id": {
                         "type": "integer",
                         "nullable": true
@@ -2544,6 +2585,66 @@
                     },
                     "password": {
                         "type": "string"
+                    },
+                    "temporary_profile_picture_public": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "AdminStudentRequestGetStudentRequestData": {},
+            "AdminStudentResponseGetStudentResponseData": {
+                "properties": {
+                    "department_id": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "national_id": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "birthdate": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02",
+                        "nullable": true
+                    },
+                    "enrollment_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02",
+                        "nullable": true
+                    },
+                    "graduation_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02",
+                        "nullable": true
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "profile_picture": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/SingleMedia"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -2591,6 +2692,15 @@
                     },
                     "password": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminStudentUploadStudentProfileRequestUploadStudentProfilePictureRequestData": {
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "format": "binary"
                     }
                 },
                 "type": "object"
@@ -2921,10 +3031,7 @@
                     "course": {
                         "$ref": "#/components/schemas/GetCoursesMarksCourseItemData"
                     },
-                    "year": {
-                        "type": "integer"
-                    },
-                    "semester": {
+                    "academic_year_semester_id": {
                         "type": "integer"
                     },
                     "final_mark": {
@@ -3089,10 +3196,7 @@
                     "id": {
                         "type": "integer"
                     },
-                    "year": {
-                        "type": "integer"
-                    },
-                    "semester": {
+                    "academic_year_semester_id": {
                         "type": "integer"
                     },
                     "created_at": {
@@ -3402,6 +3506,14 @@
                 }
             },
             "adminsStudentIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsStudentGetStudentIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

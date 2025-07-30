@@ -784,7 +784,7 @@ class CreateInvokableControllerWithData extends Command
 
             use App\Http\Controllers\Controller;
             use App\Data\\$post_form_final_name;
-            use App\Data\Shared\Swagger\Request\JsonRequestBody;
+            use App\Data\Shared\Swagger\Request\FormDataRequestBody;
             use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
             use OpenApi\Attributes as OAT;
 
@@ -792,7 +792,7 @@ class CreateInvokableControllerWithData extends Command
             {
 
                 #[OAT\Post(path: '/$main_route', tags: ['$tag'])]
-                #[JsonRequestBody($post_form_data_name)]
+                #[FormDataRequestBody($post_form_data_name)]
                 #[SuccessNoContentResponse]
                 public function __invoke($post_form_data_class \$request)
                 {

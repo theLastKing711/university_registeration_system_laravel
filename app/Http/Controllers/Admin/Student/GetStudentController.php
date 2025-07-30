@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Student;
+
+use App\Data\Admin\Student\Request\GetStudentRequestData;
+use App\Data\Admin\Student\Response\GetStudentResponseData;
+use App\Data\Shared\Swagger\Response\SuccessItemResponse;
+use App\Enum\FileUploadDirectory;
+use App\Http\Controllers\Admin\Student\Abstract\StudentController;
+use App\Models\User;
+use OpenApi\Attributes as OAT;
+
+class GetStudentController extends StudentController
+{
+    #[OAT\Get(path: '/admins/students/{id}', tags: ['adminsStudents'])]
+    #[SuccessItemResponse(GetStudentResponseData::class)]
+    public function __invoke(GetStudentRequestData $request)
+    {
+        return GetStudentResponseData::from(
+            User::query()
+                ->with(
+                    [
+                        'medially' => fn ($query) => $query
+                            ->where('collection_name', FileUploadDirectory::USER_PROFILE_PICTURE),
+                    ]
+                )
+                ->firstWhere(
+                    'id',
+                    $request->id
+                )
+        );
+    }
+}

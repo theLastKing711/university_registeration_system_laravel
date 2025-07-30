@@ -21,12 +21,6 @@ class GetCoursesController extends Controller
     #[SuccessItemResponse(GetCoursesResponsePaginationResultData::class)]
     public function __invoke(GetCoursesRequestData $request, UsdCurrencyExchangeRateService $usdCurrencyExchangeRateService)
     {
-
-        // $usdCurrencyExchangeRateService
-        //     ->updateUsdSypExchangeRateFromAnExternalApi();
-
-        // return;
-
         $courses =
             Course::query()
                 ->where(

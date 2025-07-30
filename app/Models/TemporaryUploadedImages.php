@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Enum\FileUploadDirectory;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @property int $id
@@ -56,6 +58,16 @@ class TemporaryUploadedImages extends Model
     use HasFactory;
 
     /**
+     * Summary of medially
+     *
+     * @return MorphTo<Model, $this>|MorphTo<Model, \Eloquent>
+     */
+    public function uploadable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    /**
      * Summary of user
      *
      * @return BelongsTo<User, $this>
@@ -65,7 +77,7 @@ class TemporaryUploadedImages extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function fromCloudinaryUploadResponse(CloudinaryEngine $response_file, int $user_id): self
+    public static function fromCloudinaryUploadResponse(CloudinaryEngine $response_file, int $user_id, FileUploadDirectory $fileUploadDirectory): self
     {
 
         $response =
@@ -86,6 +98,7 @@ class TemporaryUploadedImages extends Model
         $temporary_uploaded_image->file_url = $first_eager_response['secure_url'];
         $temporary_uploaded_image->size = $first_eager_response['bytes'];
         $temporary_uploaded_image->file_type = $response_file->getFileType();
+        $temporary_uploaded_image->collection_name = $fileUploadDirectory->value;
 
         return $temporary_uploaded_image;
     }

@@ -3,8 +3,10 @@
 namespace Database\Factories;
 
 use App\Enum\Auth\RolesEnum;
+use App\Enum\FileUploadDirectory;
 use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
+use App\Models\Media;
 use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Carbon\Carbon;
@@ -89,6 +91,17 @@ class UserFactory extends Factory
         });
     }
 
+    public function withProfilePicture(): static
+    {
+        return $this->has(
+            Media::factory()
+                ->withCollectionName(
+                    FileUploadDirectory::USER_PROFILE_PICTURE
+                ),
+            'medially'
+        );
+    }
+
     public function fromItDepartment(): static
     {
 
@@ -157,13 +170,6 @@ class UserFactory extends Factory
                 )
                     ->year;
 
-            // $student_year =
-            //     $university_first_open_year
-            //     -
-            //     $student_year
-            //     +
-            //     1;
-
             $registerable_courses_years =
                 collect(
                     range(1, $student_year - $university_first_open_year + 1)
@@ -198,20 +204,6 @@ class UserFactory extends Factory
                         ->attach($courses_ids, ['final_mark' => 30]);
 
                 });
-
-            // $courses_ids =
-            //     OpenCourseRegisteration::query()
-            //         ->whereYear(column: 'year', $year)
-            //         ->whereHas(
-            //             'course',
-            //             fn (Builder $query) => $query
-            //                 ->whereIn('year', $registerable_courses_years)
-            //         )
-            //         ->pluck('id');
-
-            // $student
-            //     ->courses()
-            //     ->attach($courses_ids);
 
         });
 
@@ -252,22 +244,6 @@ class UserFactory extends Factory
         });
 
     }
-
-    // /**
-    //  * @param  \Illuminate\Database\Eloquent\Collection<OpenCourseRegisteration>  $courses
-    //  */
-    // public function withExams(Collection $courses): static
-    // {
-
-    //     return $this->afterCreating(function (User $student) use ($courses){
-    //         $student
-    //             ->studentCourseRegisterations()
-    //             ->createMany(
-    //                 $courses
-    //             )
-    //     });
-
-    // }
 
     public function staticStudent(): static
     {

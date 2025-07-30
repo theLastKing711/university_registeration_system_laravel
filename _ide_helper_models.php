@@ -651,6 +651,10 @@ namespace App\Models{
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @mixin \Eloquent
+ * @property string $collection_name
+ * @property string $thumbnail_url
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Media whereCollectionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Media whereThumbnailUrl($value)
  */
 	class Media extends \Eloquent {}
 }
@@ -827,6 +831,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Teacher whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Teacher whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Classroom,\Illuminate\Database\Eloquent\Relations\Pivot> $classrooms
+ * @property-read int|null $classrooms_count
  */
 	class Teacher extends \Eloquent {}
 }
@@ -874,6 +880,15 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUserId($value)
  * @mixin \Eloquent
+ * @property string $uploadable_type
+ * @property int $uploadable_id
+ * @property string $collection_name
+ * @property string $thumbnail_url
+ * @property-read \Illuminate\Database\Eloquent\Model $uploadable
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereCollectionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereThumbnailUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUploadableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUploadableType($value)
  */
 	class TemporaryUploadedImages extends \Eloquent {}
 }
@@ -996,7 +1011,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNationalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoneNumber($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $medially
+ * @property-read int|null $medially_count
  */
-	class User extends \Eloquent {}
+	class User extends \Eloquent implements \App\Interfaces\IUploadable, \App\Interfaces\Mediable {}
 }
 

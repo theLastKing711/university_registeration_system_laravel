@@ -39,9 +39,11 @@ use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisteratio
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseController;
 use App\Http\Controllers\Admin\Student\DeleteStudentController;
+use App\Http\Controllers\Admin\Student\GetStudentController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Student\UpdateStudentController;
+use App\Http\Controllers\Admin\Student\UploadStudentProfilePictureController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
@@ -235,8 +237,11 @@ Route::prefix('admins')
                 ])
                 ->group(function () {
 
+                    Route::get('{id}', action: GetStudentController::class);
+
                     Route::post('', action: RegisterStudentController::class);
 
+                    Route::post('profile-picture', UploadStudentProfilePictureController::class);
                     Route::patch('{id}', UpdateStudentController::class);
 
                     Route::patch('{id}/graduation', GraduateStudentController::class);

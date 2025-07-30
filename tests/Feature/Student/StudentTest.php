@@ -17,16 +17,19 @@ use App\Models\StudentCourseRegisteration;
 use App\Models\Teacher;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Admin\Traits\CloudUploadServiceMocks;
 use Tests\Feature\Student\Abstractions\StudentTestCase;
 
 class StudentTest extends StudentTestCase
 {
+    use CloudUploadServiceMocks;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this
-            ->withRoutePaths('open-course-registerations');
+        // $this
+        //     ->withRoutePaths('open-course-registerations');
 
     }
 
@@ -908,12 +911,6 @@ class StudentTest extends StudentTestCase
             ->create();
 
         $this->actingAs($student);
-
-        $register_in_open_course_request =
-            new RegisterInOpenCoursesRequestData(
-                $student_courses->pluck('id')
-                    ->toArray()
-            );
 
         $response =
             $this

@@ -5,15 +5,24 @@ namespace Tests\Feature\Admin\Student;
 use App\Data\Admin\Student\GraduateStudent\Request\GraduateStudentRequestData;
 use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Admin\Student\UpdateStudent\Request\UpdateStudentRequestData;
+use App\Data\Admin\Student\UploadStudentProfile\Request\UploadStudentProfilePictureRequestData;
+use App\Enum\FileUploadDirectory;
 use App\Models\Department;
+use App\Models\Media;
+use App\Models\TemporaryUploadedImages;
 use App\Models\User;
+use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\DepartmentSeeder;
+use Illuminate\Http\UploadedFile;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
+use Tests\Feature\Admin\Traits\CloudUploadServiceMocks;
 
 class StudentTest extends AdminTestCase
 {
+    use CloudUploadServiceMocks;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,6 +41,33 @@ class StudentTest extends AdminTestCase
     }
 
     #[Test]
+    public function get_student_with_200_response(): void
+    {
+
+        $student =
+            User::factory()
+                ->withStudentRole()
+                ->has(
+                    Media::factory()
+                        ->withCollectionName(
+                            FileUploadDirectory::USER_PROFILE_PICTURE
+                        ),
+                    'medially'
+                )
+                ->create();
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    $student->id
+                )
+                ->getJsonData();
+
+        $response->assertStatus(200);
+
+    }
+
+    #[Test]
     public function register_student_with_200_response(): void
     {
 
@@ -39,6 +75,19 @@ class StudentTest extends AdminTestCase
             Department::query()
                 ->first()
                 ->id;
+
+        $admin = User::factory()
+            ->withStudentRole()
+            ->has(
+                TemporaryUploadedImages::factory()
+                    ->withCollectionName(FileUploadDirectory::USER_PROFILE_PICTURE)
+            )
+            ->create();
+
+        $new_student_temporary_profile_picture =
+             $admin
+                 ->temporaryUploadedImages()
+                 ->first();
 
         $register_student_request =
             new RegisterStudentRequestData(
@@ -49,6 +98,13 @@ class StudentTest extends AdminTestCase
                 fake()->phoneNumber(),
                 fake()->name(),
                 fake()->password(),
+                $new_student_temporary_profile_picture->public_id
+            );
+
+        $this
+            ->mockDestory(
+                $register_student_request
+                    ->temporary_profile_picture_public
             );
 
         $response =
@@ -70,6 +126,27 @@ class StudentTest extends AdminTestCase
                     'enrollment_date' => $register_student_request->enrollment_date,
                     'phone_number' => $register_student_request->phone_number,
                     'name' => $register_student_request->name,
+                ]
+            );
+
+        $this
+            ->assertDatabaseHas(
+                Media::class,
+                [
+                    'file_url' => $new_student_temporary_profile_picture->file_url,
+                    'file_name' => $new_student_temporary_profile_picture->file_name,
+                    'file_type' => $new_student_temporary_profile_picture->file_type,
+                    'size' => $new_student_temporary_profile_picture->size,
+                    'collection_name' => $new_student_temporary_profile_picture->collection_name,
+                    'thumbnail_url' => $new_student_temporary_profile_picture->thumbnail_url,
+                ]
+            );
+
+        $this
+            ->assertDatabaseMissing(
+                TemporaryUploadedImages::class,
+                [
+                    'id' => $new_student_temporary_profile_picture->id,
                 ]
             );
 
@@ -192,6 +269,54 @@ class StudentTest extends AdminTestCase
                 [
                     'id' => $new_student->id,
                     'graduation_date' => $graduate_student_request->graduation_date,
+                ]
+            );
+
+    }
+
+    #[Test]
+    public function upload_student_profile_picture_with_200_response()
+    {
+
+        $upload_mock_response =
+             $this
+                 ->mockUpload();
+
+        $file =
+            UploadedFile::fake()
+                ->create(
+                    'test_file.jpg',
+                    800
+                );
+
+        $upload_student_profile_picture_request =
+            new UploadStudentProfilePictureRequestData(
+                file: $file
+            );
+
+        $response =
+            $this
+                ->withRoutePaths('profile-picture')
+                ->postJsonData(
+                    $upload_student_profile_picture_request
+                        ->toArray()
+                );
+
+        $response->assertStatus(200);
+
+        $this
+            ->assertDatabaseHas(
+                TemporaryUploadedImages::class,
+                [
+                    'uploadable_id' => $this->admin->id,
+                    'uploadable_type' => User::class,
+                    'public_id' => $upload_mock_response[CloudinaryEngine::PUBLIC_ID],
+                    'file_name' => $upload_mock_response[CloudinaryEngine::ORIGINAL_FILENAME],
+                    'file_url' => $upload_mock_response[CloudinaryEngine::SECURE_URL],
+                    'size' => $upload_mock_response[CloudinaryEngine::BYTES],
+                    'file_type' => $upload_mock_response[CloudinaryEngine::RESOURCE_TYPE],
+                    'collection_name' => FileUploadDirectory::USER_PROFILE_PICTURE,
+                    'thumbnail_url' => $upload_mock_response['eager'][0][CloudinaryEngine::SECURE_URL],
                 ]
             );
 
