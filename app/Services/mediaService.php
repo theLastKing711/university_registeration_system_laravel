@@ -15,11 +15,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Traversable;
 
 class mediaService
 {
     // public function __construct(private CloudUploadService $cloudUploadService) {}
+
+    public function destroyByMediaId(int $mediaId)
+    {
+
+        /** @var Media $media */
+        $media =
+            Media::query()
+                ->firstWhere(
+                    'id',
+                    $mediaId
+                );
+
+        CloudUploadService::destroy($media->file_name);
+
+        $media->delete();
+
+    }
 
     /**
      * temporary upload files on clound in specified directory
@@ -27,7 +43,6 @@ class mediaService
      * @param  \App\Trait\Uploadable&Model  $model
      * @param  UploadedFile[]|Collection<UploadedFile>  $request_files
      * @param  FileUploadDirectory  $fileUploadDirectorys
-     * @return array|Traversable
      *
      * @throws ApiError
      */
@@ -64,7 +79,7 @@ class mediaService
                 temporaryUploadedImages()
                     ->saveMany($temporary_uploaded_images);
 
-        return $uploaded_images;
+        return $temporary_uploaded_images;
     }
 
     /**

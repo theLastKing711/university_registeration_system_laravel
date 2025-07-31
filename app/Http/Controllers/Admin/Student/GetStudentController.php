@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Student;
 
-use App\Data\Admin\Student\Request\GetStudentRequestData;
-use App\Data\Admin\Student\Response\GetStudentResponseData;
+use App\Data\Admin\Student\GetStudent\Request\GetStudentRequestData;
+use App\Data\Admin\Student\GetStudent\Response\GetStudentResponseData;
 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
 use App\Enum\FileUploadDirectory;
 use App\Http\Controllers\Admin\Student\Abstract\StudentController;

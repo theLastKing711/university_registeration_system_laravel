@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisteratio
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseController;
 use App\Http\Controllers\Admin\Student\DeleteStudentController;
+use App\Http\Controllers\Admin\Student\DeleteStudentProfilePictureController;
 use App\Http\Controllers\Admin\Student\GetStudentController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
@@ -242,11 +243,14 @@ Route::prefix('admins')
                     Route::post('', action: RegisterStudentController::class);
 
                     Route::post('profile-picture', UploadStudentProfilePictureController::class);
+
                     Route::patch('{id}', UpdateStudentController::class);
 
                     Route::patch('{id}/graduation', GraduateStudentController::class);
 
                     Route::delete('{id}', DeleteStudentController::class);
+
+                    Route::delete('{id}/profile-picture/{profile_picture_id}', DeleteStudentProfilePictureController::class);
 
                 });
 

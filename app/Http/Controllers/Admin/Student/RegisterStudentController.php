@@ -24,8 +24,8 @@ class RegisterStudentController extends Controller
         /** @var TemporaryUploadedImages $temporary_uploaded_profile_picture */
         $temporary_uploaded_profile_picture =
             TemporaryUploadedImages::firstWhere(
-                'public_id',
-                $request->temporary_profile_picture_public
+                'id',
+                $request->temporary_profile_picture_id
             );
 
         DB::transaction(function () use ($request, $temporary_uploaded_profile_picture) {
@@ -59,7 +59,7 @@ class RegisterStudentController extends Controller
                 ->delete();
 
             CloudUploadService::destroy(
-                $temporary_uploaded_profile_picture->public_id
+                $temporary_uploaded_profile_picture->file_name
             );
 
         });

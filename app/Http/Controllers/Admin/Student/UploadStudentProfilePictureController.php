@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin\Student;
 
 use App\Data\Admin\Student\UploadStudentProfile\Request\UploadStudentProfilePictureRequestData;
+use App\Data\Shared\Media\MediaData;
 use App\Data\Shared\Swagger\Request\FormDataRequestBody;
-use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
+use App\Data\Shared\Swagger\Response\SuccessItemResponse;
 use App\Enum\FileUploadDirectory;
 use App\Facades\MediaService;
 use App\Http\Controllers\Controller;
@@ -15,18 +16,25 @@ class UploadStudentProfilePictureController extends Controller
 {
     #[OAT\Post(path: '/admins/students/profile-picture', tags: ['adminsStudents'])]
     #[FormDataRequestBody(UploadStudentProfilePictureRequestData::class)]
-    #[SuccessNoContentResponse]
+    #[SuccessItemResponse(MediaData::class)]
     public function __invoke(UploadStudentProfilePictureRequestData $request)
     {
 
         $logged_user =
             Auth::User();
 
-        MediaService::temporaryUploadImages(
-            $logged_user,
-            collect([$request->file]),
-            FileUploadDirectory::USER_PROFILE_PICTURE
-        );
+        $temporary_uploaded_images =
+            MediaService::temporaryUploadImages(
+                $logged_user,
+                collect([$request->file]),
+                FileUploadDirectory::USER_PROFILE_PICTURE
+            );
+
+        return
+            MediaData::from(
+                $temporary_uploaded_images
+                    ->first()
+            );
 
     }
 }

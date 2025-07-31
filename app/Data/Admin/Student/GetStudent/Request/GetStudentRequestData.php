@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\Student\Request;
+namespace App\Data\Admin\Student\GetStudent\Request;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;

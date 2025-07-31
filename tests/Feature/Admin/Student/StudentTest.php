@@ -98,13 +98,13 @@ class StudentTest extends AdminTestCase
                 fake()->phoneNumber(),
                 fake()->name(),
                 fake()->password(),
-                $new_student_temporary_profile_picture->public_id
+                $new_student_temporary_profile_picture->id
             );
 
         $this
             ->mockDestory(
-                $register_student_request
-                    ->temporary_profile_picture_public
+                $new_student_temporary_profile_picture
+                    ->file_name
             );
 
         $response =
@@ -275,7 +275,7 @@ class StudentTest extends AdminTestCase
     }
 
     #[Test]
-    public function upload_student_profile_picture_with_200_response()
+    public function upload_student_profile_picture_with_201_response()
     {
 
         $upload_mock_response =
@@ -302,7 +302,7 @@ class StudentTest extends AdminTestCase
                         ->toArray()
                 );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $this
             ->assertDatabaseHas(
@@ -317,6 +317,49 @@ class StudentTest extends AdminTestCase
                     'file_type' => $upload_mock_response[CloudinaryEngine::RESOURCE_TYPE],
                     'collection_name' => FileUploadDirectory::USER_PROFILE_PICTURE,
                     'thumbnail_url' => $upload_mock_response['eager'][0][CloudinaryEngine::SECURE_URL],
+                ]
+            );
+
+    }
+
+    #[Test]
+    public function delete_student_profile_picture_with_200_response()
+    {
+
+        $student =
+             User::factory()
+                 ->withStudentRole()
+                 ->withProfilePicture()
+                 ->create();
+
+        /** @var Media $student_profile_picture */
+        $student_profile_picture =
+            $student
+                ->medially
+                ->first();
+
+        $this
+            ->mockDestory(
+                $student_profile_picture
+                    ->file_name
+            );
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    $student->id,
+                    'profile-picture',
+                    $student_profile_picture->id
+                )
+                ->deleteJsonData();
+
+        $response->assertStatus(200);
+
+        $this
+            ->assertDatabaseMissing(
+                Media::class,
+                [
+                    'id' => $student_profile_picture->id,
                 ]
             );
 

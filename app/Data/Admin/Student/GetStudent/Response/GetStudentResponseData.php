@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Data\Admin\Student\Response;
+namespace App\Data\Admin\Student\GetStudent\Response;
 
 use App\Data\Shared\Casts\MediallyToSingleMediaCast;
+use App\Data\Shared\Media\MediaData;
 use App\Data\Shared\Media\SingleMedia;
 use App\Data\Shared\Swagger\Property\DateProperty;
 use App\Models\User;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -32,23 +34,26 @@ class GetStudentResponseData extends Data
         public string $name,
         #[
             OAT\Property,
+            MapInputName('medially'),
+            WithCast(MediallyToSingleMediaCast::class),
         ]
-        public ?SingleMedia $profile_picture,
+        public ?MediaData $profile_picture,
+
     ) {}
 
     // WithCast(MediallyToSingleMediaCast::class),
 
-    public static function fromModel(User $user): self
-    {
-        return new self(
-            $user->department_id,
-            $user->national_id,
-            $user->birthdate,
-            $user->enrollment_date,
-            $user->graduation_date,
-            $user->phone_number,
-            $user->name,
-            SingleMedia::from($user)
-        );
-    }
+    // public static function fromModel(User $user): self
+    // {
+    //     return new self(
+    //         $user->department_id,
+    //         $user->national_id,
+    //         $user->birthdate,
+    //         $user->enrollment_date,
+    //         $user->graduation_date,
+    //         $user->phone_number,
+    //         $user->name,
+    //         SingleMedia::from($user)
+    //     );
+    // }
 }
