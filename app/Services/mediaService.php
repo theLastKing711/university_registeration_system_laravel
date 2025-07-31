@@ -37,6 +37,26 @@ class mediaService
 
     }
 
+    public function destroyTemporaryImageById(int $id)
+    {
+
+        /** @var Media $media */
+        $media =
+            TemporaryUploadedImages::query()
+                ->firstWhere(
+                    'id',
+                    $id
+                );
+
+        $media
+            ->delete();
+
+        CloudUploadService::destroy(
+            $media->file_name
+        );
+
+    }
+
     /**
      * temporary upload files on clound in specified directory
      *

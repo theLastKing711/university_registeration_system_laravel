@@ -23,9 +23,6 @@ trait CloudUploadServiceMocks
 
     public function mockDestory(string $public_id, $times = 1)
     {
-        $upload_mock_response =
-            $this
-                ->getUploadMockResponse();
 
         CloudUploadService::shouldReceive('destroy')
             ->with($public_id)

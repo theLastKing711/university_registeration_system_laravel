@@ -30,6 +30,11 @@ class UpdateStudentRequestData extends Data
         public string $name,
         #[OAT\Property]
         public string $password,
+        #[
+            OAT\Property,
+            Exists('temporary_uploaded_images', 'id')
+        ]
+        public ?int $temporary_profile_picture_id,
 
         #[
             OAT\PathParameter(

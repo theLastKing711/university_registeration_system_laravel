@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enum\FileUploadDirectory;
 use App\Interfaces\IUploadable;
 use App\Trait\Uploadable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -227,6 +228,39 @@ class User extends Authenticatable implements IUploadable
     public function studentCourseRegisterations(): HasMany
     {
         return $this->hasMany(StudentCourseRegisteration::class, 'student_id');
+    }
+
+    public function updateProfilePicture(Media $media)
+    {
+        return
+            $this
+                ->medially()
+                ->where('collection_name', FileUploadDirectory::USER_PROFILE_PICTURE)
+                ->update(
+                    $media
+                        ->toArray()
+                );
+
+    }
+
+    public function profilePicture()
+    {
+        return
+            $this
+                ->medially
+                ->where('collection_name', FileUploadDirectory::USER_PROFILE_PICTURE)
+                ->first();
+
+    }
+
+    public function temporaryUploadedProfilePicture()
+    {
+        return
+            $this
+                ->temporaryUploadedImages
+                ->where('collection_name', FileUploadDirectory::USER_PROFILE_PICTURE)
+                ->first();
+
     }
 
     /**

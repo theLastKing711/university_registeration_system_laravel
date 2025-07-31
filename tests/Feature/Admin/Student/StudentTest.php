@@ -156,16 +156,37 @@ class StudentTest extends AdminTestCase
     public function update_student_with_200_response(): void
     {
 
-        /** @var User $new_students */
-        $new_student =
-            User::factory()
-                ->withStudentRole()
-                ->create();
-
         $department_id =
             Department::query()
                 ->first()
                 ->id;
+
+        $admin = User::factory()
+            ->has(
+                TemporaryUploadedImages::factory()
+            )
+            ->create();
+
+        $temporary_picture_uploaded_by_admin =
+                $admin
+                    ->temporaryUploadedProfilePicture();
+
+        /** @var User $new_students */
+        $new_student =
+            User::factory()
+                ->withStudentRole()
+                ->withProfilePicture()
+                ->create();
+
+        $student_profile_picture =
+            $new_student
+                ->profilePicture();
+
+        $this
+            ->mockDestory(
+                public_id: $temporary_picture_uploaded_by_admin
+                    ->file_name
+            );
 
         $update_student_request =
             new UpdateStudentRequestData(
@@ -177,6 +198,7 @@ class StudentTest extends AdminTestCase
                 fake()->phoneNumber(),
                 fake()->name(),
                 fake()->password(),
+                $temporary_picture_uploaded_by_admin->id,
                 $new_student->id
             );
 
@@ -203,6 +225,33 @@ class StudentTest extends AdminTestCase
                     'enrollment_date' => $update_student_request->enrollment_date,
                     'phone_number' => $update_student_request->phone_number,
                     'name' => $update_student_request->name,
+                ]
+            );
+
+        $this
+            ->assertDatabaseMissing(
+                TemporaryUploadedImages::class,
+                [
+                    'id' => $temporary_picture_uploaded_by_admin->id,
+                ]
+            );
+
+        $this
+            ->assertDatabaseHas(
+                Media::class,
+                [
+                    'medially_id' => $new_student->id,
+                    'file_name' => $temporary_picture_uploaded_by_admin->file_name,
+                    'file_url' => $temporary_picture_uploaded_by_admin->file_url,
+                ]
+            );
+
+        $this
+            ->assertDatabaseMissing(
+                Media::class,
+                [
+                    'file_name' => $student_profile_picture->file_name,
+                    'file_url' => $student_profile_picture->file_url,
                 ]
             );
 

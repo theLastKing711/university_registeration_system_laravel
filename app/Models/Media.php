@@ -81,4 +81,19 @@ class Media extends \CloudinaryLabs\CloudinaryLaravel\Model\Media
 
         return $media;
     }
+
+    public static function fromTemporaryUploadedImage(TemporaryUploadedImages $temporaryUploadedImages): self
+    {
+
+        $media = new Media;
+
+        $media->file_name = $temporaryUploadedImages->file_name;
+        $media->file_url = $temporaryUploadedImages->file_url;
+        $media->size = $temporaryUploadedImages->size;
+        $media->file_type = $temporaryUploadedImages->file_type;
+        $media->collection_name = $temporaryUploadedImages->collection_name;
+
+        return $media;
+
+    }
 }
