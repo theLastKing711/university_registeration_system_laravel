@@ -6,6 +6,7 @@ use App\Data\Admin\Student\GraduateStudent\Request\GraduateStudentRequestData;
 use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Admin\Student\UpdateStudent\Request\UpdateStudentRequestData;
 use App\Data\Admin\Student\UploadStudentProfile\Request\UploadStudentProfilePictureRequestData;
+use App\Data\Admin\Student\UploadStudentSchoolFiles\Request\UploadStudentSchoolFilesRequestData;
 use App\Enum\FileUploadDirectory;
 use App\Models\Department;
 use App\Models\Media;
@@ -169,7 +170,7 @@ class StudentTest extends AdminTestCase
 
         $temporary_picture_uploaded_by_admin =
                 $admin
-                    ->temporaryUploadedProfilePicture();
+                    ->temporaryUploadedProfilePicture;
 
         /** @var User $new_students */
         $new_student =
@@ -180,7 +181,7 @@ class StudentTest extends AdminTestCase
 
         $student_profile_picture =
             $new_student
-                ->profilePicture();
+                ->profilePicture;
 
         $this
             ->mockDestory(
@@ -251,7 +252,7 @@ class StudentTest extends AdminTestCase
                 Media::class,
                 [
                     'file_name' => $student_profile_picture->file_name,
-                    'file_url' => $student_profile_picture->file_url,
+                    'file_url' => $temporary_picture_uploaded_by_admin->file_url,
                 ]
             );
 
@@ -410,6 +411,66 @@ class StudentTest extends AdminTestCase
                 [
                     'id' => $student_profile_picture->id,
                 ]
+            );
+
+    }
+
+    #[Test]
+    public function upload_school_files_with_201_response()
+    {
+
+        $school_files_count =
+            2;
+
+        $files_request =
+            collect([])
+                ->range(1, $school_files_count)
+                ->map(fn ($file) => UploadedFile::fake()
+                    ->create(
+                        fake()->imageUrl(),
+                        fake()->numberBetween(800, 1000)
+                    )
+                );
+
+        $upload_student_profile_picture_request =
+            new UploadStudentSchoolFilesRequestData(
+                files: $files_request->toArray()
+            );
+
+        $upload_mock_response =
+             $this
+                 ->mockUpload(
+                     $files_request->count()
+                 );
+
+        $response =
+            $this
+                ->withRoutePaths(
+                    'school-files'
+                )
+                ->postJsonData(
+                    $upload_student_profile_picture_request
+                        ->toArray()
+                );
+
+        $response->assertStatus(200);
+
+        $upload_mock_response
+            ->each(fn ($resposne) => $this
+                ->assertDatabaseHas(
+                    TemporaryUploadedImages::class,
+                    [
+                        'uploadable_id' => $this->admin->id,
+                        'uploadable_type' => User::class,
+                        'public_id' => $resposne[CloudinaryEngine::PUBLIC_ID],
+                        'file_name' => $resposne[CloudinaryEngine::ORIGINAL_FILENAME],
+                        'file_url' => $resposne[CloudinaryEngine::SECURE_URL],
+                        'size' => $resposne[CloudinaryEngine::BYTES],
+                        'file_type' => $resposne[CloudinaryEngine::RESOURCE_TYPE],
+                        'collection_name' => FileUploadDirectory::SCHOOL_FILES,
+                        'thumbnail_url' => $resposne['eager'][0][CloudinaryEngine::SECURE_URL],
+                    ]
+                )
             );
 
     }

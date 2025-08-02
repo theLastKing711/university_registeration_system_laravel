@@ -98,7 +98,7 @@ class UserFactory extends Factory
                 ->withCollectionName(
                     FileUploadDirectory::USER_PROFILE_PICTURE
                 ),
-            'medially'
+            'profile_picture'
         );
     }
 

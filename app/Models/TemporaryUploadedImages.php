@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enum\FileUploadDirectory;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -101,5 +103,16 @@ class TemporaryUploadedImages extends Model
         $temporary_uploaded_image->collection_name = $fileUploadDirectory->value;
 
         return $temporary_uploaded_image;
+    }
+
+    #[Scope]
+    protected function profilePicture(Builder $query): void
+    {
+        $query
+            ->where(
+                'collection_name',
+                FileUploadDirectory::USER_PROFILE_PICTURE
+            );
+
     }
 }

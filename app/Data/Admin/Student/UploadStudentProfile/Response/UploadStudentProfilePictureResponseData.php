@@ -8,7 +8,7 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[Oat\Schema(schema: 'AdminStudentUploadStudentProfileRequestUploadStudentProfilePictureRequestData')]
+#[Oat\Schema(schema: 'AdminStudentUploadStudentProfileResponseUploadStudentProfilePictureRequestData')]
 class UploadStudentProfilePictureResponseData extends Data
 {
     public function __construct(

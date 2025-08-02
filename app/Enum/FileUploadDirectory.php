@@ -4,7 +4,9 @@ namespace App\Enum;
 
 enum FileUploadDirectory: string
 {
-    case USER_PROFILE_PICTURE = 'admin';
+    case USER_PROFILE_PICTURE = 'profile_picture';
+
+    case SCHOOL_FILES = 'school_files';
 
     // case DRIVER = 'driver';
 
@@ -18,7 +20,7 @@ enum FileUploadDirectory: string
 
         return match ($this) {
             self::USER_PROFILE_PICTURE => 'User Profile Picture',
-
+            self::SCHOOL_FILES => 'School Files',
         };
     }
 }

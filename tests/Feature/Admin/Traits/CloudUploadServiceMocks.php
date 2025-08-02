@@ -8,19 +8,40 @@ trait CloudUploadServiceMocks
 {
     public function mockUpload($times = 1)
     {
+
+        if ($times == 1) {
+
+            $upload_mock_response =
+                $this
+                    ->getUploadMockResponse();
+
+            CloudUploadService::shouldReceive('upload')
+                ->once()
+                ->andReturn(
+                    $upload_mock_response
+                );
+
+            return $upload_mock_response;
+
+        }
+
         $upload_mock_response =
-            $this
-                ->getUploadMockResponse();
+            collect([])
+                ->range(1, $times)
+                ->map(
+                    fn ($value) => $this->getUploadMockResponse()
+                );
 
         CloudUploadService::shouldReceive('upload')
             ->times($times)
             ->andReturn(
-                $upload_mock_response
+                ...$upload_mock_response->toArray()
             );
 
-        return $upload_mock_response;
+        return collect($upload_mock_response);
     }
 
+    // public id is also $media->file_name
     public function mockDestory(string $public_id, $times = 1)
     {
 

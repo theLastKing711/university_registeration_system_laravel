@@ -13,8 +13,6 @@
 
 namespace App\Data\Shared\Media{
 /**
- * 
- *
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Media> $medially
  * @property-read int|null $medially_count
  * @method static \Illuminate\Database\Eloquent\Builder|ModelAndMediable newModelQuery()
@@ -42,8 +40,6 @@ namespace App\Data\Shared\Media{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $year
  * @property int $semester
@@ -88,8 +84,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -130,8 +124,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $classroom_id
  * @property int $course_teacher_id
@@ -176,8 +168,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int|null $department_id
  * @property string $name
@@ -243,8 +233,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $lecture_id
  * @property int $student_id
@@ -285,8 +273,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $course_id
  * @property int $teacher_id
@@ -341,8 +327,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $first_course_id
  * @property int $second_course_id
@@ -380,8 +364,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property int $is_course_registeration_open
@@ -432,8 +414,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $department_id
  * @property int $academic_year_semester_id
@@ -473,8 +453,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $course_teacher_id
  * @property int $classroom_id
@@ -527,8 +505,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $exam_id
  * @property int $student_id
@@ -567,8 +543,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $course_teacher_id
  * @property string $happened_at
@@ -610,8 +584,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property string $medially_type
  * @property int $medially_id
@@ -661,8 +633,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $course_id
  * @property int $academic_year_semester_id
@@ -704,6 +674,7 @@ namespace App\Models{
  * @method static Builder<static>|OpenCourseRegisteration whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property string $price_in_usd
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|OpenCourseRegisteration getStudents(int $id)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|OpenCourseRegisteration wherePriceInUsd($value)
  */
 	class OpenCourseRegisteration extends \Eloquent {}
@@ -711,8 +682,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $course_id
  * @property int $prerequisite_id
@@ -751,8 +720,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $student_id
  * @property int $course_id
@@ -792,8 +759,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property int $department_id
@@ -839,8 +804,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property int $user_id
  * @property string $file_name
@@ -885,6 +848,7 @@ namespace App\Models{
  * @property string $collection_name
  * @property string $thumbnail_url
  * @property-read \Illuminate\Database\Eloquent\Model $uploadable
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages profilePicture()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereCollectionName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereThumbnailUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUploadableId($value)
@@ -895,8 +859,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property string $currency
  * @property string $rate
@@ -932,8 +894,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -1013,6 +973,12 @@ namespace App\Models{
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $medially
  * @property-read int|null $medially_count
+ * @property-read \CloudinaryLabs\CloudinaryLaravel\Model\Media|null $profilePicture
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $schoolFiles
+ * @property-read int|null $school_files_count
+ * @property-read \App\Models\TemporaryUploadedImages|null $temporaryUploadedProfilePicture
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $temporaryUploadedSchoolFiles
+ * @property-read int|null $temporary_uploaded_school_files_count
  */
 	class User extends \Eloquent implements \App\Interfaces\IUploadable, \App\Interfaces\Mediable {}
 }

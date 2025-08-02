@@ -30,6 +30,10 @@ class UpdateStudentController extends StudentController
                         $request->id
                     );
 
+            $user->popular();
+
+            $user->test();
+
             $user
                 ->update([
                     'department_id' => $request->department_id,

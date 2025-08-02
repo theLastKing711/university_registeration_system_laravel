@@ -8,16 +8,6 @@ use App\Facades\MediaService;
 use App\Http\Controllers\Admin\Student\Abstract\StudentController;
 use OpenApi\Attributes as OAT;
 
-#[
-    OAT\PathItem(
-        path: '/admins/students/{id}',
-        parameters: [
-            new OAT\PathParameter(
-                ref: '#/components/parameters/usersTestPathParameterData',
-            ),
-        ],
-    ),
-]
 class DeleteStudentProfilePictureController extends StudentController
 {
     #[OAT\Delete(path: '/admins/students/{id}/profile-picture/{id}', tags: ['adminsStudents'])]

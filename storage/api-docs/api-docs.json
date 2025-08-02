@@ -648,6 +648,32 @@
                 }
             ]
         },
+        "/admins/students/{id}/profile-picture/{id}": {
+            "delete": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "15637f551504a64a7c49a1f63d5f8cc7",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsUpdateStudentPathParameter"
+                },
+                {
+                    "$ref": "#/components/parameters/adminsStudentDeleteStudentProfilePictureIdPathParameter"
+                }
+            ]
+        },
         "/admins/students/{id}/graduation": {
             "patch": {
                 "tags": [
@@ -1367,6 +1393,34 @@
                 }
             }
         },
+        "/admins/students/school-files": {
+            "post": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "5350d73f0afa046a0c6f24dc589fc57c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminStudentUploadSchoolFilesRequestUploadSchoolFilesRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admins/students/profile-picture": {
             "post": {
                 "tags": [
@@ -1384,11 +1438,13 @@
                     }
                 },
                 "responses": {
-                    "204": {
-                        "description": "",
+                    "200": {
+                        "description": "Item fetched successfully",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/MediaData"
+                                }
                             }
                         }
                     }
@@ -2538,61 +2594,8 @@
             },
             "AdminOpenCourseRegisterationUnAssignTeacherFromOpenCourseRequestUnAssignTeacherFromOpenCourseRequestData": {},
             "UnRegisterOpenCourseRequestData": {},
+            "AdminStudentDeleteStudentProfilePictureRequestDeleteStudentProfilePictureRequestData": {},
             "DeleteStudentRequestData": {},
-            "GraduateStudentRequestData": {
-                "properties": {
-                    "graduation_date": {
-                        "schema": "string",
-                        "type": "string",
-                        "format": "datetime",
-                        "default": "2024-09-02",
-                        "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02"
-                    }
-                },
-                "type": "object"
-            },
-            "RegisterStudentRequestData": {
-                "properties": {
-                    "department_id": {
-                        "type": "integer",
-                        "nullable": true
-                    },
-                    "national_id": {
-                        "type": "string"
-                    },
-                    "birthdate": {
-                        "schema": "string",
-                        "type": "string",
-                        "format": "datetime",
-                        "default": "2024-09-02",
-                        "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02"
-                    },
-                    "enrollment_date": {
-                        "schema": "string",
-                        "type": "string",
-                        "format": "datetime",
-                        "default": "2024-09-02",
-                        "pattern": "YYYY-MM-DD",
-                        "example": "2024-09-02"
-                    },
-                    "phone_number": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "temporary_profile_picture_public": {
-                        "type": "string",
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
             "AdminStudentRequestGetStudentRequestData": {},
             "AdminStudentResponseGetStudentResponseData": {
                 "properties": {
@@ -2641,9 +2644,63 @@
                     "profile_picture": {
                         "oneOf": [
                             {
-                                "$ref": "#/components/schemas/SingleMedia"
+                                "$ref": "#/components/schemas/MediaData"
                             }
                         ],
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "GraduateStudentRequestData": {
+                "properties": {
+                    "graduation_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterStudentRequestData": {
+                "properties": {
+                    "department_id": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "national_id": {
+                        "type": "string"
+                    },
+                    "birthdate": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    },
+                    "enrollment_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "temporary_profile_picture_id": {
+                        "type": "string",
                         "nullable": true
                     }
                 },
@@ -2692,15 +2749,39 @@
                     },
                     "password": {
                         "type": "string"
+                    },
+                    "temporary_profile_picture_id": {
+                        "type": "integer",
+                        "nullable": true
                     }
                 },
                 "type": "object"
             },
+            "AdminStudentUploadSchoolFilesRequestUploadSchoolFilesRequestData": {
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UploadFileData"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TestFile": {},
             "AdminStudentUploadStudentProfileRequestUploadStudentProfilePictureRequestData": {
                 "properties": {
                     "file": {
                         "type": "string",
                         "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminStudentUploadStudentProfileResponseUploadStudentProfilePictureRequestData": {
+                "properties": {
+                    "file": {
+                        "$ref": "#/components/schemas/MediaData"
                     }
                 },
                 "type": "object"
@@ -2941,6 +3022,10 @@
                     },
                     "file_url": {
                         "type": "string"
+                    },
+                    "thumbnail_url": {
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -3497,6 +3582,22 @@
                     "type": "integer"
                 }
             },
+            "adminsStudentDeleteStudentProfilePictureExtreRefIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsStudentDeleteStudentProfilePictureIdPathParameter": {
+                "name": "profile_picture_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsDeleteStudentPathParameter": {
                 "name": "id",
                 "in": "path",
@@ -3505,7 +3606,7 @@
                     "type": "integer"
                 }
             },
-            "adminsStudentIdPathParameterData": {
+            "adminsStudentGetStudentIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,
@@ -3513,7 +3614,7 @@
                     "type": "integer"
                 }
             },
-            "adminsStudentGetStudentIdPathParameter": {
+            "adminsStudentIdPathParameterData": {
                 "name": "id",
                 "in": "path",
                 "required": true,

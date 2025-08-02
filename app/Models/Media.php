@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enum\FileUploadDirectory;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -96,4 +98,17 @@ class Media extends \CloudinaryLabs\CloudinaryLaravel\Model\Media
         return $media;
 
     }
+
+    // #[Scope]
+    // protected function profilePicture(Builder $query): void
+    // {
+
+    //     $query->whereHasMorph('user', [User::class], function ($morphQuery) {
+    //         $morphQuery->where(
+    //             'collection_name',
+    //             FileUploadDirectory::USER_PROFILE_PICTURE
+    //         );
+    //     });
+
+    // }
 }

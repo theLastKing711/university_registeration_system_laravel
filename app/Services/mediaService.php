@@ -62,7 +62,6 @@ class mediaService
      *
      * @param  \App\Trait\Uploadable&Model  $model
      * @param  UploadedFile[]|Collection<UploadedFile>  $request_files
-     * @param  FileUploadDirectory  $fileUploadDirectorys
      *
      * @throws ApiError
      */

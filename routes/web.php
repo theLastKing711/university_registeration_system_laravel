@@ -45,6 +45,7 @@ use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Student\UpdateStudentController;
 use App\Http\Controllers\Admin\Student\UploadStudentProfilePictureController;
+use App\Http\Controllers\Admin\Student\UploadStudentSchoolFilesController;
 use App\Http\Controllers\Admin\Teacher\CreateTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
@@ -243,6 +244,8 @@ Route::prefix('admins')
                     Route::post('', action: RegisterStudentController::class);
 
                     Route::post('profile-picture', UploadStudentProfilePictureController::class);
+
+                    Route::post('school-files', UploadStudentSchoolFilesController::class);
 
                     Route::patch('{id}', UpdateStudentController::class);
 

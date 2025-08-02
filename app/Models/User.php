@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -234,8 +235,7 @@ class User extends Authenticatable implements IUploadable
     {
         return
             $this
-                ->medially()
-                ->where('collection_name', FileUploadDirectory::USER_PROFILE_PICTURE)
+                ->profilePicture()
                 ->update(
                     $media
                         ->toArray()
@@ -243,24 +243,70 @@ class User extends Authenticatable implements IUploadable
 
     }
 
-    public function profilePicture()
+    /**
+     * Get the profilePicture associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<Media, $this>
+     */
+    public function profilePicture(): MorphOne
     {
         return
             $this
-                ->medially
-                ->where('collection_name', FileUploadDirectory::USER_PROFILE_PICTURE)
-                ->first();
-
+                ->medially()
+                ->where(
+                    'collection_name',
+                    FileUploadDirectory::USER_PROFILE_PICTURE
+                )
+                ->one();
     }
 
-    public function temporaryUploadedProfilePicture()
+    /**
+     * Get the profilePicture associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Media, $this>
+     */
+    public function schoolFiles(): MorphMany
     {
         return
             $this
-                ->temporaryUploadedImages
-                ->where('collection_name', FileUploadDirectory::USER_PROFILE_PICTURE)
-                ->first();
+                ->medially()
+                ->where(
+                    'collection_name',
+                    FileUploadDirectory::SCHOOL_FILES
+                );
+    }
 
+    /**
+     * Get the profilePicture associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<TemporaryUploadedImages, $this>
+     */
+    public function temporaryUploadedProfilePicture(): MorphOne
+    {
+        return
+            $this
+                ->temporaryUploadedImages()
+                ->where(
+                    'collection_name',
+                    FileUploadDirectory::USER_PROFILE_PICTURE
+                )
+                ->one();
+    }
+
+    /**
+     * Get the profilePicture associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<TemporaryUploadedImages, $this>
+     */
+    public function temporaryUploadedSchoolFiles(): MorphMany
+    {
+        return
+            $this
+                ->medially()
+                ->where(
+                    'collection_name',
+                    FileUploadDirectory::SCHOOL_FILES
+                );
     }
 
     /**
