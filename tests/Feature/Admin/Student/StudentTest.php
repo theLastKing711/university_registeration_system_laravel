@@ -13,6 +13,7 @@ use App\Models\Media;
 use App\Models\TemporaryUploadedImages;
 use App\Models\User;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
+use CloudinaryLabs\CloudinaryLaravel\Model\Media as ModelMedia;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Illuminate\Http\UploadedFile;
@@ -162,22 +163,54 @@ class StudentTest extends AdminTestCase
                 ->first()
                 ->id;
 
+        $admin_uploaded_school_files_count =
+            4;
+
         $admin = User::factory()
             ->has(
                 TemporaryUploadedImages::factory()
+                    ->profilePicture(),
+                'temporaryUploadedProfilePicture'
+            )
+            ->has(
+                TemporaryUploadedImages::factory($admin_uploaded_school_files_count)
+                    ->schoolFiles(),
+                'temporaryUploadedImages'
             )
             ->create();
 
-        $temporary_picture_uploaded_by_admin =
+        $temporary_proflie_picture_uploaded_by_admin =
                 $admin
                     ->temporaryUploadedProfilePicture;
+
+        $temporary_school_files_uploaded_by_admin =
+                $admin
+                    ->temporaryUploadedImages
+                    ->where(
+                        'collection_name',
+                        FileUploadDirectory::SCHOOL_FILES
+                    );
+
+        $student_school_files_count =
+                4;
 
         /** @var User $new_students */
         $new_student =
             User::factory()
                 ->withStudentRole()
                 ->withProfilePicture()
+                ->withSchoolFiles($student_school_files_count)
                 ->create();
+
+        $school_files_to_delete =
+            $new_student
+                ->medially()
+                ->where(
+                    'collection_name',
+                    FileUploadDirectory::SCHOOL_FILES
+                )
+                ->take(3)
+                ->get();
 
         $student_profile_picture =
             $new_student
@@ -185,8 +218,14 @@ class StudentTest extends AdminTestCase
 
         $this
             ->mockDestory(
-                public_id: $temporary_picture_uploaded_by_admin
+                public_id: $temporary_proflie_picture_uploaded_by_admin
                     ->file_name
+            );
+
+        $temporary_school_files_uploaded_by_admin
+            ->pluck('file_name')
+            ->each(
+                fn ($file_name) => $this->mockDestory($file_name)
             );
 
         $update_student_request =
@@ -199,8 +238,10 @@ class StudentTest extends AdminTestCase
                 fake()->phoneNumber(),
                 fake()->name(),
                 fake()->password(),
-                $temporary_picture_uploaded_by_admin->id,
-                $new_student->id
+                $temporary_proflie_picture_uploaded_by_admin->id,
+                school_files_ids_to_add: $temporary_school_files_uploaded_by_admin->pluck('id'),
+                school_files_ids_to_delete: $school_files_to_delete->pluck('id'),
+                id: $new_student->id
             );
 
         $response =
@@ -233,7 +274,7 @@ class StudentTest extends AdminTestCase
             ->assertDatabaseMissing(
                 TemporaryUploadedImages::class,
                 [
-                    'id' => $temporary_picture_uploaded_by_admin->id,
+                    'id' => $temporary_proflie_picture_uploaded_by_admin->id,
                 ]
             );
 
@@ -242,8 +283,10 @@ class StudentTest extends AdminTestCase
                 Media::class,
                 [
                     'medially_id' => $new_student->id,
-                    'file_name' => $temporary_picture_uploaded_by_admin->file_name,
-                    'file_url' => $temporary_picture_uploaded_by_admin->file_url,
+                    'file_name' => $temporary_proflie_picture_uploaded_by_admin->file_name,
+                    'file_url' => $temporary_proflie_picture_uploaded_by_admin->file_url,
+                    'collection_name' => FileUploadDirectory::USER_PROFILE_PICTURE,
+
                 ]
             );
 
@@ -252,8 +295,68 @@ class StudentTest extends AdminTestCase
                 Media::class,
                 [
                     'file_name' => $student_profile_picture->file_name,
-                    'file_url' => $temporary_picture_uploaded_by_admin->file_url,
+                    'file_url' => $student_profile_picture->file_url,
                 ]
+            );
+
+        // $this
+        //     ->assertDatabaseCount(
+        //         Media::class,
+        //         $student_school_files_count
+        //                 +
+        //                 1
+        //                                         +
+        //                 $admin_uploaded_school_files_count
+
+        //     );
+
+        $school_files_to_delete
+            ->each(fn (ModelMedia $student_school_file) => $this
+                ->assertDatabaseMissing(
+                    Media::class,
+                    [
+                        'id' => $student_school_file->id,
+                        'file_name' => $student_school_file->file_name,
+                        'file_url' => $student_school_file->file_url,
+                    ]
+                )
+            );
+
+        $temporary_school_files_uploaded_by_admin
+            ->each(fn ($temporary_school_file) => $this
+                ->assertDatabaseMissing(
+                    TemporaryUploadedImages::class,
+                    [
+                        'id' => $temporary_school_file->id,
+                        'file_name' => $temporary_school_file->file_name,
+                        'file_url' => $temporary_school_file->file_url,
+                    ]
+                )
+            );
+
+        $school_files_to_delete
+            ->each(fn (ModelMedia $student_school_file) => $this
+                ->assertDatabaseMissing(
+                    Media::class,
+                    [
+                        'id' => $student_school_file->id,
+                        'file_name' => $student_school_file->file_name,
+                        'file_url' => $student_school_file->file_url,
+                    ]
+                )
+            );
+
+        $temporary_school_files_uploaded_by_admin
+            ->each(fn ($student_school_file) => $this
+                ->assertDatabaseHas(
+                    Media::class,
+                    [
+                        'medially_id' => $new_student->id,
+                        'file_name' => $student_school_file->file_name,
+                        'file_url' => $student_school_file->file_url,
+                        'collection_name' => FileUploadDirectory::SCHOOL_FILES,
+                    ]
+                )
             );
 
     }

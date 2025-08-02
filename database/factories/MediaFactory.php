@@ -34,4 +34,22 @@ class MediaFactory extends Factory
         ]);
 
     }
+
+    public function profilePicture(): static
+    {
+
+        return $this->state(fn (array $attributes) => [
+            'collection_name' => FileUploadDirectory::USER_PROFILE_PICTURE,
+        ]);
+
+    }
+
+    public function schoolFiles(): static
+    {
+
+        return $this->state(fn (array $attributes) => [
+            'collection_name' => FileUploadDirectory::SCHOOL_FILES,
+        ]);
+
+    }
 }

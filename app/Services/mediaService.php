@@ -40,19 +40,19 @@ class mediaService
     public function destroyTemporaryImageById(int $id)
     {
 
-        /** @var Media $media */
-        $media =
+        /** @var TemporaryUploadedImages $temporaryUploadedImage */
+        $temporaryUploadedImage =
             TemporaryUploadedImages::query()
                 ->firstWhere(
                     'id',
                     $id
                 );
 
-        $media
+        $temporaryUploadedImage
             ->delete();
 
         CloudUploadService::destroy(
-            $media->file_name
+            $temporaryUploadedImage->file_name
         );
 
     }

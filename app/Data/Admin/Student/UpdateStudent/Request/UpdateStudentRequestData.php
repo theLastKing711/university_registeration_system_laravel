@@ -2,10 +2,14 @@
 
 namespace App\Data\Admin\Student\UpdateStudent\Request;
 
+use App\Data\Shared\Casts\ArrayToCollectionCast;
+use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Data\Shared\Swagger\Property\DateProperty;
+use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Validation\Exists;
+use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -35,6 +39,18 @@ class UpdateStudentRequestData extends Data
             Exists('temporary_uploaded_images', 'id')
         ]
         public ?int $temporary_profile_picture_id,
+        #[
+            ArrayProperty('integer'),
+            WithCast(ArrayToCollectionCast::class)
+        ]
+        /** @var Collection<int> */
+        public Collection $school_files_ids_to_add,
+        #[
+            ArrayProperty('integer'),
+            WithCast(ArrayToCollectionCast::class)
+        ]
+        /** @var Collection<int> */
+        public Collection $school_files_ids_to_delete,
 
         #[
             OAT\PathParameter(

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enum\Auth\RolesEnum;
-use App\Enum\FileUploadDirectory;
 use App\Models\Department;
 use App\Models\DepartmentRegisterationPeriod;
 use App\Models\Media;
@@ -95,10 +94,17 @@ class UserFactory extends Factory
     {
         return $this->has(
             Media::factory()
-                ->withCollectionName(
-                    FileUploadDirectory::USER_PROFILE_PICTURE
-                ),
-            'profile_picture'
+                ->profilePicture(),
+            'profilePicture'
+        );
+    }
+
+    public function withSchoolFiles($count = 1): static
+    {
+        return $this->has(
+            Media::factory($count)
+                ->schoolFiles(),
+            'medially'
         );
     }
 

@@ -7,6 +7,9 @@ namespace App\Models;
 use App\Enum\FileUploadDirectory;
 use App\Interfaces\IUploadable;
 use App\Trait\Uploadable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -231,14 +235,22 @@ class User extends Authenticatable implements IUploadable
         return $this->hasMany(StudentCourseRegisteration::class, 'student_id');
     }
 
-    public function updateProfilePicture(Media $media)
+    public function updateProfilePicture(TemporaryUploadedImages $temporaryUploadedImage)
     {
+        $media =
+            Media::fromTemporaryUploadedImage(
+                $temporaryUploadedImage
+            );
+
+        $this
+            ->profilePicture()
+            ->delete();
+
         return
             $this
                 ->profilePicture()
-                ->update(
-                    $media
-                        ->toArray()
+                ->create(
+                    $media->toArray()
                 );
 
     }
@@ -261,6 +273,37 @@ class User extends Authenticatable implements IUploadable
     }
 
     /**
+     * Summary of updateSchoolFiles
+     *
+     * @param  \Illuminate\Support\Collection<TemporaryUploadedImages>  $temporaryUploadedImages
+     * @param  \Illuminate\Support\Collection<int>  $schoololFilesIdsTodelete
+     */
+    public function updateSchoolFiles(EloquentCollection $temporaryUploadedImagesToAdd, Collection $schoolFilesIdsTodelete)
+    {
+        $medias =
+            $temporaryUploadedImagesToAdd
+                ->map(fn ($file) => Media::fromTemporaryUploadedImage(
+                    $file
+                )
+                );
+
+        Media::query()
+            ->whereIn(
+                'id',
+                $schoolFilesIdsTodelete
+            )
+            ->delete();
+
+        return
+            $this
+                ->medially()
+                ->createMany(
+                    $medias->toArray()
+                );
+
+    }
+
+    /**
      * Get the profilePicture associated with the User
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Media, $this>
@@ -274,6 +317,17 @@ class User extends Authenticatable implements IUploadable
                     'collection_name',
                     FileUploadDirectory::SCHOOL_FILES
                 );
+    }
+
+    #[Scope]
+    protected function schoolFilesTest(Builder $query): void
+    {
+        $query
+
+            ->where(
+                'collection_name',
+                FileUploadDirectory::SCHOOL_FILES
+            );
     }
 
     /**
@@ -302,10 +356,9 @@ class User extends Authenticatable implements IUploadable
     {
         return
             $this
-                ->medially()
-                ->where(
-                    'collection_name',
-                    FileUploadDirectory::SCHOOL_FILES
+                ->temporaryUploadedImages()
+                ->whereCollectionName(
+                    FileUploadDirectory::USER_PROFILE_PICTURE
                 );
     }
 

@@ -94,6 +94,7 @@ class Media extends \CloudinaryLabs\CloudinaryLaravel\Model\Media
         $media->size = $temporaryUploadedImages->size;
         $media->file_type = $temporaryUploadedImages->file_type;
         $media->collection_name = $temporaryUploadedImages->collection_name;
+        $media->thumbnail_url = $temporaryUploadedImages->thumbnail_url;
 
         return $media;
 
