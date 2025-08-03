@@ -42,7 +42,7 @@ trait CloudUploadServiceMocks
     }
 
     // public id is also $media->file_name
-    public function mockDestory(string $public_id, $times = 1)
+    public function mockDestroy(string $public_id, $times = 1)
     {
 
         CloudUploadService::shouldReceive('destroy')

@@ -58,6 +58,34 @@ class mediaService
     }
 
     /**
+     * Summary of destroyTemporaryImagesByIds
+     *
+     * @param  \Illuminate\Support\Collection<int>  $ids
+     * @return void
+     */
+    public function destroyTemporaryImagesByIds(Collection $tempraryUploaedImagesIds)
+    {
+
+        $temporaryUploadedImages =
+            TemporaryUploadedImages::query()
+                ->whereIn(
+                    'id',
+                    $tempraryUploaedImagesIds
+                )
+                ->get();
+
+        $temporaryUploadedImages
+            ->each(fn ($image) => CloudUploadService::destroy(
+                $image->file_name
+            ));
+
+        $temporaryUploadedImages
+            ->toQuery()
+            ->delete();
+
+    }
+
+    /**
      * temporary upload files on clound in specified directory
      *
      * @param  \App\Trait\Uploadable&Model  $model

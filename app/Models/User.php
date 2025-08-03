@@ -235,12 +235,27 @@ class User extends Authenticatable implements IUploadable
         return $this->hasMany(StudentCourseRegisteration::class, 'student_id');
     }
 
-    public function updateProfilePicture(TemporaryUploadedImages $temporaryUploadedImage)
+    public function updateProfilePictureByTemporaryUploadedImageId(int $id)
     {
+
+        /** @var TemporaryUploadedImages $temporary_uploaded_profile_picture */
+        $temporary_uploaded_profile_picture =
+            TemporaryUploadedImages::query()
+                ->firstWhere(
+                    'id',
+                    $id
+                );
+
         $media =
             Media::fromTemporaryUploadedImage(
-                $temporaryUploadedImage
+                $temporary_uploaded_profile_picture
             );
+
+        return $this->updateProfilePicture($media);
+    }
+
+    public function updateProfilePicture(Media $media)
+    {
 
         $this
             ->profilePicture()
@@ -275,11 +290,20 @@ class User extends Authenticatable implements IUploadable
     /**
      * Summary of updateSchoolFiles
      *
-     * @param  \Illuminate\Support\Collection<TemporaryUploadedImages>  $temporaryUploadedImages
+     * @param  \Illuminate\Support\Collection<int>  $temporaryUploadedImagesIds
      * @param  \Illuminate\Support\Collection<int>  $schoololFilesIdsTodelete
      */
-    public function updateSchoolFiles(EloquentCollection $temporaryUploadedImagesToAdd, Collection $schoolFilesIdsTodelete)
+    public function updateSchoolFiles(Collection $temporaryUploadedImagesIds, Collection $schoolFilesIdsTodelete)
     {
+
+        $temporaryUploadedImagesToAdd =
+            TemporaryUploadedImages::query()
+                ->whereIn(
+                    'id',
+                    $temporaryUploadedImagesIds
+                )
+                ->get();
+
         $medias =
             $temporaryUploadedImagesToAdd
                 ->map(fn ($file) => Media::fromTemporaryUploadedImage(
@@ -304,11 +328,35 @@ class User extends Authenticatable implements IUploadable
     }
 
     /**
-     * Get the profilePicture associated with the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Media, $this>
-     */
-    public function schoolFiles(): MorphMany
+    //  * Summary of updateSchoolFiles
+    //  *
+    //  */
+    // public function updateSchoolFiles(EloquentCollection $temporaryUploadedImagesToAdd, Collection $schoolFilesIdsTodelete)
+    // {
+    //     $medias =
+    //         $temporaryUploadedImagesToAdd
+    //             ->map(fn ($file) => Media::fromTemporaryUploadedImage(
+    //                 $file
+    //             )
+    //             );
+
+    //     Media::query()
+    //         ->whereIn(
+    //             'id',
+    //             $schoolFilesIdsTodelete
+    //         )
+    //         ->delete();
+
+    //     return
+    //         $this
+    //             ->medially()
+    //             ->createMany(
+    //                 $medias->toArray()
+    //             );
+
+    // }
+
+    public function schoolFiles()
     {
         return
             $this
@@ -347,18 +395,14 @@ class User extends Authenticatable implements IUploadable
                 ->one();
     }
 
-    /**
-     * Get the profilePicture associated with the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<TemporaryUploadedImages, $this>
-     */
-    public function temporaryUploadedSchoolFiles(): MorphMany
+    public function temporaryUploadedSchoolFiles()
     {
         return
             $this
                 ->temporaryUploadedImages()
-                ->whereCollectionName(
-                    FileUploadDirectory::USER_PROFILE_PICTURE
+                ->where(
+                    'collection_name',
+                    FileUploadDirectory::SCHOOL_FILES
                 );
     }
 

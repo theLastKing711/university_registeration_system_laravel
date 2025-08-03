@@ -7,9 +7,7 @@ use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Facades\MediaService;
 use App\Http\Controllers\Admin\Student\Abstract\StudentController;
-use App\Models\TemporaryUploadedImages;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OAT;
 
@@ -42,43 +40,25 @@ class UpdateStudentController extends StudentController
                     'password' => $request->password,
                 ]);
 
-            /** @var TemporaryUploadedImages $temporary_uploaded_profile_picture */
-            $temporary_uploaded_profile_picture =
-                TemporaryUploadedImages::query()
-                    ->firstWhere(
-                        'id',
-                        $request->temporary_profile_picture_id
-                    );
-
             $user
-                ->updateProfilePicture(
-                    $temporary_uploaded_profile_picture
+                ->updateProfilePictureByTemporaryUploadedImageId(
+                    $request->temporary_profile_picture_id
                 );
 
             MediaService::destroyTemporaryImageById(
                 $request->temporary_profile_picture_id
             );
 
-            /** @var Collection<TemporaryUploadedImages> $temporary_uploaded_school_files */
-            $temporary_uploaded_school_files =
-                TemporaryUploadedImages::query()
-                    ->whereIn(
-                        'id',
-                        $request->school_files_ids_to_add
-                    )
-                    ->get();
-
-            $temporary_uploaded_school_files
-                ->each(fn ($file) => MediaService::destroyTemporaryImageById(
-                    $file->id
-                )
-                );
-
             $user
                 ->updateSchoolFiles(
-                    $temporary_uploaded_school_files,
+                    $request->school_files_ids_to_add,
                     $request->school_files_ids_to_delete
                 );
+
+            MediaService::destroyTemporaryImagesByIds(
+                $request
+                    ->school_files_ids_to_add
+            );
 
         });
 

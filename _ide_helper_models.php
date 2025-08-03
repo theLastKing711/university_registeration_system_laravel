@@ -974,11 +974,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $medially
  * @property-read int|null $medially_count
  * @property-read \CloudinaryLabs\CloudinaryLaravel\Model\Media|null $profilePicture
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $schoolFiles
- * @property-read int|null $school_files_count
  * @property-read \App\Models\TemporaryUploadedImages|null $temporaryUploadedProfilePicture
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TemporaryUploadedImages> $temporaryUploadedSchoolFiles
- * @property-read int|null $temporary_uploaded_school_files_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User schoolFilesTest()
  */
 	class User extends \Eloquent implements \App\Interfaces\IUploadable, \App\Interfaces\Mediable {}

@@ -104,7 +104,7 @@ class StudentTest extends AdminTestCase
             );
 
         $this
-            ->mockDestory(
+            ->mockDestroy(
                 $new_student_temporary_profile_picture
                     ->file_name
             );
@@ -185,11 +185,7 @@ class StudentTest extends AdminTestCase
 
         $temporary_school_files_uploaded_by_admin =
                 $admin
-                    ->temporaryUploadedImages
-                    ->where(
-                        'collection_name',
-                        FileUploadDirectory::SCHOOL_FILES
-                    );
+                    ->temporaryUploadedSchoolFiles;
 
         $student_school_files_count =
                 4;
@@ -202,22 +198,20 @@ class StudentTest extends AdminTestCase
                 ->withSchoolFiles($student_school_files_count)
                 ->create();
 
+        $school_files_count_to_delete =
+                3;
+
         $school_files_to_delete =
             $new_student
-                ->medially()
-                ->where(
-                    'collection_name',
-                    FileUploadDirectory::SCHOOL_FILES
-                )
-                ->take(3)
-                ->get();
+                ->schoolFiles
+                ->take($school_files_count_to_delete);
 
         $student_profile_picture =
             $new_student
                 ->profilePicture;
 
         $this
-            ->mockDestory(
+            ->mockDestroy(
                 public_id: $temporary_proflie_picture_uploaded_by_admin
                     ->file_name
             );
@@ -225,7 +219,7 @@ class StudentTest extends AdminTestCase
         $temporary_school_files_uploaded_by_admin
             ->pluck('file_name')
             ->each(
-                fn ($file_name) => $this->mockDestory($file_name)
+                fn ($file_name) => $this->mockDestroy($file_name)
             );
 
         $update_student_request =
@@ -299,16 +293,17 @@ class StudentTest extends AdminTestCase
                 ]
             );
 
-        // $this
-        //     ->assertDatabaseCount(
-        //         Media::class,
-        //         $student_school_files_count
-        //                 +
-        //                 1
-        //                                         +
-        //                 $admin_uploaded_school_files_count
-
-        //     );
+        $this
+            ->assertDatabaseCount(
+                Media::class,
+                $student_school_files_count
+                        +
+                        1
+                        +
+                        $admin_uploaded_school_files_count
+                        -
+                        $school_files_count_to_delete
+            );
 
         $school_files_to_delete
             ->each(fn (ModelMedia $student_school_file) => $this
@@ -492,7 +487,7 @@ class StudentTest extends AdminTestCase
                 ->first();
 
         $this
-            ->mockDestory(
+            ->mockDestroy(
                 $student_profile_picture
                     ->file_name
             );
