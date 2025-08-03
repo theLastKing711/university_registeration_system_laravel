@@ -126,7 +126,10 @@ class mediaService
     public function temporaryUploadImage(Model $model, UploadedFile $request_file, FileUploadDirectory $fileUploadDirectory)
     {
 
-        $cloud_image_resposne = CloudUploadService::upload($request_file);
+        $cloud_image_resposne =
+            CloudUploadService::upload(
+                $request_file
+            );
 
         $temporary_uploaded_image =
             TemporaryUploadedImages::fromCloudinaryUploadResponse(

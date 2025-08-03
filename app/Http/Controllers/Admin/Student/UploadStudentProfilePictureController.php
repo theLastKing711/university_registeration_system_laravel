@@ -24,9 +24,9 @@ class UploadStudentProfilePictureController extends Controller
             Auth::User();
 
         $temporary_uploaded_images =
-            MediaService::temporaryUploadImages(
+            MediaService::temporaryUploadImage(
                 $logged_user,
-                collect([$request->file]),
+                $request->file,
                 FileUploadDirectory::USER_PROFILE_PICTURE
             );
 
