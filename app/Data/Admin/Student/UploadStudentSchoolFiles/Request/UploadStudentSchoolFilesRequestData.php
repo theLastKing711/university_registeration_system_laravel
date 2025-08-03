@@ -2,10 +2,12 @@
 
 namespace App\Data\Admin\Student\UploadStudentSchoolFiles\Request;
 
+use App\Data\Shared\Casts\ArrayToCollectionCast;
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -27,9 +29,12 @@ class UploadStudentSchoolFilesRequestData extends Data
         // #[ArrayProperty(TestFile::class)]
         // /** @var Collection<TestFile> */
         // public Collection $files,
-        #[ArrayProperty(UploadedFile::class)]
+        #[
+            ArrayProperty(UploadedFile::class),
+            WithCast(ArrayToCollectionCast::class)
+        ]
         /** @var Collection<UploadedFile> */
-        public array $files,
+        public Collection $files,
 
     ) {}
 

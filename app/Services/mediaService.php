@@ -10,7 +10,6 @@ use App\Models\Media;
 use App\Models\TemporaryUploadedImages;
 use Cloudinary;
 use Cloudinary\Api\Exception\ApiError;
-use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -48,12 +47,12 @@ class mediaService
                     $id
                 );
 
-        $temporaryUploadedImage
-            ->delete();
-
         CloudUploadService::destroy(
             $temporaryUploadedImage->file_name
         );
+
+        $temporaryUploadedImage
+            ->delete();
 
     }
 
@@ -96,29 +95,17 @@ class mediaService
     public function temporaryUploadImages(Model $model, Collection $request_files, FileUploadDirectory $fileUploadDirectory)
     {
 
-        $cloud_uploaded_files =
-            $request_files
-                ->map(function (UploadedFile $request_file) {
-                    return CloudUploadService::upload($request_file);
-                });
-
         $temporary_uploaded_images =
-            $cloud_uploaded_files
-                ->map(function ($cloud_image_resposne) use ($fileUploadDirectory) {
+            $request_files
+                ->map(function (UploadedFile $request_file) use ($fileUploadDirectory) {
+                    $cloud_image_resposne = CloudUploadService::upload($request_file);
 
-                    $first_eager_response =
-                         $cloud_image_resposne['eager'][0];
+                    return
+                        TemporaryUploadedImages::fromCloudinaryUploadResponse(
+                            $cloud_image_resposne,
+                            $fileUploadDirectory
+                        );
 
-                    $temporary_uploaded_image = new TemporaryUploadedImages;
-                    $temporary_uploaded_image->public_id = $cloud_image_resposne[CloudinaryEngine::PUBLIC_ID];
-                    $temporary_uploaded_image->file_name = $cloud_image_resposne[CloudinaryEngine::ORIGINAL_FILENAME];
-                    $temporary_uploaded_image->file_url = $cloud_image_resposne[CloudinaryEngine::SECURE_URL];
-                    $temporary_uploaded_image->size = $cloud_image_resposne[CloudinaryEngine::BYTES];
-                    $temporary_uploaded_image->file_type = $cloud_image_resposne[CloudinaryEngine::RESOURCE_TYPE];
-                    $temporary_uploaded_image->collection_name = $fileUploadDirectory->value;
-                    $temporary_uploaded_image->thumbnail_url = $first_eager_response[CloudinaryEngine::SECURE_URL];
-
-                    return $temporary_uploaded_image;
                 });
 
         $uploaded_images =
@@ -127,6 +114,32 @@ class mediaService
                     ->saveMany($temporary_uploaded_images);
 
         return $temporary_uploaded_images;
+    }
+
+    /**
+     * temporary upload files on clound in specified directory
+     *
+     * @param  \App\Trait\Uploadable&Model  $model
+     *
+     * @throws ApiError
+     */
+    public function temporaryUploadImage(Model $model, UploadedFile $request_file, FileUploadDirectory $fileUploadDirectory)
+    {
+
+        $cloud_image_resposne = CloudUploadService::upload($request_file);
+
+        $temporary_uploaded_image =
+            TemporaryUploadedImages::fromCloudinaryUploadResponse(
+                $cloud_image_resposne,
+                $fileUploadDirectory
+            );
+
+        $uploaded_images =
+            $model->
+                temporaryUploadedImages()
+                    ->save($temporary_uploaded_image);
+
+        return $temporary_uploaded_image;
     }
 
     /**

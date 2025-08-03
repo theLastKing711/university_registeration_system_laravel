@@ -532,7 +532,7 @@ class StudentTest extends AdminTestCase
 
         $upload_student_profile_picture_request =
             new UploadStudentSchoolFilesRequestData(
-                files: $files_request->toArray()
+                files: $files_request
             );
 
         $upload_mock_response =

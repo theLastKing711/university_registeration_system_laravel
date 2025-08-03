@@ -28,8 +28,8 @@ class StudentTest extends StudentTestCase
     {
         parent::setUp();
 
-        // $this
-        //     ->withRoutePaths('open-course-registerations');
+        $this
+            ->withRoutePaths('open-course-registerations');
 
     }
 

@@ -24,7 +24,7 @@ class UploadStudentSchoolFilesController extends Controller
 
         MediaService::temporaryUploadImages(
             $logged_user,
-            collect($request->files),
+            $request->files,
             FileUploadDirectory::SCHOOL_FILES
         );
 

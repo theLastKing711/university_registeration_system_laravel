@@ -79,28 +79,20 @@ class TemporaryUploadedImages extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function fromCloudinaryUploadResponse(CloudinaryEngine $response_file, int $user_id, FileUploadDirectory $fileUploadDirectory): self
+    public static function fromCloudinaryUploadResponse(array $cloud_image_resposne, FileUploadDirectory $fileUploadDirectory): self
     {
 
-        $response =
-            $response_file
-                ->getResponse();
-
-        // first transformed file
         $first_eager_response =
-            $response['eager'][0];
-
-        // $media->file_url = $response_file->getSecurePath();
-        // $media->size = $first_eager_response->getSize();
+                        $cloud_image_resposne['eager'][0];
 
         $temporary_uploaded_image = new TemporaryUploadedImages;
-        $temporary_uploaded_image->user_id = $user_id;
-        $temporary_uploaded_image->public_id = $response_file->getPublicId();
-        $temporary_uploaded_image->file_name = $response_file->getFileName();
-        $temporary_uploaded_image->file_url = $first_eager_response['secure_url'];
-        $temporary_uploaded_image->size = $first_eager_response['bytes'];
-        $temporary_uploaded_image->file_type = $response_file->getFileType();
+        $temporary_uploaded_image->public_id = $cloud_image_resposne[CloudinaryEngine::PUBLIC_ID];
+        $temporary_uploaded_image->file_name = $cloud_image_resposne[CloudinaryEngine::ORIGINAL_FILENAME];
+        $temporary_uploaded_image->file_url = $cloud_image_resposne[CloudinaryEngine::SECURE_URL];
+        $temporary_uploaded_image->size = $cloud_image_resposne[CloudinaryEngine::BYTES];
+        $temporary_uploaded_image->file_type = $cloud_image_resposne[CloudinaryEngine::RESOURCE_TYPE];
         $temporary_uploaded_image->collection_name = $fileUploadDirectory->value;
+        $temporary_uploaded_image->thumbnail_url = $first_eager_response[CloudinaryEngine::SECURE_URL];
 
         return $temporary_uploaded_image;
     }
