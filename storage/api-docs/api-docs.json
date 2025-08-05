@@ -888,6 +888,40 @@
             }
         },
         "/admins/admins": {
+            "get": {
+                "tags": [
+                    "adminsAdmins"
+                ],
+                "operationId": "d0c7454f54b0377b431a8da4e703d349",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminAdminGetAdminsResponseGetAdminsResponsePaginationResultData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "adminsAdmins"
@@ -1393,34 +1427,6 @@
                 }
             }
         },
-        "/admins/students/school-files": {
-            "post": {
-                "tags": [
-                    "adminsStudents"
-                ],
-                "operationId": "5350d73f0afa046a0c6f24dc589fc57c",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AdminStudentUploadSchoolFilesRequestUploadSchoolFilesRequestData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/admins/students/profile-picture": {
             "post": {
                 "tags": [
@@ -1445,6 +1451,34 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/MediaData"
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admins/students/school-files": {
+            "post": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "2d9f0991b837161b88d1d2fb15a72436",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminStudentUploadSchoolFilesRequestUploadSchoolFilesRequestData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
                             }
                         }
                     }
@@ -1960,6 +1994,43 @@
                     }
                 },
                 "type": "object"
+            },
+            "GetAdminsRequestData": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginationQueryParameterData"
+                    }
+                ]
+            },
+            "AdminAdminGetAdminsResponseGetAdminsResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminAdminGetAdminsResponseGetAdminsResponsePaginationResultData": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/adminPaginatedAbstract"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AdminAdminGetAdminsResponseGetAdminsResponseData"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
             },
             "adminLogin": {
                 "properties": {
@@ -2753,22 +2824,22 @@
                     "temporary_profile_picture_id": {
                         "type": "integer",
                         "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "AdminStudentUploadSchoolFilesRequestUploadSchoolFilesRequestData": {
-                "properties": {
-                    "items": {
+                    },
+                    "school_files_ids_to_add": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/UploadFileData"
+                            "type": "integer"
+                        }
+                    },
+                    "school_files_ids_to_delete": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
                         }
                     }
                 },
                 "type": "object"
             },
-            "TestFile": {},
             "AdminStudentUploadStudentProfileRequestUploadStudentProfilePictureRequestData": {
                 "properties": {
                     "file": {
@@ -2786,6 +2857,18 @@
                 },
                 "type": "object"
             },
+            "AdminStudentUploadSchoolFilesRequestUploadSchoolFilesRequestData": {
+                "properties": {
+                    "files": {
+                        "type": "array",
+                        "items": {
+                            "type": "Illuminate\\Http\\UploadedFile"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TestFile": {},
             "CreateTeacherRequestData": {
                 "properties": {
                     "name": {

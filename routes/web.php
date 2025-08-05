@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\AcademicYearSemester\OpenDepartmentsForRegisterat
 use App\Http\Controllers\Admin\AcademicYearSemester\UpdateAcademicYearSemesterController;
 use App\Http\Controllers\Admin\Admin\CreateAdminController;
 use App\Http\Controllers\Admin\Admin\DeleteAdminController;
+use App\Http\Controllers\Admin\Admin\GetAdminController;
+use App\Http\Controllers\Admin\Admin\GetAdminsController;
+use App\Http\Controllers\Admin\Admin\UpdateAdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ClassroomCourseTeacher\AssignClassroomToCourseTeacherController;
 use App\Http\Controllers\Admin\ClassroomCourseTeacher\DeleteClassroomCourseTeacherController;
@@ -99,12 +102,18 @@ Route::prefix('admins')
             Route::prefix('admins')
                 ->middleware(
                     [
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                        // RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]
                 )
                 ->group(function () {
 
+                    Route::get('', GetAdminsController::class);
+
+                    Route::get('{id}', GetAdminController::class);
+
                     Route::post('', CreateAdminController::class);
+
+                    Route::patch('{id}', UpdateAdminController::class);
 
                     Route::delete('', DeleteAdminController::class);
 
