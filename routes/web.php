@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\Exam\DeleteExamController;
 use App\Http\Controllers\Admin\Exam\GetExamController;
 use App\Http\Controllers\Admin\Exam\UpdateExamController;
 use App\Http\Controllers\Admin\Exam\UpdateStudentExamMarkController;
+use App\Http\Controllers\Admin\Image\UploadImageController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourseController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseContr
 use App\Http\Controllers\Admin\Student\DeleteStudentController;
 use App\Http\Controllers\Admin\Student\DeleteStudentProfilePictureController;
 use App\Http\Controllers\Admin\Student\GetStudentController;
+use App\Http\Controllers\Admin\Student\GetStudentsController;
 use App\Http\Controllers\Admin\Student\GraduateStudentController;
 use App\Http\Controllers\Admin\Student\RegisterStudentController;
 use App\Http\Controllers\Admin\Student\UpdateStudentController;
@@ -102,7 +104,7 @@ Route::prefix('admins')
             Route::prefix('admins')
                 ->middleware(
                     [
-                        // RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                     ]
                 )
                 ->group(function () {
@@ -115,7 +117,7 @@ Route::prefix('admins')
 
                     Route::patch('{id}', UpdateAdminController::class);
 
-                    Route::delete('', DeleteAdminController::class);
+                    Route::delete('{id}', DeleteAdminController::class);
 
                 });
 
@@ -226,6 +228,18 @@ Route::prefix('admins')
 
                 });
 
+            Route::prefix('images')
+                ->middleware(
+                    [
+                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                    ]
+                )
+                ->group(function () {
+
+                    Route::post('', UploadImageController::class);
+
+                });
+
             Route::prefix('open-course-registerations')
                 ->group(function () {
 
@@ -247,6 +261,8 @@ Route::prefix('admins')
                     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                 ])
                 ->group(function () {
+
+                    Route::get('', action: GetStudentsController::class);
 
                     Route::get('{id}', action: GetStudentController::class);
 

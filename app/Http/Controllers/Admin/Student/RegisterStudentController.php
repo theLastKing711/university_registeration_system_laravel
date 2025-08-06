@@ -58,6 +58,11 @@ class RegisterStudentController extends Controller
             $temporary_uploaded_profile_picture
                 ->delete();
 
+            $student
+                ->uploadSchoolFiles(
+                    $request->school_files_ids_to_add,
+                );
+
             CloudUploadService::destroy(
                 $temporary_uploaded_profile_picture->file_name
             );

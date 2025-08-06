@@ -2,8 +2,13 @@
 
 namespace App\Data\Admin\Student\RegisterStudent\Request;
 
+use App\Data\Shared\Casts\ArrayToCollectionCast;
+use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Data\Shared\Swagger\Property\DateProperty;
+use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelData\Attributes\Validation\Exists;
+use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -29,5 +34,14 @@ class RegisterStudentRequestData extends Data
 
         #[OAT\Property]
         public ?string $temporary_profile_picture_id,
+
+        #[
+            ArrayProperty('integer'),
+            WithCast(ArrayToCollectionCast::class),
+            Exists('temporary_uploaded_images', 'id')
+        ]
+        /** @var Collection<int> */
+        public Collection $school_files_ids_to_add,
+
     ) {}
 }

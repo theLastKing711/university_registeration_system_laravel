@@ -87,6 +87,73 @@
                 }
             ]
         },
+        "/admins/admins/{id}": {
+            "get": {
+                "tags": [
+                    "adminsAdmins"
+                ],
+                "operationId": "f94801c6bc55a1e49361034a3b545df1",
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminAdminGetAdminResponseGetAdminResponseData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "adminsAdmins"
+                ],
+                "operationId": "83054d1b7822616cf1aa5aeea24e17b0",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "adminsAdmins"
+                ],
+                "operationId": "d16375b80ecd9b8a38c405b15b9f1c7d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminAdminUpdateAdminResponseUpdateAdminResponseData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/adminsCoursesUpdateCoursePathParameterData"
+                }
+            ]
+        },
         "/admins/classroom-course-teachers/{id}": {
             "delete": {
                 "tags": [
@@ -947,34 +1014,6 @@
                         }
                     }
                 }
-            },
-            "delete": {
-                "tags": [
-                    "adminsAdmins"
-                ],
-                "operationId": "a97667191247dbaae980571e29c71f2d",
-                "parameters": [
-                    {
-                        "name": "ids[]",
-                        "in": "query",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
             }
         },
         "/sanctum/csrf-cookie": {
@@ -1400,6 +1439,40 @@
             }
         },
         "/admins/students": {
+            "get": {
+                "tags": [
+                    "adminsStudents"
+                ],
+                "operationId": "85ec1ccf808eaea568ef22907b507772",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminAdminGetStudentsResponseGetStudentsResponsePaginationResultData"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "adminsStudents"
@@ -1983,6 +2056,7 @@
                 },
                 "type": "object"
             },
+            "AdminAdminDeleteAdminRequestDeleteAdminRequestData": {},
             "DeleteAdminRequestData": {
                 "properties": {
                     "ids": {
@@ -1991,6 +2065,18 @@
                         "items": {
                             "type": "integer"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "AdminAdminGetAdminRequestGetAdminRequestData": {},
+            "AdminAdminGetAdminResponseGetAdminResponseData": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -2032,6 +2118,19 @@
                     }
                 ]
             },
+            "AdminAdminUpdateAdminRequestUpdateAdminRequestData": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "AdminAdminUpdateAdminResponseUpdateAdminResponseData": {},
             "adminLogin": {
                 "properties": {
                     "name": {
@@ -2722,6 +2821,79 @@
                     }
                 },
                 "type": "object"
+            },
+            "GetStudentsRequestData": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginationQueryParameterData"
+                    }
+                ]
+            },
+            "AdminAdminGetStudentsResponseGetStudentsResponseData": {
+                "properties": {
+                    "department_id": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "national_id": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "birthdate": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02",
+                        "nullable": true
+                    },
+                    "enrollment_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02",
+                        "nullable": true
+                    },
+                    "graduation_date": {
+                        "schema": "string",
+                        "type": "string",
+                        "format": "datetime",
+                        "default": "2024-09-02",
+                        "pattern": "YYYY-MM-DD",
+                        "example": "2024-09-02",
+                        "nullable": true
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AdminAdminGetStudentsResponseGetStudentsResponsePaginationResultData": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/adminPaginatedAbstract"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AdminAdminGetStudentsResponseGetStudentsResponseData"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
             },
             "GraduateStudentRequestData": {
                 "properties": {
@@ -3481,7 +3653,31 @@
                     "type": "integer"
                 }
             },
+            "adminsDeleteAdminIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsAdminsGetAdminIdPathParameter": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "adminsAdminIdPathParameterData": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "adminsAdminsUpdateAdminIdPathParameter": {
                 "name": "id",
                 "in": "path",
                 "required": true,

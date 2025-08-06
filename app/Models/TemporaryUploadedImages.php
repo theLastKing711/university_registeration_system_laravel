@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\FileUploadDirectory;
+use Cloudinary\Api\ApiResponse;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -79,11 +80,11 @@ class TemporaryUploadedImages extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function fromCloudinaryUploadResponse(array $cloud_image_resposne, FileUploadDirectory $fileUploadDirectory): self
+    public static function fromCloudinaryUploadResponse(array|ApiResponse $cloud_image_resposne, FileUploadDirectory $fileUploadDirectory): self
     {
 
-        $first_eager_response =
-                        $cloud_image_resposne['eager'][0];
+        // $first_eager_response =
+        //                 $cloud_image_resposne['eager'][0];
 
         $temporary_uploaded_image = new TemporaryUploadedImages;
         $temporary_uploaded_image->public_id = $cloud_image_resposne[CloudinaryEngine::PUBLIC_ID];
@@ -92,7 +93,7 @@ class TemporaryUploadedImages extends Model
         $temporary_uploaded_image->size = $cloud_image_resposne[CloudinaryEngine::BYTES];
         $temporary_uploaded_image->file_type = $cloud_image_resposne[CloudinaryEngine::RESOURCE_TYPE];
         $temporary_uploaded_image->collection_name = $fileUploadDirectory->value;
-        $temporary_uploaded_image->thumbnail_url = $first_eager_response[CloudinaryEngine::SECURE_URL];
+        $temporary_uploaded_image->thumbnail_url = $cloud_image_resposne[CloudinaryEngine::SECURE_URL];
 
         return $temporary_uploaded_image;
     }

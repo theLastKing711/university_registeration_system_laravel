@@ -328,6 +328,44 @@ class User extends Authenticatable implements IUploadable
     }
 
     /**
+     * Summary of updateSchoolFiles
+     *
+     * @param  \Illuminate\Support\Collection<int>  $temporaryUploadedImagesIds
+     */
+    public function uploadSchoolFiles(Collection $temporaryUploadedImagesIds)
+    {
+
+        $temporaryUploadedImagesToAdd =
+            TemporaryUploadedImages::query()
+                ->whereIn(
+                    'id',
+                    $temporaryUploadedImagesIds
+                )
+                ->get();
+
+        $medias =
+            $temporaryUploadedImagesToAdd
+                ->map(fn ($file) => Media::fromTemporaryUploadedImage(
+                    $file
+                )
+                );
+
+        $upload_images =
+            $this
+                ->medially()
+                ->createMany(
+                    $medias->toArray()
+                );
+
+        $temporaryUploadedImagesToAdd
+            ->toQuery()
+            ->delete();
+
+        return $upload_images;
+
+    }
+
+    /**
     //  * Summary of updateSchoolFiles
     //  *
     //  */
@@ -355,7 +393,11 @@ class User extends Authenticatable implements IUploadable
     //             );
 
     // }
-
+    /**
+     * Summary of schoolFiles
+     *
+     * @return MorphMany<Media, $this>
+     */
     public function schoolFiles()
     {
         return

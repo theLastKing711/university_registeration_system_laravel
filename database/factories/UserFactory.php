@@ -35,6 +35,7 @@ class UserFactory extends Factory
 
         return [
             'national_id' => (string) $this->faker->randomNumber(6),
+            'phone_number' => fake()->phoneNumber(),
             'birthdate' => $this->faker->date(),
             'graduation_date' => null,
             'name' => fake()->name(),

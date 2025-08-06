@@ -17,6 +17,7 @@ use CloudinaryLabs\CloudinaryLaravel\Model\Media as ModelMedia;
 use Database\Seeders\AcademicYearSemesterSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Admin\Abstractions\AdminTestCase;
 use Tests\Feature\Admin\Traits\CloudUploadServiceMocks;
@@ -78,11 +79,18 @@ class StudentTest extends AdminTestCase
                 ->first()
                 ->id;
 
+        $school_files_count = 2;
+
         $admin = User::factory()
             ->withStudentRole()
             ->has(
                 TemporaryUploadedImages::factory()
-                    ->withCollectionName(FileUploadDirectory::USER_PROFILE_PICTURE)
+                    ->withCollectionName(FileUploadDirectory::USER_PROFILE_PICTURE),
+            )
+            ->has(
+                TemporaryUploadedImages::factory()
+                    ->withCollectionName(FileUploadDirectory::SCHOOL_FILES)
+                    ->count($school_files_count)
             )
             ->create();
 
@@ -90,6 +98,16 @@ class StudentTest extends AdminTestCase
              $admin
                  ->temporaryUploadedImages()
                  ->first();
+
+        /** @var Collection<TemporaryUploadedImages> $school_files */
+        $school_files =
+            $admin
+                ->temporaryUploadedSchoolFiles;
+
+        $this
+            ->assertNotEmpty(
+                $school_files
+            );
 
         $register_student_request =
             new RegisterStudentRequestData(
@@ -100,7 +118,8 @@ class StudentTest extends AdminTestCase
                 fake()->phoneNumber(),
                 fake()->name(),
                 fake()->password(),
-                $new_student_temporary_profile_picture->id
+                $new_student_temporary_profile_picture->id,
+                $school_files->pluck('id')
             );
 
         $this
@@ -150,6 +169,31 @@ class StudentTest extends AdminTestCase
                 [
                     'id' => $new_student_temporary_profile_picture->id,
                 ]
+            );
+
+        $school_files
+            ->each(fn (TemporaryUploadedImages $file) => $this
+                ->assertDatabaseMissing(
+                    TemporaryUploadedImages::class,
+                    [
+                        'id' => $file->id,
+                    ]
+                )
+            );
+
+        $school_files
+            ->each(fn (TemporaryUploadedImages $file) => $this
+                ->assertDatabaseHas(
+                    Media::class,
+                    [
+                        'file_url' => $file->file_url,
+                        'file_name' => $file->file_name,
+                        'file_type' => $file->file_type,
+                        'size' => $file->size,
+                        'collection_name' => $file->collection_name,
+                        'thumbnail_url' => $file->thumbnail_url,
+                    ]
+                )
             );
 
     }
