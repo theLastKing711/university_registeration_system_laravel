@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Traits;
 
 use App\Facades\CloudUploadService;
+use Illuminate\Support\Collection;
 
 trait CloudUploadServiceMocks
 {
@@ -48,6 +49,16 @@ trait CloudUploadServiceMocks
         CloudUploadService::shouldReceive('destroy')
             ->with($public_id)
             ->times($times);
+    }
+
+    public function mockDestroyMultiple(Collection $images)
+    {
+
+        $images
+            ->pluck('file_name')
+            ->each(
+                fn ($file_name) => $this->mockDestroy($file_name, 1)
+            );
     }
 
     public function getUploadMockResponse(): array

@@ -6,7 +6,7 @@ use App\Data\Admin\Student\RegisterStudent\Request\RegisterStudentRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Enum\Auth\RolesEnum;
-use App\Facades\CloudUploadService;
+use App\Facades\MediaService;
 use App\Http\Controllers\Controller;
 use App\Models\TemporaryUploadedImages;
 use App\Models\User;
@@ -40,31 +40,34 @@ class RegisterStudentController extends Controller
             $student->name = $request->name;
             $student->password = $request->password;
 
-            $student->save();
-
-            $student->assignRole(RolesEnum::STUDENT);
+            $student
+                ->save();
 
             $student
-                ->medially()
-                ->create([
-                    'file_url' => $temporary_uploaded_profile_picture->file_url,
-                    'file_name' => $temporary_uploaded_profile_picture->file_name,
-                    'file_type' => $temporary_uploaded_profile_picture->file_type,
-                    'size' => $temporary_uploaded_profile_picture->size,
-                    'collection_name' => $temporary_uploaded_profile_picture->collection_name,
-                    'thumbnail_url' => $temporary_uploaded_profile_picture->thumbnail_url,
-                ]);
+                ->assignRole(RolesEnum::STUDENT);
 
-            $temporary_uploaded_profile_picture
-                ->delete();
+            if (isset($request->temporary_profile_picture_id)) {
+
+                $student
+                    ->updateProfilePictureByTemporaryUploadedImageId(
+                        $request
+                            ->temporary_profile_picture_id
+                    );
+
+                MediaService::destroyTemporaryImageById(
+                    $temporary_uploaded_profile_picture->id
+                );
+
+            }
 
             $student
                 ->uploadSchoolFiles(
                     $request->school_files_ids_to_add,
                 );
 
-            CloudUploadService::destroy(
-                $temporary_uploaded_profile_picture->file_name
+            MediaService::destroyTemporaryImagesByIds(
+                $request
+                    ->school_files_ids_to_add
             );
 
         });

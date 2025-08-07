@@ -82,7 +82,6 @@ class StudentTest extends AdminTestCase
         $school_files_count = 2;
 
         $admin = User::factory()
-            ->withStudentRole()
             ->has(
                 TemporaryUploadedImages::factory()
                     ->withCollectionName(FileUploadDirectory::USER_PROFILE_PICTURE),
@@ -94,20 +93,14 @@ class StudentTest extends AdminTestCase
             )
             ->create();
 
-        $new_student_temporary_profile_picture =
+        $admin_temporary_profile_picture =
              $admin
-                 ->temporaryUploadedImages()
-                 ->first();
+                 ->temporaryUploadedProfilePicture;
 
         /** @var Collection<TemporaryUploadedImages> $school_files */
         $school_files =
             $admin
                 ->temporaryUploadedSchoolFiles;
-
-        $this
-            ->assertNotEmpty(
-                $school_files
-            );
 
         $register_student_request =
             new RegisterStudentRequestData(
@@ -118,14 +111,19 @@ class StudentTest extends AdminTestCase
                 fake()->phoneNumber(),
                 fake()->name(),
                 fake()->password(),
-                $new_student_temporary_profile_picture->id,
+                $admin_temporary_profile_picture->id,
                 $school_files->pluck('id')
             );
 
         $this
             ->mockDestroy(
-                $new_student_temporary_profile_picture
+                $admin_temporary_profile_picture
                     ->file_name
+            );
+
+        $this
+            ->mockDestroyMultiple(
+                $school_files
             );
 
         $response =
@@ -135,7 +133,15 @@ class StudentTest extends AdminTestCase
                         ->toArray()
                 );
 
-        $response->assertStatus(200);
+        $response
+            ->assertStatus(200);
+
+        $created_student =
+            User::query()
+                ->firstWhere(
+                    'name',
+                    $register_student_request->name
+                );
 
         $this
             ->assertDatabaseHas(
@@ -154,12 +160,13 @@ class StudentTest extends AdminTestCase
             ->assertDatabaseHas(
                 Media::class,
                 [
-                    'file_url' => $new_student_temporary_profile_picture->file_url,
-                    'file_name' => $new_student_temporary_profile_picture->file_name,
-                    'file_type' => $new_student_temporary_profile_picture->file_type,
-                    'size' => $new_student_temporary_profile_picture->size,
-                    'collection_name' => $new_student_temporary_profile_picture->collection_name,
-                    'thumbnail_url' => $new_student_temporary_profile_picture->thumbnail_url,
+                    'medially_id' => $created_student->id,
+                    'file_url' => $admin_temporary_profile_picture->file_url,
+                    'file_name' => $admin_temporary_profile_picture->file_name,
+                    'file_type' => $admin_temporary_profile_picture->file_type,
+                    'size' => $admin_temporary_profile_picture->size,
+                    'collection_name' => $admin_temporary_profile_picture->collection_name,
+                    'thumbnail_url' => $admin_temporary_profile_picture->thumbnail_url,
                 ]
             );
 
@@ -167,7 +174,7 @@ class StudentTest extends AdminTestCase
             ->assertDatabaseMissing(
                 TemporaryUploadedImages::class,
                 [
-                    'id' => $new_student_temporary_profile_picture->id,
+                    'id' => $admin_temporary_profile_picture->id,
                 ]
             );
 
@@ -186,6 +193,7 @@ class StudentTest extends AdminTestCase
                 ->assertDatabaseHas(
                     Media::class,
                     [
+                        'medially_id' => $created_student->id,
                         'file_url' => $file->file_url,
                         'file_name' => $file->file_name,
                         'file_type' => $file->file_type,
@@ -260,10 +268,9 @@ class StudentTest extends AdminTestCase
                     ->file_name
             );
 
-        $temporary_school_files_uploaded_by_admin
-            ->pluck('file_name')
-            ->each(
-                fn ($file_name) => $this->mockDestroy($file_name)
+        $this
+            ->mockDestroyMultiple(
+                $temporary_school_files_uploaded_by_admin
             );
 
         $update_student_request =

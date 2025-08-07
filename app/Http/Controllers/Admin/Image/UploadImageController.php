@@ -11,6 +11,7 @@ use App\Data\Shared\Swagger\Request\FormDataRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
 use App\Facades\MediaService;
 use App\Http\Controllers\Controller;
+use App\Models\TemporaryUploadedImages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
@@ -26,26 +27,31 @@ class UploadImageController extends Controller
 
         // Log::info('hello world');
 
-        return new MediaData(
-            fake()->numberBetween(1, 1000),
-            'https://placehold.co/600x400',
-            'https://placehold.co/600x400'
-        );
+        // $temporaryImage =
+        //     TemporaryUploadedImages::factory()
+        //         ->schoolFiles()
+        //         ->create();
 
-        // $logged_user =
-        //    Auth::User();
+        // return new MediaData(
+        //     $temporaryImage->id,
+        //     'https://placehold.co/600x400',
+        //     'https://placehold.co/600x400'
+        // );
 
-        // $temporary_uploaded_image =
-        //     MediaService::temporaryUploadImage(
-        //         $logged_user,
-        //         $request->file,
-        //         $request->fileUploadDirectory
-        //     );
+        $logged_user =
+           Auth::User();
 
-        // return
-        //     MediaData::from(
-        //         $temporary_uploaded_image
-        //     );
+        $temporary_uploaded_image =
+            MediaService::temporaryUploadImage(
+                $logged_user,
+                $request->file,
+                $request->fileUploadDirectory
+            );
+
+        return
+            MediaData::from(
+                $temporary_uploaded_image
+            );
 
     }
 }

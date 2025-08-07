@@ -257,15 +257,11 @@ class User extends Authenticatable implements IUploadable
     public function updateProfilePicture(Media $media)
     {
 
-        $this
-            ->profilePicture()
-            ->delete();
-
         return
             $this
                 ->profilePicture()
                 ->create(
-                    $media->toArray()
+                    attributes: $media->toArray()
                 );
 
     }
@@ -356,10 +352,6 @@ class User extends Authenticatable implements IUploadable
                 ->createMany(
                     $medias->toArray()
                 );
-
-        $temporaryUploadedImagesToAdd
-            ->toQuery()
-            ->delete();
 
         return $upload_images;
 
@@ -457,6 +449,9 @@ class User extends Authenticatable implements IUploadable
     {
         return [
             // 'enrollment_date' => 'datetime:Y-m-d',
+            'birthdate' => 'date',
+            'enrollment_date' => 'date',
+            'graduation_date' => 'date',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
