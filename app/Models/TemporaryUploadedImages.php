@@ -87,13 +87,14 @@ class TemporaryUploadedImages extends Model
         //                 $cloud_image_resposne['eager'][0];
 
         $temporary_uploaded_image = new TemporaryUploadedImages;
+        $temporary_uploaded_image->uid = $cloud_image_resposne['context']['custom']['uid'];
         $temporary_uploaded_image->public_id = $cloud_image_resposne[CloudinaryEngine::PUBLIC_ID];
         $temporary_uploaded_image->file_name = $cloud_image_resposne[CloudinaryEngine::ORIGINAL_FILENAME];
         $temporary_uploaded_image->file_url = $cloud_image_resposne[CloudinaryEngine::SECURE_URL];
         $temporary_uploaded_image->size = $cloud_image_resposne[CloudinaryEngine::BYTES];
         $temporary_uploaded_image->file_type = $cloud_image_resposne[CloudinaryEngine::RESOURCE_TYPE];
         $temporary_uploaded_image->collection_name = $fileUploadDirectory->value;
-        $temporary_uploaded_image->thumbnail_url = $cloud_image_resposne[CloudinaryEngine::SECURE_URL];
+        $temporary_uploaded_image->thumbnail_url = 'alsdjaslkdj';
 
         return $temporary_uploaded_image;
     }

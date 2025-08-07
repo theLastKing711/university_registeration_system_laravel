@@ -15,17 +15,19 @@ class GetStudentController extends StudentController
     #[SuccessItemResponse(GetStudentResponseData::class)]
     public function __invoke(GetStudentRequestData $request)
     {
-        // return GetStudentResponseData::from(
-        return User::query()
-            ->with(
-                [
-                    'profilePicture',
-                ]
-            )
-            ->firstWhere(
-                'id',
-                $request->id
-            );
-        // );
+
+        return GetStudentResponseData::from(
+            User::query()
+                ->with(
+                    [
+                        'profilePicture',
+                        'schoolFiles',
+                    ]
+                )
+                ->firstWhere(
+                    'id',
+                    $request->id
+                )
+        );
     }
 }

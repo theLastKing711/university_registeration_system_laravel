@@ -449,9 +449,9 @@ class User extends Authenticatable implements IUploadable
     {
         return [
             // 'enrollment_date' => 'datetime:Y-m-d',
-            'birthdate' => 'date',
-            'enrollment_date' => 'date',
-            'graduation_date' => 'date',
+            'birthdate' => 'date:Y-m-d',
+            'enrollment_date' => 'date:Y-m-d',
+            'graduation_date' => 'date:Y-m-d',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

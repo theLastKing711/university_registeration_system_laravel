@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('temporary_uploaded_images', function (Blueprint $table) {
             $table->id();
             $table->morphs('uploadable');
+            $table->uuid('uid')->nullable();
             $table->string('file_name');
             $table->string('file_url');
             $table->integer('size');

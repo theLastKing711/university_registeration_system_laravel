@@ -18,6 +18,7 @@ class TemporaryUploadedImagesFactory extends Factory
     public function definition(): array
     {
         return [
+            'uid' => fake()->uuid(),
             'file_name' => fake()->name(),
             'file_url' => fake()->imageUrl(),
             'size' => fake()->numberBetween(1000, 10000),

@@ -24,6 +24,7 @@ class UploadImageData extends Data
         ]
         public UploadedFile $file,
         #[OAT\Property]
+        public string $uid,
         public FileUploadDirectory $fileUploadDirectory,
     ) {}
 }

@@ -73,23 +73,6 @@ per_page: number;
 total: number;
 };
 }
-declare namespace App.Data.Admin.Admin.GetStudents.Response {
-export type GetStudentsResponseData = {
-department_id: number | null;
-national_id: string | null;
-birthdate: string | null;
-enrollment_date: string | null;
-graduation_date: string | null;
-phone_number: string | null;
-name: string;
-};
-export type GetStudentsResponsePaginationResultData = {
-data: Array<any>;
-current_page: number;
-per_page: number;
-total: number;
-};
-}
 declare namespace App.Data.Admin.Admin.UpdateAdmin.Request {
 export type UpdateAdminRequestData = {
 name: string;
@@ -414,6 +397,7 @@ id: number;
 }
 declare namespace App.Data.Admin.Student.GetStudent.Response {
 export type GetStudentResponseData = {
+id: number;
 department_id: number | null;
 national_id: string | null;
 birthdate: string | null;
@@ -421,7 +405,26 @@ enrollment_date: string | null;
 graduation_date: string | null;
 phone_number: string | null;
 name: string;
-profile_picture: App.Data.Shared.Media.MediaData | null;
+profilePicture: App.Data.Shared.Image.AntDesginImageResponseData | null;
+schoolFiles: Array<App.Data.Shared.Image.AntDesginImageResponseData> | Array<any>;
+};
+}
+declare namespace App.Data.Admin.Student.GetStudents.Response {
+export type GetStudentsResponseData = {
+id: number;
+department_id: number | null;
+national_id: string | null;
+birthdate: string | null;
+enrollment_date: string | null;
+graduation_date: string | null;
+phone_number: string | null;
+name: string;
+};
+export type GetStudentsResponsePaginationResultData = {
+data: Array<any>;
+current_page: number;
+per_page: number;
+total: number;
 };
 }
 declare namespace App.Data.Admin.Student.GraduateStudent.Request {
@@ -439,6 +442,7 @@ phone_number: string;
 name: string;
 password: string;
 temporary_profile_picture_id: string | null;
+school_files_ids_to_add: Array<number> | Array<any>;
 };
 }
 declare namespace App.Data.Admin.Student.UpdateStudent.Request {
@@ -577,9 +581,26 @@ export type FilePublicIdPathParameterData = {
 public_id: string;
 };
 }
+declare namespace App.Data.Shared.Image {
+export type AntDesginImageResponseData = {
+id: number;
+uid: string;
+name: string;
+url: string;
+type: string;
+size: number;
+percent: number | null;
+status: string | null;
+};
+export type UploadImageData = {
+file: any;
+fileUploadDirectory: App.Enum.FileUploadDirectory;
+};
+}
 declare namespace App.Data.Shared.Media {
 export type MediaData = {
 id: string;
+file_name: string;
 file_url: string;
 thumbnail_url: string | null;
 };

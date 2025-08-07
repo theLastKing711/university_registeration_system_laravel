@@ -3,6 +3,7 @@
 namespace App\Data\Admin\Student\GetStudents\Response;
 
 use App\Data\Shared\Swagger\Property\DateProperty;
+use Carbon\Carbon;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -13,15 +14,17 @@ class GetStudentsResponseData extends Data
 {
     public function __construct(
         #[OAT\Property]
+        public int $id,
+        #[OAT\Property]
         public ?int $department_id,
         #[OAT\Property]
         public ?string $national_id,
         #[DateProperty]
-        public ?string $birthdate,
+        public ?Carbon $birthdate,
         #[DateProperty]
-        public ?string $enrollment_date,
+        public ?Carbon $enrollment_date,
         #[DateProperty]
-        public ?string $graduation_date,
+        public ?Carbon $graduation_date,
         #[OAT\Property]
         public ?string $phone_number,
         #[OAT\Property]

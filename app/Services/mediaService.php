@@ -123,12 +123,43 @@ class mediaService
      *
      * @throws ApiError
      */
-    public function temporaryUploadImage(Model $model, UploadedFile $request_file, FileUploadDirectory $fileUploadDirectory)
+    public function temporaryUploadImage(Model $model, UploadedFile $request_file, FileUploadDirectory $fileUploadDirectory, array $options = [])
     {
 
         $cloud_image_resposne =
             CloudUploadService::upload(
-                $request_file
+                $request_file,
+                $options
+            );
+
+        $temporary_uploaded_image =
+            TemporaryUploadedImages::fromCloudinaryUploadResponse(
+                $cloud_image_resposne,
+                $fileUploadDirectory
+            );
+
+        $uploaded_images =
+            $model->
+                temporaryUploadedImages()
+                    ->save($temporary_uploaded_image);
+
+        return $temporary_uploaded_image;
+    }
+
+    /**
+     * temporary upload files on clound in specified directory
+     *
+     * @param  \App\Trait\Uploadable&Model  $model
+     *
+     * @throws ApiError
+     */
+    public function temporaryUploadAntDesginImage(Model $model, UploadedFile $request_file, FileUploadDirectory $fileUploadDirectory, array $options = [])
+    {
+
+        $cloud_image_resposne =
+            CloudUploadService::upload(
+                $request_file,
+                $options
             );
 
         $temporary_uploaded_image =

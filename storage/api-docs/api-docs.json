@@ -1380,6 +1380,45 @@
                 }
             }
         },
+        "/admins/images": {
+            "post": {
+                "tags": [
+                    "adminImages"
+                ],
+                "operationId": "501f56f8757be5fad9227db0f45d5edd",
+                "parameters": [
+                    {
+                        "name": "fileUploadDirectory",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/uploadImageData"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UploadFileResponseData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admins/open-course-registerations": {
             "post": {
                 "tags": [
@@ -2769,6 +2808,9 @@
             "AdminStudentRequestGetStudentRequestData": {},
             "AdminStudentResponseGetStudentResponseData": {
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "department_id": {
                         "type": "integer",
                         "nullable": true
@@ -2811,13 +2853,19 @@
                     "name": {
                         "type": "string"
                     },
-                    "profile_picture": {
+                    "profilePicture": {
                         "oneOf": [
                             {
-                                "$ref": "#/components/schemas/MediaData"
+                                "$ref": "#/components/schemas/AntDesginImageResponseData"
                             }
                         ],
                         "nullable": true
+                    },
+                    "schoolFiles": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AntDesginImageResponseData"
+                        }
                     }
                 },
                 "type": "object"
@@ -2831,6 +2879,9 @@
             },
             "AdminAdminGetStudentsResponseGetStudentsResponseData": {
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "department_id": {
                         "type": "integer",
                         "nullable": true
@@ -2945,6 +2996,12 @@
                     "temporary_profile_picture_id": {
                         "type": "string",
                         "nullable": true
+                    },
+                    "school_files_ids_to_add": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
                 },
                 "type": "object"
@@ -3251,6 +3308,65 @@
                 },
                 "type": "object"
             },
+            "AntDesginImageResponse": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "AntDesginImageResponseData": {
+                "properties": {
+                    "response": {
+                        "$ref": "#/components/schemas/AntDesginImageResponse"
+                    },
+                    "uid": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "size": {
+                        "type": "integer"
+                    },
+                    "percent": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "AntDesginUploadFile": {
+                "properties": {
+                    "uid": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "uploadImageData": {
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "uid": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "ListData": {
                 "properties": {
                     "id": {
@@ -3273,6 +3389,9 @@
             "MediaData": {
                 "properties": {
                     "id": {
+                        "type": "string"
+                    },
+                    "file_name": {
                         "type": "string"
                     },
                     "file_url": {
@@ -4009,6 +4128,10 @@
         {
             "name": "adminsExams",
             "description": "adminsExams"
+        },
+        {
+            "name": "adminImages",
+            "description": "adminImages"
         },
         {
             "name": "adminsOpenCourseRegisterations",

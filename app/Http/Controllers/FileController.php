@@ -27,7 +27,7 @@ use OpenApi\Attributes as OAT;
         parameters: [
             new OAT\PathParameter(
                 ref: '#/components/parameters/filesPublicIdPathParameterData',
-            ), a,
+            ),
         ],
     ),
 ]

@@ -623,10 +623,12 @@ namespace App\Models{
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
  * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
  * @mixin \Eloquent
+ * @property string|null $uid
  * @property string $collection_name
  * @property string $thumbnail_url
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Media whereCollectionName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Media whereThumbnailUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Media whereUid($value)
  */
 	class Media extends \Eloquent {}
 }
@@ -845,12 +847,14 @@ namespace App\Models{
  * @mixin \Eloquent
  * @property string $uploadable_type
  * @property int $uploadable_id
+ * @property string|null $uid
  * @property string $collection_name
  * @property string $thumbnail_url
  * @property-read \Illuminate\Database\Eloquent\Model $uploadable
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages profilePicture()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereCollectionName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereThumbnailUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUploadableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TemporaryUploadedImages whereUploadableType($value)
  */
