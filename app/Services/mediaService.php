@@ -78,9 +78,11 @@ class mediaService
                 $image->file_name
             ));
 
-        $temporaryUploadedImages
-            ->toQuery()
-            ->delete();
+        if ($temporaryUploadedImages->isNotEmpty()) {
+            $temporaryUploadedImages
+                ->toQuery()
+                ->delete();
+        }
 
     }
 

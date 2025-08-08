@@ -257,11 +257,16 @@ class User extends Authenticatable implements IUploadable
     public function updateProfilePicture(Media $media)
     {
 
+        // need to delete from the cloud first
+        $this
+            ->profilePicture()
+            ->delete();
+
         return
             $this
                 ->profilePicture()
                 ->create(
-                    attributes: $media->toArray()
+                    $media->toArray()
                 );
 
     }
