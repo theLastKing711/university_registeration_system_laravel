@@ -4,7 +4,6 @@ namespace App\Data\Shared\Image;
 
 use App\Models\TemporaryUploadedImages;
 use CloudinaryLabs\CloudinaryLaravel\Model\Media;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\Validation\Between;
 use Spatie\LaravelData\Data;
@@ -38,11 +37,9 @@ class AntDesginImageResponseData extends Data
     public static function fromMedia(Media $media): self
     {
 
-        Log::info($media);
-
         return new self(
-            new AntDesginImageResponse($media->uid),
-            (string) $media->id,
+            new AntDesginImageResponse($media->id),
+            $media->uid,
             $media->file_name,
             $media->file_url,
             $media->file_type,
@@ -53,11 +50,9 @@ class AntDesginImageResponseData extends Data
     public static function fromTemporaryUploadedImage(TemporaryUploadedImages $media): self
     {
 
-        Log::info($media);
-
         return new self(
-            new AntDesginImageResponse($media->uid),
-            (string) $media->id,
+            new AntDesginImageResponse($media->id),
+            $media->uid,
             $media->file_name,
             $media->file_url,
             $media->file_type,

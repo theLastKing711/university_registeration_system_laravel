@@ -28,26 +28,42 @@ class UpdateStudentController extends StudentController
                         $request->id
                     );
 
-            $user
-                ->update([
-                    'department_id' => $request->department_id,
-                    'national_id' => $request->national_id,
-                    'birthdate' => $request->birthdate,
-                    'enrollment_date' => $request->enrollment_date,
-                    'graduation_date' => $request->graduation_date,
-                    'phone_number' => $request->phone_number,
-                    'name' => $request->name,
-                    'password' => $request->password,
-                ]);
+            when(
+                isset($request->password),
+                fn () => $user
+                    ->update([
+                        'department_id' => $request->department_id,
+                        'national_id' => $request->national_id,
+                        'birthdate' => $request->birthdate,
+                        'enrollment_date' => $request->enrollment_date,
+                        'graduation_date' => $request->graduation_date,
+                        'phone_number' => $request->phone_number,
+                        'name' => $request->name,
+                        'password' => $request->password,
+                    ]),
+                fn () => $user
+                    ->update([
+                        'department_id' => $request->department_id,
+                        'national_id' => $request->national_id,
+                        'birthdate' => $request->birthdate,
+                        'enrollment_date' => $request->enrollment_date,
+                        'graduation_date' => $request->graduation_date,
+                        'phone_number' => $request->phone_number,
+                        'name' => $request->name,
+                    ])
+            );
 
-            $user
-                ->updateProfilePictureByTemporaryUploadedImageId(
+            if (isset($request->temporary_profile_picture_id)) {
+                $user
+                    ->updateProfilePictureByTemporaryUploadedImageId(
+                        $request->temporary_profile_picture_id
+                    );
+
+                MediaService::destroyTemporaryImageById(
                     $request->temporary_profile_picture_id
                 );
 
-            MediaService::destroyTemporaryImageById(
-                $request->temporary_profile_picture_id
-            );
+            }
 
             $user
                 ->updateSchoolFiles(

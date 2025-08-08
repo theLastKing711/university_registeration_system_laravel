@@ -89,6 +89,7 @@ class Media extends \CloudinaryLabs\CloudinaryLaravel\Model\Media
 
         $media = new Media;
 
+        $media->uid = $temporaryUploadedImages->uid;
         $media->file_name = $temporaryUploadedImages->file_name;
         $media->file_url = $temporaryUploadedImages->file_url;
         $media->size = $temporaryUploadedImages->size;

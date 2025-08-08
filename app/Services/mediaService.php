@@ -138,6 +138,8 @@ class mediaService
                 $fileUploadDirectory
             );
 
+        Log::info($temporary_uploaded_image);
+
         $uploaded_images =
             $model->
                 temporaryUploadedImages()

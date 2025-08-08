@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Validation\Exists;
+use Spatie\LaravelData\Attributes\Validation\Present;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -33,7 +34,7 @@ class UpdateStudentRequestData extends Data
         #[OAT\Property]
         public string $name,
         #[OAT\Property]
-        public string $password,
+        public ?string $password,
         #[
             OAT\Property,
             Exists('temporary_uploaded_images', 'id')
@@ -41,13 +42,15 @@ class UpdateStudentRequestData extends Data
         public ?int $temporary_profile_picture_id,
         #[
             ArrayProperty('integer'),
-            WithCast(ArrayToCollectionCast::class)
+            WithCast(ArrayToCollectionCast::class),
+            Present
         ]
         /** @var Collection<int> */
         public Collection $school_files_ids_to_add,
         #[
             ArrayProperty('integer'),
-            WithCast(ArrayToCollectionCast::class)
+            WithCast(ArrayToCollectionCast::class),
+            Present
         ]
         /** @var Collection<int> */
         public Collection $school_files_ids_to_delete,

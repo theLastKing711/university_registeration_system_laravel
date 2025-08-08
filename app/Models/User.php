@@ -448,7 +448,6 @@ class User extends Authenticatable implements IUploadable
     protected function casts(): array
     {
         return [
-            // 'enrollment_date' => 'datetime:Y-m-d',
             'birthdate' => 'date:Y-m-d',
             'enrollment_date' => 'date:Y-m-d',
             'graduation_date' => 'date:Y-m-d',

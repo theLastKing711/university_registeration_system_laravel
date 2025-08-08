@@ -5,6 +5,7 @@ namespace App\Data\Admin\Student\RegisterStudent\Request;
 use App\Data\Shared\Casts\ArrayToCollectionCast;
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Data\Shared\Swagger\Property\DateProperty;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\Validation\Exists;
@@ -21,10 +22,14 @@ class RegisterStudentRequestData extends Data
         public ?int $department_id,
         #[OAT\Property]
         public string $national_id,
-        #[DateProperty]
-        public string $birthdate,
-        #[DateProperty]
-        public string $enrollment_date,
+        #[
+            DateProperty,
+        ]
+        public Carbon $birthdate,
+        #[
+            DateProperty,
+        ]
+        public Carbon $enrollment_date,
         #[OAT\Property]
         public string $phone_number,
         #[OAT\Property]
@@ -41,7 +46,7 @@ class RegisterStudentRequestData extends Data
             Exists('temporary_uploaded_images', 'id')
         ]
         /** @var Collection<int> */
-        public Collection $school_files_ids_to_add,
+        public ?Collection $school_files_ids_to_add,
 
     ) {}
 }
