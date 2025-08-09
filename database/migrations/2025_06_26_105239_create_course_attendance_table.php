@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('lecture_id')
-                ->constrained();
+                ->constrained()
+                ->cascadeOnDelete();
+
             $table
                 ->foreignId('student_id')
-                ->constrained('users', 'id');
+                ->constrained('users', 'id')
+                ->cascadeOnDelete();
+
             $table->boolean('is_student_present');
             $table->timestamps();
         });

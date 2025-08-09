@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table
                 ->foreignId('student_id')
-                ->constrained('users');
+                ->constrained('users')
+                ->cascadeOnDelete();
+
             $table
                 ->foreignId('course_id')
-                ->constrained('open_course_registerations');
+                ->constrained('open_course_registerations')
+                ->cascadeOnDelete();
+
             $table
                 ->integer('final_mark')
                 ->nullable();
