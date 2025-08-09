@@ -7,7 +7,6 @@ use App\Data\Shared\Image\AntDesginImageResponseData;
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Data\Shared\Swagger\Property\DateProperty;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -26,11 +25,11 @@ class GetStudentResponseData extends Data
         #[OAT\Property]
         public ?string $national_id,
         #[DateProperty]
-        public ?Carbon $birthdate,
+        public ?string $birthdate,
         #[DateProperty]
-        public ?Carbon $enrollment_date,
+        public ?string $enrollment_date,
         #[DateProperty]
-        public ?Carbon $graduation_date,
+        public ?string $graduation_date,
         #[OAT\Property]
         public ?string $phone_number,
         #[OAT\Property]

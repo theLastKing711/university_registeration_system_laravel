@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enum\FileUploadDirectory;
+use App\Enum\SortDirection;
 use App\Interfaces\IUploadable;
 use App\Trait\Uploadable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -445,6 +446,81 @@ class User extends Authenticatable implements IUploadable
                 );
     }
 
+    #[Scope]
+    protected function search(Builder $query, string $searchTerm, string ...$columns): void
+    {
+
+        $columns = collect($columns);
+
+        if (isset($searchTerm)) {
+            $columns->each(fn ($column) => $query
+                ->where($column, 'LIKE', '%'.$query.'%')
+            );
+        }
+
+    }
+
+    /**
+     * Summary of scopeSearchColumns
+     *
+     * @param  array<string>  $columns
+     */
+    public function scopeSearchColumns(Builder $query, ?string $searchTerm, array $columns): void
+    {
+        if (isset($searchTerm)) {
+
+            $query->whereAny($columns, operator: 'LIKE', value: '%'.$searchTerm.'%');
+        }
+    }
+
+    /**
+     * Summary of scopeSearchColumns
+     *
+     * @param  array<string>  $column
+     */
+    public function scopeSearchExact(Builder $query, ?string $value, string $column): void
+    {
+
+        $query
+            ->when(
+                $value,
+                fn (Builder $query) => $query
+                    ->where(
+                        $column,
+                        $value
+                    )
+            );
+
+    }
+
+    /**
+     * Summary of scopeSearchColumns
+     *
+     * @param  array<string>  $column
+     */
+    public function scopeSortByColumn(Builder $query, ?string $column, ?SortDirection $direction = SortDirection::ASCENDING): void
+    {
+
+        $query
+            ->when(
+                $column,
+                fn (Builder $query) => $direction == SortDirection::DESCENDING
+                    ?
+                     $query->orderByDesc($column)
+                    :
+                    $query->orderBy($column)
+            );
+
+    }
+
+    // function searchAny(string $query, string ...$columns) {
+
+    //     if(isset($query))
+    //     {
+    //         return $this->where()
+    //     }
+    // }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -453,9 +529,9 @@ class User extends Authenticatable implements IUploadable
     protected function casts(): array
     {
         return [
-            'birthdate' => 'date:Y-m-d',
-            'enrollment_date' => 'date:Y-m-d',
-            'graduation_date' => 'date:Y-m-d',
+            // 'birthdate' => 'date:Y-m-d',
+            // 'enrollment_date' => 'date:Y-m-d',
+            // 'graduation_date' => 'date:Y-m-d',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

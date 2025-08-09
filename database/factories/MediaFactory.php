@@ -21,6 +21,7 @@ class MediaFactory extends Factory
             'uid' => fake()->uuid(),
             'file_name' => fake()->name(),
             'file_url' => fake()->imageUrl(),
+            'file_type' => 'image/png',
             'size' => fake()->numberBetween(1000, 10000),
             'collection_name' => fake()->randomElement(FileUploadDirectory::cases())->value,
             'thumbnail_url' => fake()->imageUrl(),

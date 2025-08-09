@@ -980,6 +980,10 @@ namespace App\Models{
  * @property-read \CloudinaryLabs\CloudinaryLaravel\Model\Media|null $profilePicture
  * @property-read \App\Models\TemporaryUploadedImages|null $temporaryUploadedProfilePicture
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User schoolFilesTest()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User search(string $searchTerm, string ...$columns)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User searchColumns(?string $searchTerm, array $columns)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User searchExact(?string $value, string $column)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User sortByColumn(?\App\Enum\SortDirection $direction, string $column)
  */
 	class User extends \Eloquent implements \App\Interfaces\IUploadable, \App\Interfaces\Mediable {}
 }

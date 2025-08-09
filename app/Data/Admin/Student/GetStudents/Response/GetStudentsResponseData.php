@@ -16,7 +16,7 @@ class GetStudentsResponseData extends Data
         #[OAT\Property]
         public int $id,
         #[OAT\Property]
-        public ?int $department_id,
+        public string $department_name,
         #[OAT\Property]
         public ?string $national_id,
         #[DateProperty]
