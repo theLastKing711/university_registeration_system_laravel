@@ -3,7 +3,6 @@
 namespace App\Data\Admin\Course\GetCourse\Response;
 
 use App\Data\Shared\Swagger\Property\ArrayProperty;
-use App\Data\Shared\Swagger\Property\DateProperty;
 use App\Models\Course;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
@@ -29,8 +28,6 @@ class GetCourseResponseData extends Data
         public int $credits,
         #[OAT\Property]
         public int $open_for_students_in_year,
-        #[DateProperty]
-        public string $created_at,
         #[ArrayProperty(CrossListedItemData::class)]
         /** @var Collection<CrossListedItemData> */
         public Collection $cross_listed_courses,
@@ -42,7 +39,7 @@ class GetCourseResponseData extends Data
     public static function fromModel(Course $course): self
     {
 
-        $cross_listed_coruses =
+        $cross_listed_courses =
             $course
                 ->firstCrossListed
                 ->merge(
@@ -58,10 +55,9 @@ class GetCourseResponseData extends Data
             $course->is_active,
             $course->credits,
             $course->open_for_students_in_year,
-            $course->created_at,
-            CrossListedItemData::collect($cross_listed_coruses),
+            CrossListedItemData::collect($cross_listed_courses),
             PrerequisiteItemData::collect(
-                $course->prerequisites
+                $course->coursesPrerequisites
             )
         );
     }

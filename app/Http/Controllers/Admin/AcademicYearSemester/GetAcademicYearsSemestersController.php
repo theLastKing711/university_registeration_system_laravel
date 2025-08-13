@@ -26,11 +26,12 @@ class GetAcademicYearsSemestersController extends Controller
 
         $academic_years_semesters =
             AcademicYearSemester::query()
+                ->with('departments')
                 ->when(
                     $request->department_id,
                     fn (Builder $query) => $query
                         ->whereRelation(
-                            'departmentRegisterationPeriod',
+                            'departmentRegisterationPeriods',
                             'department_id',
                             $request->department_id
                         )

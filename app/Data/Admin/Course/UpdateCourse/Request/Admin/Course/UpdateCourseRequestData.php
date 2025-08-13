@@ -2,7 +2,9 @@
 
 namespace App\Data\Admin\Course\UpdateCourse\Request\Admin\Course;
 
+use App\Data\Shared\IdData;
 use App\Data\Shared\Swagger\Property\ArrayProperty;
+use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Validation\Exists;
@@ -27,15 +29,17 @@ class UpdateCourseRequestData extends Data
         #[OAT\Property]
         public int $open_for_students_in_year,
         #[
-            ArrayProperty('integer'),
-            Exists('courses', 'id')
+            ArrayProperty(IdData::class),
         ]
-        public array $cross_listed_courses_ids,
+        /** @var Collection<IdData> */
+        public Collection $cross_listed_courses,
+
         #[
-            ArrayProperty('integer'),
-            Exists('courses', 'id')
+            ArrayProperty(IdData::class),
         ]
-        public array $prerequisites_ids,
+        /** @var Collection<IdData> */
+        public Collection $prerequisites,
+
         #[
             OAT\PathParameter(
                 parameter: 'adminsCoursesUpdateCoursePathParameterData',

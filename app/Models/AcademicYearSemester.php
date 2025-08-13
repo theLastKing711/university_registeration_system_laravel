@@ -59,7 +59,7 @@ class AcademicYearSemester extends Model
      *
      * @return HasMany<DepartmentRegisterationPeriod, $this>
      */
-    public function departmentRegisterationPeriod(): HasMany
+    public function departmentRegisterationPeriods(): HasMany
     {
         return $this->hasMany(DepartmentRegisterationPeriod::class);
     }

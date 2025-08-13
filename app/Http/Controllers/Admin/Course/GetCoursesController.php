@@ -23,10 +23,10 @@ class GetCoursesController extends Controller
     {
         $courses =
             Course::query()
-                ->where(
-                    'department_id',
-                    $request->department_id
-                )
+                // ->where(
+                //     'department_id',
+                //     $request->department_id
+                // )
                 ->paginate();
 
         return

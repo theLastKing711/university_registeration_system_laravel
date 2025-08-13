@@ -78,6 +78,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AcademicYearSemester whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AcademicYearSemester whereYear($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DepartmentRegisterationPeriod> $departmentRegisterationPeriods
+ * @property-read int|null $department_registeration_periods_count
  */
 	class AcademicYearSemester extends \Eloquent {}
 }
@@ -983,7 +985,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User search(string $searchTerm, string ...$columns)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User searchColumns(?string $searchTerm, array $columns)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User searchExact(?string $value, string $column)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User sortByColumn(?\App\Enum\SortDirection $direction, string $column)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User sortByColumn(?string $column, ?\App\Enum\SortDirection $direction = \App\Enum\SortDirection::ASCENDING)
  */
 	class User extends \Eloquent implements \App\Interfaces\IUploadable, \App\Interfaces\Mediable {}
 }

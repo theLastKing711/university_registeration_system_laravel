@@ -5,6 +5,7 @@ namespace App\Data\Admin\Student\UpdateStudent\Request;
 use App\Data\Shared\Casts\ArrayToCollectionCast;
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Data\Shared\Swagger\Property\DateProperty;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -24,11 +25,11 @@ class UpdateStudentRequestData extends Data
         #[OAT\Property]
         public string $national_id,
         #[DateProperty]
-        public string $birthdate,
+        public Carbon $birthdate,
         #[DateProperty]
-        public ?string $enrollment_date,
+        public ?Carbon $enrollment_date,
         #[DateProperty]
-        public ?string $graduation_date,
+        public ?Carbon $graduation_date,
         #[OAT\Property]
         public string $phone_number,
         #[OAT\Property]

@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Data\Admin\OpenCourseRegisteration\GetOpenCourseRegisterations\Request;
+
+use App\Data\Shared\Pagination\QueryParameters\PaginationQueryParameterData;
+use OpenApi\Attributes as OAT;
+
+#[Oat\Schema()]
+class GetOpenCourseRegisterationsRequestData extends PaginationQueryParameterData
+{
+    public function __construct(
+        ?int $page,
+        ?int $perPage,
+        #[OAT\Property]
+
+        public ?int $department_Id,
+        public ?int $academic_year_semester_id,
+
+    ) {
+        parent::__construct($page, $perPage);
+    }
+}

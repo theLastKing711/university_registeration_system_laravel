@@ -15,7 +15,7 @@ class UpdateCourseController extends CourseController
     #[OAT\Patch(path: '/admins/courses/{id}', tags: ['adminsCourses'])]
     #[JsonRequestBody(UpdateCourseRequestData::class)]
     #[SuccessNoContentResponse]
-    public function __invoke(UpdateCourseRequestData $request, Course $course)
+    public function __invoke(UpdateCourseRequestData $request)
     {
 
         DB::transaction(function () use ($request) {
@@ -49,13 +49,13 @@ class UpdateCourseController extends CourseController
                 ->firstCrossListed()
                 ->sync(
                     $request
-                        ->cross_listed_courses_ids
+                        ->cross_listed_courses->pluck('id')
                 );
 
             $course
                 ->coursesPrerequisites()
                 ->sync(
-                    $request->prerequisites_ids
+                    $request->prerequisites->pluck('id')
                 );
 
         });

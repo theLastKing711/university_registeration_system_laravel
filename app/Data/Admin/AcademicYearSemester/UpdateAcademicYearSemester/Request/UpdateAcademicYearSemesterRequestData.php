@@ -2,8 +2,10 @@
 
 namespace App\Data\Admin\AcademicYearSemester\UpdateAcademicYearSemester\Request;
 
+use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Models\AcademicYearSemester;
 use Closure;
+use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
@@ -23,6 +25,9 @@ class UpdateAcademicYearSemesterRequestData extends Data
         public int $year,
         #[OAT\Property]
         public int $semester,
+        #[ArrayProperty(UpdateDepartmentData::class)]
+        /** @var Collection<UpdateDepartmentData> */
+        public Collection $departments,
 
         #[
             OAT\PathParameter(
@@ -40,6 +45,16 @@ class UpdateAcademicYearSemesterRequestData extends Data
 
     public static function rules(ValidationContext $context): array
     {
+
+        $academic_year_semester =
+                        AcademicYearSemester::query()
+                            ->where(
+                                'id',
+                                '!=',
+                                $context->payload['id']
+                            )
+                            ->first();
+
         return [
             'year' => [
                 function (string $attribute, mixed $value, Closure $fail) use ($context) {
@@ -67,6 +82,31 @@ class UpdateAcademicYearSemesterRequestData extends Data
 
                 },
             ],
+            // 'departments.*.id' => [
+            //     function (string $attribute, mixed $value, Closure $fail) use ($context) {
+
+            //         $academic_year_semester =
+            //             AcademicYearSemester::query()
+            //                 ->where(
+            //                     'id',
+            //                     $context->payload['id']
+            //                 )
+            //                 ->whereHas(
+            //                     'departments',
+            //                     fn ($query) => $query
+            //                         ->where(
+            //                             'departments.id',
+            //                             $value
+            //                         )
+            //                 )
+            //                 ->first();
+
+            //         if ($academic_year_semester) {
+            //             $fail('القسم مفتوح مسيقا');
+            //         }
+
+            //     },
+            // ],
         ];
     }
 }

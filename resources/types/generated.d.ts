@@ -9,10 +9,30 @@ export type DeleteAcademicYearSemesterRequestData = {
 id: number;
 };
 }
-declare namespace App.Data.Admin.AcademicYearSemester.GetcademicYearsSemesters.Response {
-export type GetAcademicYearsSemestersResponseData = {
+declare namespace App.Data.Admin.AcademicYearSemester.GetcademicYearsSemester.Request {
+export type GetAcademicYearsSemesterRequestData = {
+id: number;
+};
+}
+declare namespace App.Data.Admin.AcademicYearSemester.GetcademicYearsSemester.Response {
+export type GetAcademicYearsSemesterResponseData = {
+id: number;
 year: number;
 semester: number;
+departments: Array<App.Data.Admin.AcademicYearSemester.GetcademicYearsSemester.Response.GetDepartmentRegisteratioPeriodsData> | Array<any>;
+};
+export type GetDepartmentRegisteratioPeriodsData = {
+id: number;
+name: string;
+is_open_for_students: boolean | null;
+};
+}
+declare namespace App.Data.Admin.AcademicYearSemester.GetcademicYearsSemesters.Response {
+export type GetAcademicYearsSemestersResponseData = {
+id: number;
+year: number;
+semester: number;
+departments: Array<App.Data.Admin.Student.GetStudents.Response.GetDepartmentData> | Array<any>;
 };
 export type GetAcademicYearsSemestersResponsePaginationResultData = {
 data: Array<any>;
@@ -410,9 +430,13 @@ schoolFiles: Array<App.Data.Shared.Image.AntDesginImageResponseData> | Array<any
 };
 }
 declare namespace App.Data.Admin.Student.GetStudents.Response {
+export type GetDepartmentData = {
+id: number;
+name: string;
+};
 export type GetStudentsResponseData = {
 id: number;
-department_id: number | null;
+department_name: string;
 national_id: string | null;
 birthdate: string | null;
 enrollment_date: string | null;
@@ -442,7 +466,7 @@ phone_number: string;
 name: string;
 password: string;
 temporary_profile_picture_id: string | null;
-school_files_ids_to_add: Array<number> | Array<any>;
+school_files_ids_to_add: Array<number> | Array<any> | null;
 };
 }
 declare namespace App.Data.Admin.Student.UpdateStudent.Request {
@@ -454,7 +478,7 @@ enrollment_date: string | null;
 graduation_date: string | null;
 phone_number: string;
 name: string;
-password: string;
+password: string | null;
 temporary_profile_picture_id: number | null;
 school_files_ids_to_add: Array<number> | Array<any>;
 school_files_ids_to_delete: Array<number> | Array<any>;
@@ -582,8 +606,11 @@ public_id: string;
 };
 }
 declare namespace App.Data.Shared.Image {
+export type AntDesginImageResponse = {
+id: string;
+};
 export type AntDesginImageResponseData = {
-id: number;
+response: App.Data.Shared.Image.AntDesginImageResponse;
 uid: string;
 name: string;
 url: string;
@@ -592,8 +619,12 @@ size: number;
 percent: number | null;
 status: string | null;
 };
+export type AntDesginUploadFile = {
+uid: string;
+};
 export type UploadImageData = {
 file: any;
+uid: string;
 fileUploadDirectory: App.Enum.FileUploadDirectory;
 };
 }
@@ -736,6 +767,7 @@ declare namespace App.Enum {
 export type Currency = 'USD' | 'SYP';
 export type FileUploadDirectory = 'profile_picture' | 'school_files';
 export type Gender = 0 | 1;
+export type SortDirection = 'asc' | 'desc';
 }
 declare namespace App.Enum.Auth {
 export type RolesEnum = 'admin' | 'student' | 'courses registerer' | 'marks assigner';

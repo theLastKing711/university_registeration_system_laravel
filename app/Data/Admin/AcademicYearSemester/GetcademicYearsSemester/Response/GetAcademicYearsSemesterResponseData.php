@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Data\Admin\AcademicYearSemester\GetcademicYearsSemesters\Response;
+namespace App\Data\Admin\AcademicYearSemester\GetcademicYearsSemester\Response;
 
-use App\Data\Admin\Student\GetStudents\Response\GetDepartmentData;
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Models\AcademicYearSemester;
 use Illuminate\Support\Collection;
@@ -11,8 +10,8 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[Oat\Schema(schema: 'AdminAcademicYearSemesterGetcademicYearsSemestersResponseGetAcademicYearsSemestersResponseData')]
-class GetAcademicYearsSemestersResponseData extends Data
+#[Oat\Schema(schema: 'AdminAcademicYearSemesterGetcademicYearsSemesterResponseGetcademicYearsSemesterResponseData')]
+class GetAcademicYearsSemesterResponseData extends Data
 {
     public function __construct(
         #[OAT\Property]
@@ -21,8 +20,8 @@ class GetAcademicYearsSemestersResponseData extends Data
         public int $year,
         #[OAT\Property]
         public int $semester,
-        #[ArrayProperty(GetDepartmentData::class)]
-        /** @var Collection<GetDepartmentData> */
+        #[ArrayProperty(GetDepartmentRegisteratioPeriodsData::class)]
+        /** @var Collection<GetDepartmentRegisteratioPeriodsData> */
         public Collection $departments,
     ) {}
 
@@ -32,9 +31,9 @@ class GetAcademicYearsSemestersResponseData extends Data
             $academic_year_semester->id,
             $academic_year_semester->year,
             $academic_year_semester->semester,
-            GetDepartmentData::collect(
+            GetDepartmentRegisteratioPeriodsData::collect(
                 $academic_year_semester
-                    ->departments
+                    ->departmentRegisterationPeriods
             )
 
         );
