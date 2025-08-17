@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use OpenApi\Attributes as OAT;
 
-class gETClassroomController extends Controller
+class GetClassroomController extends Controller
 {
     #[OAT\Get(path: '/admins/classrooms/{id}', tags: ['adminsClassrooms'])]
     #[SuccessItemResponse(GetClassroomResponseData::class)]

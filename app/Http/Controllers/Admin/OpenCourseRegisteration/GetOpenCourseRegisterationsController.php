@@ -18,10 +18,10 @@ class GetOpenCourseRegisterationsController extends Controller
     #[QueryParameter('perPage', 'integer')]
     #[QueryParameter('department_Id', 'integer')]
     #[QueryParameter('academic_year_semester_id', 'integer')]
-
     #[SuccessItemResponse(GetOpenCourseRegisterationsResponsePaginationResultData::class)]
     public function __invoke(GetOpenCourseRegisterationsRequestData $request)
     {
+
         return GetOpenCourseRegisterationsResponseData::collect(
             OpenCourseRegisteration::query()
                 ->with(
@@ -29,6 +29,29 @@ class GetOpenCourseRegisterationsController extends Controller
                         'academicYearSemester',
                         'course',
                     ]
+                )
+                ->when(
+                    $request->department_id,
+                    fn ($query) => $query
+                        ->whereRelation(
+                            'course',
+                            'department_id',
+                            $request->department_id
+                        )
+                        ->orWhereRelation(
+                            'course',
+                            'courses.department_id',
+                            null
+                        )
+                )
+                ->when(
+                    $request->academic_year_semester_id,
+                    fn ($query) => $query
+                        ->where(
+                            'academic_year_semester_id',
+                            operator: $request->academic_year_semester_id
+                        )
+
                 )
                 ->paginate()
         );

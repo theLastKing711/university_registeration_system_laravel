@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AcademicYearSemester\CreateAcademicYearSemesterCo
 use App\Http\Controllers\Admin\AcademicYearSemester\DeleteAcademicYearSemesterController;
 use App\Http\Controllers\Admin\AcademicYearSemester\GetAcademicYearsSemesterController;
 use App\Http\Controllers\Admin\AcademicYearSemester\GetAcademicYearsSemestersController;
+use App\Http\Controllers\Admin\AcademicYearSemester\GetAcademicYearsSemestersListController;
 use App\Http\Controllers\Admin\AcademicYearSemester\OpenDepartmentsForRegisterationController;
 use App\Http\Controllers\Admin\AcademicYearSemester\UpdateAcademicYearSemesterController;
 use App\Http\Controllers\Admin\Admin\CreateAdminController;
@@ -15,11 +16,12 @@ use App\Http\Controllers\Admin\Admin\UpdateAdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\Classroom\CreateClassroomController;
 use App\Http\Controllers\Admin\Classroom\DeleteClassroomController;
-use App\Http\Controllers\Admin\Classroom\gETClassroomController;
+use App\Http\Controllers\Admin\Classroom\GetClassroomController;
 use App\Http\Controllers\Admin\Classroom\GetClassroomsController;
 use App\Http\Controllers\Admin\Classroom\UpdateClassroomController;
 use App\Http\Controllers\Admin\ClassroomCourseTeacher\AssignClassroomToCourseTeacherController;
 use App\Http\Controllers\Admin\ClassroomCourseTeacher\DeleteClassroomCourseTeacherController;
+use App\Http\Controllers\Admin\ClassroomCourseTeacher\GetClassroomCourseTeachersController;
 use App\Http\Controllers\Admin\ClassroomCourseTeacher\UpdateCourseTeacherClassroomController;
 use App\Http\Controllers\Admin\Course\CreateCourseController;
 use App\Http\Controllers\Admin\Course\DeleteCourseController;
@@ -47,6 +49,7 @@ use App\Http\Controllers\Admin\Exam\UpdateExamController;
 use App\Http\Controllers\Admin\Exam\UpdateStudentExamMarkController;
 use App\Http\Controllers\Admin\Image\UploadImageController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
+use App\Http\Controllers\Admin\OpenCourseRegisteration\CreateOpenCourseRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationsController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourseController;
@@ -65,6 +68,7 @@ use App\Http\Controllers\Admin\Teacher\DeleteTeacherController;
 use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
 use App\Http\Controllers\Admin\Teacher\GetTeacherController;
 use App\Http\Controllers\Admin\Teacher\GetTeachersController;
+use App\Http\Controllers\Admin\Teacher\GetTeachersListController;
 use App\Http\Controllers\Admin\Teacher\GetTeachersPaginatedController;
 use App\Http\Controllers\Admin\Teacher\UpdateTeacherController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksController;
@@ -97,6 +101,8 @@ Route::prefix('admins')
                     ]
                 )
                 ->group(function () {
+
+                    Route::get('list', GetAcademicYearsSemestersListController::class);
 
                     Route::get('', GetAcademicYearsSemestersController::class);
 
@@ -137,7 +143,7 @@ Route::prefix('admins')
 
                     Route::get('', GetClassroomsController::class);
 
-                    Route::get('{id}', gETClassroomController::class);
+                    Route::get('{id}', GetClassroomController::class);
 
                     Route::post('', CreateClassroomController::class);
 
@@ -214,6 +220,8 @@ Route::prefix('admins')
             // with course_teacher_id path route not set
             Route::prefix('classroom-course-teachers')
                 ->group(function (): void {
+
+                    Route::get('', GetClassroomCourseTeachersController::class);
 
                     Route::post('', AssignClassroomToCourseTeacherController::class)->middleware([
                         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
@@ -304,7 +312,12 @@ Route::prefix('admins')
 
                     Route::get('', GetOpenCourseRegisterationsController::class);
 
-                    Route::post('', OpenCourseForRegisterationController::class)
+                    // Route::post('', OpenCourseForRegisterationController::class)
+                    //     ->middleware(
+                    //         RolesEnum::oneOfRolesMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER)
+                    //     );
+
+                    Route::post('', CreateOpenCourseRegisterationController::class)
                         ->middleware(
                             RolesEnum::oneOfRolesMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER)
                         );
@@ -352,6 +365,8 @@ Route::prefix('admins')
                     Route::get('paginated', GetTeachersPaginatedController::class);
 
                     Route::get('', GetTeachersController::class);
+
+                    Route::get('list', GetTeachersListController::class);
 
                     Route::get('{id}', GetTeacherController::class);
 

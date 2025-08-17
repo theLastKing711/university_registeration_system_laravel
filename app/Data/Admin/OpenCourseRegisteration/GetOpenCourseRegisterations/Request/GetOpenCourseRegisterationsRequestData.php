@@ -11,9 +11,7 @@ class GetOpenCourseRegisterationsRequestData extends PaginationQueryParameterDat
     public function __construct(
         ?int $page,
         ?int $perPage,
-        #[OAT\Property]
-
-        public ?int $department_Id,
+        public ?int $department_id,
         public ?int $academic_year_semester_id,
 
     ) {

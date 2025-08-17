@@ -39,5 +39,9 @@ class CreateCourseRequestData extends Data
         /** @var Collection<IdData> */
         public Collection $prerequisites,
 
+        #[ArrayProperty(IdData::class)]
+        /** @var Collection<CreateTeacherData> */
+        public Collection $teachers,
+
     ) {}
 }

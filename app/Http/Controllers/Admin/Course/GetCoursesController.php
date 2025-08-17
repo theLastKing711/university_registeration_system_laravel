@@ -23,10 +23,18 @@ class GetCoursesController extends Controller
     {
         $courses =
             Course::query()
-                // ->where(
-                //     'department_id',
-                //     $request->department_id
-                // )
+                ->when(
+                    $request->department_id,
+                    fn ($query) => $query
+                        ->where(
+                            'department_id',
+                            $request->department_id
+                        )
+                        ->orWhere(
+                            'department_id',
+                            null
+                        )
+                )
                 ->paginate();
 
         return

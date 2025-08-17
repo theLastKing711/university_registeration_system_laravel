@@ -11,8 +11,8 @@ class GetCoursesRequestData extends PaginationQueryParameterData
     public function __construct(
         ?int $page,
         ?int $perPage,
-        #[OAT\Property]
         public ?int $department_id,
+        public ?int $academic_year_semester_id,
     ) {
         parent::__construct($page, $perPage);
     }
