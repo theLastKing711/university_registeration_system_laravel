@@ -4,6 +4,8 @@ namespace App\Data\Admin\ClassroomCourseTeacher\UpdateCourseTeacherClassroom\Req
 
 use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseTeacher;
+use App\Models\OpenCourseRegisteration;
+use App\Models\Teacher;
 use Closure;
 use Log;
 use OpenApi\Attributes as OAT;
@@ -30,11 +32,24 @@ class UpdateCourseTeacherClassroomRequestData extends Data
         ]
         public int $classroom_id,
 
+        // #[
+        //     OAT\Property,
+        //     Exists('course_teacher', 'id')
+        // ]
+        // public int $course_teacher_id,
+
         #[
             OAT\Property,
-            Exists('course_teacher', 'id')
+            Exists(OpenCourseRegisteration::class, 'id')
         ]
-        public int $course_teacher_id,
+        public int $course_id,
+
+        #[
+            OAT\Property,
+            Exists(Teacher::class, 'id')
+
+        ]
+        public int $teacher_id,
 
         #[OAT\Property, In([0, 1, 2, 3, 4, 5, 6, 7])]
         public int $day,
@@ -80,7 +95,11 @@ class UpdateCourseTeacherClassroomRequestData extends Data
 
                     $request_classroom_id = $context->payload['classroom_id'];
 
-                    $request_course_teacher_id = $context->payload['course_teacher_id'];
+                    // $request_course_teacher_id = $context->payload['course_teacher_id'];
+
+                    $request_course_id = $context->payload['course_id'];
+
+                    $request_teacher_id = $context->payload['teacher_id'];
 
                     $request_day = $context->payload['day'];
 
@@ -92,8 +111,10 @@ class UpdateCourseTeacherClassroomRequestData extends Data
                         CourseTeacher::query()
                             ->with('course')
                             ->firstWhere(
-                                'id',
-                                $request_course_teacher_id
+                                [
+                                    'course_id' => $request_course_id,
+                                    'teacher_id' => $request_teacher_id,
+                                ]
                             );
 
                     $course_year =

@@ -4,6 +4,8 @@ namespace App\Data\Admin\ClassroomCourseTeacher\AssignClassroomToCourseTeacher\R
 
 use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseTeacher;
+use App\Models\OpenCourseRegisteration;
+use App\Models\Teacher;
 use Closure;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\Validation\Bail;
@@ -22,17 +24,33 @@ class AssignClassroomToCourseTeacherRequestData extends Data
 {
     public function __construct(
 
+        #[OAT\Property]
+        public int $id,
+
         #[
             OAT\Property,
             Exists('classrooms', 'id')
         ]
         public int $classroom_id,
 
+        // #[
+        //     OAT\Property,
+        //     Exists('course_teacher', 'id')
+        // ]
+        // public int $course_teacher_id,
+
         #[
             OAT\Property,
-            Exists('course_teacher', 'id')
+            Exists(OpenCourseRegisteration::class, 'id')
         ]
-        public int $course_teacher_id,
+        public int $course_id,
+
+        #[
+            OAT\Property,
+            Exists(Teacher::class, 'id')
+
+        ]
+        public int $teacher_id,
 
         #[OAT\Property, In([0, 1, 2, 3, 4, 5, 6, 7])]
         public int $day,
@@ -63,7 +81,11 @@ class AssignClassroomToCourseTeacherRequestData extends Data
 
                     $request_classroom_id = $context->payload['classroom_id'];
 
-                    $request_course_teacher_id = $context->payload['course_teacher_id'];
+                    // $request_course_teacher_id = $context->payload['course_teacher_id'];
+
+                    $request_course_id = $context->payload['course_id'];
+
+                    $request_teacher_id = $context->payload['teacher_id'];
 
                     $request_day = $context->payload['day'];
 
@@ -71,12 +93,22 @@ class AssignClassroomToCourseTeacherRequestData extends Data
 
                     $request_to = $context->payload['to'];
 
+                    // $course_teacher =
+                    //     CourseTeacher::query()
+                    //         ->with('course')
+                    //         ->firstWhere(
+                    //             'id',
+                    //             $request_course_teacher_id
+                    //         );
+
                     $course_teacher =
                         CourseTeacher::query()
                             ->with('course')
                             ->firstWhere(
-                                'id',
-                                $request_course_teacher_id
+                                [
+                                    'course_id' => $request_course_id,
+                                    'teacher_id' => $request_teacher_id,
+                                ]
                             );
 
                     $course_year =

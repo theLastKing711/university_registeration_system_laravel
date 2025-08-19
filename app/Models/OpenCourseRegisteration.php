@@ -144,4 +144,33 @@ class OpenCourseRegisteration extends Pivot
     {
         $query->where('votes', '>', 100);
     }
+
+    #[Scope]
+    protected function FilterByDepartmentAndAcademicYearSemesterId(Builder $query, ?int $department_id, ?int $academic_year_semester_id): void
+    {
+        $query
+            ->when(
+                $academic_year_semester_id,
+                fn ($query) => $query
+                    ->where(
+                        'academic_year_semester_id',
+                        operator: $academic_year_semester_id
+                    )
+
+            )
+            ->when(
+                $department_id,
+                fn ($query) => $query
+                    ->whereRelation(
+                        'course',
+                        'department_id',
+                        $department_id
+                    )
+                    ->orWhereRelation(
+                        'course',
+                        'courses.department_id',
+                        null
+                    )
+            );
+    }
 }

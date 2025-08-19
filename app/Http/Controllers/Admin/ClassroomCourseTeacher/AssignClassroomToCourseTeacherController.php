@@ -18,7 +18,13 @@ class AssignClassroomToCourseTeacherController extends Controller
     {
 
         CourseTeacher::query()
-            ->firstWhere('id', $request->course_teacher_id)
+            // ->firstWhere('id', $request->course_teacher_id)
+            ->firstWhere(
+                [
+                    'course_id' => $request->course_id,
+                    'teacher_id' => $request->teacher_id,
+                ]
+            )
             ->classrooms()
             ->attach(
                 $request->classroom_id,

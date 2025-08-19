@@ -13,7 +13,7 @@ use OpenApi\Attributes as OAT;
 
 class GetOpenCourseRegisterationsController extends Controller
 {
-    #[OAT\Get(path: '/admins/opencourseregisterations', tags: ['adminsOpenCourseRegisterations'])]
+    #[OAT\Get(path: '/admins/open-course-registerations', tags: ['adminsOpenCourseRegisterations'])]
     #[QueryParameter('page', 'integer')]
     #[QueryParameter('perPage', 'integer')]
     #[QueryParameter('department_Id', 'integer')]
@@ -30,29 +30,7 @@ class GetOpenCourseRegisterationsController extends Controller
                         'course',
                     ]
                 )
-                ->when(
-                    $request->department_id,
-                    fn ($query) => $query
-                        ->whereRelation(
-                            'course',
-                            'department_id',
-                            $request->department_id
-                        )
-                        ->orWhereRelation(
-                            'course',
-                            'courses.department_id',
-                            null
-                        )
-                )
-                ->when(
-                    $request->academic_year_semester_id,
-                    fn ($query) => $query
-                        ->where(
-                            'academic_year_semester_id',
-                            operator: $request->academic_year_semester_id
-                        )
-
-                )
+                ->FilterByDepartmentAndAcademicYearSemesterId($request->department_id, $request->academic_year_semester_id)
                 ->paginate()
         );
     }

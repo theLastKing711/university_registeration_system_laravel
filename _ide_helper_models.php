@@ -678,6 +678,7 @@ namespace App\Models{
  * @method static Builder<static>|OpenCourseRegisteration whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property string $price_in_usd
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|OpenCourseRegisteration FilterByDepartmentAndAcademicYearSemesterId(?int $department_id, ?int $academic_year_semester_id)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|OpenCourseRegisteration getStudents(int $id)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|OpenCourseRegisteration wherePriceInUsd($value)
  */
