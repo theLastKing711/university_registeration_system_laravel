@@ -5,7 +5,11 @@ namespace App\Data\Admin\Exam\CreateExam\Request;
 use App\Data\Shared\Swagger\Property\DateProperty;
 use App\Models\CourseTeacher;
 use App\Models\Exam;
+use App\Models\OpenCourseRegisteration;
+use App\Models\Teacher;
+use Carbon\Carbon;
 use Closure;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
 use Spatie\LaravelData\Attributes\Validation\Exists;
@@ -18,11 +22,21 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class CreateExamRequestData extends Data
 {
     public function __construct(
+        // #[
+        //     OAT\Property,
+        //     Exists('course_teacher', 'id')
+        // ]
+        // public int $course_teacher_id,
         #[
             OAT\Property,
-            Exists('course_teacher', 'id')
+            Exists(OpenCourseRegisteration::class, 'id')
         ]
-        public int $course_teacher_id,
+        public int $course_id,
+        #[
+            OAT\Property,
+            Exists(Teacher::class, 'id')
+        ]
+        public int $teacher_id,
         #[
             OAT\Property,
             Exists('classrooms', 'id')
@@ -30,8 +44,10 @@ class CreateExamRequestData extends Data
         public int $classroom_id,
         #[OAT\Property]
         public int $max_mark,
-        #[DateProperty]
-        public string $date,
+        #[
+            DateProperty,
+        ]
+        public Carbon $date,
         #[
             OAT\Property(default: '08:00:00'),
             DateFormat('H:i:s')
@@ -49,6 +65,9 @@ class CreateExamRequestData extends Data
 
     public static function rules(ValidationContext $context): array
     {
+
+        Log::info('hello world');
+
         return [
             'from' => [
 
@@ -56,9 +75,15 @@ class CreateExamRequestData extends Data
 
                     $request_classroom_id = $context->payload['classroom_id'];
 
-                    $request_course_teacher_id = $context->payload['course_teacher_id'];
+                    // $request_course_teacher_id = $context->payload['course_teacher_id'];
 
-                    $request_date = $context->payload['date'];
+                    $request_course_id = $context->payload['course_id'];
+
+                    $request_teacher_id = $context->payload['teacher_id'];
+
+                    // $request_date = Carbon::createFromFormat('Y-m-d', $context->payload['date']);
+
+                    $request_date = Carbon::parse($context->payload['date']);
 
                     $request_from = $context->payload['from'];
 
@@ -72,28 +97,24 @@ class CreateExamRequestData extends Data
                         CourseTeacher::query()
                             ->with('course')
                             ->firstWhere(
-                                'id',
-                                $request_course_teacher_id
+                                [
+                                    'course_id' => $request_course_id,
+                                    'teacher_id' => $request_teacher_id,
+                                ]
                             );
 
-                    $course_year = $course_teacher->course->academicYearSemester->year;
-
-                    $course_semester = $course_teacher->course->academicYearSemester->semester;
+                    $course_academic_year_semester_id =
+                        $course_teacher->course->academic_year_semester_id;
 
                     /** @var Exam|null $exams_with_overlapped_timing */
                     $exams_with_overlapped_timing = Exam::query()
                         ->with('courseTeacher.course.course')
                         ->where('classroom_id', $request_classroom_id)
-                        ->where('date', $request_date)
+                        ->whereDate('date', $request_date)
                         ->whereRelation(
-                            'courseTeacher.course.academicYearSemester',
-                            'year',
-                            $course_year
-                        )
-                        ->whereRelation(
-                            'courseTeacher.course.academicYearSemester',
-                            'semester',
-                            $course_semester
+                            'courseTeacher.course',
+                            'academic_year_semester_id',
+                            $course_academic_year_semester_id
                         )
                         ->whereNested(function ($query) use ($request_from, $request_to) {
                             $query

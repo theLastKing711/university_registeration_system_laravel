@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\Exam\AssignMarkToStudentController;
 use App\Http\Controllers\Admin\Exam\CreateExamController;
 use App\Http\Controllers\Admin\Exam\DeleteExamController;
 use App\Http\Controllers\Admin\Exam\GetExamController;
+use App\Http\Controllers\Admin\Exam\GetExamsController;
 use App\Http\Controllers\Admin\Exam\UpdateExamController;
 use App\Http\Controllers\Admin\Exam\UpdateStudentExamMarkController;
 use App\Http\Controllers\Admin\Image\UploadImageController;
@@ -288,6 +289,9 @@ Route::prefix('admins')
                     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
                 ])
                 ->group(function () {
+
+                    Route::get('', GetExamsController::class);
+
                     Route::get('{id}', GetExamController::class);
 
                     Route::post('', CreateExamController::class);

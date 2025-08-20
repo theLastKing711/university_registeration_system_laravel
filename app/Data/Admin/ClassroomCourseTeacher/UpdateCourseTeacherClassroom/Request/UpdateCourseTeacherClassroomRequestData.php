@@ -117,11 +117,8 @@ class UpdateCourseTeacherClassroomRequestData extends Data
                                 ]
                             );
 
-                    $course_year =
-                        $course_teacher->course->academicYearSemester->year;
-
-                    $course_semester =
-                        $course_teacher->course->academicYearSemester->semester;
+                    $course_academic_year_semester_id =
+                        $course_teacher->course->academic_year_semester_id;
 
                     $overlapped_time_classrooms = ClassroomCourseTeacher::query()
                         ->where(
@@ -131,13 +128,8 @@ class UpdateCourseTeacherClassroomRequestData extends Data
                         )
                         ->whereRelation(
                             'courseTeacher.course.academicYearSemester',
-                            'year',
-                            $course_year
-                        )
-                        ->whereRelation(
-                            'courseTeacher.course.academicYearSemester',
-                            'semester',
-                            $course_semester
+                            'id',
+                            $course_academic_year_semester_id
                         )
                         ->where('classroom_id', $request_classroom_id)
                         ->where('day', $request_day)

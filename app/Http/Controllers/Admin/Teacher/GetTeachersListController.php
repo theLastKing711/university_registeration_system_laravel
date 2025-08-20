@@ -15,6 +15,7 @@ class GetTeachersListController extends Controller
     #[SuccessListResponse(GetTeachersListResponseData::class)]
     public function __invoke(GetTeachersListRequestData $request)
     {
+
         return
             GetTeachersListResponseData::collect(
                 Teacher::query()

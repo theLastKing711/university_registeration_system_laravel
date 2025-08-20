@@ -6,7 +6,7 @@ use App\Data\Admin\Course\GetCoursesList\Request\GetCoursesListRequestData;
 use App\Data\Admin\Course\GetCoursesList\Response\GetCoursesListResponseData;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Course;
+use App\Models\OpenCourseRegisteration;
 use OpenApi\Attributes as OAT;
 
 class GetCoursesListController extends Controller
@@ -15,20 +15,34 @@ class GetCoursesListController extends Controller
     #[SuccessListResponse(GetCoursesListResponseData::class)]
     public function __invoke(GetCoursesListRequestData $request)
     {
+
         return GetCoursesListResponseData::collect(
-            Course::query()
+            OpenCourseRegisteration::query()
                 ->select([
                     'id',
-                    'name',
+                    'course_id',
                 ])
+                ->with(
+                    'course:id,name'
+                )
+                ->when(
+                    $request->academic_year_semester_id,
+                    fn ($query) => $query
+                        ->where(
+                            'academic_year_semester_id',
+                            $request->academic_year_semester_id
+                        )
+                )
                 ->when(
                     $request->department_id,
                     fn ($query) => $query
-                        ->where(
-                            'department_Id',
+                        ->whereRelation(
+                            'course',
+                            'department_id',
                             $request->department_id
                         )
-                        ->orWhere(
+                        ->orWhereRelation(
+                            'course',
                             'department_id',
                             null
                         )

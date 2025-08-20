@@ -17,8 +17,6 @@ class GetClassroomCourseTeachersController extends Controller
     {
         return GetClassroomCourseTeachersResponseData::collect(
             ClassroomCourseTeacher::query()
-                // ->withAggregate('courseTeacher.course', 'name')
-                // ->withAggregate('courseTeacher.course', 'id')
                 ->with([
                     'courseTeacher' => [
                         'course.course',

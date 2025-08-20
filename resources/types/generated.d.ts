@@ -9,6 +9,12 @@ export type DeleteAcademicYearSemesterRequestData = {
 id: number;
 };
 }
+declare namespace App.Data.Admin.AcademicYearSemester.GetAcademicYearsSemestersList.Response {
+export type GetAcademicYearsSemestersListResponseData = {
+id: number;
+title: string;
+};
+}
 declare namespace App.Data.Admin.AcademicYearSemester.GetcademicYearsSemester.Request {
 export type GetAcademicYearsSemesterRequestData = {
 id: number;
@@ -51,7 +57,12 @@ declare namespace App.Data.Admin.AcademicYearSemester.UpdateAcademicYearSemester
 export type UpdateAcademicYearSemesterRequestData = {
 year: number;
 semester: number;
+departments: Array<App.Data.Admin.AcademicYearSemester.UpdateAcademicYearSemester.Request.UpdateDepartmentData> | Array<any>;
 id: number;
+};
+export type UpdateDepartmentData = {
+id: number;
+is_open_for_students: boolean | null;
 };
 }
 declare namespace App.Data.Admin.Admin.CreateAdmin.Request {
@@ -93,6 +104,16 @@ per_page: number;
 total: number;
 };
 }
+declare namespace App.Data.Admin.Admin.GetOpenCourseRegisterations.Response {
+export type GetOpenCourseRegisterationsResponseData = {
+};
+export type GetOpenCourseRegisterationsResponsePaginationResultData = {
+data: Array<any>;
+current_page: number;
+per_page: number;
+total: number;
+};
+}
 declare namespace App.Data.Admin.Admin.UpdateAdmin.Request {
 export type UpdateAdminRequestData = {
 name: string;
@@ -104,10 +125,61 @@ declare namespace App.Data.Admin.Admin.UpdateAdmin.Response {
 export type UpdateAdminResponseData = {
 };
 }
+declare namespace App.Data.Admin.Classroom.CreateClassroom.Request {
+export type CreateClassroomRequestData = {
+name: string;
+};
+}
+declare namespace App.Data.Admin.Classroom.DeleteClassroom.Request {
+export type DeleteClassroomRequestData = {
+id: number;
+};
+}
+declare namespace App.Data.Admin.Classroom.GetClassroom.Request {
+export type GetClassroomRequestData = {
+id: number;
+};
+}
+declare namespace App.Data.Admin.Classroom.GetClassroom.Response {
+export type GetClassroomResponseData = {
+id: number;
+name: string;
+};
+}
+declare namespace App.Data.Admin.Classroom.GetClassroomList.Request {
+export type GetClassroomListRequestData = {
+};
+}
+declare namespace App.Data.Admin.Classroom.GetClassroomList.Response {
+export type GetClassroomListResponseData = {
+id: number;
+name: string;
+};
+}
+declare namespace App.Data.Admin.Classroom.GetClassrooms.Response {
+export type GetClassroomsResponseData = {
+id: number;
+name: string;
+};
+export type GetClassroomsResponsePaginationResultData = {
+data: Array<any>;
+current_page: number;
+per_page: number;
+total: number;
+};
+}
+declare namespace App.Data.Admin.Classroom.UpdateClassroom.Request {
+export type UpdateClassroomRequestData = {
+name: string;
+id: number;
+};
+}
 declare namespace App.Data.Admin.ClassroomCourseTeacher.AssignClassroomToCourseTeacher.Request {
 export type AssignClassroomToCourseTeacherRequestData = {
+id: number;
 classroom_id: number;
-course_teacher_id: number;
+course_id: number;
+teacher_id: number;
 day: number;
 from: string;
 to: string;
@@ -118,10 +190,43 @@ export type DeleteClassroomCourseTeacherRequestData = {
 id: number;
 };
 }
+declare namespace App.Data.Admin.ClassroomCourseTeacher.GetClassroomCourseTeacher.Request {
+export type GetClassroomCourseTeacherRequestData = {
+id: number;
+};
+}
+declare namespace App.Data.Admin.ClassroomCourseTeacher.GetClassroomCourseTeacher.Response {
+export type GetClassroomCourseTeacherResponseData = {
+classroom_id: number;
+course_id: number;
+teacher_id: number;
+day: number;
+from: string;
+to: string;
+};
+}
+declare namespace App.Data.Admin.ClassroomCourseTeacher.GetClassroomCourseTeachers.Request {
+export type GetClassroomCourseTeachersRequestData = {
+};
+}
+declare namespace App.Data.Admin.ClassroomCourseTeacher.GetClassroomCourseTeachers.Response {
+export type GetClassroomCourseTeachersResponseData = {
+id: number;
+classroom_id: number;
+course_id: number;
+course_name: string;
+teacher_id: number;
+teacher_name: string;
+day: number;
+from: string;
+to: string;
+};
+}
 declare namespace App.Data.Admin.ClassroomCourseTeacher.UpdateCourseTeacherClassroom.Request {
 export type UpdateCourseTeacherClassroomRequestData = {
 classroom_id: number;
-course_teacher_id: number;
+course_id: number;
+teacher_id: number;
 day: number;
 from: string;
 to: string;
@@ -136,6 +241,14 @@ code: string;
 is_active: boolean;
 credits: number;
 open_for_students_in_year: number;
+cross_listed_courses: Array<App.Data.Shared.IdData> | Array<any>;
+prerequisites: Array<App.Data.Shared.IdData> | Array<any>;
+teachers: Array<any> | Array<any>;
+};
+}
+declare namespace App.Data.Admin.Course.DeleteCourse.Request {
+export type DeleteCourseRequestData = {
+id: number;
 };
 }
 declare namespace App.Data.Admin.Course.DeleteCourses.Request {
@@ -156,7 +269,6 @@ code: string;
 is_active: boolean;
 credits: number;
 open_for_students_in_year: number;
-created_at: string;
 cross_listed_courses: Array<App.Data.Admin.Course.GetCourse.Response.CrossListedItemData> | Array<any>;
 prerequisites: Array<App.Data.Admin.Course.GetCourse.Response.PrerequisiteItemData> | Array<any>;
 };
@@ -188,6 +300,17 @@ per_page: number;
 total: number;
 };
 }
+declare namespace App.Data.Admin.Course.GetCoursesList.Request {
+export type GetCoursesListRequestData = {
+department_id: number | null;
+};
+}
+declare namespace App.Data.Admin.Course.GetCoursesList.Response {
+export type GetCoursesListResponseData = {
+id: number;
+name: string;
+};
+}
 declare namespace App.Data.Admin.Course.UpdateCourse.Request.Admin.Course {
 export type UpdateCourseRequestData = {
 department_id: number;
@@ -196,8 +319,8 @@ code: string;
 is_active: boolean;
 credits: number;
 open_for_students_in_year: number;
-cross_listed_courses_ids: Array<any>;
-prerequisites_ids: Array<any>;
+cross_listed_courses: Array<App.Data.Shared.IdData> | Array<any>;
+prerequisites: Array<App.Data.Shared.IdData> | Array<any>;
 id: number;
 };
 }
@@ -310,7 +433,8 @@ mark: number;
 }
 declare namespace App.Data.Admin.Exam.CreateExam.Request {
 export type CreateExamRequestData = {
-course_teacher_id: number;
+course_id: number;
+teacher_id: number;
 classroom_id: number;
 max_mark: number;
 date: string;
@@ -342,6 +466,26 @@ from: string;
 to: string;
 is_main_exam: boolean;
 classroom: App.Data.Admin.Exam.GetExam.Response.ClassroomItemData;
+};
+}
+declare namespace App.Data.Admin.Exam.GetExams.Response {
+export type GetExamsResponseData = {
+id: number;
+course_name: string;
+teacher_name: string;
+course_teacher_id: number;
+classroom_id: number;
+classroom_name: string;
+max_mark: string;
+from: string;
+to: string;
+is_main_exam: boolean;
+};
+export type GetExamsResponsePaginationResultData = {
+data: Array<any>;
+current_page: number;
+per_page: number;
+total: number;
 };
 }
 declare namespace App.Data.Admin.Exam.UpdateExam.Request {
@@ -376,6 +520,45 @@ export type AssignTeacherToCourseRequestData = {
 teacher_id: number;
 is_main_teacher: boolean;
 id: number;
+};
+}
+declare namespace App.Data.Admin.OpenCourseRegisteration.CreateOpenCourseRegisteration.Request {
+export type CreateOpenCourseRegisterationRequestData = {
+course_id: number;
+academic_year_semester_id: number;
+price_in_usd: number;
+teachers: Array<App.Data.Admin.OpenCourseRegisteration.CreateOpenCourseRegisteration.Request.CreateTeacherData> | Array<any>;
+};
+export type CreateTeacherData = {
+id: number;
+is_main_teacher: boolean;
+};
+}
+declare namespace App.Data.Admin.OpenCourseRegisteration.GetOpenCourseRegisterationList.Request {
+export type GetOpenCourseRegisterationListRequestData = {
+department_id: number | null;
+academic_year_semester_id: number | null;
+};
+}
+declare namespace App.Data.Admin.OpenCourseRegisteration.GetOpenCourseRegisterationList.Response {
+export type GetOpenCourseRegisterationListResponseData = {
+};
+}
+declare namespace App.Data.Admin.OpenCourseRegisteration.GetOpenCourseRegisterations.Response {
+export type GetOpenCourseRegisterationsResponseData = {
+id: number;
+course_id: number;
+course_name: string;
+academic_year_semester_id: number;
+year: number;
+semester: number;
+price_in_usd: string;
+};
+export type GetOpenCourseRegisterationsResponsePaginationResultData = {
+data: Array<any>;
+current_page: number;
+per_page: number;
+total: number;
 };
 }
 declare namespace App.Data.Admin.OpenCourseRegisteration.OpenCourseForRegisteration.Request {
@@ -529,6 +712,19 @@ name: string;
 }
 declare namespace App.Data.Admin.Teacher.GetTeachers.Response {
 export type GetTeachersResponseData = {
+ID: number;
+name: string | null;
+};
+}
+declare namespace App.Data.Admin.Teacher.GetTeachersList.Request {
+export type GetTeachersListRequestData = {
+course_id: number | null;
+};
+}
+declare namespace App.Data.Admin.Teacher.GetTeachersList.Response {
+export type GetTeachersListResponseData = {
+id: number;
+name: string;
 };
 }
 declare namespace App.Data.Admin.Teacher.GetTeachersPaginated.Response {
@@ -562,6 +758,9 @@ ids: Array<any>;
 };
 }
 declare namespace App.Data.Shared {
+export type IdData = {
+id: number;
+};
 export type ListData = {
 id: number;
 title: string;

@@ -2,6 +2,7 @@
 
 namespace App\Data\Admin\Course\GetCoursesList\Response;
 
+use App\Models\OpenCourseRegisteration;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -17,4 +18,11 @@ class GetCoursesListResponseData extends Data
         public string $name,
     ) {}
 
+    public static function fromModel(OpenCourseRegisteration $open_course): self
+    {
+        return new self(
+            $open_course->id,
+            $open_course->course->name
+        );
+    }
 }

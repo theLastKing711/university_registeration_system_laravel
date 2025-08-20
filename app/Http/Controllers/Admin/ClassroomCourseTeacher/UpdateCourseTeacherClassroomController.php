@@ -26,7 +26,6 @@ class UpdateCourseTeacherClassroomController extends ClassroomCourseTeacherContr
                         'teacher_id' => $request->teacher_id,
 
                     ]
-
                 )
                 ->id;
 

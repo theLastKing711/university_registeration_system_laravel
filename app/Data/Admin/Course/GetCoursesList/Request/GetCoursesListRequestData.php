@@ -12,6 +12,7 @@ class GetCoursesListRequestData extends Data
 {
     public function __construct(
         public ?int $department_id,
+        public ?int $academic_year_semester_id,
     ) {}
 
 }
