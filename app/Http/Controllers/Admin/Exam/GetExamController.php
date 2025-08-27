@@ -16,22 +16,25 @@ class GetExamController extends Controller
     public function __invoke(GetExamRequestData $request)
     {
 
-        $course_exams =
+        return GetExamResponseData::from(
             Exam::query()
                 ->with(
                     [
                         'classroom',
                         'courseTeacher' => [
+                            'course' => [
+                                'course',
+                            ],
                             'teacher',
                         ],
+                        'examStudents',
                     ]
                 )
                 ->firstWhere(
-                    'course_teacher_id',
+                    'id',
                     $request->id
-                );
-
-        return $course_exams;
+                )
+        );
 
     }
 }

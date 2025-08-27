@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Course;
 use App\Models\OpenCourseRegisteration;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\DB;
 
 class OpenCourseRegisterationSeeder extends Seeder
@@ -260,6 +261,11 @@ class OpenCourseRegisterationSeeder extends Seeder
                                //    'semester' => fake()->numberBetween(0, 2),
                            ]);
                });
+
+        Context::add(
+            OpenCourseRegisteration::class,
+            OpenCourseRegisteration::all()
+        );
 
         // $courses = collect(self::OPEN_COURSE_REGISTERATIONS);
 

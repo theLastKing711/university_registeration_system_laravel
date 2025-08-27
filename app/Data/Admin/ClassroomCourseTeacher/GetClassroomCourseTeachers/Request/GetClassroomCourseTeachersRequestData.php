@@ -11,6 +11,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class GetClassroomCourseTeachersRequestData extends Data
 {
     public function __construct(
-
+        #[OAT\Property]
+        public ?int $department_id,
+        #[OAT\Property]
+        public ?int $academic_year_semester_id,
     ) {}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationList\Request;
+namespace App\Data\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationsList\Request;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
@@ -8,7 +8,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema(schema: 'AdminOpenCourseRegisterationGetOpenCourseRegisterationListRequestGetOpenCourseRegisterationListRequestData')]
-class GetOpenCourseRegisterationListRequestData extends Data
+class GetOpenCourseRegisterationsListRequestData extends Data
 {
     public function __construct(
         #[OAT\Property]

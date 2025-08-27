@@ -23,6 +23,24 @@ class GetClassroomCourseTeachersController extends Controller
                         'teacher',
                     ],
                 ])
+                ->when(
+                    $request->academic_year_semester_id,
+                    fn ($query) => $query
+                        ->orWhereRelation(
+                            'courseTeacher.course',
+                            'academic_year_semester_id',
+                            $request->academic_year_semester_id
+                        )
+                )
+                ->when(
+                    $request->department_id,
+                    fn ($query) => $query
+                        ->whereRelation(
+                            'courseTeacher.course.course',
+                            'department_id',
+                            $request->department_id
+                        )
+                )
                 ->paginate()
         );
     }

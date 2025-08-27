@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin\ClassroomCourseTeacher;
 
-use App\Data\Admin\ClassroomCourseTeacher\AssignClassroomToCourseTeacher\Request\AssignClassroomToCourseTeacherRequestData;
+use App\Data\Admin\ClassroomCourseTeacher\CreateClassroomCourseTeacher\Request\CreateClassroomCourseTeacherRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
 use App\Models\CourseTeacher;
 use OpenApi\Attributes as OAT;
 
-class AssignClassroomToCourseTeacherController extends Controller
+class CreateClassroomCourseTeacherController extends Controller
 {
     #[OAT\Post(path: '/admins/classroom-course-teachers', tags: ['adminsClassroomCourseTeachers'])]
-    #[JsonRequestBody(AssignClassroomToCourseTeacherRequestData::class)]
+    #[JsonRequestBody(CreateClassroomCourseTeacherRequestData::class)]
     #[SuccessNoContentResponse]
-    public function __invoke(AssignClassroomToCourseTeacherRequestData $request)
+    public function __invoke(CreateClassroomCourseTeacherRequestData $request)
     {
 
         CourseTeacher::query()

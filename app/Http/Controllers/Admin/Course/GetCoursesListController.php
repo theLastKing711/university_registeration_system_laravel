@@ -6,7 +6,7 @@ use App\Data\Admin\Course\GetCoursesList\Request\GetCoursesListRequestData;
 use App\Data\Admin\Course\GetCoursesList\Response\GetCoursesListResponseData;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
 use App\Http\Controllers\Controller;
-use App\Models\OpenCourseRegisteration;
+use App\Models\Course;
 use OpenApi\Attributes as OAT;
 
 class GetCoursesListController extends Controller
@@ -17,36 +17,40 @@ class GetCoursesListController extends Controller
     {
 
         return GetCoursesListResponseData::collect(
-            OpenCourseRegisteration::query()
+            Course::query()
                 ->select([
                     'id',
-                    'course_id',
+                    'name',
                 ])
-                ->with(
-                    'course:id,name'
-                )
-                ->when(
-                    $request->academic_year_semester_id,
-                    fn ($query) => $query
-                        ->where(
-                            'academic_year_semester_id',
-                            $request->academic_year_semester_id
-                        )
-                )
-                ->when(
-                    $request->department_id,
-                    fn ($query) => $query
-                        ->whereRelation(
-                            'course',
-                            'department_id',
-                            $request->department_id
-                        )
-                        ->orWhereRelation(
-                            'course',
-                            'department_id',
-                            null
-                        )
-                )
+                // ->select([
+                //     'id',
+                //     'course_id',
+                // ])
+                // ->with(
+                //     'course:id,name'
+                // )
+                // ->when(
+                //     $request->academic_year_semester_id,
+                //     fn ($query) => $query
+                //         ->where(
+                //             'academic_year_semester_id',
+                //             $request->academic_year_semester_id
+                //         )
+                // )
+                // ->when(
+                //     $request->department_id,
+                //     fn ($query) => $query
+                //         ->whereRelation(
+                //             'course',
+                //             'department_id',
+                //             $request->department_id
+                //         )
+                //         ->orWhereRelation(
+                //             'course',
+                //             'department_id',
+                //             null
+                //         )
+                // )
                 ->get()
         );
     }

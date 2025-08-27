@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enum\Auth\RolesEnum;
 use App\Models\OpenCourseRegisteration;
 use App\Models\User;
 use Hash;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Context;
 
 class StudentSeeder extends Seeder
 {
@@ -26,7 +28,7 @@ class StudentSeeder extends Seeder
             ->withProfilePicture()
             ->enrolledInYear(2014)
             ->unGraduated()
-            ->withCourses()
+            // ->withCourses()
             ->count(count: 3)
             // ->hasAttached(
             //     $it_courses,
@@ -45,7 +47,7 @@ class StudentSeeder extends Seeder
             ->withProfilePicture()
             ->enrolledInYear(2015)
             ->unGraduated()
-            ->withCourses()
+            // ->withCourses()
             ->count(count: 1)
             ->create();
 
@@ -55,6 +57,14 @@ class StudentSeeder extends Seeder
         //     ->graduatedInYear(2018)
         //     ->count(10)
         //     ->create();
+
+        Context::add(
+            'students',
+            User::query()
+                ->role(RolesEnum::STUDENT)
+                ->get()
+
+        );
 
     }
 }

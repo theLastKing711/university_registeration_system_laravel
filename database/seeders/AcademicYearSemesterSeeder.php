@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\AcademicYearSemester;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Context;
 
 class AcademicYearSemesterSeeder extends Seeder
 {
@@ -15,6 +16,11 @@ class AcademicYearSemesterSeeder extends Seeder
         AcademicYearSemester::factory()
             ->OpenFromYearToYearForEachSequence(2014, 2016)
             ->create();
+
+        Context::add(
+            'academic_year_semesters',
+            AcademicYearSemester::all()
+        );
 
     }
 }

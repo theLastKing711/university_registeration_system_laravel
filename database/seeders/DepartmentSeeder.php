@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\OpenCourseRegisteration;
+use Context;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -203,6 +204,11 @@ class DepartmentSeeder extends Seeder
             $departments
                 ->pluck('data')
                 ->toArray()
+        );
+
+        Context::add(
+            'departments',
+            Department::all()
         );
 
         // $departments = collect(self::DEPARTMENTS);

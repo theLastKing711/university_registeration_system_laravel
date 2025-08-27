@@ -19,5 +19,10 @@ return [
         'unfinished_required_prerequisites' => ':courses_codes لا يمكن التسجيل بالمقرر بسسب عدم إنهاء المتطلبات التالية للمقرر',
         'duplicate_registered_course' => 'أكثر من مرة واحدة,:course_code لا يمكن التسجيل بالمقرر',
     ],
+    'admin' => [
+        'open_coruse_registeraions' => [
+            'course_opened_previously' => 'المقرر تم فتحه مسبقاََ.',
+        ],
 
+    ],
 ];

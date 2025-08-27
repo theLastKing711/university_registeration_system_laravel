@@ -9,7 +9,6 @@ use App\Models\OpenCourseRegisteration;
 use App\Models\Teacher;
 use Carbon\Carbon;
 use Closure;
-use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
 use Spatie\LaravelData\Attributes\Validation\Exists;
@@ -65,8 +64,6 @@ class CreateExamRequestData extends Data
 
     public static function rules(ValidationContext $context): array
     {
-
-        Log::info('hello world');
 
         return [
             'from' => [

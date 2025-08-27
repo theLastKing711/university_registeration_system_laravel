@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\ClassroomCourseTeacher\AssignClassroomToCourseTeacher\Request;
+namespace App\Data\Admin\ClassroomCourseTeacher\CreateClassroomCourseTeacher\Request;
 
 use App\Models\ClassroomCourseTeacher;
 use App\Models\CourseTeacher;
@@ -20,13 +20,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema()]
-class AssignClassroomToCourseTeacherRequestData extends Data
+class CreateClassroomCourseTeacherRequestData extends Data
 {
     public function __construct(
-
-        #[OAT\Property]
-        public int $id,
-
         #[
             OAT\Property,
             Exists('classrooms', 'id')
