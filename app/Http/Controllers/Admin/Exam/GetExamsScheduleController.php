@@ -114,14 +114,14 @@ class GetExamsScheduleController extends Controller
 
         }
 
-        Pdf::view(
-            'pdf.exams-schedule',
-            [
-                'table_headers' => $table_headers,
-                'table_data' => $exam_schedule_table,
-            ]
-        )
-            ->save(storage_path().'/invoice.pdf');
+        // Pdf::view(
+        //     'pdf.exams-schedule',
+        //     [
+        //         'table_headers' => $table_headers,
+        //         'table_data' => $exam_schedule_table,
+        //     ]
+        // )
+        //     ->save(storage_path().'/invoice.pdf');
 
         return
             Pdf::view(
@@ -131,7 +131,7 @@ class GetExamsScheduleController extends Controller
                     'table_data' => $exam_schedule_table,
                 ]
             )
-                ->name('exams_test.pdf')
-                ->download();
+                ->name('exam Schedule '.Carbon::now()->format('Y-m-d H:i:s').'.pdf')
+                ->download('exams_test.pdf');
     }
 }
