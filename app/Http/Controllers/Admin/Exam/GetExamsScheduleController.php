@@ -4,15 +4,19 @@ namespace App\Http\Controllers\Admin\Exam;
 
 use App\Data\Admin\Exam\GetExamsSchedule\Request\GetExamsScheduleRequestData;
 use App\Data\Admin\Exam\GetExamsSchedule\Response\GetExamsScheduleResponseData;
+use App\Data\Shared\Swagger\Parameter\QueryParameter\QueryParameter;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use Illuminate\Support\Carbon;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class GetExamsScheduleController extends Controller
 {
     #[OAT\Get(path: '/admins/exams', tags: ['adminsExams'])]
+    #[QueryParameter('department_id', ' integer')]
+    #[QueryParameter('academic_year_semester', ' integer')]
     #[SuccessListResponse(GetExamsScheduleResponseData::class)]
     public function __invoke(GetExamsScheduleRequestData $request)
     {
@@ -20,10 +24,26 @@ class GetExamsScheduleController extends Controller
         $unique_exam_times =
            Exam::query()
                ->select('from', 'to')
+               ->when(
+                   $request->department_id,
+                   fn ($query) => $query
+                       ->whereRelation(
+                           'courseTeacher.course.course',
+                           'department_id',
+                           $request->department_id
+                       )
+               )
+               ->when(
+                   $request->academic_year_semester_id,
+                   fn ($query) => $query
+                       ->whereRelation(
+                           'courseTeacher.course',
+                           'academic_year_semester_id',
+                           $request->academic_year_semester_id
+                       )
+               )
                ->get()
                ->unique('from', 'to');
-
-        // return $unique_exam_times;
 
         $time_slots_heades =
             $unique_exam_times
@@ -47,7 +67,24 @@ class GetExamsScheduleController extends Controller
             Exam::query()
                 ->with('courseTeacher.course.course')
                 ->orderBy('date')
-                // ->limit(10)
+                ->when(
+                    $request->department_id,
+                    fn ($query) => $query
+                        ->whereRelation(
+                            'courseTeacher.course.course',
+                            'department_id',
+                            $request->department_id
+                        )
+                )
+                ->when(
+                    $request->academic_year_semester_id,
+                    fn ($query) => $query
+                        ->whereRelation(
+                            'courseTeacher.course',
+                            'academic_year_semester_id',
+                            $request->academic_year_semester_id
+                        )
+                )
                 ->get()
                 ->groupBy(['date', 'from', 'to']);
 
@@ -57,27 +94,44 @@ class GetExamsScheduleController extends Controller
 
         foreach ($grouped_exams as $date => $date_values) {
 
-            $exam_schedule_table[$exam_schedule_table_index]['id'] = $exam_schedule_table_index + 1;
-            $exam_schedule_table[$exam_schedule_table_index]['date'] = $date;
-            $exam_schedule_table[$exam_schedule_table_index]['day'] = Carbon::parse($date)->day;
+            $exam_schedule_table[$exam_schedule_table_index]['id'] =
+                $exam_schedule_table_index + 1;
+            $exam_schedule_table[$exam_schedule_table_index]['date'] =
+                 $date;
+            $exam_schedule_table[$exam_schedule_table_index]['day'] =
+             Carbon::parse($date)->day;
 
             foreach ($unique_exam_times as $time_slot_key => $time_slot_value) {
-                $exam_schedule_table[$exam_schedule_table_index]['courses'] =
+                $exam_schedule_table[$exam_schedule_table_index]['exams'][] =
                 isset($date_values[$time_slot_value->from])
                 ?
                     $date_values[$time_slot_value->from][$time_slot_value->to]
                     :
-                    null;
+                    [];
             }
 
             $exam_schedule_table_index++;
 
         }
 
-        return $exam_schedule_table;
+        Pdf::view(
+            'pdf.exams-schedule',
+            [
+                'table_headers' => $table_headers,
+                'table_data' => $exam_schedule_table,
+            ]
+        )
+            ->save(storage_path().'/invoice.pdf');
 
-        return GetExamsScheduleResponseData::collect(
-
-        );
+        return
+            Pdf::view(
+                'pdf.exams-schedule',
+                [
+                    'table_headers' => $table_headers,
+                    'table_data' => $exam_schedule_table,
+                ]
+            )
+                ->name('exams_test.pdf')
+                ->download();
     }
 }
