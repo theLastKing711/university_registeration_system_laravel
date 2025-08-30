@@ -21,6 +21,21 @@ enum RolesEnum: string
     // extra helper to allow for greater customization of displayed values,
     // without disclosing the name/value data directly
     // can be used like this: RolesEnum::ADMIN->label() which return 'Admin'
+
+    // public function permissions(): string
+    // {
+
+    //     return match ($this) {
+    //         self::ADMIN => ['*'],
+    //         self::STUDENT => 'Student',
+    //         self::COURSES_REGISTERER => ['register courses'],
+    //         self::MARKS_ASSIGNER => 'Marks Assigner',
+    //         // self::USER => 'User',
+    //         // self::DRIVER => 'Driver',
+    //         // self::STORE => 'Store',
+    //     };
+    // }
+
     public function label(): string
     {
 

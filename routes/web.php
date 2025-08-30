@@ -51,6 +51,7 @@ use App\Http\Controllers\Admin\Exam\GetExamsController;
 use App\Http\Controllers\Admin\Exam\GetExamsScheduleController;
 use App\Http\Controllers\Admin\Exam\UpdateExamController;
 use App\Http\Controllers\Admin\Exam\UpdateStudentExamMarkController;
+use App\Http\Controllers\Admin\GetRole\GetUserRoleController;
 use App\Http\Controllers\Admin\Image\UploadImageController;
 use App\Http\Controllers\Admin\Lecture\CreateLectureController;
 use App\Http\Controllers\Admin\Lecture\GetLectureController;
@@ -137,6 +138,8 @@ Route::prefix('admins')
                 ->group(function () {
 
                     Route::get('', GetAdminsController::class);
+
+                    Route::get('role', GetUserRoleController::class);
 
                     Route::get('{id}', GetAdminController::class);
 
