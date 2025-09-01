@@ -6,7 +6,9 @@ use App\Data\Admin\Auth\LoginData;
 use App\Data\Admin\Auth\LoginDataResponse;
 use App\Data\Shared\LoginFailedResponse;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
+use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Log;
@@ -88,9 +90,54 @@ class AuthController extends Controller
     {
         Log::info('hello world');
 
-        if (Auth::attempt(['name' => $data->name, 'password' => $data->password])) {
+        if (
+            Auth::attempt(['name' => $data->name, 'password' => $data->password])) {
 
-            return LoginDataResponse::from(Auth::user());
+            $logged_user =
+                User::query()
+                    // ->with([
+                    //     'permissions' => fn ($query) => $query->first(),
+                    // ])
+                    ->with(
+                        [
+                            'roles' => fn ($query) => $query
+                                ->with(
+                                    [
+                                        'permissions' => fn ($query) => $query->first(),
+                                    ]
+                                )
+                                ->first(),
+                        ]
+                    )
+                    ->firstWhere(
+                        'id',
+                        Auth::User()->id
+                    );
+
+            [$action, $route] =
+                explode(
+                    ' ',
+                    $logged_user
+                        ->roles
+                        ->first()
+                        ->permissions
+                        ->first()
+                        ->name,
+                );
+
+            $is_user_student =
+                $logged_user
+                    ->hasRole(RolesEnum::STUDENT);
+
+            $dashboard_redirect_route =
+                $is_user_student ? "/students/{$route}" : "/admins/{$route}";
+
+            return
+                new LoginDataResponse(
+                    $logged_user->id,
+                    $logged_user->name,
+                    $dashboard_redirect_route
+                );
         }
 
         return response()

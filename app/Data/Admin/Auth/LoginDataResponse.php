@@ -9,13 +9,13 @@ use Spatie\LaravelData\Data;
 class LoginDataResponse extends Data
 {
     public function __construct(
-        #[OAT\Property(type: 'integer')]
+        #[OAT\Property]
         public int $id,
-        #[OAT\Property(type: 'string')]
+        #[OAT\Property]
         public string $name,
+        #[OAT\Property]
+        public string $redirect_to,
         // #[OAT\Property(type: 'string')]
         // public string $email,
-        #[OAT\Property(type: 'string')]
-        public string $created_at,
     ) {}
 }
