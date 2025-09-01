@@ -11,10 +11,10 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class GetUserRoleResponseData extends Data
 {
     public function __construct(
-        #[OAT\Property]
-        public int $id,
-        #[OAT\Property]
-        public string $name,
+        // #[OAT\Property]
+        // public int $id,
+        // #[OAT\Property]
+        // public string $name,
         #[
             OAT\Property,
         ]

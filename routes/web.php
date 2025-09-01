@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\Auth\PermissionsEnum;
 use App\Enum\Auth\RolesEnum;
 use App\Http\Controllers\Admin\AcademicYearSemester\CreateAcademicYearSemesterController;
 use App\Http\Controllers\Admin\AcademicYearSemester\DeleteAcademicYearSemesterController;
@@ -106,11 +107,11 @@ Route::prefix('admins')
         Route::middleware(['auth:sanctum'])->group(function () {
 
             Route::prefix('academic-year-semesters')
-                ->middleware(
-                    [
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]
-                )
+                // ->middleware(
+                //     [
+                //         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                //     ]
+                // )
                 ->group(function () {
 
                     Route::get('list', GetAcademicYearsSemestersListController::class);
@@ -130,11 +131,6 @@ Route::prefix('admins')
                 });
 
             Route::prefix('admins')
-                ->middleware(
-                    [
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]
-                )
                 ->group(function () {
 
                     Route::get('', GetAdminsController::class);
@@ -276,9 +272,9 @@ Route::prefix('admins')
                 });
 
             Route::prefix('departments')
-                ->middleware([
-                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                ])
+                // ->middleware([
+                //     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                // ])
                 ->group(function () {
 
                     Route::get('', action: GetDepartmentsController::class);
@@ -363,7 +359,9 @@ Route::prefix('admins')
 
                     Route::post('', CreateOpenCourseRegisterationController::class)
                         ->middleware(
-                            RolesEnum::oneOfRolesMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER)
+                            PermissionsEnum::oneOfPermissionsMiddleware(
+                                PermissionsEnum::CREATE_OPEN_COURSE_REGISTERATION
+                            )
                         );
 
                     Route::post('{id}/teachers', AssignTeacherToOpenCourseController::class);

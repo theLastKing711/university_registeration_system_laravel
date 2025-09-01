@@ -14,28 +14,6 @@ enum RolesEnum: string
 
     case MARKS_ASSIGNER = 'marks assigner';
 
-    // case DRIVER = 'driver';
-
-    // case STORE = 'store';
-
-    // extra helper to allow for greater customization of displayed values,
-    // without disclosing the name/value data directly
-    // can be used like this: RolesEnum::ADMIN->label() which return 'Admin'
-
-    // public function permissions(): string
-    // {
-
-    //     return match ($this) {
-    //         self::ADMIN => ['*'],
-    //         self::STUDENT => 'Student',
-    //         self::COURSES_REGISTERER => ['register courses'],
-    //         self::MARKS_ASSIGNER => 'Marks Assigner',
-    //         // self::USER => 'User',
-    //         // self::DRIVER => 'Driver',
-    //         // self::STORE => 'Store',
-    //     };
-    // }
-
     public function label(): string
     {
 
@@ -44,9 +22,34 @@ enum RolesEnum: string
             self::STUDENT => 'Student',
             self::COURSES_REGISTERER => 'Course Cegisterer',
             self::MARKS_ASSIGNER => 'Marks Assigner',
-            // self::USER => 'User',
-            // self::DRIVER => 'Driver',
-            // self::STORE => 'Store',
+        };
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @return PermissionsEnum[]
+     **/
+    public function permissions(): array
+    {
+
+        return match ($this) {
+            self::ADMIN => [
+                ...PermissionsEnum::get_academic_year_semesters_permissions(),
+                ...PermissionsEnum::get_admin_permissions(),
+                ...PermissionsEnum::get_classroom_course_teachers_permissions(),
+                ...PermissionsEnum::get_classrooms_permissions(),
+                ...PermissionsEnum::get_courses(),
+                ...PermissionsEnum::get_exams(),
+                ...PermissionsEnum::get_lectures(),
+                ...PermissionsEnum::get_open_course_registerations_permissions(),
+                ...PermissionsEnum::get_students(),
+            ],
+            self::STUDENT => PermissionsEnum::get_open_course_registerations_permissions(),
+            self::COURSES_REGISTERER => PermissionsEnum::get_open_course_registerations_permissions(),
+            self::MARKS_ASSIGNER => PermissionsEnum::get_open_course_registerations_permissions(),
         };
     }
 

@@ -1,0 +1,201 @@
+<?php
+
+namespace App\Enum\Auth;
+
+enum PermissionsEnum: string
+{
+    // case NAMEINAPP = 'name-in-database';
+
+    case CREATE_ACADEMIC_YEAR_SEMESTER = 'create academic-year-semesters';
+    case LIST_ACADEMIC_YEAR_SEMESTER = 'list academic-year-semesters';
+    case SHOW_ACADEMIC_YEAR_SEMESTER = 'show academic-year-semesters';
+    case DELETE_ACADEMIC_YEAR_SEMESTER = 'delete academic-year-semesters';
+
+    case CREATE_ADMIN = 'create admins';
+    case LIST_ADMIN = 'list admins';
+    case SHOW_ADMIN = 'show admins';
+    case DELETE_ADMIN = 'delete admins';
+
+    case CREATE_CLASSROOM_COURSE_TEACHER = 'create classroom-course-teachers';
+    case LIST_CLASSROOM_COURSE_TEACHER = 'list classroom-course-teachers';
+    case SHOW_CLASSROOM_COURSE_TEACHER = 'show classroom-course-teachers';
+    case DELETE_CLASSROOM_COURSE_TEACHER = 'delete classroom-course-teachers';
+
+    case CREATE_CLASSROOM = 'create classrooms';
+    case LIST_CLASSROOM = 'list classrooms';
+    case SHOW_CLASSROOM = 'show classrooms';
+    case DELETE_CLASSROOM = 'delete classrooms';
+
+    case CREATE_COURSE = 'create courses';
+    case LIST_COURSE = 'list courses';
+    case SHOW_COURSE = 'show courses';
+    case DELETE_COURSE = 'delete courses';
+
+    case CREATE_EXAM = 'create exams';
+    case LIST_EXAM = 'list exams';
+    case SHOW_EXAM = 'show exams';
+    case DELETE_EXAM = 'delete exams';
+
+    case CREATE_LECTURE = 'create lectures';
+    case LIST_LECTURE = 'list lectures';
+    case SHOW_LECTURE = 'show lectures';
+    case DELETE_LECTURE = 'delete lectures';
+
+    case CREATE_OPEN_COURSE_REGISTERATION = 'create open-course-registerations';
+    case LIST_OPEN_COURSE_REGISTERATION = 'list open-course-registerations';
+    case SHOW_OPEN_COURSE_REGISTERATION = 'show open-course-registerations';
+    case DELETE_OPEN_COURSE_REGISTERATION = 'delete open-course-registerations';
+
+    case CREATE_STUDENT = 'create students';
+    case LIST_STUDENT = 'list students';
+    case SHOW_STUDENT = 'show students';
+    case DELETE_STUDENT = 'delete students';
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_academic_year_semesters_permissions()
+    {
+        return
+            [
+                self::CREATE_ACADEMIC_YEAR_SEMESTER,
+                self::LIST_ACADEMIC_YEAR_SEMESTER,
+                self::SHOW_ACADEMIC_YEAR_SEMESTER,
+                self::DELETE_ACADEMIC_YEAR_SEMESTER,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_admin_permissions()
+    {
+        return
+            [
+                self::CREATE_ADMIN,
+                self::LIST_ADMIN,
+                self::SHOW_ADMIN,
+                self::DELETE_ADMIN,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_classroom_course_teachers_permissions()
+    {
+        return
+            [
+                self::CREATE_CLASSROOM_COURSE_TEACHER,
+                self::LIST_CLASSROOM_COURSE_TEACHER,
+                self::SHOW_CLASSROOM_COURSE_TEACHER,
+                self::DELETE_CLASSROOM_COURSE_TEACHER,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_classrooms_permissions()
+    {
+        return
+            [
+                self::CREATE_CLASSROOM,
+                self::LIST_CLASSROOM,
+                self::SHOW_CLASSROOM,
+                self::DELETE_CLASSROOM,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_courses()
+    {
+        return
+            [
+                self::CREATE_COURSE,
+                self::LIST_COURSE,
+                self::SHOW_COURSE,
+                self::DELETE_COURSE,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_exams()
+    {
+        return
+            [
+                self::CREATE_EXAM,
+                self::LIST_EXAM,
+                self::SHOW_EXAM,
+                self::DELETE_EXAM,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_lectures()
+    {
+        return
+            [
+                self::CREATE_LECTURE,
+                self::LIST_LECTURE,
+                self::SHOW_LECTURE,
+                self::DELETE_LECTURE,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_open_course_registerations_permissions()
+    {
+        return
+            [
+                self::CREATE_OPEN_COURSE_REGISTERATION,
+                self::LIST_OPEN_COURSE_REGISTERATION,
+                self::SHOW_OPEN_COURSE_REGISTERATION,
+                self::DELETE_OPEN_COURSE_REGISTERATION,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_students()
+    {
+        return
+            [
+                self::CREATE_STUDENT,
+                self::LIST_STUDENT,
+                self::SHOW_STUDENT,
+                self::DELETE_STUDENT,
+            ];
+    }
+
+    /**
+     * Summary of oneOfMiddleware
+     *
+     * @param  PermissionsEnum[]  $roles
+     */
+    public static function oneOfPermissionsMiddleware(...$permissions): string
+    {
+        $permissions_count = count($permissions);
+
+        $permissions_collections = collect($permissions);
+
+        return
+            $permissions_collections
+                ->implode('|');
+
+    }
+
+    public static function onePermissionOnlyMiddleware(PermissionsEnum $permission): string
+    {
+        return 'permission:'.$permission->value;
+    }
+}

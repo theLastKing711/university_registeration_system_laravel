@@ -13,6 +13,10 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $this->seedAdmins();
+
+        $this->seedCourseRegisterers();
+
+        $this->seedMarkAssigner();
     }
 
     public function seedAdmins(): void
@@ -26,5 +30,21 @@ class AdminSeeder extends Seeder
         //     ->count(9)
         //     ->admin()
         //     ->create();
+    }
+
+    public function seedCourseRegisterers(): void
+    {
+
+        User::factory()
+            ->staticCourseRegisterer()
+            ->create();
+
+    }
+
+    public function seedMarkAssigner(): void
+    {
+        User::factory()
+            ->staticMarkAssigner()
+            ->create();
     }
 }
