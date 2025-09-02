@@ -19,6 +19,9 @@ class GetAdminsController extends Controller
     #[SuccessItemResponse(GetAdminsResponsePaginationResultData::class)]
     public function __invoke(GetAdminsRequestData $request)
     {
+
+        // sleep(4);
+
         return GetAdminsResponseData::collect(
             User::all()
         );

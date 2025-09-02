@@ -12,19 +12,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Attributes as OAT;
 
-#[
-    OAT\PathItem(
-        path: '/admins/getroles/{id}',
-        parameters: [
-            new OAT\PathParameter(
-                ref: '#/components/parameters/usersTestPathParameterData',
-            ),
-        ],
-    ),
-]
 class GetUserRoleController extends Controller
 {
-    #[OAT\Get(path: '/admins/getroles/{id}', tags: ['adminsGetRoles'])]
+    #[OAT\Get(path: '/admins/role', tags: ['adminsAdmins'])]
     #[JsonRequestBody(GetUserRoleRequestData::class)]
     #[SuccessItemResponse(GetUserRoleResponseData::class)]
     public function __invoke(GetUserRoleRequestData $request)

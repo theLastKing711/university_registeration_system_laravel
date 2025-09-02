@@ -92,13 +92,6 @@ use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterInOpenCoursesCo
 use App\Http\Controllers\Student\OpenCourseRegisteration\UnRegisterFromOpenCourseController;
 use Illuminate\Support\Facades\Route;
 
-// Route::prefix('files')
-//     ->middleware(['api'])
-//     ->group(function () {
-//         Route::get('', [FileController::class, 'index']);
-//         Route::post('', [FileController::class, 'store']);
-//     });
-
 Route::prefix('admins')
     ->middleware(['api'])
     ->group(function () {
@@ -116,17 +109,42 @@ Route::prefix('admins')
 
                     Route::get('list', GetAcademicYearsSemestersListController::class);
 
-                    Route::get('', GetAcademicYearsSemestersController::class);
+                    Route::get('', GetAcademicYearsSemestersController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_ACADEMIC_YEAR_SEMESTER
+                            )
+                        );
 
-                    Route::get('{id}', GetAcademicYearsSemesterController::class);
+                    Route::get('{id}', GetAcademicYearsSemesterController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_ACADEMIC_YEAR_SEMESTER
+                            )
+                        );
 
-                    Route::post('', CreateAcademicYearSemesterController::class);
+                    Route::post('', CreateAcademicYearSemesterController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_ACADEMIC_YEAR_SEMESTER
+                            )
+                        );
 
                     Route::post('{id}/departments', OpenDepartmentsForRegisterationController::class);
 
-                    Route::patch('{id}', UpdateAcademicYearSemesterController::class);
+                    Route::patch('{id}', UpdateAcademicYearSemesterController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_ACADEMIC_YEAR_SEMESTER
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteAcademicYearSemesterController::class);
+                    Route::delete('{id}', DeleteAcademicYearSemesterController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_ACADEMIC_YEAR_SEMESTER
+                            )
+                        );
 
                 });
 
