@@ -11,17 +11,15 @@ use OpenApi\Attributes as OAT;
 
 class DeleteDepartmentController extends Controller
 {
-    #[OAT\Delete(path: '/admins/departments', tags: ['adminsDepartments'])]
+    #[OAT\Delete(path: '/admins/departments/{id}', tags: ['adminsDepartments'])]
     #[ListQueryParameter]
     #[SuccessNoContentResponse]
     public function __invoke(DeleteDepartmentRequestData $request)
     {
 
         Department::query()
-            ->whereIn(
-                'id',
-                $request
-                    ->ids
+            ->firstWhereId(
+                $request->id
             )
             ->delete();
 

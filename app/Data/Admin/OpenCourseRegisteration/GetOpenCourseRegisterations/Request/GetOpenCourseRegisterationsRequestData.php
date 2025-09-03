@@ -5,7 +5,7 @@ namespace App\Data\Admin\OpenCourseRegisteration\GetOpenCourseRegisterations\Req
 use App\Data\Shared\Pagination\QueryParameters\PaginationQueryParameterData;
 use OpenApi\Attributes as OAT;
 
-#[Oat\Schema()]
+#[Oat\Schema(ref: 'App\Data\Admin\OpenCourseRegisteration\GetOpenCourseRegisterations\Request;')]
 class GetOpenCourseRegisterationsRequestData extends PaginationQueryParameterData
 {
     public function __construct(

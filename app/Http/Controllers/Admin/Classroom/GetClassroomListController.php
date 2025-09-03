@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class GetClassroomListController extends Controller
 {
-    #[OAT\Get(path: '/admins/classrooms', tags: ['adminsClassrooms'])]
+    #[OAT\Get(path: '/admins/classrooms/list', tags: ['adminsClassrooms'])]
     #[SuccessListResponse(GetClassroomListResponseData::class)]
     public function __invoke(GetClassroomListRequestData $request)
     {

@@ -6,6 +6,7 @@ enum PermissionsEnum: string
 {
     // case NAMEINAPP = 'name-in-database';
 
+    case TEST_PERMISSION = 'test permission';
     case CREATE_ACADEMIC_YEAR_SEMESTER = 'create academic-year-semesters';
     case LIST_ACADEMIC_YEAR_SEMESTER = 'list academic-year-semesters';
     case SHOW_ACADEMIC_YEAR_SEMESTER = 'show academic-year-semesters';
@@ -38,6 +39,12 @@ enum PermissionsEnum: string
     case SHOW_COURSE = 'show courses';
     case EDIT_COURSE = 'edit courses';
     case DELETE_COURSE = 'delete courses';
+
+    case CREATE_DEPARTMENT = 'create departments';
+    case LIST_DEPARTMENT = 'list departments';
+    case SHOW_DEPARTMENT = 'show departments';
+    case EDIT_DEPARTMENT = 'edit departments';
+    case DELETE_DEPARTMENT = 'delete departments';
 
     case CREATE_EXAM = 'create exams';
     case LIST_EXAM = 'list exams';
@@ -135,6 +142,21 @@ enum PermissionsEnum: string
                 self::LIST_COURSE,
                 self::SHOW_COURSE,
                 self::DELETE_COURSE,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_departments()
+    {
+        return
+            [
+                self::CREATE_DEPARTMENT,
+                // self::EDIT_DEPARTMENT,
+                self::LIST_DEPARTMENT,
+                self::SHOW_DEPARTMENT,
+                self::DELETE_DEPARTMENT,
             ];
     }
 

@@ -17,13 +17,10 @@ class CreateDepartmentController extends Controller
     public function __invoke(CreateDepartmentRequestData $request)
     {
 
-        $department = new Department;
-
-        $department->name = $request->name;
-
-        Department::create(
-            $department->toArray()
-        );
+        Department::query()
+            ->create([
+                'name' => $request->name,
+            ]);
 
     }
 }

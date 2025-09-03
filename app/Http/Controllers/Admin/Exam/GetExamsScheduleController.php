@@ -14,7 +14,7 @@ use Spatie\LaravelPdf\Facades\Pdf;
 
 class GetExamsScheduleController extends Controller
 {
-    #[OAT\Get(path: '/admins/exams', tags: ['adminsExams'])]
+    #[OAT\Get(path: '/admins/exams/schedule', tags: ['adminsExams'])]
     #[QueryParameter('department_id', ' integer')]
     #[QueryParameter('academic_year_semester', ' integer')]
     #[SuccessListResponse(GetExamsScheduleResponseData::class)]

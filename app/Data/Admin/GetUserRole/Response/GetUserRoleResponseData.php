@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\GetRole\Response;
+namespace App\Data\Admin\GetUserRole\Response;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;

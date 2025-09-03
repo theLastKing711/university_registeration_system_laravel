@@ -5,7 +5,7 @@ namespace App\Data\Admin\Classroom\GetClassrooms\Request;
 use App\Data\Shared\Pagination\QueryParameters\PaginationQueryParameterData;
 use OpenApi\Attributes as OAT;
 
-#[Oat\Schema()]
+#[Oat\Schema('App\Data\Admin\Classroom\GetClassrooms\Request')]
 class GetClassroomsRequestData extends PaginationQueryParameterData
 {
     public function __construct(

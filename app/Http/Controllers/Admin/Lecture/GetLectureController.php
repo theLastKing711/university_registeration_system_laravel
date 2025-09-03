@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class GetLectureController extends LectureController
 {
-    #[OAT\Get(path: '/admins/lectures', tags: ['adminsLectures'])]
+    #[OAT\Get(path: '/admins/lectures/{id}', tags: ['adminsLectures'])]
     #[SuccessListResponse(GetLectureResponseData::class)]
     public function __invoke(GetLectureRequestData $request)
     {

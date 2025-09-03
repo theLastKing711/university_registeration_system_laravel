@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Admin\Department\DeleteDepartment\Request;
+namespace App\Data\Admin\Department\Abstract;
 
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -10,12 +10,12 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema()]
-class DeleteDepartmentRequestData extends Data
+class DepartmentData extends Data
 {
     public function __construct(
         #[
             OAT\PathParameter(
-                parameter: 'DeleteDepartmentRequestDataIdPathParameter',
+                parameter: 'adminsDepartmentDataIdPathParameter',
                 name: 'id',
                 schema: new OAT\Schema(
                     type: 'integer',

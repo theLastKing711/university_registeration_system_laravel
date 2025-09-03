@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin\GetRole;
 
-use App\Data\Admin\GetRole\Request\GetUserRoleRequestData;
-use App\Data\Admin\GetRole\Response\GetUserRoleResponseData;
+use App\Data\Admin\GetUserRole\Request\GetUserRoleRequestData;
+use App\Data\Admin\GetUserRole\Response\GetUserRoleResponseData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessItemResponse;
 use App\Enum\Auth\RolesEnum;
@@ -41,16 +41,16 @@ class GetUserRoleController extends Controller
                     Auth::User()->id
                 );
 
-        $is_user_admin
-            =
-            $logged_user
-                ->hasRole(RolesEnum::ADMIN);
+        // $is_user_admin
+        //     =
+        //     $logged_user
+        //         ->hasRole(RolesEnum::ADMIN);
 
-        if ($is_user_admin) {
-            return new GetUserRoleResponseData(
-                true
-            );
-        }
+        // if ($is_user_admin) {
+        //     return new GetUserRoleResponseData(
+        //         true
+        //     );
+        // }
 
         $user_has_required_permission =
             $logged_user

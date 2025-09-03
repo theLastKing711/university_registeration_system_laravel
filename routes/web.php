@@ -41,7 +41,9 @@ use App\Http\Controllers\Admin\CourseTeacher\GetCourseTeacherStudentsController;
 use App\Http\Controllers\Admin\CourseTeacher\UpdateCourseTeacherAttendaceController;
 use App\Http\Controllers\Admin\Department\CreateDepartmentController;
 use App\Http\Controllers\Admin\Department\DeleteDepartmentController;
+use App\Http\Controllers\Admin\Department\GetDepartmentController;
 use App\Http\Controllers\Admin\Department\GetDepartmentsController;
+use App\Http\Controllers\Admin\Department\GetDepartmentsListController;
 use App\Http\Controllers\Admin\Department\GetDepartmentTeachersController;
 use App\Http\Controllers\Admin\Department\UpdateDepartmentController;
 use App\Http\Controllers\Admin\Exam\AssignMarkToStudentController;
@@ -151,34 +153,84 @@ Route::prefix('admins')
             Route::prefix('admins')
                 ->group(function () {
 
-                    Route::get('', GetAdminsController::class);
+                    Route::get('', GetAdminsController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_ADMIN
+                            )
+                        );
 
                     Route::get('role', GetUserRoleController::class);
 
-                    Route::get('{id}', GetAdminController::class);
+                    Route::get('{id}', GetAdminController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_ADMIN
+                            )
+                        );
 
-                    Route::post('', CreateAdminController::class);
+                    Route::post('', CreateAdminController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_ADMIN
+                            )
+                        );
 
-                    Route::patch('{id}', UpdateAdminController::class);
+                    Route::patch('{id}', UpdateAdminController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_ADMIN
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteAdminController::class);
+                    Route::delete('{id}', DeleteAdminController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_ADMIN
+                            )
+                        );
 
                 });
 
             Route::prefix('classrooms')
                 ->group(function () {
 
-                    Route::get('', GetClassroomsController::class);
+                    Route::get('', GetClassroomsController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_ADMIN
+                            )
+                        );
 
                     Route::get('list', GetClassroomListController::class);
 
-                    Route::get('{id}', GetClassroomController::class);
+                    Route::get('{id}', GetClassroomController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_CLASSROOM
+                            )
+                        );
 
-                    Route::post('', CreateClassroomController::class);
+                    Route::post('', CreateClassroomController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_CLASSROOM
+                            )
+                        );
 
-                    Route::patch('{id}', UpdateClassroomController::class);
+                    Route::patch('{id}', UpdateClassroomController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_CLASSROOM
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteClassroomController::class);
+                    Route::delete('{id}', DeleteClassroomController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_CLASSROOM
+                            )
+                        );
 
                     // Route::get('{id}/lectures', GetCourseTeacherLecturesController::class)
                     //     ->middleware([
@@ -250,60 +302,133 @@ Route::prefix('admins')
             Route::prefix('classroom-course-teachers')
                 ->group(function (): void {
 
-                    Route::get('', GetClassroomCourseTeachersController::class);
+                    Route::get('', GetClassroomCourseTeachersController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_CLASSROOM_COURSE_TEACHER
+                            )
+                        );
 
-                    Route::get('{id}', GetClassroomCourseTeacherController::class);
+                    Route::get('{id}', GetClassroomCourseTeacherController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_CLASSROOM_COURSE_TEACHER
+                            )
+                        );
 
-                    Route::post('', CreateClassroomCourseTeacherController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
+                    Route::post('', CreateClassroomCourseTeacherController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_CLASSROOM_COURSE_TEACHER
+                            )
+                        );
 
-                    Route::patch('{id}', UpdateCourseTeacherClassroomController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
+                    Route::patch('{id}', UpdateCourseTeacherClassroomController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_CLASSROOM_COURSE_TEACHER
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteClassroomCourseTeacherController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]);
+                    Route::delete('{id}', DeleteClassroomCourseTeacherController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_CLASSROOM_COURSE_TEACHER
+                            )
+                        );
 
                 });
 
             Route::prefix('courses')
                 ->group(function () {
 
-                    Route::get('', GetCoursesController::class);
+                    Route::get('', GetCoursesController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_COURSE
+                            )
+                        );
 
                     Route::get('list', GetCoursesListController::class);
 
-                    Route::get('{id}', GetCourseController::class);
+                    Route::get('{id}', GetCourseController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_COURSE
+                            )
+                        );
 
-                    Route::post('', CreateCourseController::class);
+                    Route::post('', CreateCourseController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_COURSE
+                            )
+                        );
 
-                    Route::patch('{id}', UpdateCourseController::class);
+                    Route::patch('{id}', UpdateCourseController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_COURSE
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteCourseController::class);
+                    Route::delete('{id}', DeleteCourseController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_COURSE
+                            )
+                        );
 
-                    Route::delete('', action: DeleteCoursesController::class)->middleware([
-                        RolesEnum::oneRoleOnlyMiddleware(role: RolesEnum::ADMIN),
-                    ]);
+                    Route::delete('', action: DeleteCoursesController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_COURSE
+                            )
+                        );
 
                 });
 
             Route::prefix('departments')
-                // ->middleware([
-                //     RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                // ])
                 ->group(function () {
 
-                    Route::get('', action: GetDepartmentsController::class);
+                    Route::get('', action: GetDepartmentsController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_DEPARTMENT
+                            )
+                        );
+
+                    Route::get('list', action: GetDepartmentsListController::class);
+
+                    Route::get('{id}', action: GetDepartmentController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_DEPARTMENT
+                            )
+                        );
 
                     Route::get('{id}/teachers', action: GetDepartmentTeachersController::class);
 
-                    Route::post('', CreateDepartmentController::class);
+                    Route::post('', CreateDepartmentController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_DEPARTMENT
+                            )
+                        );
 
-                    Route::patch('{id}', action: UpdateDepartmentController::class);
+                    Route::patch('{id}', action: UpdateDepartmentController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_DEPARTMENT
+                            )
+                        );
 
-                    Route::delete('', DeleteDepartmentController::class);
+                    Route::delete('{id}', DeleteDepartmentController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_DEPARTMENT
+                            )
+                        );
 
                 });
 
@@ -313,21 +438,46 @@ Route::prefix('admins')
                 ])
                 ->group(function () {
 
-                    Route::get('', GetExamsController::class);
+                    Route::get('', GetExamsController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_EXAM
+                            )
+                        );
 
                     Route::get('schedule', GetExamsScheduleController::class);
 
-                    Route::get('{id}', GetExamController::class);
+                    Route::get('{id}', GetExamController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_EXAM
+                            )
+                        );
 
-                    Route::post('', CreateExamController::class);
+                    Route::post('', CreateExamController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_EXAM
+                            )
+                        );
 
                     Route::post('{id}/students', AssignMarkToStudentController::class);
 
                     Route::patch('{id}/students', UpdateStudentExamMarkController::class);
 
-                    Route::patch('{id}', UpdateExamController::class);
+                    Route::patch('{id}', UpdateExamController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_EXAM
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteExamController::class);
+                    Route::delete('{id}', DeleteExamController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_EXAM
+                            )
+                        );
 
                 });
 
@@ -351,22 +501,52 @@ Route::prefix('admins')
                 )
                 ->group(function () {
 
-                    Route::get('', GetLecturesController::class);
+                    Route::get('', GetLecturesController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_LECTURE
+                            )
+                        );
 
-                    Route::get('{id}', GetLectureController::class);
+                    Route::get('{id}', GetLectureController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_LECTURE
+                            )
+                        );
 
-                    Route::post('', CreateLectureController::class);
+                    Route::post('', CreateLectureController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_LECTURE
+                            )
+                        );
 
-                    Route::patch('{id}', UpdateLectureController::class);
+                    Route::patch('{id}', UpdateLectureController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_LECTURE
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteCourseController::class);
+                    Route::delete('{id}', DeleteCourseController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_LECTURE
+                            )
+                        );
 
                 });
 
             Route::prefix('open-course-registerations')
                 ->group(function () {
 
-                    Route::get('', GetOpenCourseRegisterationsController::class);
+                    Route::get('', GetOpenCourseRegisterationsController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_OPEN_COURSE_REGISTERATION
+                            )
+                        );
 
                     Route::get('list', GetOpenCourseRegisterationsListController::class);
 
@@ -386,7 +566,12 @@ Route::prefix('admins')
 
                     Route::delete('{id}/teachers', UnAssignTeacherFromOpenCourseController::class);
 
-                    Route::delete('{id}', UnRegisterOpenCourseController::class);
+                    Route::delete('{id}', UnRegisterOpenCourseController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_OPEN_COURSE_REGISTERATION
+                            )
+                        );
 
                 });
 

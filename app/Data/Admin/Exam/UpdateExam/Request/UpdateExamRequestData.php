@@ -57,6 +57,10 @@ class UpdateExamRequestData extends Data
         #[OAT\Property]
         public bool $is_main_exam,
 
+        #[ArrayProperty(UpdateExamStudentData::class)]
+        /** @var Collection<UpdateExamStudentData> */
+        public Collection $exam_students,
+
         #[
             OAT\PathParameter(
                 parameter: 'updateExamIdPathParameter',
@@ -69,10 +73,6 @@ class UpdateExamRequestData extends Data
             Exists('exams', 'id')
         ]
         public int $id,
-
-        #[ArrayProperty(UpdateExamStudentData::class)]
-        /** @var Collection<UpdateExamStudentData> */
-        public Collection $exam_students,
 
     ) {}
 

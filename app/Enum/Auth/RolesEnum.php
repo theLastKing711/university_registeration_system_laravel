@@ -43,6 +43,7 @@ enum RolesEnum: string
                 ...PermissionsEnum::get_classrooms_permissions(),
                 ...PermissionsEnum::get_courses(),
                 ...PermissionsEnum::get_exams(),
+                ...PermissionsEnum::get_departments(),
                 ...PermissionsEnum::get_lectures(),
                 ...PermissionsEnum::get_open_course_registerations_permissions(),
                 ...PermissionsEnum::get_students(),

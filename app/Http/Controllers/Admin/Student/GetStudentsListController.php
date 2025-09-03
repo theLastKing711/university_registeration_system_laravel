@@ -11,7 +11,7 @@ use OpenApi\Attributes as OAT;
 
 class GetStudentsListController extends Controller
 {
-    #[OAT\Get(path: '/admins/students', tags: ['adminsStudents'])]
+    #[OAT\Get(path: '/admins/students/list', tags: ['adminsStudents'])]
     #[SuccessListResponse(GetStudentsListResponseData::class)]
     public function __invoke(GetStudentsListRequestData $request)
     {
