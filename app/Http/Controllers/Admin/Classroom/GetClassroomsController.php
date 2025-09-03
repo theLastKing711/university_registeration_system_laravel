@@ -21,7 +21,7 @@ class GetClassroomsController extends Controller
     {
         return GetClassroomsResponseData::collect(
             Classroom::query()
-                ->paginate()
+                ->paginate($request->perPage)
         );
     }
 }

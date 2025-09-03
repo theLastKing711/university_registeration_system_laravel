@@ -2,10 +2,18 @@
 
 namespace App\Data\Admin\Department\GetDepartment\Request;
 
-use App\Data\Admin\Department\Abstract\DepartmentData;
+use App\Data\Shared\Pagination\QueryParameters\PaginationQueryParameterData;
 use OpenApi\Attributes as OAT;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[Oat\Schema(schema: 'AdminDepartmentGetDepartmentRequestGetDepartmentRequestData')]
-class GetDepartmentRequestData extends DepartmentData {}
+#[Oat\Schema(schema: 'AdminDepartmentGetDepartmentsRequestGetDepartmentsRequestData')]
+class GetDepartmentRequestData extends PaginationQueryParameterData
+{
+    public function __construct(
+        ?int $page,
+        ?int $perPage,
+    ) {
+        parent::__construct($page, $perPage);
+    }
+}

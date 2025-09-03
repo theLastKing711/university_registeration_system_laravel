@@ -35,7 +35,7 @@ class GetCoursesController extends Controller
                             null
                         )
                 )
-                ->paginate();
+                ->paginate($request->perPage);
 
         return
             GetCoursesResponseData::collect(

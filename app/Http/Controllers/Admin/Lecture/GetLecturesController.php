@@ -52,7 +52,7 @@ class GetLecturesController extends Controller
                             $request->course_id
                         )
                 )
-                ->paginate()
+                ->paginate($request->perPage)
         );
     }
 }

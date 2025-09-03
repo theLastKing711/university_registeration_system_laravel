@@ -31,7 +31,7 @@ class GetOpenCourseRegisterationsController extends Controller
                     ]
                 )
                 ->FilterByDepartmentAndAcademicYearSemesterId($request->department_id, $request->academic_year_semester_id)
-                ->paginate()
+                ->paginate($request->perPage)
         );
     }
 }

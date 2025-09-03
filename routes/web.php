@@ -494,11 +494,11 @@ Route::prefix('admins')
                 });
 
             Route::prefix('lectures')
-                ->middleware(
-                    [
-                        RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                    ]
-                )
+                // ->middleware(
+                //     [
+                //         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                //     ]
+                // )
                 ->group(function () {
 
                     Route::get('', GetLecturesController::class)
@@ -609,7 +609,7 @@ Route::prefix('admins')
                 ])
                 ->group(function () {
 
-                    Route::get('paginated', GetTeachersPaginatedController::class);
+                    // Route::get('paginated', GetTeachersPaginatedController::class);
 
                     Route::get('', GetTeachersController::class);
 

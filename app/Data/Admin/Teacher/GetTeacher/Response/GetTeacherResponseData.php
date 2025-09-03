@@ -15,5 +15,7 @@ class GetTeacherResponseData extends Data
         public int $id,
         #[OAT\Property]
         public string $name,
+        #[OAT\Property]
+        public int $department_id,
     ) {}
 }

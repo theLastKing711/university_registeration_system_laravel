@@ -60,7 +60,7 @@ class GetExamsController extends Controller
                             $request->course_id
                         )
                 )
-                ->paginate()
+                ->paginate($request->perPage)
         );
     }
 }

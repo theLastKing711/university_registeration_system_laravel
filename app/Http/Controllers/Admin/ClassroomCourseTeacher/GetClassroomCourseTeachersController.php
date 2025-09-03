@@ -41,7 +41,7 @@ class GetClassroomCourseTeachersController extends Controller
                             $request->department_id
                         )
                 )
-                ->paginate()
+                ->paginate($request->perPage)
         );
     }
 }

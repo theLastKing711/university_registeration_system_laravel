@@ -71,6 +71,12 @@ enum PermissionsEnum: string
     case EDIT_STUDENT = 'edit students';
     case DELETE_STUDENT = 'delete students';
 
+    case CREATE_TEACHER = 'create teachers';
+    case LIST_TEACHER = 'list teachers';
+    case SHOW_TEACHER = 'show teachers';
+    case EDIT_TEACHER = 'edit teachers';
+    case DELETE_TEACHER = 'delete teachers';
+
     /**
      * @return PermissionsEnum[]
      **/
@@ -220,6 +226,21 @@ enum PermissionsEnum: string
                 self::LIST_STUDENT,
                 self::SHOW_STUDENT,
                 self::DELETE_STUDENT,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_teachers()
+    {
+        return
+            [
+                self::CREATE_TEACHER,
+                self::EDIT_TEACHER,
+                self::LIST_TEACHER,
+                self::SHOW_TEACHER,
+                self::DELETE_TEACHER,
             ];
     }
 

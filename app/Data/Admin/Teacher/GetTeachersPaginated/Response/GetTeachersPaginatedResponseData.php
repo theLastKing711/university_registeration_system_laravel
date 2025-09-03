@@ -2,6 +2,7 @@
 
 namespace App\Data\Admin\Teacher\GetTeachersPaginated\Response;
 
+use App\Models\Teacher;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -15,5 +16,16 @@ class GetTeachersPaginatedResponseData extends Data
         public int $id,
         #[OAT\Property]
         public string $name,
+        #[OAT\Property]
+        public string $department_name,
     ) {}
+
+    // public static function fromModel(Teacher $teacher): self
+    // {
+    //     return new self(
+    //         $teacher->id,
+    //         $teacher->name,
+    //         $teacher->department->name
+    //     );
+    // }
 }

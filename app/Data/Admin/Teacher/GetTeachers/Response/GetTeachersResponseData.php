@@ -12,7 +12,7 @@ class GetTeachersResponseData extends Data
 {
     public function __construct(
         #[OAT\Property]
-        public int $ID,
+        public int $id,
         #[OAT\Property]
         public ?string $name,
     ) {}

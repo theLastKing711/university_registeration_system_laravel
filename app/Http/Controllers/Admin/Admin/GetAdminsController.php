@@ -23,7 +23,7 @@ class GetAdminsController extends Controller
         // sleep(4);
 
         return GetAdminsResponseData::collect(
-            User::all()
+            User::paginate($request->perPage)
         );
     }
 }

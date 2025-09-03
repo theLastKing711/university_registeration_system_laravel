@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Department;
 
+use App\Data\Admin\Department\GetDepartment\Request\GetDepartmentRequestData;
 use App\Data\Admin\Department\GetDepartments\Response\GetDepartmentsResponseData;
 use App\Data\Shared\Swagger\Response\SuccessListResponse;
 use App\Http\Controllers\Controller;
@@ -12,11 +13,11 @@ class GetDepartmentsController extends Controller
 {
     #[OAT\Get(path: '/admins/departments', tags: ['adminsDepartments'])]
     #[SuccessListResponse(GetDepartmentsResponseData::class)]
-    public function __invoke()
+    public function __invoke(GetDepartmentRequestData $request)
     {
         return
             GetDepartmentsResponseData::collect(
-                Department::all()
+                Department::paginate($request->perPage)
             );
 
     }
