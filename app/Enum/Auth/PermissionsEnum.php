@@ -51,6 +51,7 @@ enum PermissionsEnum: string
     case SHOW_EXAM = 'show exams';
     case EDIT_EXAM = 'edit exams';
     case DELETE_EXAM = 'delete exams';
+    case LIST_EXAM_SCHEDULE = 'list exams schedule';
 
     case CREATE_LECTURE = 'create lectures';
     case LIST_LECTURE = 'list lectures';
@@ -172,6 +173,8 @@ enum PermissionsEnum: string
                 self::LIST_EXAM,
                 self::SHOW_EXAM,
                 self::DELETE_EXAM,
+                self::LIST_EXAM_SCHEDULE,
+                // self::SHOW_EXAM_SCHEDULE,
             ];
     }
 

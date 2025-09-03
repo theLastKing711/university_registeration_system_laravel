@@ -11,7 +11,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Log;
 use OpenApi\Attributes as OAT;
 
 class AuthController extends Controller
@@ -88,8 +87,6 @@ class AuthController extends Controller
     #[JsonRequestBody(LoginData::class)]
     public function login(Request $request, LoginData $data): mixed
     {
-        Log::info('hello world');
-
         if (
             Auth::attempt(['name' => $data->name, 'password' => $data->password])) {
 
