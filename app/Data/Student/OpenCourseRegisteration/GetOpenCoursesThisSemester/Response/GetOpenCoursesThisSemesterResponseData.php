@@ -12,8 +12,18 @@ class GetOpenCoursesThisSemesterResponseData extends Data
 {
     public function __construct(
         #[OAT\Property]
-        public int $year,
+        public int $id,
         #[OAT\Property]
-        public int $semester,
+        public string $name,
+        #[OAT\Property]
+        public string $department_name,
+        #[OAT\Property]
+        public string $code,
+        #[OAT\Property]
+        public int $credits,
+        #[OAT\Property]
+        public int $open_for_students_in_year,
+        #[OAT\Property]
+        public int $price,
     ) {}
 }

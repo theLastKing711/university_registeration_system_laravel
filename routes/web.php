@@ -90,6 +90,7 @@ use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksThisSeme
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesScheduleController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetOpenCoursesThisSemesterController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetStudentRegisteredOpenCoursesThisSemesterController;
+use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterInOpenCourseController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\RegisterInOpenCoursesController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\UnRegisterFromOpenCourseController;
 use Illuminate\Support\Facades\Route;
@@ -641,22 +642,25 @@ Route::prefix('students')
     ->middleware(['api', 'auth:sanctum', RolesEnum::oneRoleOnlyMiddleware(RolesEnum::STUDENT)])
     ->group(function () {
 
-        Route::prefix('open-course-registerations')->group(function () {
+        Route::prefix('open-course-registerations')
+            ->group(function () {
 
-            Route::get('', action: GetOpenCoursesThisSemesterController::class);
-            Route::get('schedule', GetOpenCoursesScheduleController::class);
+                Route::get('', action: GetOpenCoursesThisSemesterController::class);
+                Route::get('schedule', GetOpenCoursesScheduleController::class);
 
-            Route::get('marks', GetCoursesMarksController::class);
+                Route::get('marks', GetCoursesMarksController::class);
 
-            Route::get('marks/this-semester', GetCoursesMarksThisSemesterController::class);
+                Route::get('marks/this-semester', GetCoursesMarksThisSemesterController::class);
 
-            Route::get('registered-courses/this-semester', GetStudentRegisteredOpenCoursesThisSemesterController::class);
+                Route::get('registered-courses/this-semester', GetStudentRegisteredOpenCoursesThisSemesterController::class);
 
-            Route::post('', RegisterInOpenCoursesController::class);
+                Route::post('{id}', RegisterInOpenCourseController::class);
 
-            Route::delete('{id}', UnRegisterFromOpenCourseController::class);
+                // Route::post('', RegisterInOpenCoursesController::class);
 
-        });
+                Route::delete('{id}', UnRegisterFromOpenCourseController::class);
+
+            });
 
         // Route::prefix('course-registerations')
         //     ->group(function () {

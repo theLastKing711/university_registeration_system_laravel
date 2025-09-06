@@ -16,8 +16,12 @@ return [
         'student unregistered in course' => 'الطالب صاحب المعرف :id غير مسجل بالمادة, لايمكن تسجيل له علامة فحص.',
     ],
     'open_coruse_registeraions' => [
-        'unfinished_required_prerequisites' => ':courses_codes لا يمكن التسجيل بالمقرر بسسب عدم إنهاء المتطلبات التالية للمقرر',
-        'duplicate_registered_course' => 'أكثر من مرة واحدة,:course_code لا يمكن التسجيل بالمقرر',
+        // 'unfinished_required_prerequisites' => ':courses_codes لا يمكن التسجيل بالمقرر بسسب عدم إنهاء المتطلبات التالية للمقرر',
+        'unfinished_required_prerequisites' => 'لا يمكن التسجيل بالمقرر بسسب عدم إنهاء المتطلبات التالية للمقرر :courses_codes.',
+
+        // 'duplicate_registered_course' => 'أكثر من مرة واحدة,:course_code لا يمكن التسجيل بالمقرر',
+        'duplicate_registered_course' => 'لايمكن التسجيل بالمادة :course_code, أكثر من مرة واحدة.',
+
     ],
     'admin' => [
         'open_coruse_registeraions' => [

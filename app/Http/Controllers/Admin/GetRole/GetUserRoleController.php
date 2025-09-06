@@ -31,8 +31,15 @@ class GetUserRoleController extends Controller
             $request
                 ->action;
 
+        $student_role_or_empty =
+            $role === 'studentS'
+            ?
+            ' student'
+            :
+            '';
+
         $permission =
-            "{$action} {$route}";
+            "{$action}{$student_role_or_empty} {$route}";
 
         $logged_user =
             User::query()

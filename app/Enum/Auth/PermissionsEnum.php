@@ -77,6 +77,8 @@ enum PermissionsEnum: string
     case EDIT_TEACHER = 'edit teachers';
     case DELETE_TEACHER = 'delete teachers';
 
+    case LIST_STUDENT_OPEN_COURSE_REGISTERATIONS_THIS_SEMESTER = 'list student open-course-registerations';
+
     /**
      * @return PermissionsEnum[]
      **/
@@ -241,6 +243,17 @@ enum PermissionsEnum: string
                 self::LIST_TEACHER,
                 self::SHOW_TEACHER,
                 self::DELETE_TEACHER,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_student_permissions()
+    {
+        return
+            [
+                self::LIST_STUDENT_OPEN_COURSE_REGISTERATIONS_THIS_SEMESTER,
             ];
     }
 
