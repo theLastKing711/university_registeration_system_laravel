@@ -17,7 +17,7 @@ class UnRegisterFromOpenCourseController extends OpenCourseRegisterationControll
     {
 
         StudentCourseRegisteration::query()
-            ->where(
+            ->firstWhere(
                 [
                     'course_id' => $request->id,
                     'student_id' => Auth::User()->id,

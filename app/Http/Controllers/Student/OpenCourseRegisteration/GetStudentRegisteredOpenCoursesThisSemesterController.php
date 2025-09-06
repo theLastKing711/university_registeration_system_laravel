@@ -49,6 +49,19 @@ class GetStudentRegisteredOpenCoursesThisSemesterController extends Controller
                 ->load([
                     'courses' => fn ($query) => $query
                         ->with('course')
+                        ->when(
+                            $request->query,
+                            fn ($query) => $query
+                                ->whereHas(
+                                    'course',
+                                    fn ($query) => $query->
+                                            whereAny(
+                                                ['name', 'name'],
+                                                'LIKE',
+                                                "%{$request->query}%"
+                                            )
+                                )
+                        )
                         ->where(
                             'academic_year_semester_id',
                             $current_year_semester->id

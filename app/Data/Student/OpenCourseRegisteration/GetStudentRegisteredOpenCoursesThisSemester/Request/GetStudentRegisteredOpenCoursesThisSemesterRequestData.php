@@ -9,6 +9,7 @@ class GetStudentRegisteredOpenCoursesThisSemesterRequestData extends PaginationQ
     public function __construct(
         ?int $page,
         ?int $perPage,
+        public ?string $query,
     ) {
         parent::__construct($page, $perPage);
     }

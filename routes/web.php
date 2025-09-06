@@ -654,9 +654,9 @@ Route::prefix('students')
 
                 Route::get('registered-courses/this-semester', GetStudentRegisteredOpenCoursesThisSemesterController::class);
 
-                Route::post('{id}', RegisterInOpenCourseController::class);
+                Route::post('', RegisterInOpenCoursesController::class);
 
-                // Route::post('', RegisterInOpenCoursesController::class);
+                Route::post('{id}', RegisterInOpenCourseController::class);
 
                 Route::delete('{id}', UnRegisterFromOpenCourseController::class);
 
