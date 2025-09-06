@@ -24,7 +24,7 @@ class GetCoursesMarksThisSemesterResponseData extends Data
         // #[OAT\Property]
         // public int $semester,
         #[OAT\Property]
-        public int $final_mark,
+        public ?int $final_mark,
         // #[DateProperty]
         // public string $date_applied = now()
         #[OAT\Property]

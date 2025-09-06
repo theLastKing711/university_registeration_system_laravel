@@ -646,6 +646,7 @@ Route::prefix('students')
             ->group(function () {
 
                 Route::get('', action: GetOpenCoursesThisSemesterController::class);
+
                 Route::get('schedule', GetOpenCoursesScheduleController::class);
 
                 Route::get('marks', GetCoursesMarksController::class);

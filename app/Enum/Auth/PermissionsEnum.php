@@ -77,7 +77,13 @@ enum PermissionsEnum: string
     case EDIT_TEACHER = 'edit teachers';
     case DELETE_TEACHER = 'delete teachers';
 
-    case LIST_STUDENT_OPEN_COURSE_REGISTERATIONS_THIS_SEMESTER = 'list student open-course-registerations';
+    case LIST_STUDENT_OPEN_COURSE_REGISTERATION_THIS_SEMESTER = 'list student open-course-registerations this-semester';
+    case LIST_STUDENT_OPEN_COURSE_REGISTERATION = 'list student open-course-registerations';
+    case LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS_THIS_SEMESTER = 'list student open-course-registerations marks this semester';
+    case LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS = 'list student open-course-registerations marks';
+
+    case CREATE_STUDENT_OPEN_COURSE_REGISTERATION = 'create student open-course-registerations';
+    case DELETE_STUDENT_OPEN_COURSE_REGISTERATION = 'delete student open-course-registerations';
 
     /**
      * @return PermissionsEnum[]
@@ -253,7 +259,12 @@ enum PermissionsEnum: string
     {
         return
             [
-                self::LIST_STUDENT_OPEN_COURSE_REGISTERATIONS_THIS_SEMESTER,
+                self::LIST_STUDENT_OPEN_COURSE_REGISTERATION_THIS_SEMESTER,
+                self::LIST_STUDENT_OPEN_COURSE_REGISTERATION,
+                self::LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS_THIS_SEMESTER,
+                self::LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS,
+                self::CREATE_STUDENT_OPEN_COURSE_REGISTERATION,
+                self::DELETE_STUDENT_OPEN_COURSE_REGISTERATION,
             ];
     }
 

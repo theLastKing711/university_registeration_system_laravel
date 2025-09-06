@@ -17,6 +17,7 @@ class GetCoursesMarksController extends Controller
     #[OAT\Get(path: '/students/open-course-registerations/marks', tags: ['studentMarks'])]
     #[QueryParameter('page', 'integer')]
     #[QueryParameter('perPage', 'integer')]
+    #[QueryParameter('query')]
     #[SuccessItemResponse(GetCoursesMarksResponsePaginationResultData::class)]
     public function __invoke(GetCoursesMarksRequestData $request)
     {
