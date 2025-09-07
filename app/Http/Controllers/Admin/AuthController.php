@@ -127,7 +127,7 @@ class AuthController extends Controller
                     ->hasRole(RolesEnum::STUDENT);
 
             $dashboard_redirect_route =
-                $is_user_student ? "/students/{$route}" : "/admins/{$route}";
+                $is_user_student ? '/students/open-course-registerations' : "/admins/{$route}";
 
             return
                 new LoginDataResponse(

@@ -19,7 +19,7 @@ class GetCoursesMarksResponseData extends Data
         #[OAT\Property]
         public int $academic_year_semester_id,
         #[OAT\Property]
-        public int $final_mark,
+        public ?int $final_mark,
 
         #[OAT\Property]
         public int $exam_mark = 100,

@@ -50,6 +50,11 @@ class GetOpenCoursesThisSemesterController extends Controller
         return DB::table('courses')
             ->leftJoin('departments', 'courses.department_id', operator: 'departments.id')
             ->join('open_course_registerations', 'open_course_registerations.course_id', 'courses.id')
+            ->join(
+                'academic_year_semesters',
+                'academic_year_semesters.id',
+                'open_course_registerations.academic_year_semester_id'
+            )
             ->where(
                 'open_course_registerations.academic_year_semester_id',
                 $department_active_year_semester_id
@@ -71,6 +76,8 @@ class GetOpenCoursesThisSemesterController extends Controller
             ->select(
                 'courses.*',
                 'open_course_registerations.id',
+                'academic_year_semesters.year',
+                'academic_year_semesters.semester',
             )
             ->addSelect(
                 FacadesDB::raw("open_course_registerations.price_in_usd * {$syp_usd_exchange_rate} as price"),

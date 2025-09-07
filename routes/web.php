@@ -605,26 +605,54 @@ Route::prefix('admins')
                 });
 
             Route::prefix('teachers')
-                ->middleware([
-                    RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
-                ])
+
                 ->group(function () {
 
                     // Route::get('paginated', GetTeachersPaginatedController::class);
 
-                    Route::get('', GetTeachersController::class);
+                    Route::get('', GetTeachersController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::LIST_TEACHER
+                            )
+                        );
 
                     Route::get('list', GetTeachersListController::class);
 
-                    Route::get('{id}', GetTeacherController::class);
+                    Route::get('{id}', GetTeacherController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_TEACHER
+                            )
+                        );
 
-                    Route::post('', CreateTeacherController::class);
+                    Route::post('', CreateTeacherController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::CREATE_TEACHER
+                            )
+                        );
 
-                    Route::patch('{id}', UpdateTeacherController::class);
+                    Route::patch('{id}', UpdateTeacherController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_TEACHER
+                            )
+                        );
 
-                    Route::delete('{id}', DeleteTeacherController::class);
+                    Route::delete('{id}', DeleteTeacherController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_TEACHER
+                            )
+                        );
 
-                    Route::delete('', DeleteTeachersController::class);
+                    Route::delete('', DeleteTeachersController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::DELETE_TEACHER
+                            )
+                        );
 
                 });
 
@@ -645,21 +673,56 @@ Route::prefix('students')
         Route::prefix('open-course-registerations')
             ->group(function () {
 
-                Route::get('', action: GetOpenCoursesThisSemesterController::class);
+                Route::get('', action: GetOpenCoursesThisSemesterController::class)
+                    ->middleware([
+                        PermissionsEnum::onePermissionOnlyMiddleware(
+                            PermissionsEnum::LIST_STUDENT_OPEN_COURSE_REGISTERATION
+                        ),
+                    ]);
 
                 Route::get('schedule', GetOpenCoursesScheduleController::class);
 
-                Route::get('marks', GetCoursesMarksController::class);
+                Route::get('marks', GetCoursesMarksController::class)
+                    ->middleware([
+                        PermissionsEnum::onePermissionOnlyMiddleware(
+                            PermissionsEnum::LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS
+                        ),
+                    ]);
 
-                Route::get('marks/this-semester', GetCoursesMarksThisSemesterController::class);
+                Route::get('marks/this-semester', GetCoursesMarksThisSemesterController::class)
+                    ->middleware([
+                        PermissionsEnum::onePermissionOnlyMiddleware(
+                            PermissionsEnum::LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS_THIS_SEMESTER
+                        ),
+                    ]);
 
-                Route::get('registered-courses/this-semester', GetStudentRegisteredOpenCoursesThisSemesterController::class);
+                Route::get('registered-courses/this-semester', GetStudentRegisteredOpenCoursesThisSemesterController::class)
+                    ->middleware([
+                        PermissionsEnum::onePermissionOnlyMiddleware(
+                            PermissionsEnum::LIST_STUDENT_OPEN_COURSE_REGISTERATION_THIS_SEMESTER
+                        ),
+                    ]);
 
-                Route::post('', RegisterInOpenCoursesController::class);
+                Route::post('', RegisterInOpenCoursesController::class)
+                    ->middleware([
+                        PermissionsEnum::onePermissionOnlyMiddleware(
+                            PermissionsEnum::CREATE_STUDENT_OPEN_COURSE_REGISTERATION
+                        ),
+                    ]);
 
-                Route::post('{id}', RegisterInOpenCourseController::class);
+                Route::post('{id}', RegisterInOpenCourseController::class)
+                    ->middleware([
+                        PermissionsEnum::onePermissionOnlyMiddleware(
+                            PermissionsEnum::CREATE_STUDENT_OPEN_COURSE_REGISTERATION
+                        ),
+                    ]);
 
-                Route::delete('{id}', UnRegisterFromOpenCourseController::class);
+                Route::delete('{id}', UnRegisterFromOpenCourseController::class)
+                    ->middleware([
+                        PermissionsEnum::onePermissionOnlyMiddleware(
+                            PermissionsEnum::DELETE_STUDENT_OPEN_COURSE_REGISTERATION
+                        ),
+                    ]);
 
             });
 

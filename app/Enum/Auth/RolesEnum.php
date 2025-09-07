@@ -48,10 +48,17 @@ enum RolesEnum: string
                 ...PermissionsEnum::get_open_course_registerations_permissions(),
                 ...PermissionsEnum::get_students(),
                 ...PermissionsEnum::get_teachers(),
+                ...PermissionsEnum::get_filter_header_permissions(),
             ],
             self::STUDENT => PermissionsEnum::get_student_permissions(),
-            self::COURSES_REGISTERER => PermissionsEnum::get_open_course_registerations_permissions(),
-            self::MARKS_ASSIGNER => PermissionsEnum::get_open_course_registerations_permissions(),
+            self::COURSES_REGISTERER => [
+                ...PermissionsEnum::get_open_course_registerations_permissions(),
+                ...PermissionsEnum::get_filter_header_permissions(),
+            ],
+            self::MARKS_ASSIGNER => [
+                ...PermissionsEnum::get_open_course_registerations_permissions(),
+                ...PermissionsEnum::get_filter_header_permissions(),
+            ],
         };
     }
 

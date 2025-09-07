@@ -70,16 +70,20 @@ enum PermissionsEnum: string
     case SHOW_STUDENT = 'show students';
     case EDIT_STUDENT = 'edit students';
     case DELETE_STUDENT = 'delete students';
-
     case CREATE_TEACHER = 'create teachers';
     case LIST_TEACHER = 'list teachers';
     case SHOW_TEACHER = 'show teachers';
     case EDIT_TEACHER = 'edit teachers';
     case DELETE_TEACHER = 'delete teachers';
 
+    // filter header permissions
+    case LIST_ACADEMIC_YEAR_SEMESTER_LIST = 'list academic-year-semesters list';
+    case LIST_DEPARTMENT_LIST = 'list departments list';
+
+    // student permissions
     case LIST_STUDENT_OPEN_COURSE_REGISTERATION_THIS_SEMESTER = 'list student open-course-registerations this-semester';
     case LIST_STUDENT_OPEN_COURSE_REGISTERATION = 'list student open-course-registerations';
-    case LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS_THIS_SEMESTER = 'list student open-course-registerations marks this semester';
+    case LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS_THIS_SEMESTER = 'list student open-course-registerations marks this-semester';
     case LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS = 'list student open-course-registerations marks';
 
     case CREATE_STUDENT_OPEN_COURSE_REGISTERATION = 'create student open-course-registerations';
@@ -249,6 +253,18 @@ enum PermissionsEnum: string
                 self::LIST_TEACHER,
                 self::SHOW_TEACHER,
                 self::DELETE_TEACHER,
+            ];
+    }
+
+    /**
+     * @return PermissionsEnum[]
+     **/
+    public static function get_filter_header_permissions()
+    {
+        return
+            [
+                self::LIST_ACADEMIC_YEAR_SEMESTER_LIST,
+                self::LIST_DEPARTMENT_LIST,
             ];
     }
 

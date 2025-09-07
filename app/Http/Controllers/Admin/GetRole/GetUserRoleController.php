@@ -20,26 +20,38 @@ class GetUserRoleController extends Controller
     public function __invoke(GetUserRoleRequestData $request)
     {
 
-        [$role, $route] =
+        $route_array =
             explode(
                 '/',
                 $request
                     ->resourse
             );
 
+        $role = '';
+
+        $route = '';
+
+        foreach ($route_array as $key => $value) {
+            if ($key === 0) {
+                $role = $value;
+            } else {
+                $route = "{$route} {$value}";
+            }
+        }
+
         $action =
             $request
                 ->action;
 
         $student_role_or_empty =
-            $role === 'studentS'
+            $role === 'students'
             ?
             ' student'
             :
             '';
 
         $permission =
-            "{$action}{$student_role_or_empty} {$route}";
+            "{$action}{$student_role_or_empty}{$route}";
 
         $logged_user =
             User::query()
