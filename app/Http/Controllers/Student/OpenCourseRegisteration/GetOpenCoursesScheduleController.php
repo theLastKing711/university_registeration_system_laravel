@@ -7,8 +7,10 @@ use App\Data\Student\OpenCourseRegisteration\GetCoursesScheduleThisSemester\Resp
 use App\Http\Controllers\Controller;
 use App\Models\ClassroomCourseTeacher;
 use DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Attributes as OAT;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class GetOpenCoursesScheduleController extends Controller
 {
@@ -58,9 +60,84 @@ class GetOpenCoursesScheduleController extends Controller
                                 )
                         )
                 )
-                ->get();
+                ->orderBy('from')
+                ->get()
+                ->groupBy([
+                    'from',
+                    'to',
+                    'day',
+                ]);
 
-        return GetCoursesScheduleThisSemesterResponseData::collect($student_course_schedule);
+        $student_courses_schedule_header =
+            [
+                'السبت',
+                'الأحد',
+                'الاثنين',
+                'الثلاثاء',
+                'الأربعاء',
+                'الخميس',
+                'الجمعة',
+            ];
+
+        $student_courses_schedule_array =
+                [];
+
+        // return $student_courses_schedule_header;
+
+        // $row_index = 0;
+
+        foreach ($student_course_schedule as $from => $to_data) {
+
+            foreach ($to_data as $to => $classroom_course_data) {
+
+                // $student_courses_schedule_array[$row_index][] =
+                //     array_fill(0, count($student_courses_schedule_header), '');
+
+                foreach ($student_courses_schedule_header as $day_index => $day) {
+
+                    // $student_courses_schedule_array[$row_index][$day_index] =
+                    //     25;
+                    // isset(
+                    //     $student_course_schedule[$from][$to]
+                    // )
+
+                    if (
+                        isset(
+                            $student_course_schedule[$from][$to][$day_index]
+                        )
+                    ) {
+                        $student_courses_schedule_array["{$from}-{$to}"][$day_index] =
+                            $student_course_schedule[$from][$to][$day_index]
+                                ->pluck(
+                                    'courseTeacher.course.course.name'
+                                );
+
+                    } else {
+                        $student_courses_schedule_array["{$from}-{$to}"][$day_index] =
+                            [];
+                    }
+                }
+
+                // $row_index++;
+
+            }
+
+        }
+
+        // return [];
+
+        // return $student_courses_schedule_array;
+
+        return
+            Pdf::view(
+                'pdf.student.courses-schedule',
+                [
+                    'table_headers' => ['', ...$student_courses_schedule_header],
+                    'table_data' => $student_courses_schedule_array,
+                ]
+            )
+                ->name('courses schedule'.Carbon::now()->format('Y-m-d H:i:s').'.pdf')
+                ->download('courses schedule.pdf');
 
     }
 }

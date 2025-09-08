@@ -85,6 +85,7 @@ enum PermissionsEnum: string
     case LIST_STUDENT_OPEN_COURSE_REGISTERATION = 'list student open-course-registerations';
     case LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS_THIS_SEMESTER = 'list student open-course-registerations marks this-semester';
     case LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS = 'list student open-course-registerations marks';
+    case LIST_STUDENT_OPEN_COURSE_REGISTERATION_SCHEDULE = 'list student open-course-registerations schedule';
 
     case CREATE_STUDENT_OPEN_COURSE_REGISTERATION = 'create student open-course-registerations';
     case DELETE_STUDENT_OPEN_COURSE_REGISTERATION = 'delete student open-course-registerations';
@@ -279,6 +280,7 @@ enum PermissionsEnum: string
                 self::LIST_STUDENT_OPEN_COURSE_REGISTERATION,
                 self::LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS_THIS_SEMESTER,
                 self::LIST_STUDENT_OPEN_COURSE_REGISTERATION_MARKS,
+                self::LIST_STUDENT_OPEN_COURSE_REGISTERATION_SCHEDULE,
                 self::CREATE_STUDENT_OPEN_COURSE_REGISTERATION,
                 self::DELETE_STUDENT_OPEN_COURSE_REGISTERATION,
             ];
