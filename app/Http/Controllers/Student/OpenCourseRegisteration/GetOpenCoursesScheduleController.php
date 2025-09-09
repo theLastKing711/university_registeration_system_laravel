@@ -82,24 +82,13 @@ class GetOpenCoursesScheduleController extends Controller
         $student_courses_schedule_array =
                 [];
 
-        // return $student_courses_schedule_header;
-
         // $row_index = 0;
 
         foreach ($student_course_schedule as $from => $to_data) {
 
             foreach ($to_data as $to => $classroom_course_data) {
 
-                // $student_courses_schedule_array[$row_index][] =
-                //     array_fill(0, count($student_courses_schedule_header), '');
-
                 foreach ($student_courses_schedule_header as $day_index => $day) {
-
-                    // $student_courses_schedule_array[$row_index][$day_index] =
-                    //     25;
-                    // isset(
-                    //     $student_course_schedule[$from][$to]
-                    // )
 
                     if (
                         isset(
@@ -123,10 +112,6 @@ class GetOpenCoursesScheduleController extends Controller
             }
 
         }
-
-        // return [];
-
-        // return $student_courses_schedule_array;
 
         return
             Pdf::view(

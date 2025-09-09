@@ -70,6 +70,7 @@ enum PermissionsEnum: string
     case SHOW_STUDENT = 'show students';
     case EDIT_STUDENT = 'edit students';
     case DELETE_STUDENT = 'delete students';
+
     case CREATE_TEACHER = 'create teachers';
     case LIST_TEACHER = 'list teachers';
     case SHOW_TEACHER = 'show teachers';
