@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -15,6 +16,15 @@ Broadcast::channel('teachers', function (User $user) {
 
 // must be defined for private channels
 // user is the logged in user
-Broadcast::channel('teachers.{id}', function (User $user) {
+Broadcast::channel('teachers.{id}', function (User $user, int $id) {
+
+    // return $id === 1;
     return true;
 });
+
+// other way to write it teachers.{id}
+// Broadcast::channel('teachers.{teacher}', function (User $user, Teacher $teacher) {
+
+//     return $teacher->id === 2;
+//     // return true;
+// });
