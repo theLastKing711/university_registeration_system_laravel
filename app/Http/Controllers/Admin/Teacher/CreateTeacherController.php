@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Teacher;
 use App\Data\Admin\Teacher\CreateTeacher\Request\CreateTeacherRequestData;
 use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
+use App\Events\Admin\NewTeacherAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use OpenApi\Attributes as OAT;
@@ -16,12 +17,17 @@ class CreateTeacherController extends Controller
     #[SuccessNoContentResponse]
     public function __invoke(CreateTeacherRequestData $request)
     {
+
         $teacher = new Teacher;
 
         $teacher->name = $request->name;
         $teacher->department_id = $request->department_id;
 
         $teacher->save();
+
+        NewTeacherAdded::dispatch(
+            Teacher::first()
+        );
 
     }
 }
