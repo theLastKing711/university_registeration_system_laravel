@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 // change in broadcastAs return value and potentially other functions,
 // requires php artisan queue:restart
 // or restart manually
-class NewTeacherAdded implements ShouldBroadcast
+class TeacherUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -37,12 +37,12 @@ class NewTeacherAdded implements ShouldBroadcast
 
     public function broadcastOn(): Channel
     {
-        return new PrivateChannel('teachers');
+        return new PrivateChannel("teachers.{$this->teacher->id}");
     }
 
     public function broadcastAs(): string
     {
-        return 'created';
+        return 'updated';
     }
 
     public function broadcastWith(): array
@@ -50,7 +50,7 @@ class NewTeacherAdded implements ShouldBroadcast
         return [
             'payload' => [
                 'message' => [
-                    "New teacher with name {$this->teacher->name} has been created.",
+                    "teacher with name {$this->teacher->name} has been updated.",
                 ],
             ],
         ];

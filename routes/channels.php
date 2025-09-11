@@ -12,3 +12,9 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('teachers', function (User $user) {
     return true;
 });
+
+// must be defined for private channels
+// user is the logged in user
+Broadcast::channel('teachers.{id}', function (User $user) {
+    return true;
+});
