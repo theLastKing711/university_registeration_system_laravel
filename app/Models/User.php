@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enum\Auth\RolesEnum;
 use App\Enum\FileUploadDirectory;
 use App\Enum\SortDirection;
 use App\Interfaces\IUploadable;
@@ -443,6 +444,22 @@ class User extends Authenticatable implements IUploadable
                 ->where(
                     'collection_name',
                     FileUploadDirectory::SCHOOL_FILES
+                );
+    }
+
+    /**
+     * Get the profilePicture associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Media, $this>
+     */
+    public function adminNotifications()
+    {
+        return
+            $this
+                ->notifications()
+                ->whereIn(
+                    'type',
+                    RolesEnum::getAdminNotifications()
                 );
     }
 

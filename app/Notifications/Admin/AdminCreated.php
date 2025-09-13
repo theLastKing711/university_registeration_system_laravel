@@ -33,6 +33,11 @@ class AdminCreated extends Notification
         return ['database', 'broadcast'];
     }
 
+    public function getMessage(object $notifiable): string
+    {
+        return "Dear {$notifiable->name}, a new admin with name {$this->admin->name} has been added";
+    }
+
     /**
      * Get the mail representation of the notification.
      */
@@ -52,9 +57,11 @@ class AdminCreated extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'recipient_id' => $notifiable->id,
+            // 'recipient_id' => $notifiable->id,
             'admin_id' => $this->admin->id,
             'admin_name' => $this->admin->name,
+            'message' => $this->getMessage($notifiable),
+            'link' => "/admins/admins/{$this->admin->id}",
         ];
     }
 
@@ -63,7 +70,7 @@ class AdminCreated extends Notification
         return new BroadcastMessage([
             'payload' => [
                 'message' => [
-                    "Dear {$notifiable->name}, a new admin with name {$this->admin->name} has been added",
+                    $this->getMessage($notifiable),
                 ],
             ],
         ]);

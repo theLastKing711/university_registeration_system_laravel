@@ -2,6 +2,8 @@
 
 namespace App\Enum\Auth;
 
+use App\Enum\NotificationType;
+
 enum RolesEnum: string
 {
     // case NAMEINAPP = 'name-in-database';
@@ -23,6 +25,38 @@ enum RolesEnum: string
             self::COURSES_REGISTERER => 'Course Cegisterer',
             self::MARKS_ASSIGNER => 'Marks Assigner',
         };
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @return NotificationType[]
+     **/
+    public function notifications(): array
+    {
+
+        return match ($this) {
+            self::ADMIN => [
+                NotificationType::AdminCreated,
+                NotificationType::TeacherAssignedToCourse,
+            ],
+            self::STUDENT => [],
+            self::COURSES_REGISTERER => [
+                NotificationType::AdminCreated,
+                NotificationType::TeacherAssignedToCourse,
+            ],
+            self::MARKS_ASSIGNER => [
+                NotificationType::AdminCreated,
+                NotificationType::TeacherAssignedToCourse,
+            ],
+        };
+    }
+
+    public static function getAdminNotifications(): array
+    {
+        return self::ADMIN->notifications();
     }
 
     /**

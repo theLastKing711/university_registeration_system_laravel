@@ -60,6 +60,7 @@ use App\Http\Controllers\Admin\Lecture\CreateLectureController;
 use App\Http\Controllers\Admin\Lecture\GetLectureController;
 use App\Http\Controllers\Admin\Lecture\GetLecturesController;
 use App\Http\Controllers\Admin\Lecture\UpdateLectureController;
+use App\Http\Controllers\Admin\Notification\GetNotificationsController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\CreateOpenCourseRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationsController;
@@ -536,6 +537,18 @@ Route::prefix('admins')
                                 PermissionsEnum::DELETE_LECTURE
                             )
                         );
+
+                });
+
+            Route::prefix('notifications')
+                // ->middleware(
+                //     [
+                //         RolesEnum::oneRoleOnlyMiddleware(RolesEnum::ADMIN),
+                //     ]
+                // )
+                ->group(function () {
+
+                    Route::get('', GetNotificationsController::class);
 
                 });
 
