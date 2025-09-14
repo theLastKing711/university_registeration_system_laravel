@@ -37,7 +37,7 @@ class GetNotificationsController extends Controller
             ->json([
                 'data' => $notifications->items(),
                 'per_page' => $notifications->perPage(),
-                'next_cursor' => $notifications->nextCursor(),
+                'next_cursor' => $notifications->nextCursor()?->encode(),
                 'total' => $total_unread_notifications,
             ]);
 
