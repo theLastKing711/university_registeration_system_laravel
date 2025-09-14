@@ -61,7 +61,7 @@ class AdminCreated extends Notification
             'admin_id' => $this->admin->id,
             'admin_name' => $this->admin->name,
             'message' => $this->getMessage($notifiable),
-            'link' => "/admins/admins/{$this->admin->id}",
+            'link' => "/admins/admins/edit/{$this->admin->id}",
         ];
     }
 

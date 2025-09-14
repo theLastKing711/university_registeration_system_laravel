@@ -22,9 +22,10 @@ class GetNotificationsController extends Controller
 
         return $notifications =
             Auth::User()
-                ->adminNotifications()
+                // ->adminNotifications()
+                ->notifications()
                 ->cursorPaginate(
-                    perPage: 1
+                    perPage: $request->perPage
                 );
 
         return GetNotificationsResponseData::collect(
