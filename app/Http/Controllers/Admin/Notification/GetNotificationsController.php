@@ -20,13 +20,26 @@ class GetNotificationsController extends Controller
     public function __invoke(GetNotificationsRequestData $request)
     {
 
-        return $notifications =
+        $total_unread_notifications =
+            Auth::User()
+                ->unreadNotifications()
+                ->count();
+
+        $notifications =
             Auth::User()
                 // ->adminNotifications()
                 ->notifications()
                 ->cursorPaginate(
                     perPage: $request->perPage
                 );
+
+        return response()
+            ->json([
+                'data' => $notifications->items(),
+                'per_page' => $notifications->perPage(),
+                'next_cursor' => $notifications->nextCursor(),
+                'total' => $total_unread_notifications,
+            ]);
 
         return GetNotificationsResponseData::collect(
             $notifications->data
