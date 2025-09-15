@@ -13,7 +13,7 @@ class CreateInvokableControllerWithData extends Command
      *
      * @var string
      */
-    protected $signature = 'make:data-controller {name} {--request==} {--model==} {--query==} {--post==} {--post-form==} {--patch==} {--patch-form==} {--get-one==} {--get-many==} {--delete-one==} {--delete-many==} {--pagination==}';
+    protected $signature = 'make:data-controller {name} {--request==} {--model==} {--query==} {--post==} {--post-form==} {--patch==} {--patch-form==} {--get-one==} {--get-many==} {--delete-one==} {--delete-many==} {--pagination==} {--abstract}';
 
     /**
      * The console command description.
@@ -879,6 +879,66 @@ class CreateInvokableControllerWithData extends Command
 
             Artisan::call('make:data', [
                 'name' => $patch_form_option,
+            ]);
+
+            return;
+        }
+
+        $abstract_option = $this->option('abstract');
+
+        if ($abstract_option) {
+
+            $abstract_path =
+                str_replace(
+                    '/',
+                    '\\',
+                    $abstract_option
+                );
+
+            $abstract_option_array =
+            explode(
+                '\\',
+                $abstract_path,
+            );
+
+            $abstract_data_class =
+                $abstract_option_array[count($abstract_option_array) - 1].'Data';
+
+            $abstract_data_name =
+                $abstract_data_class.'::class';
+
+            $abstract_final_name = $abstract_path.'Data';
+
+            $fileContents = <<<EOT
+            <?php
+
+            namespace App\Http\Controllers\\$real_path;
+
+            use App\Http\Controllers\Controller;
+            use App\Data\\$abstract_final_name;
+            use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
+            use OpenApi\Attributes as OAT;
+
+            #[
+                OAT\PathItem(
+                    path: '/$main_route/{id}',
+                    parameters: [
+                        new OAT\PathParameter(
+                            ref: '#/components/parameters/$path_ref',
+                        ),
+                    ],
+                ),
+            ]
+            abstract class $file_class_name extends Controller
+            { }
+
+            EOT;
+
+            $written = Storage::disk('app')
+                ->put('Http\Controllers'.'\\'.$this->argument('name').'Controller.php', $fileContents);
+
+            Artisan::call('make:data', [
+                'name' => $delete_one_option,
             ]);
 
             return;
