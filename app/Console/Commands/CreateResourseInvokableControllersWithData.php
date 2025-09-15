@@ -12,7 +12,7 @@ class CreateResourseInvokableControllersWithData extends Command
      *
      * @var string
      */
-    protected $signature = 'make:resourse-data-controller {path} {--with-pagination}';
+    protected $signature = 'make:resourse-data-controller {path} {--with-pagination} {--post==} {--patch==} {--get-one==} {--get-many==} {--delete-one==}';
 
     /**
      * The console command description.
@@ -38,33 +38,34 @@ class CreateResourseInvokableControllersWithData extends Command
 
         if ($this->option('with-pagination')) {
             $this
-                ->generateGetManyWithPaginationController($path, $resourse);
+                ->generateGetManyWithPaginationController($path, $resourse, $this->option('get-many'));
         } else {
             $this
-                ->generateGetManyController($path, $resourse);
+                ->generateGetManyController($path, $resourse, $this->option('get-many'));
         }
 
         $this
-            ->generateGetController($path, $resourse);
+            ->generateGetController($path, $resourse, $this->option('get-one'));
 
         $this->
-            generatePostController($path, $resourse);
+            generatePostController($path, $resourse, $this->option('post'));
 
         $this
-            ->generatePatchController($path, $resourse);
+            ->generatePatchController($path, $resourse, $this->option('patch'));
 
         $this
-            ->generateDeleteController($path, $resourse);
+            ->generateDeleteController($path, $resourse, $this->option('delete-one'));
 
     }
 
     private function genereateBaseAbstractClass($path, $resourse)
     {
         $abstract_name =
-            'Abstract'
-                .$path
-                .'\\'
-                ."{$resourse}";
+                $path
+                    .'\\'
+                    .'Abstract'
+                    .'\\'
+                    ."{$resourse}";
 
         Artisan::call('make:controller', [
             'name' => $abstract_name,
@@ -72,23 +73,27 @@ class CreateResourseInvokableControllersWithData extends Command
         ]);
     }
 
-    private function generateGetManyController($path, $resourse)
+    private function generateGetManyController($path, $resourse, ?string $action)
     {
         $resourse_plural =
             $resourse
                 .'s';
 
+        $action =
+            $action ??
+            'Get'.$resourse_plural;
+
         $get_name =
             $path
                 .'\\'
-                ."Get{$resourse_plural}";
+                .$action;
 
         $get_response_data =
             $get_name
                 .'\\'
                 .'Response'
                 .'\\'
-                ."Get{$resourse_plural}Response";
+                ."{$action}Response";
 
         Artisan::call('make:data-controller', [
             'name' => $get_name,
@@ -96,36 +101,42 @@ class CreateResourseInvokableControllersWithData extends Command
         ]);
     }
 
-    private function generateGetManyWithPaginationController($path, $resourse)
+    private function generateGetManyWithPaginationController($path, $resourse, ?string $action)
     {
 
         $resourse_plural =
             $resourse
                 .'s';
 
+        if ($action) {
+            $action =
+                $action ??
+                'Get'.$resourse_plural;
+        }
+
         $get_name =
            $path
                .'\\'
-               ."Get{$resourse_plural}";
+               ."{$action}";
 
         $get_response_data =
             $get_name
                 .'\\'
                 .'Response'
                 .'\\'
-                ."Get{$resourse_plural}Response";
+                ."{$action}Response";
 
         $pagination_name =
             $path
                 .'\\'
-                ."Get{$resourse_plural}";
+                ."{$action}";
 
         $pagination_request_data =
             $pagination_name
                 .'\\'
                 .'Request'
                 .'\\'
-                ."Get{$resourse_plural}Request";
+                ."{$action}Request";
 
         Artisan::call('make:data-controller', [
             'name' => $get_name,
@@ -134,19 +145,24 @@ class CreateResourseInvokableControllersWithData extends Command
         ]);
     }
 
-    private function generateGetController($path, $resourse)
+    private function generateGetController($path, $resourse, $action)
     {
+
+        $action =
+            $action ??
+            'Get'.$resourse;
+
         $get_name =
             $path
                 .'\\'
-                ."Get{$resourse}";
+                ."{$action}";
 
         $get_request_data =
             $get_name
                 .'\\'
                 .'Request'
                 .'\\'
-                ."Get{$resourse}Request";
+                ."{$action}Request";
 
         Artisan::call('make:data-controller', [
             'name' => $get_name,
@@ -154,19 +170,24 @@ class CreateResourseInvokableControllersWithData extends Command
         ]);
     }
 
-    private function generatePostController($path, $resourse)
+    private function generatePostController($path, $resourse, $action)
     {
+
+        $action =
+            $action ??
+            'Create'.$resourse;
+
         $post_name =
             $path
                 .'\\'
-                ."Create{$resourse}";
+                ."{$action}";
 
         $post_request_data =
             $post_name
                 .'\\'
                 .'Request'
                 .'\\'
-                ."Create{$resourse}Request";
+                ."{$action}Request";
 
         Artisan::call('make:data-controller', [
             'name' => $post_name,
@@ -174,19 +195,24 @@ class CreateResourseInvokableControllersWithData extends Command
         ]);
     }
 
-    private function generatePatchController($path, $resourse)
+    private function generatePatchController($path, $resourse, $action)
     {
+
+        $action =
+            $action ??
+            'Update'.$resourse;
+
         $patch_name =
             $path
                 .'\\'
-                ."Update{$resourse}";
+                ."{$action}";
 
         $patch_request_data =
             $patch_name
                 .'\\'
                 .'Request'
                 .'\\'
-                ."Update{$resourse}Request";
+                ."{$action}Request";
 
         Artisan::call('make:data-controller', [
             'name' => $patch_name,
@@ -194,19 +220,24 @@ class CreateResourseInvokableControllersWithData extends Command
         ]);
     }
 
-    private function generateDeleteController($path, $resourse)
+    private function generateDeleteController($path, $resourse, $action)
     {
+
+        $action =
+           $action ??
+           'Delete'.$resourse;
+
         $delete_name =
             $path
                 .'\\'
-                ."Delete{$resourse}";
+                ."{$action}";
 
         $delete_request_data =
             $delete_name
                 .'\\'
                 .'Request'
                 .'\\'
-                ."Delete{$resourse}Request";
+                ."{$action}Request";
 
         Artisan::call('make:data-controller', [
             'name' => $delete_name,

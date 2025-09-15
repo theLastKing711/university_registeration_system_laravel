@@ -108,17 +108,17 @@ class CreateInvokableControllerWithData extends Command
             $path_option = $this->option('request');
 
             $path_path =
-            str_replace(
-                '/',
-                '\\',
-                $path_option
-            );
+                str_replace(
+                    '/',
+                    '\\',
+                    $path_option
+                );
 
             $path_option_array =
-            explode(
-                '\\',
-                $path_path,
-            );
+                explode(
+                    '\\',
+                    $path_path,
+                );
 
             $path_data_class =
                 // $path_option_array[count($path_option_array) - 1].'Data';
@@ -886,7 +886,7 @@ class CreateInvokableControllerWithData extends Command
 
         $abstract_option = $this->option('abstract');
 
-        if ($abstract_option) {
+        if ($abstract_option != null) {
 
             $abstract_path =
                 str_replace(
@@ -915,8 +915,6 @@ class CreateInvokableControllerWithData extends Command
             namespace App\Http\Controllers\\$real_path;
 
             use App\Http\Controllers\Controller;
-            use App\Data\\$abstract_final_name;
-            use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
             use OpenApi\Attributes as OAT;
 
             #[
@@ -938,7 +936,7 @@ class CreateInvokableControllerWithData extends Command
                 ->put('Http\Controllers'.'\\'.$this->argument('name').'Controller.php', $fileContents);
 
             Artisan::call('make:data', [
-                'name' => $delete_one_option,
+                'name' => $abstract_option,
             ]);
 
             return;
