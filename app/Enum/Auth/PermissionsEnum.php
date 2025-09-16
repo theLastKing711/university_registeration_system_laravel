@@ -154,7 +154,7 @@ enum PermissionsEnum: string
     /**
      * @return PermissionsEnum[]
      **/
-    public static function get_courses()
+    public static function get_courses_permissions()
     {
         return
             [
@@ -169,7 +169,7 @@ enum PermissionsEnum: string
     /**
      * @return PermissionsEnum[]
      **/
-    public static function get_departments()
+    public static function get_departments_permissions()
     {
         return
             [
@@ -184,7 +184,7 @@ enum PermissionsEnum: string
     /**
      * @return PermissionsEnum[]
      **/
-    public static function get_exams()
+    public static function get_exams_permissions()
     {
         return
             [
@@ -201,7 +201,7 @@ enum PermissionsEnum: string
     /**
      * @return PermissionsEnum[]
      **/
-    public static function get_lectures()
+    public static function get_lectures_permissions()
     {
         return
             [
@@ -231,7 +231,7 @@ enum PermissionsEnum: string
     /**
      * @return PermissionsEnum[]
      **/
-    public static function get_students()
+    public static function get_students_permissions()
     {
         return
             [
@@ -246,7 +246,7 @@ enum PermissionsEnum: string
     /**
      * @return PermissionsEnum[]
      **/
-    public static function get_teachers()
+    public static function get_teachers_permissions()
     {
         return
             [
