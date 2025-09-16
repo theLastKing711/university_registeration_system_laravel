@@ -404,16 +404,7 @@ class CreateInvokableControllerWithData extends Command
             use App\Data\Shared\Swagger\Response\SuccessItemResponse;
             use OpenApi\Attributes as OAT;
 
-            #[
-                OAT\PathItem(
-                    path: '/$main_route/{id}',
-                    parameters: [
-                        new OAT\PathParameter(
-                            ref: '#/components/parameters/$path_ref',
-                        ),
-                    ],
-                ),
-            ]
+
             class $file_class_name extends Controller
             {
 
@@ -434,6 +425,7 @@ class CreateInvokableControllerWithData extends Command
 
             Artisan::call('make:data', [
                 'name' => $get_one_option,
+                '--path' => true,
             ]);
 
             // if ($this->option('with-request')) {
@@ -977,3 +969,15 @@ class CreateInvokableControllerWithData extends Command
 
     }
 }
+
+// get-one controller old path parameter
+// #[
+//     OAT\PathItem(
+//         path: '/$main_route/{id}',
+//         parameters: [
+//             new OAT\PathParameter(
+//                 ref: '#/components/parameters/$path_ref',
+//             ),
+//         ],
+//     ),
+// ]

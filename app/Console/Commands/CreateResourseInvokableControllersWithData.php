@@ -67,7 +67,7 @@ class CreateResourseInvokableControllersWithData extends Command
                     .'\\'
                     ."{$resourse}";
 
-        Artisan::call('make:controller', [
+        Artisan::call('make:data-controller', [
             'name' => $abstract_name,
             '--abstract',
         ]);
