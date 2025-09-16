@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AcademicYearSemester\UpdateAcademicYearSemesterCo
 use App\Http\Controllers\Admin\Admin\CreateAdminController;
 use App\Http\Controllers\Admin\Admin\DeleteAdminController;
 use App\Http\Controllers\Admin\Admin\GetAdminController;
+use App\Http\Controllers\Admin\Admin\GetAdminListController;
 use App\Http\Controllers\Admin\Admin\GetAdminsController;
 use App\Http\Controllers\Admin\Admin\UpdateAdminController;
 use App\Http\Controllers\Admin\AuthController;
@@ -60,6 +61,10 @@ use App\Http\Controllers\Admin\Lecture\CreateLectureController;
 use App\Http\Controllers\Admin\Lecture\GetLectureController;
 use App\Http\Controllers\Admin\Lecture\GetLecturesController;
 use App\Http\Controllers\Admin\Lecture\UpdateLectureController;
+use App\Http\Controllers\Admin\Meeting\DeleteMeetingController;
+use App\Http\Controllers\Admin\Meeting\GetMeetingController;
+use App\Http\Controllers\Admin\Meeting\GetMeetingsController;
+use App\Http\Controllers\Admin\Meeting\UpdateMeetingController;
 use App\Http\Controllers\Admin\Notification\GetNotificationsController;
 use App\Http\Controllers\Admin\Notification\MarkNotificationAsReadController;
 use App\Http\Controllers\Admin\Notification\MarkNotificationsAsReadController;
@@ -164,6 +169,7 @@ Route::prefix('admins')
                             )
                         );
 
+                    Route::get('list', GetAdminListController::class);
                     Route::get('role', GetUserRoleController::class);
 
                     Route::get('{id}', GetAdminController::class)
@@ -539,6 +545,19 @@ Route::prefix('admins')
                                 PermissionsEnum::DELETE_LECTURE
                             )
                         );
+
+                });
+
+            Route::prefix('meetings')
+                ->group(function () {
+
+                    Route::get('', GetMeetingsController::class);
+
+                    Route::get('{id}', GetMeetingController::class);
+
+                    Route::patch('{id}', UpdateMeetingController::class);
+
+                    Route::delete('{id}', DeleteMeetingController::class);
 
                 });
 

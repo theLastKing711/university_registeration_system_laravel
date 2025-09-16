@@ -153,6 +153,16 @@ class User extends Authenticatable implements IUploadable
     //     return $this->morphMany(TemporaryUploadedImages::class, 'uploadable');
     // }
 
+    /**
+     * The meetings that belong to the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Meeting, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
+     */
+    public function meetings(): BelongsToMany
+    {
+        return $this->belongsToMany(Meeting::class);
+    }
+
     // student relations
 
     /**

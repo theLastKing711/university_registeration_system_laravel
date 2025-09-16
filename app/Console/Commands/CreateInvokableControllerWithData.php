@@ -89,11 +89,16 @@ class CreateInvokableControllerWithData extends Command
         $data_path_option = $this->option('request');
 
         if ($data_path_option) {
+
+            $should_include_path =
+                $this->option('get-one') || $this->option('delete-one');
+
             Artisan::call('make:data', [
                 'name' => $data_path_option,
-                // '--path' => 'default',
+                '--path' => $should_include_path,
             ]);
         }
+
         $path_class_import = '';
 
         $path_variable_declaration = '';
@@ -362,6 +367,7 @@ class CreateInvokableControllerWithData extends Command
 
             Artisan::call('make:data', [
                 'name' => $patch_option,
+                '--path' => true,
             ]);
 
             return;
@@ -425,7 +431,6 @@ class CreateInvokableControllerWithData extends Command
 
             Artisan::call('make:data', [
                 'name' => $get_one_option,
-                '--path' => true,
             ]);
 
             // if ($this->option('with-request')) {

@@ -638,6 +638,41 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
+ * @property string $happens_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $attendances
+ * @property-read int|null $attendances_count
+ * @method static \Database\Factories\MeetingFactory factory($count = null, $state = [])
+ * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting newQuery()
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereHappensAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereUpdatedAt($value)
+ */
+	class Meeting extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
  * @property int $course_id
  * @property int $academic_year_semester_id
  * @property \Illuminate\Support\Carbon $created_at
@@ -980,6 +1015,8 @@ namespace App\Models{
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $medially
  * @property-read int|null $medially_count
+ * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Meeting,\Illuminate\Database\Eloquent\Relations\Pivot> $meetings
+ * @property-read int|null $meetings_count
  * @property-read \CloudinaryLabs\CloudinaryLaravel\Model\Media|null $profilePicture
  * @property-read \App\Models\TemporaryUploadedImages|null $temporaryUploadedProfilePicture
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User schoolFilesTest()

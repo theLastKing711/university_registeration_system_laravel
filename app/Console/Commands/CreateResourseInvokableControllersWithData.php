@@ -156,6 +156,13 @@ class CreateResourseInvokableControllersWithData extends Command
                 .'\\'
                 ."{$action}";
 
+        $get_response_data =
+            $get_name
+                .'\\'
+                .'Response'
+                .'\\'
+                ."{$action}Response";
+
         $get_request_data =
             $get_name
                 .'\\'
@@ -165,7 +172,8 @@ class CreateResourseInvokableControllersWithData extends Command
 
         Artisan::call('make:data-controller', [
             'name' => $get_name,
-            '--get-one' => $get_request_data,
+            '--get-one' => $get_response_data,
+            '--request' => $get_request_data,
         ]);
     }
 
