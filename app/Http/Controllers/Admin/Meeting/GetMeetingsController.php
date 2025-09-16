@@ -17,6 +17,7 @@ class GetMeetingsController extends Controller
     {
         return GetMeetingsResponseData::collect(
             Meeting::query()
+                ->with('attendances')
                 ->whereHas(
                     'attendances',
                     fn ($query) => $query

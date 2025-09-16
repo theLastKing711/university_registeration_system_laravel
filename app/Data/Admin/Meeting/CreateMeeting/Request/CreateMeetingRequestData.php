@@ -4,6 +4,7 @@ namespace App\Data\Admin\Meeting\CreateMeeting\Request;
 
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Data\Shared\Swagger\Property\DateProperty;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;
@@ -15,7 +16,7 @@ class CreateMeetingRequestData extends Data
 {
     public function __construct(
         #[DateProperty]
-        public ?string $happens_at,
+        public ?Carbon $happens_at,
         #[ArrayProperty(CreateAttendanceData::class)]
         /** @var Collection<CreateAttendanceData> */
         public Collection $attendances,

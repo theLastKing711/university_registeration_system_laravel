@@ -61,6 +61,7 @@ use App\Http\Controllers\Admin\Lecture\CreateLectureController;
 use App\Http\Controllers\Admin\Lecture\GetLectureController;
 use App\Http\Controllers\Admin\Lecture\GetLecturesController;
 use App\Http\Controllers\Admin\Lecture\UpdateLectureController;
+use App\Http\Controllers\Admin\Meeting\CreateMeetingController;
 use App\Http\Controllers\Admin\Meeting\DeleteMeetingController;
 use App\Http\Controllers\Admin\Meeting\GetMeetingController;
 use App\Http\Controllers\Admin\Meeting\GetMeetingsController;
@@ -552,6 +553,8 @@ Route::prefix('admins')
                 ->group(function () {
 
                     Route::get('', GetMeetingsController::class);
+
+                    Route::post('', CreateMeetingController::class);
 
                     Route::get('{id}', GetMeetingController::class);
 
