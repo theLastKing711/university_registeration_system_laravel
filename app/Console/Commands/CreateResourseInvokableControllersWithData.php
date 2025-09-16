@@ -108,16 +108,14 @@ class CreateResourseInvokableControllersWithData extends Command
             $resourse
                 .'s';
 
-        if ($action) {
-            $action =
-                $action ??
-                'Get'.$resourse_plural;
-        }
+        $action =
+            $action ??
+            'Get'.$resourse_plural;
 
         $get_name =
-           $path
-               .'\\'
-               ."{$action}";
+            $path
+                .'\\'
+                .$action;
 
         $get_response_data =
             $get_name
@@ -143,6 +141,7 @@ class CreateResourseInvokableControllersWithData extends Command
             '--get-many' => $get_response_data,
             '--pagination' => $pagination_request_data,
         ]);
+
     }
 
     private function generateGetController($path, $resourse, $action)
