@@ -4,7 +4,7 @@ namespace App\Data\Admin\Meeting\CreateMeeting\Request;
 
 use App\Data\Shared\Swagger\Property\ArrayProperty;
 use App\Data\Shared\Swagger\Property\DateProperty;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Data;

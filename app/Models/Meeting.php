@@ -20,4 +20,10 @@ class Meeting extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    // auto transform value saved in db in format("year-month-day hour-minute-second)
+    // after retrieval from data base when called to array on them to carbon value with time zone same above with added (Z) or (+offset) at the end
+    protected $casts = [
+        'happens_at' => 'datetime',
+    ];
 }
