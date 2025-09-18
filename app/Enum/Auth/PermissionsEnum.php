@@ -59,6 +59,12 @@ enum PermissionsEnum: string
     case EDIT_LECTURE = 'edit lectures';
     case DELETE_LECTURE = 'delete lectures';
 
+    case CREATE_MEETINGS = 'create meetings';
+    case LIST_MEETINGS = 'list meetings';
+    case SHOW_MEETINGS = 'show meetings';
+    case EDIT_MEETINGS = 'edit meetings';
+    case DELETE_MEETINGS = 'delete meetings';
+
     case CREATE_OPEN_COURSE_REGISTERATION = 'create open-course-registerations';
     case LIST_OPEN_COURSE_REGISTERATION = 'list open-course-registerations';
     case SHOW_OPEN_COURSE_REGISTERATION = 'show open-course-registerations';
@@ -211,6 +217,22 @@ enum PermissionsEnum: string
                 self::SHOW_LECTURE,
                 self::DELETE_LECTURE,
             ];
+    }
+
+    /**
+     * Summary of get_meetings_permissions
+     *
+     * @return PermissionsEnum[]
+     */
+    public static function get_meetings_permissions(): array
+    {
+        return [
+            self::CREATE_MEETINGS,
+            self::EDIT_MEETINGS,
+            self::LIST_MEETINGS,
+            self::SHOW_MEETINGS,
+            self::DELETE_MEETINGS,
+        ];
     }
 
     /**

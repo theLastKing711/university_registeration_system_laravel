@@ -83,6 +83,7 @@ enum RolesEnum: string
                 ...PermissionsEnum::get_students_permissions(),
                 ...PermissionsEnum::get_teachers_permissions(),
                 ...PermissionsEnum::get_filter_header_permissions(),
+                ...PermissionsEnum::get_meetings_permissions(),
             ],
             self::STUDENT => PermissionsEnum::get_student_permissions(),
             self::COURSES_REGISTERER => [

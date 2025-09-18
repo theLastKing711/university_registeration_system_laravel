@@ -15,12 +15,4 @@ use OpenApi\Attributes as OAT;
         ],
     ),
 ]
-class MeetingController extends Controller
-{
-
-    #[OAT\Get(path: '/admins/meetings', tags: ['adminsMeetings'])]
-    public function __invoke()
-    {
-
-    }
-}
+abstract class MeetingController extends Controller {}
