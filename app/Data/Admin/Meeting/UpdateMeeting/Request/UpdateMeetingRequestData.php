@@ -2,6 +2,10 @@
 
 namespace App\Data\Admin\Meeting\UpdateMeeting\Request;
 
+use App\Data\Shared\Swagger\Property\ArrayProperty;
+use App\Data\Shared\Swagger\Property\DateProperty;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use OpenApi\Attributes as OAT;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Validation\Exists;
@@ -13,6 +17,14 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class UpdateMeetingRequestData extends Data
 {
     public function __construct(
+
+        #[ArrayProperty(UpdateAttendanceData::class)]
+        /** @var Collection<UpdateAttendanceData> */
+        public Collection $attendances,
+
+        #[DateProperty]
+        public ?Carbon $happens_at,
+
         #[
             OAT\PathParameter(
                 parameter: 'adminsUpdateMeetingResponsePathParameterData', // the name used in ref

@@ -16,20 +16,20 @@ class GetMeetingResponseData extends Data
         #[OAT\Property]
         public int $id,
         #[OAT\Property]
-        public ?string $happens_at,
+        public ?Carbon $happens_at,
         #[ArrayProperty(GetAttendanceData::class)]
         /** @var Collection<GetAttendanceData> */
         public Collection $attendances,
     ) {}
 
-    public static function fromModel(Meeting $meeting): self
-    {
-        return new self(
-            $meeting->id,
-            Carbon::parse($meeting->happens_at)->setTimezone('UTC'),
-            $meeting
-                ->attendances
-                ->map(fn ($item) => new GetAttendanceData($item->id, $item->name))
-        );
-    }
+    // public static function fromModel(Meeting $meeting): self
+    // {
+    //     return new self(
+    //         $meeting->id,
+    //         Carbon::parse($meeting->happens_at)->setTimezone('UTC'),
+    //         $meeting
+    //             ->attendances
+    //             ->map(fn ($item) => new GetAttendanceData($item->id, $item->name))
+    //     );
+    // }
 }

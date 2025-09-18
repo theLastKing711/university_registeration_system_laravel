@@ -17,6 +17,7 @@ class GetMeetingController extends Controller
     {
         return GetMeetingResponseData::from(
             Meeting::query()
+                ->with('attendances')
                 ->firstWhereId(
                     $request->id
                 )

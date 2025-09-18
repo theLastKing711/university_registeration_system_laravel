@@ -8,7 +8,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[Oat\Schema(schema: 'AdminMeetingGetMeetingResponseGetAttendanceDataData')]
-class GetAttendanceDataData extends Data
+class GetAttendanceData extends Data
 {
     public function __construct(
         #[OAT\Property]
