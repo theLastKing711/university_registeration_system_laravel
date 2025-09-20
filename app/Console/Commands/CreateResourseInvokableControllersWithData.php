@@ -12,7 +12,7 @@ class CreateResourseInvokableControllersWithData extends Command
      *
      * @var string
      */
-    protected $signature = 'make:resourse-data-controller {path} {--with-pagination} {--post==} {--patch==} {--get-one==} {--get-many==} {--delete-one==}';
+    protected $signature = 'make:resourse-data-controller {path} {--with-pagination} {--post==} {--patch==} {--get-one==} {--get-many==} {--delete-one==} {--without-post} {--without-get-one} {--without-get-many} {--without-patch} {--without-delete}';
 
     /**
      * The console command description.
@@ -36,7 +36,7 @@ class CreateResourseInvokableControllersWithData extends Command
         $this
             ->genereateBaseAbstractClass($path, $resourse);
 
-        if ($this->option('with-pagination')) {
+        if ($this->option('with-pagination') && ! $this->option('without-get-many')) {
             $this
                 ->generateGetManyWithPaginationController($path, $resourse, $this->option('get-many'));
         } else {
@@ -44,17 +44,25 @@ class CreateResourseInvokableControllersWithData extends Command
                 ->generateGetManyController($path, $resourse, $this->option('get-many'));
         }
 
-        $this
-            ->generateGetController($path, $resourse, $this->option('get-one'));
+        if (! $this->option('without-get-one')) {
+            $this
+                ->generateGetController($path, $resourse, $this->option('get-one'));
+        }
 
-        $this->
-            generatePostController($path, $resourse, $this->option('post'));
+        if (! $this->option('without-post')) {
+            $this
+                ->generatePostController($path, $resourse, $this->option('post'));
+        }
 
-        $this
-            ->generatePatchController($path, $resourse, $this->option('patch'));
+        if (! $this->option('without-patch')) {
+            $this
+                ->generatePatchController($path, $resourse, $this->option('patch'));
+        }
 
-        $this
-            ->generateDeleteController($path, $resourse, $this->option('delete-one'));
+        if (! $this->option('without-delete-one')) {
+            $this
+                ->generateDeleteController($path, $resourse, $this->option('delete-one'));
+        }
 
     }
 

@@ -86,6 +86,32 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * @property-read \App\Models\User|null $user
+ * @method static \Database\Factories\AuditLogFactory factory($count = null, $state = [])
+ * @method static Illuminate\Database\Eloquent\Builder<static> joinRelationship(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AuditLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AuditLog newQuery()
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByLeftPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoins(string|array<string, \Illuminate\Contracts\Database\Query\Expression> $column)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsCount(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsAvg(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMax(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsMin(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> orderByPowerLeftJoinsSum(string $column, string|null $order)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinHas(string $relations, mixed operater, mixed value)
+ * @method static Illuminate\Database\Eloquent\Builder<static> powerJoinWhereHas(string $relations, \Closure(Illuminate\Database\Query\JoinClause $join)|array $join_callback_or_array)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AuditLog query()
+ */
+	class AuditLog extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * @property int $id
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -638,7 +664,7 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
- * @property string $happens_at
+ * @property \Illuminate\Support\Carbon $happens_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\User,\Illuminate\Database\Eloquent\Relations\Pivot> $attendances
@@ -1013,13 +1039,14 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNationalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoneNumber($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AuditLog> $auditLogs
+ * @property-read int|null $audit_logs_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \CloudinaryLabs\CloudinaryLaravel\Model\Media> $medially
  * @property-read int|null $medially_count
  * @property-read \App\Data\Shared\ModelwithPivotCollection<\App\Models\Meeting,\Illuminate\Database\Eloquent\Relations\Pivot> $meetings
  * @property-read int|null $meetings_count
  * @property-read \CloudinaryLabs\CloudinaryLaravel\Model\Media|null $profilePicture
  * @property-read \App\Models\TemporaryUploadedImages|null $temporaryUploadedProfilePicture
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User schoolFilesTest()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User search(string $searchTerm, string ...$columns)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User searchColumns(?string $searchTerm, array $columns)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User searchExact(?string $value, string $column)

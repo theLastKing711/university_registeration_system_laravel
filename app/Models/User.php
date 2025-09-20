@@ -418,17 +418,6 @@ class User extends Authenticatable implements IUploadable
                 );
     }
 
-    #[Scope]
-    protected function schoolFilesTest(Builder $query): void
-    {
-        $query
-
-            ->where(
-                'collection_name',
-                FileUploadDirectory::SCHOOL_FILES
-            );
-    }
-
     /**
      * Get the profilePicture associated with the User
      *
@@ -471,6 +460,16 @@ class User extends Authenticatable implements IUploadable
                     'type',
                     RolesEnum::getAdminNotifications()
                 );
+    }
+
+    /**
+     * Get all of the auditLogs for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<AuditLog, $this>
+     */
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class);
     }
 
     #[Scope]
