@@ -76,10 +76,12 @@ use App\Http\Controllers\Admin\Notification\MarkNotificationAsReadController;
 use App\Http\Controllers\Admin\Notification\MarkNotificationsAsReadController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\CreateOpenCourseRegisterationController;
+use App\Http\Controllers\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationsController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationsListController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseController;
+use App\Http\Controllers\Admin\OpenCourseRegisteration\UpdateOpenCourseRegisterationController;
 use App\Http\Controllers\Admin\Student\DeleteStudentController;
 use App\Http\Controllers\Admin\Student\DeleteStudentProfilePictureController;
 use App\Http\Controllers\Admin\Student\GetStudentController;
@@ -621,6 +623,20 @@ Route::prefix('admins')
                         );
 
                     Route::get('list', GetOpenCourseRegisterationsListController::class);
+
+                    Route::get('{id}', GetOpenCourseRegisterationController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::SHOW_OPEN_COURSE_REGISTERATION
+                            )
+                        );
+
+                    Route::patch('{id}', UpdateOpenCourseRegisterationController::class)
+                        ->middleware(
+                            PermissionsEnum::onePermissionOnlyMiddleware(
+                                PermissionsEnum::EDIT_OPEN_COURSE_REGISTERATION
+                            )
+                        );
 
                     // Route::post('', OpenCourseForRegisterationController::class)
                     //     ->middleware(
