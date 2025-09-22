@@ -12,7 +12,7 @@ class CreateResourseInvokableControllersWithData extends Command
      *
      * @var string
      */
-    protected $signature = 'make:resourse-data-controller {path} {--with-pagination} {--post==} {--patch==} {--get-one==} {--get-many==} {--delete-one==} {--without-post} {--without-get-one} {--without-get-many} {--without-patch} {--without-delete}';
+    protected $signature = 'make:resourse-data-controller {path} {--with-pagination} {--post==} {--patch==} {--get-one==} {--get-many==} {--delete-one==} {--without-post} {--without-get-one} {--without-get-many} {--without-patch} {--without-delete-one}';
 
     /**
      * The console command description.

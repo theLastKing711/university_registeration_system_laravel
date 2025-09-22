@@ -17,7 +17,7 @@ return new class extends Migration
                 ->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('resourse');
+            $table->string('resource');
             $table->string('action');
             $table->json('details')->nullable();
             $table->timestamps();

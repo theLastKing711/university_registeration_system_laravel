@@ -15,6 +15,11 @@ use App\Http\Controllers\Admin\Admin\GetAdminController;
 use App\Http\Controllers\Admin\Admin\GetAdminListController;
 use App\Http\Controllers\Admin\Admin\GetAdminsController;
 use App\Http\Controllers\Admin\Admin\UpdateAdminController;
+use App\Http\Controllers\Admin\AuditLog\CreateAuditLogController;
+use App\Http\Controllers\Admin\AuditLog\GetAuditLogController;
+use App\Http\Controllers\Admin\AuditLog\GetAuditLogsController;
+use App\Http\Controllers\Admin\AuditLog\OpenCourseRegisteration\CreateOpenCourseRegisterationAuditLogController;
+use App\Http\Controllers\Admin\AuditLog\UpdateAuditLogController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\Classroom\CreateClassroomController;
 use App\Http\Controllers\Admin\Classroom\DeleteClassroomController;
@@ -73,7 +78,6 @@ use App\Http\Controllers\Admin\OpenCourseRegisteration\AssignTeacherToOpenCourse
 use App\Http\Controllers\Admin\OpenCourseRegisteration\CreateOpenCourseRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationsController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\GetOpenCourseRegisterationsListController;
-use App\Http\Controllers\Admin\OpenCourseRegisteration\OpenCourseForRegisterationController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnAssignTeacherFromOpenCourseController;
 use App\Http\Controllers\Admin\OpenCourseRegisteration\UnRegisterOpenCourseController;
 use App\Http\Controllers\Admin\Student\DeleteStudentController;
@@ -92,7 +96,6 @@ use App\Http\Controllers\Admin\Teacher\DeleteTeachersController;
 use App\Http\Controllers\Admin\Teacher\GetTeacherController;
 use App\Http\Controllers\Admin\Teacher\GetTeachersController;
 use App\Http\Controllers\Admin\Teacher\GetTeachersListController;
-use App\Http\Controllers\Admin\Teacher\GetTeachersPaginatedController;
 use App\Http\Controllers\Admin\Teacher\UpdateTeacherController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksController;
 use App\Http\Controllers\Student\OpenCourseRegisteration\GetCoursesMarksThisSemesterController;
@@ -200,6 +203,33 @@ Route::prefix('admins')
                                 PermissionsEnum::DELETE_ADMIN
                             )
                         );
+
+                });
+
+            Route::prefix('audit-logs')
+                ->group(function () {
+
+                    Route::prefix('open-course-registerations')->group(function () {
+                        Route::post('', CreateOpenCourseRegisterationAuditLogController::class);
+                    });
+
+                    Route::get('', GetAuditLogsController::class);
+
+                    Route::get('{id}', GetAuditLogController::class);
+
+                    // Route::post('{id}', CreateAuditLogController::class)
+                    //     ->middleware(
+                    //         PermissionsEnum::onePermissionOnlyMiddleware(
+                    //             PermissionsEnum::SHOW_ADMIN
+                    //         )
+                    //     );
+
+                    // Route::patch('{id}', UpdateAuditLogController::class)
+                    //     ->middleware(
+                    //         PermissionsEnum::onePermissionOnlyMiddleware(
+                    //             PermissionsEnum::EDIT_ADMIN
+                    //         )
+                    //     );
 
                 });
 
@@ -597,12 +627,12 @@ Route::prefix('admins')
                     //         RolesEnum::oneOfRolesMiddleware(RolesEnum::ADMIN, RolesEnum::COURSES_REGISTERER)
                     //     );
 
-                    Route::post('', CreateOpenCourseRegisterationController::class)
-                        ->middleware(
-                            PermissionsEnum::oneOfPermissionsMiddleware(
-                                PermissionsEnum::CREATE_OPEN_COURSE_REGISTERATION
-                            )
-                        );
+                    Route::post('', CreateOpenCourseRegisterationController::class);
+                    // ->middleware(
+                    //     PermissionsEnum::oneOfPermissionsMiddleware(
+                    //         PermissionsEnum::CREATE_OPEN_COURSE_REGISTERATION
+                    //     )
+                    // );
 
                     Route::post('{id}/teachers', AssignTeacherToOpenCourseController::class);
 

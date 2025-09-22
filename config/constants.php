@@ -1,7 +1,7 @@
 <?php
 
-//user validation
-//user product valdiation
+// user validation
+// user product valdiation
 $userProductValidationAr = [
     'quantity' => [
         'out_of_stock' => [
@@ -17,7 +17,7 @@ $userProductValidationEn = [
         ],
     ],
 ];
-//end user product validation
+// end user product validation
 
 $userValidation = [
     'ar' => [
@@ -31,7 +31,7 @@ $userValidation = [
 $userValidationEn = $userValidation['en'];
 
 $userValidationAr = $userValidation['ar'];
-//end user validation
+// end user validation
 
 return [
     'local_week_days' => [
@@ -48,5 +48,12 @@ return [
             'en' => $userValidationEn,
         ],
     ],
-
+    'audit_logs' => [
+        'actions' => [
+            'create' => 'إنشاء',
+        ],
+        'recources' => [
+            'open-course-registerations' => 'فتح المواد الدراسية',
+        ],
+    ],
 ];

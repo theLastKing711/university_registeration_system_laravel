@@ -35,36 +35,36 @@ class CreateOpenCourseRegisterationRequestData extends Data
 
     ) {}
 
-    public static function rules(ValidationContext $context): array
-    {
+    // public static function rules(ValidationContext $context): array
+    // {
 
-        $request_course_id =
-            $context->payload['course_id'];
+    //     $request_course_id =
+    //         $context->payload['course_id'];
 
-        $request_academic_year_semester_id =
-            $context->payload['academic_year_semester_id'];
+    //     $request_academic_year_semester_id =
+    //         $context->payload['academic_year_semester_id'];
 
-        $duplicate_open_course =
-            OpenCourseRegisteration::query()
-                ->firstWhere(
-                    [
-                        'course_id' => $request_course_id,
-                        'academic_year_semester_id' => $request_academic_year_semester_id,
-                    ]
-                );
+    //     $duplicate_open_course =
+    //         OpenCourseRegisteration::query()
+    //             ->firstWhere(
+    //                 [
+    //                     'course_id' => $request_course_id,
+    //                     'academic_year_semester_id' => $request_academic_year_semester_id,
+    //                 ]
+    //             );
 
-        return [
-            'course_id' => [function (string $attribute, mixed $value, Closure $fail) use ($duplicate_open_course) {
+    //     return [
+    //         'course_id' => [function (string $attribute, mixed $value, Closure $fail) use ($duplicate_open_course) {
 
-                if ($duplicate_open_course) {
-                    $fail(
-                        __(
-                            'messages.admin.open_coruse_registeraions.course_opened_previously',
-                        )
-                    );
-                }
+    //             if ($duplicate_open_course) {
+    //                 $fail(
+    //                     __(
+    //                         'messages.admin.open_coruse_registeraions.course_opened_previously',
+    //                     )
+    //                 );
+    //             }
 
-            }],
-        ];
-    }
+    //         }],
+    //     ];
+    // }
 }
