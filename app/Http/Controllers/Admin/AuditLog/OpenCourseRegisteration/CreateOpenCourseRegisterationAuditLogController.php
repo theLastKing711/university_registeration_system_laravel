@@ -20,14 +20,38 @@ class CreateOpenCourseRegisterationAuditLogController extends Controller
     public function __invoke(CreateOpenCourseRegisterationAuditLogRequestData $request)
     {
 
+        if ($request->action === 'create') {
+
+            AuditLog::query()
+                ->create([
+                    'user_id' => Auth::User()->id,
+                    'resource' => $request->resource,
+                    'action' => $request->action,
+                    'details' => $request->except('action'),
+                ]);
+
+            return;
+        }
+
         AuditLog::query()
             ->create([
                 'user_id' => Auth::User()->id,
                 'resource' => $request->resource,
                 'action' => $request->action,
-                'details' => $request->except('action')->toJson(),
+                'details' => [
+                    'resource' => $request->resource,
+                    'course_id' => $request->course_id,
+                    'academic_year_semester_id' => $request->academic_year_semester_id,
+                    'price_in_usd' => $request->price_in_usd,
+                    'teachers' => $request->previousData->teachers,
+
+                    'updated_course_id' => $request->previousData->course_id,
+                    'update_academic_year_semester_id' => $request->previousData->academic_year_semester_id,
+                    'updated_price_in_usd' => $request->previousData->price_in_usd,
+                    'updated_teachers' => $request->teachers,
+
+                ],
             ]);
 
-        return $request;
     }
 }

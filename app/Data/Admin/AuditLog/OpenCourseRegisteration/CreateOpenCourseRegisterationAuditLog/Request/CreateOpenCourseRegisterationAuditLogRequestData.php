@@ -33,5 +33,8 @@ class CreateOpenCourseRegisterationAuditLogRequestData extends CreateOpenCourseR
 
         public string $action,
 
+        #[OAT\Property]
+        public ?CreateOpenCourseRegisterationRequestData $previousData
+
     ) {}
 }

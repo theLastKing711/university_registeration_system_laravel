@@ -16,9 +16,11 @@ use App\Http\Controllers\Admin\Admin\GetAdminListController;
 use App\Http\Controllers\Admin\Admin\GetAdminsController;
 use App\Http\Controllers\Admin\Admin\UpdateAdminController;
 use App\Http\Controllers\Admin\AuditLog\CreateAuditLogController;
+use App\Http\Controllers\Admin\AuditLog\DeleteAuditLogController;
 use App\Http\Controllers\Admin\AuditLog\GetAuditLogController;
 use App\Http\Controllers\Admin\AuditLog\GetAuditLogsController;
 use App\Http\Controllers\Admin\AuditLog\OpenCourseRegisteration\CreateOpenCourseRegisterationAuditLogController;
+use App\Http\Controllers\Admin\AuditLog\Teacher\CreateTeacherAuditLogController;
 use App\Http\Controllers\Admin\AuditLog\UpdateAuditLogController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\Classroom\CreateClassroomController;
@@ -215,9 +217,15 @@ Route::prefix('admins')
                         Route::post('', CreateOpenCourseRegisterationAuditLogController::class);
                     });
 
+                    Route::prefix('teachers')->group(function () {
+                        Route::post('', CreateTeacherAuditLogController::class);
+                    });
+
                     Route::get('', GetAuditLogsController::class);
 
                     Route::get('{id}', GetAuditLogController::class);
+
+                    Route::post('delete', DeleteAuditLogController::class);
 
                     // Route::post('{id}', CreateAuditLogController::class)
                     //     ->middleware(

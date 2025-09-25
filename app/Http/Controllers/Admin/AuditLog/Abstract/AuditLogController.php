@@ -7,20 +7,12 @@ use OpenApi\Attributes as OAT;
 
 #[
     OAT\PathItem(
-        path: '/admins/auditlogs/{id}',
+        path: '/admins/audit-logs/{id}',
         parameters: [
             new OAT\PathParameter(
-                ref: '#/components/parameters/testIdPathParameter',
+                ref: '#/components/parameters/AuditLogIdPathParameter',
             ),
         ],
     ),
 ]
-class AuditLogController extends Controller
-{
-
-    #[OAT\Get(path: '/admins/auditlogs', tags: ['adminsAuditLogs'])]
-    public function __invoke()
-    {
-
-    }
-}
+abstract class AuditLogController extends Controller {}

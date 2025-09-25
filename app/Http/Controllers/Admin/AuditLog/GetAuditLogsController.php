@@ -22,6 +22,14 @@ class GetAuditLogsController extends Controller
         return
             GetAuditLogsResponseData::collect(
                 AuditLog::query()
+                    ->when(
+                        $request->action,
+                        fn ($query) => $query
+                            ->where(
+                                'action',
+                                $request->action
+                            )
+                    )
                     ->paginate()
             );
 

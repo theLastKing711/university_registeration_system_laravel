@@ -4,6 +4,6 @@ namespace App\Enum;
 
 enum ResourceEnum: string
 {
-    case OPEN_COURSE_REGISTERATION = 'open-course-registeration'
+    // case OPEN_COURSE_REGISTERATION = 'open-course-registeration'
 
 }
