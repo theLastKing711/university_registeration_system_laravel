@@ -15,6 +15,8 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class CreateOpenCourseRegisterationAuditLogRequestData extends CreateOpenCourseRegisterationRequestData
 {
     public function __construct(
+        #[OAT\Property]
+        public ?int $id,
         #[
             OAT\Property,
             Exists('courses', 'id')

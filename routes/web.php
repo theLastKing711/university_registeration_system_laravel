@@ -219,6 +219,7 @@ Route::prefix('admins')
 
                     Route::prefix('teachers')->group(function () {
                         Route::post('', CreateTeacherAuditLogController::class);
+
                     });
 
                     Route::get('', GetAuditLogsController::class);

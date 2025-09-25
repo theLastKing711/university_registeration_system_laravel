@@ -17,6 +17,9 @@ class DeleteAuditLogRequestData extends Data
         #[OAT\Property]
         public string $resource,
 
+        #[OAT\Property]
+        public int $id,
+
         // #[
         //     OAT\PathParameter(
         //         parameter: 'DeleteAuditLogIdPathParameter',

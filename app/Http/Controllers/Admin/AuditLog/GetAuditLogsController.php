@@ -33,9 +33,5 @@ class GetAuditLogsController extends Controller
                     ->paginate()
             );
 
-        // return GetAuditLogsResponseData::collect(
-        //     items: AuditLog::query()
-        //         ->get()
-        // );
     }
 }

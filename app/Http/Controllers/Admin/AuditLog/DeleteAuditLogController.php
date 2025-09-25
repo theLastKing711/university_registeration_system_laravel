@@ -21,6 +21,9 @@ class DeleteAuditLogController extends AuditLogController
                 'resource' => $request->resource,
                 'action' => 'delete',
                 'user_id' => Auth::User()->id,
+                'details' => [
+                    'id' => $request->id,
+                ],
             ]);
 
     }

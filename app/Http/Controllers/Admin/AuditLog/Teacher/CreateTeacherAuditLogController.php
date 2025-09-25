@@ -19,23 +19,28 @@ class CreateTeacherAuditLogController extends Controller
     public function __invoke(CreateTeacherAuditLogRequestData $request)
     {
         if ($request->action === 'create') {
+
+            $teacher =
+                Teacher::query()
+                    ->firstWhere(
+                        'name',
+                        $request->name
+                    );
+
             AuditLog::query()
                 ->create([
                     'user_id' => Auth::User()->id,
                     'resource' => $request->resource,
                     'action' => $request->action,
-                    'details' => $request->except('action'),
+                    'details' => [
+                        'id' => $teacher->id,
+                        'name' => $teacher->name,
+                        'department_id' => $request->department_id,
+                    ],
                 ]);
 
             return;
         }
-
-        // $previous_data =
-        //  Teacher::query()
-        //      ->firstWhere(
-        //          'id',
-        //          $request->id
-        //      );
 
         AuditLog::query()
             ->create([
@@ -43,6 +48,7 @@ class CreateTeacherAuditLogController extends Controller
                 'resource' => $request->resource,
                 'action' => $request->action,
                 'details' => [
+                    'id' => $request->id,
                     'resource' => $request->resource,
                     'name' => $request->previousData->name,
                     'department_id' => $request->department_id,
