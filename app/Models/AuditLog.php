@@ -39,6 +39,6 @@ class AuditLog extends Model
     // }
 
     protected $casts = [
-        'details' => 'array', // Casts the JSON column to a PHP array
+        'details' => 'array', // Casts the JSON column to a PHP array when retrieved from db
     ];
 }
