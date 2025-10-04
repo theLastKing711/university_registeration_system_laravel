@@ -40,4 +40,7 @@ return [
         'api_key' => env('CURRENCY_CONVERTER_API_KEY'),
     ],
 
+    'stripe' => [
+        'api_key' => env('STRIPE_SECRET'),
+    ],
 ];

@@ -7,6 +7,7 @@ use App\Models\OpenCourseRegisteration;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\DB;
+use Stripe\StripeClient;
 
 class OpenCourseRegisterationSeeder extends Seeder
 {
@@ -245,14 +246,14 @@ class OpenCourseRegisterationSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run(StripeClient $stripe): void
     {
 
         $open_course_premissions_to_insert =
            Course::all()
                ->map(function (Course $course) {
 
-                   return
+                   $open_courses =
                        OpenCourseRegisteration::factory()
                            ->openFrom2014To2016ForEachSequence()
                         //    ->hasTwoTeachers()
@@ -260,6 +261,28 @@ class OpenCourseRegisterationSeeder extends Seeder
                                'course_id' => $course->id,
                                //    'semester' => fake()->numberBetween(0, 2),
                            ]);
+
+                   //    $open_courses
+                   //        ->each(function ($open_course) use ($stripe) {
+                   //            $stripe
+                   //                ->products
+                   //                ->create([
+                   //                    'id' => $open_course->id,
+                   //                    'name' => $open_course->course->name,
+                   //                ]);
+
+                   //            // one-time purchase pricing
+                   //            $stripe
+                   //                ->prices
+                   //                ->create([
+                   //                    'product' => $open_course->id,
+                   //                    'unit_amount' => $open_course->price_in_usd * 100,
+                   //                    'currency' => 'usd',
+                   //                    // 'lookup_key' => 'standard_monthly',
+                   //                ]);
+                   //        });
+
+                   return $open_courses;
                });
 
         Context::add(
@@ -283,5 +306,25 @@ class OpenCourseRegisterationSeeder extends Seeder
         //             ->toArray()
         //     );
 
+    }
+
+    private function CreateStripeProduct(StripeClient $stripe, $open_course)
+    {
+        $stripe
+            ->products
+            ->create([
+                'id' => $open_course->id,
+                'name' => $open_course->course->name,
+            ]);
+
+        // one-time purchase pricing
+        $stripe
+            ->prices
+            ->create([
+                'product' => $open_course->id,
+                'unit_amount' => $open_course->price_in_usd * 100,
+                'currency' => 'usd',
+                // 'lookup_key' => 'standard_monthly',
+            ]);
     }
 }

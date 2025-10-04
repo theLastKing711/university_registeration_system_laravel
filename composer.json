@@ -11,6 +11,7 @@
         "cloudinary-labs/cloudinary-laravel": "^2.2",
         "darkaonline/l5-swagger": "^8.6",
         "kirschbaum-development/eloquent-power-joins": "^4.0",
+        "laravel/cashier": "^16.0",
         "laravel/framework": "^12.9",
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
