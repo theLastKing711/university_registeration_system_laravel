@@ -8,6 +8,7 @@ use App\Data\Shared\Swagger\Request\JsonRequestBody;
 use App\Data\Shared\Swagger\Response\SuccessNoContentResponse;
 use App\Http\Controllers\Controller;
 use App\Models\OpenCourseRegisteration;
+use App\Services\API\StripeService;
 use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OAT;
 
@@ -16,10 +17,10 @@ class CreateOpenCourseRegisterationController extends Controller
     #[OAT\Post(path: '/admins/open-course-registerations', tags: ['adminsOpenCourseRegisterations'])]
     #[JsonRequestBody(CreateOpenCourseRegisterationRequestData::class)]
     #[SuccessNoContentResponse]
-    public function __invoke(CreateOpenCourseRegisterationRequestData $request)
+    public function __invoke(CreateOpenCourseRegisterationRequestData $request, StripeService $stripeService)
     {
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, $stripeService) {
 
             $open_course =
                 OpenCourseRegisteration::query()
@@ -44,6 +45,11 @@ class CreateOpenCourseRegisterationController extends Controller
             $open_course
                 ->teachers()
                 ->attach($teachers_attach_data);
+
+            $stripeService
+                ->createOpenCourseProduct(
+                    $open_course
+                );
 
         });
 

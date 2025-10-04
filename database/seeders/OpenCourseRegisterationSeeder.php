@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Course;
 use App\Models\OpenCourseRegisteration;
+use App\Services\API\StripeService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\DB;
@@ -246,7 +247,7 @@ class OpenCourseRegisterationSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(StripeClient $stripe): void
+    public function run(StripeService $stripeService): void
     {
 
         $open_course_premissions_to_insert =
@@ -262,25 +263,13 @@ class OpenCourseRegisterationSeeder extends Seeder
                                //    'semester' => fake()->numberBetween(0, 2),
                            ]);
 
-                   //    $open_courses
-                   //        ->each(function ($open_course) use ($stripe) {
-                   //            $stripe
-                   //                ->products
-                   //                ->create([
-                   //                    'id' => $open_course->id,
-                   //                    'name' => $open_course->course->name,
-                   //                ]);
+                   //         $open_courses
+                   //           ->each($stripeService->createOpenCourseProduct);
 
-                   //            // one-time purchase pricing
-                   //            $stripe
-                   //                ->prices
-                   //                ->create([
-                   //                    'product' => $open_course->id,
-                   //                    'unit_amount' => $open_course->price_in_usd * 100,
-                   //                    'currency' => 'usd',
-                   //                    // 'lookup_key' => 'standard_monthly',
-                   //                ]);
-                   //        });
+                   //    $open_courses
+                   //        ->each(
+                   //            fn ($open_course) => $stripeService->createOpenCourseProduct($open_course)
+                   //        );
 
                    return $open_courses;
                });

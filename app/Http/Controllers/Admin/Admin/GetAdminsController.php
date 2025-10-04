@@ -21,26 +21,6 @@ class GetAdminsController extends Controller
     public function __invoke(GetAdminsRequestData $request, StripeClient $stripe)
     {
 
-        $stripe
-            ->products
-            ->create([
-                'id' => 2,
-                'name' => 'test',
-            ]);
-
-        // one-time purchase pricing
-        $price =
-            $stripe
-                ->prices
-                ->create([
-                    'product' => '2',
-                    'unit_amount' => 10000, // value in cents
-                    'currency' => 'usd',
-                    // 'lookup_key' => 'standard_monthly',
-                ]);
-
-        // sleep(4);
-
         return GetAdminsResponseData::collect(
             User::paginate($request->perPage)
         );
